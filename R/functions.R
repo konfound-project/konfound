@@ -1,3 +1,14 @@
+#' Perform sensitivity analysis for published studies
+#' @description For published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient.
+#' @param unstd_beta an unstandardized regression coefficient
+#' @param standard_error the standard error of the estimate of the unstandardized regression coefficient
+#' @param n_obs the number of observations in the sample
+#' @param n_covariate the number of covariates in the regression model
+#' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
+#' @examples
+#' pkonfound(2, .4, 100, 3)
+#' @export
+
 pkonfound <- function(unstd_beta,
                       standard_error,
                       n_obs, 
@@ -18,4 +29,4 @@ pkonfound <- function(unstd_beta,
 
 }
 
-pkonfound(2, .4, 100, 10, tails = 2)
+pkonfound(2, .4, 200, 3, tails = 2)
