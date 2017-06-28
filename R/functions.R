@@ -7,6 +7,7 @@
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
 #' pkonfound(2, .4, 100, 3)
+#' pkonfound(.4, 2, 100, 3)
 #' @export
 
 pkonfound <- function(unstd_beta,
@@ -20,11 +21,23 @@ pkonfound <- function(unstd_beta,
     
     beta_threshhold <- critical_t * standard_error
     
-    bias <- 100 * (1 - (beta_threshhold / unstd_beta))
+    if (unstd_beta > beta_threshhold) {
+        bias <- 100 * (1 - (beta_threshhold / unstd_beta))
+        recase <- round(n_obs * (bias / 100))
+        cat(paste0("To invalidate the inference, ", round(bias, 2), " % of the estimate would have to be due to bias.\n"))
+        cat(paste0("To invalidate the inference, ", round(recase, 3), " observations would have to be replaced with cases for which there is no effect."))
+    } else if (unstd_beta < beta_threshhold) {
+        bias <- 100 * (1 - (unstd_beta / beta_threshhold))
+        recase <- round(n_obs * (bias / 100))
+        cat(paste0("To sustain the inference, ", round(bias, 2), " % of the estimate would have to be due to bias.\n"))
+        cat(paste0("To sustain the inference, ", round(recase, 3), " of the cases with 0 effect would have to be replaced with cases at the threshold of inference."))
+    } else if (unstd_beta == beta_threshhold) {
+        warning("The coefficient is exactly equal to the threshold.")
+    }
     
-    recase <- round(n_obs * (bias / 100))
-    
-    print(paste0("To invalidate the inference, ", round(bias, 2), " % of the estimate would have to be due to bias."))
-    print(paste0("To invalidate the inference, ", round(recase, 3), " observations would have to be replaced with cases for which there is no effect."))
-
 }
+
+### Questions for Ran
+
+# Am I thinking about invalidate / sustain the right way?
+# What does rep_0 do?
