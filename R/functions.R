@@ -28,5 +28,3 @@ pkonfound <- function(unstd_beta,
     print(paste0("To invalidate the inference, ", round(recase, 3), " observations would have to be replaced with cases for which there is no effect."))
 
 }
-
-pkonfound(2, .4, 200, 3, tails = 2)
