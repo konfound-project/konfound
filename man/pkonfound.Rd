@@ -23,5 +23,6 @@ prints the bias and the number of cases that would have to be replaced with case
 For published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient.
 }
 \examples{
-pkonfound(2, .4, 100, 3)
+pkonfound(unstd_beta = 2, standard_error = .4, n_obs = 100, n_covariates = 3)
+pkonfound(unstd_beta = .4, standard_error = 2, n_obs = 100, n_covariates = 3)
 }
