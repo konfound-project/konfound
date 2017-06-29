@@ -1,6 +1,6 @@
-# rsensitivity
+# konfound
 
-Package for carrying out sensitivity analysis using R
+### Package for carrying out sensitivity analysis using R
 
 Because this package is not on [CRAN](https://cran.r-project.org/), it must be downloaded from GitHub using the following commands (note that `devtools` must be installed first):
 
