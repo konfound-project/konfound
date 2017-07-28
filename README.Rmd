@@ -1,0 +1,49 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# konfound
+
+The goal of konfound is to carry out sensitivity analysis based on Rubin's causal model.
+
+### Installation
+
+You can install konfound from GitHub with:
+
+```{r gh-installation, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("jrosen48/rsensitivity")
+```
+
+### Use 
+
+`pkonfound()`, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:
+
+```{r}
+library(konfound)
+pkonfound(2, .4, 100, 3)
+```
+
+`konfound()` calculates the same for models fit in R. For example, here is the output from a linear model fit with `lm()` using the built-in dataset `mtcars`:
+
+```{r}
+m1 <- lm(mpg ~ wt + hp, data = mtcars)
+
+summary(m1)
+```
+
+Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as follows, specifying the fitted model object:
+
+```{r}
+konfound(m1, wt)
+```
