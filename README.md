@@ -20,7 +20,7 @@ devtools::install_github("jrosen48/rsensitivity")
 
 ``` r
 library(konfound)
-pkonfound(unstd_beta = 2, standard_error = .4, n_obs = 100, n_covariates = 3)
+pkonfound(2, .4, 100, 3)
 #> To invalidate the inference, 60.31% of the estimate would have to be due to bias.
 #> To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.
 ```

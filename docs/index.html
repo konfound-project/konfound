@@ -15,7 +15,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-home">
+    <div class="container template-vignette">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -42,36 +42,75 @@
 
       
       </header><div class="row">
-  <div class="contents col-md-9">
-    <div id="rsensitivity" class="section level1">
+  <div class="col-md-9">
+    
+
+    
+    
+<div class="contents">
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+<div id="konfound" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#rsensitivity" class="anchor"></a>rsensitivity</h1></div>
-<p>Package for carrying out sensitivity analysis using R</p>
-<p>Because this package is not on <a href="https://cran.r-project.org/">CRAN</a>, it must be downloaded from GitHub using the following commands (note that <code>devtools</code> must be installed first):</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"jrosen48/konfound"</span>)</code></pre></div>
-<p>Currently, one function is in-development, <code>pkonfound</code>, for published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient.</p>
-<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r"><span class="kw">konfound</span>(<span class="dt">unstd_beta =</span> <span class="dv">2</span>, <span class="dt">standard_error =</span> .<span class="dv">4</span>, <span class="dt">n_obs =</span> <span class="dv">100</span>, <span class="dt">n_covariates =</span> <span class="dv">3</span>)
+<a href="#konfound" class="anchor"></a>konfound</h1></div>
+<p>The goal of konfound is to carry out sensitivity analysis based on Rubin’s causal model.</p>
+<div id="installation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h3>
+<p>You can install konfound from GitHub with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
+devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"jrosen48/rsensitivity"</span>)</code></pre></div>
+</div>
+<div id="use" class="section level3">
+<h3 class="hasAnchor">
+<a href="#use" class="anchor"></a>Use</h3>
+<p><code><a href="reference/pkonfound.html">pkonfound()</a></code>, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)
+<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>)
+<span class="co">#&gt; To invalidate the inference, 60.31% of the estimate would have to be due to bias.</span>
+<span class="co">#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.</span></code></pre></div>
+<p><code><a href="reference/konfound.html">konfound()</a></code> calculates the same for models fit in R. For example, here is the output from a linear model fit with <code>lm()</code> using the built-in dataset <code>mtcars</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>hp, <span class="dt">data =</span> mtcars)
 
-<span class="co"># To invalidate the inference, 60.31 % of the estimate would have to be due to bias.</span>
-<span class="co"># To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.</span>
-
-<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dt">unstd_beta =</span> .<span class="dv">4</span>, <span class="dt">standard_error =</span> <span class="dv">2</span>, <span class="dt">n_obs =</span> <span class="dv">100</span>, <span class="dt">n_covariates =</span> <span class="dv">3</span>)
-
-<span class="co"># To sustain the inference, 89.92 % of the estimate would have to be due to bias.</span>
-<span class="co"># To sustain the inference, 90 of the cases with 0 effect would have to be replaced with cases at the threshold of inference.</span></code></pre></div>
+<span class="kw">summary</span>(m1)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = mpg ~ wt + hp, data = mtcars)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;    Min     1Q Median     3Q    Max </span>
+<span class="co">#&gt; -3.941 -1.600 -0.182  1.050  5.854 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept) 37.22727    1.59879  23.285  &lt; 2e-16 ***</span>
+<span class="co">#&gt; wt          -3.87783    0.63273  -6.129 1.12e-06 ***</span>
+<span class="co">#&gt; hp          -0.03177    0.00903  -3.519  0.00145 ** </span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 2.593 on 29 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.8268, Adjusted R-squared:  0.8148 </span>
+<span class="co">#&gt; F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</span></code></pre></div>
+<p>Sensitivity analysis for the effect for <code>wt</code> on <code>mpg</code> can be carried out as follows, specifying the fitted model object:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/konfound.html">konfound</a></span>(m1, wt)
+<span class="co">#&gt; To invalidate the inference, 66.72% of the estimate would have to be due to bias.</span>
+<span class="co">#&gt; To invalidate the inference, 21 observations would have to be replaced with cases for which there is no effect.</span></code></pre></div>
+</div>
+</div>
 </div>
   </div>
 
-  <div class="col-md-3" id="sidebar">
-    <h2>License</h2>
-<p>What license is it under?</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2 class="hasAnchor">
+<a href="#sidebar" class="anchor"></a>License</h2>
+<p><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE.html">LICENSE</a></p>
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Kenneth A Frank <br><small class="roles"> Author, maintainer </small> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
+
 </div>
 
 
