@@ -4,7 +4,7 @@
 \alias{pkonfound}
 \title{Perform sensitivity analysis for published studies}
 \usage{
-pkonfound(unstd_beta, standard_error, n_obs, n_covariates = 3, alpha = 0.05,
+pkonfound(unstd_beta, standard_error, n_obs, n_covariates = 1, alpha = 0.05,
   tails = 2)
 }
 \arguments{
@@ -14,7 +14,11 @@ pkonfound(unstd_beta, standard_error, n_obs, n_covariates = 3, alpha = 0.05,
 
 \item{n_obs}{the number of observations in the sample}
 
-\item{n_covariate}{the number of covariates in the regression model}
+\item{n_covariates}{the number of covariates in the regression model}
+
+\item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
+
+\item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
 }
 \value{
 prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
@@ -23,6 +27,6 @@ prints the bias and the number of cases that would have to be replaced with case
 For published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient.
 }
 \examples{
-pkonfound(unstd_beta = 2, standard_error = .4, n_obs = 100, n_covariates = 3)
-pkonfound(unstd_beta = .4, standard_error = 2, n_obs = 100, n_covariates = 3)
+pkonfound(2, .4, 100, 3)
+pkonfound(.4, 2, 100, 3)
 }
