@@ -14,7 +14,7 @@ You can install konfound from GitHub with:
 devtools::install_github("jrosen48/rsensitivity")
 ```
 
-### Use
+### Use: pkonfound for published studies
 
 `pkonfound()`, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:
 
@@ -24,6 +24,8 @@ pkonfound(2, .4, 100, 3)
 #> To invalidate the inference, 60.31% of the estimate would have to be due to bias.
 #> To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.
 ```
+
+### Use: konfound for models fit in R
 
 `konfound()` calculates the same for models fit in R. For example, here is the output from a linear model fit with `lm()` using the built-in dataset `mtcars`:
 

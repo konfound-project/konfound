@@ -60,14 +60,18 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"jrosen48/rsensitivity"</span>)</code></pre></div>
 </div>
-<div id="use" class="section level3">
+<div id="use-pkonfound-for-published-studies" class="section level3">
 <h3 class="hasAnchor">
-<a href="#use" class="anchor"></a>Use</h3>
+<a href="#use-pkonfound-for-published-studies" class="anchor"></a>Use: pkonfound for published studies</h3>
 <p><code><a href="reference/pkonfound.html">pkonfound()</a></code>, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)
 <span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>)
 <span class="co">#&gt; To invalidate the inference, 60.31% of the estimate would have to be due to bias.</span>
 <span class="co">#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.</span></code></pre></div>
+</div>
+<div id="use-konfound-for-models-fit-in-r" class="section level3">
+<h3 class="hasAnchor">
+<a href="#use-konfound-for-models-fit-in-r" class="anchor"></a>Use: konfound for models fit in R</h3>
 <p><code><a href="reference/konfound.html">konfound()</a></code> calculates the same for models fit in R. For example, here is the output from a linear model fit with <code>lm()</code> using the built-in dataset <code>mtcars</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>hp, <span class="dt">data =</span> mtcars)
 
