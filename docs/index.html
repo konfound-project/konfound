@@ -52,54 +52,51 @@
 <div id="konfound" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#konfound" class="anchor"></a>konfound</h1></div>
-<p>The goal of konfound is to carry out sensitivity analysis based on Rubin’s causal model.</p>
-<div id="installation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h3>
+<p>The goal of konfound is to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model.</p>
+</div>
+<div id="installation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h1>
 <p>You can install konfound from GitHub with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"jrosen48/rsensitivity"</span>)</code></pre></div>
 </div>
-<div id="use-pkonfound-for-published-studies" class="section level3">
+<div id="use" class="section level1">
+<h1 class="hasAnchor">
+<a href="#use" class="anchor"></a>Use</h1>
+<div id="pkonfound-for-published-studies" class="section level3">
 <h3 class="hasAnchor">
-<a href="#use-pkonfound-for-published-studies" class="anchor"></a>Use: pkonfound for published studies</h3>
+<a href="#pkonfound-for-published-studies" class="anchor"></a>pkonfound() for published studies</h3>
 <p><code><a href="reference/pkonfound.html">pkonfound()</a></code>, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)
 <span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>)
 <span class="co">#&gt; To invalidate the inference, 60.31% of the estimate would have to be due to bias.</span>
 <span class="co">#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.</span></code></pre></div>
 </div>
-<div id="use-konfound-for-models-fit-in-r" class="section level3">
+<div id="konfound-for-models-fit-in-r" class="section level3">
 <h3 class="hasAnchor">
-<a href="#use-konfound-for-models-fit-in-r" class="anchor"></a>Use: konfound for models fit in R</h3>
+<a href="#konfound-for-models-fit-in-r" class="anchor"></a>konfound() for models fit in R</h3>
 <p><code><a href="reference/konfound.html">konfound()</a></code> calculates the same for models fit in R. For example, here is the output from a linear model fit with <code>lm()</code> using the built-in dataset <code>mtcars</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>hp, <span class="dt">data =</span> mtcars)
-
-<span class="kw">summary</span>(m1)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Call:</span>
+arm<span class="op">::</span><span class="kw">display</span>(m1)
 <span class="co">#&gt; lm(formula = mpg ~ wt + hp, data = mtcars)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Residuals:</span>
-<span class="co">#&gt;    Min     1Q Median     3Q    Max </span>
-<span class="co">#&gt; -3.941 -1.600 -0.182  1.050  5.854 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Coefficients:</span>
-<span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span>
-<span class="co">#&gt; (Intercept) 37.22727    1.59879  23.285  &lt; 2e-16 ***</span>
-<span class="co">#&gt; wt          -3.87783    0.63273  -6.129 1.12e-06 ***</span>
-<span class="co">#&gt; hp          -0.03177    0.00903  -3.519  0.00145 ** </span>
+<span class="co">#&gt;             coef.est coef.se</span>
+<span class="co">#&gt; (Intercept) 37.23     1.60  </span>
+<span class="co">#&gt; wt          -3.88     0.63  </span>
+<span class="co">#&gt; hp          -0.03     0.01  </span>
 <span class="co">#&gt; ---</span>
-<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Residual standard error: 2.593 on 29 degrees of freedom</span>
-<span class="co">#&gt; Multiple R-squared:  0.8268, Adjusted R-squared:  0.8148 </span>
-<span class="co">#&gt; F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</span></code></pre></div>
+<span class="co">#&gt; n = 32, k = 3</span>
+<span class="co">#&gt; residual sd = 2.59, R-Squared = 0.83</span></code></pre></div>
 <p>Sensitivity analysis for the effect for <code>wt</code> on <code>mpg</code> can be carried out as follows, specifying the fitted model object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/konfound.html">konfound</a></span>(m1, wt)
 <span class="co">#&gt; To invalidate the inference, 66.72% of the estimate would have to be due to bias.</span>
 <span class="co">#&gt; To invalidate the inference, 21 observations would have to be replaced with cases for which there is no effect.</span></code></pre></div>
 </div>
+</div>
+<div id="shiny-version-for-published-studies" class="section level1">
+<h1 class="hasAnchor">
+<a href="#shiny-version-for-published-studies" class="anchor"></a>Shiny Version for published studies</h1>
+<p>A shiny version for sensitivity analysis for published studies is available <a href="https://jmichaelrosenberg.shinyapps.io/shinykonfound/">here</a></p>
 </div>
 </div>
   </div>
@@ -110,7 +107,8 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 <p><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE.html">LICENSE</a></p>
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Kenneth A Frank <br><small class="roles"> Author, maintainer </small> </li>
+<li>Kenneth A Frank <br><small class="roles"> Maintainer </small> </li>
+<li>Joshua M Rosenberg <br><small class="roles"> Author </small> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
@@ -119,7 +117,7 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 
 
       <footer><div class="copyright">
-  <p>Developed by Kenneth A Frank.</p>
+  <p>Developed by Kenneth A Frank, Joshua M Rosenberg.</p>
 </div>
 
 <div class="pkgdown">

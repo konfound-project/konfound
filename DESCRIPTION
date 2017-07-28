@@ -3,14 +3,14 @@ Type: Package
 Title: Sensitivity analysis based on Rubin's causal model
 Version: 0.1.0
 Authors@R: c(
-    person(c("Kenneth", "A"), "Frank", role = c("aut", "cre"), email = "kenfrank@msu.edu"),
+    person(c("Kenneth", "A"), "Frank", role = c("cre"), email = "kenfrank@msu.edu"),
     person(c("Ran"), "Xu", role = "ctb", email = "ranxu@msu.edu"),
-    person(c("Joshua", "M"), "Rosenberg", role = c("ctb"), email = "jmichaelrosenberg@gmail.com")
+    person(c("Joshua", "M"), "Rosenberg", role = c("aut"), email = "jmichaelrosenberg@gmail.com")
     )
-Maintainer: The package maintainer <yourself@somewhere.net>
+Maintainer: Joshua Rosenberg <jmichaelrosenberg@gmail.com>
 Description: R package to easily carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin's (1974) causal model. 
 License: MIT + file LICENSE
-Imports: broom, rlang, dplyr
+Imports: broom, rlang, dplyr, arm
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
