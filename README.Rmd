@@ -25,7 +25,7 @@ You can install konfound from GitHub with:
 devtools::install_github("jrosen48/rsensitivity")
 ```
 
-# Use
+# Use of konfound
 
 ### pkonfound() for published studies
 
@@ -49,6 +49,20 @@ Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as foll
 
 ```{r}
 konfound(m1, wt)
+```
+
+### mkonfound for meta-analyses including sensitivity analysis
+
+```{r, eval = F}
+df <- tribble(
+  ~unstd_beta, ~standard_error, ~n_obs, ~n_covariates,
+  2,           .3,              70,      3,
+  10,          2.9,             405,     4,
+  1.7,         1.5,             200,     1,
+  -3,          1.3,             125,     2
+)
+
+mkonfound(df)
 ```
 
 # Shiny Version for published studies 
