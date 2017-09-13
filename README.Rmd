@@ -32,7 +32,7 @@ devtools::install_github("jrosen48/rsensitivity")
 `pkonfound()`, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:
 
 ```{r}
-library(konfound)
+# library(konfound)
 pkonfound(2, .4, 100, 3, to_return = "df")
 pkonfound(2, .4, 100, 3, to_return = "print")
 pkonfound(2, .4, 100, 3, to_return = "plot")

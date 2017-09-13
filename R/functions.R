@@ -65,6 +65,7 @@ konfound <- function(model_object,
                          n_covariates = n_covariates,
                          alpha = alpha,
                          tails = tails,
+                         nu = 0,
                          to_return = "print") } }
     # else if (class(model_object) == "glm") {
     #     
