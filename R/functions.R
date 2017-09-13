@@ -86,4 +86,5 @@ mkonfound <- function(df, alpha, tails) {
                  as.list(dplyr::pull(df, 2)), 
                  as.list(dplyr::pull(df, 3)), 
                  as.list(dplyr::pull(df, 4)))
-    purrr::pmap_dfr(args, pkonfound, to_return = TRUE) } 
+    x <- purrr::pmap_dfr(args, pkonfound, to_return = "df")
+    dplyr::bind_cols(df, x) } 
