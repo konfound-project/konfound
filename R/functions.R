@@ -6,6 +6,7 @@
 #' @param n_covariates the number of covariates in the regression model
 #' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
+#' @param nu what hypothesis to be tested; defaults to testing whether unstd_beta is significantly different from 0
 #' @param to_return whether to return a data.frame (by specifying this argument to euqal "df") or a plot ("plot"); default is to print the output to the console
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
@@ -19,6 +20,7 @@ pkonfound <- function(unstd_beta,
                       n_covariates = 1, 
                       alpha = .05, 
                       tails = 2, 
+                      nu = 0,
                       to_return = "print") {
     test_sensitivity(unstd_beta = unstd_beta,
                      standard_error = standard_error,
@@ -26,6 +28,7 @@ pkonfound <- function(unstd_beta,
                      n_covariates = n_covariates,
                      alpha = alpha, 
                      tails = tails,
+                     nu = nu,
                      to_return = to_return) }
 
 #' Perform sensitivity analysis on fitted models
@@ -44,20 +47,13 @@ konfound <- function(model_object,
                      tested_variable, 
                      alpha = .05, 
                      tails = 2) {
-    
-    # Dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
-    tested_variable_enquo <- rlang::enquo(tested_variable)
+    tested_variable_enquo <- rlang::enquo(tested_variable) # dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
     tested_variable_string <- rlang::quo_name(tested_variable_enquo)
-    
-    # Tidying output
-    tidy_output <- broom::tidy(model_object)
-    
+    tidy_output <- broom::tidy(model_object) # tidying output
     coef_df <- dplyr::filter(tidy_output, term == tested_variable_string)
     glance_output <- broom::glance(model_object)
     
     # Dispatching based on class
-    
-    # lm:
     if (class(model_object) == "lm") {
         unstd_beta = coef_df$estimate
         standard_error = coef_df$std.error

@@ -18,9 +18,20 @@
 # # arm::display(m1)
 # 
 
+alpha = .05
+tails = 2
+n_obs = 100
+n_covariates = 1
+standard_error = .4
+unstd_beta = 2
+
+critical_t <- qt(1 - (alpha / tails), n_obs - n_covariates) * -1 
+beta_threshhold <- critical_t * standard_error
+
+unstd_beta
+beta_threshhold
+
 pkonfound(.4, 2, 100, 3, to_return = "df")
-pkonfound(2, .4, 100, 3, to_return = "print")
-pkonfound(2, .4, 100, 3, to_return = "plot")
 
 # df <- tibble::tribble(
 #     ~unstd_beta, ~standard_error, ~n_obs, ~n_covariates,

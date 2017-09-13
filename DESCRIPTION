@@ -10,7 +10,9 @@ Authors@R: c(
 Maintainer: Joshua Rosenberg <jmichaelrosenberg@gmail.com>
 Description: R package to easily carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin's (1974) causal model. 
 License: MIT + file LICENSE
-Imports: broom, rlang, dplyr, arm,
+Imports: broom, 
+    rlang, 
+    dplyr,
     ggplot2,
     tidyr,
     purrr
