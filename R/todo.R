@@ -5,7 +5,8 @@
 
 # align how dataframe prints with mkonfound by creating yes and no scenarios for pct_bias and n
 # change mkonfound output to return df and if bias or sustain for pct_value and obs
-# improve plot
+# shiny
+# glm
 # update README
 
 # done

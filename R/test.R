@@ -18,7 +18,9 @@
 # # arm::display(m1)
 # 
 
+pkonfound(.4, 2, 100, 3, to_return = "df")
 pkonfound(2, .4, 100, 3, to_return = "print")
+pkonfound(2, .4, 100, 3, to_return = "plot")
 
 # df <- tibble::tribble(
 #     ~unstd_beta, ~standard_error, ~n_obs, ~n_covariates,

@@ -33,7 +33,10 @@ devtools::install_github("jrosen48/rsensitivity")
 
 ```{r}
 library(konfound)
-pkonfound(2, .4, 100, 3)
+pkonfound(2, .4, 100, 3, to_return = "df")
+pkonfound(2, .4, 100, 3, to_return = "print")
+pkonfound(2, .4, 100, 3, to_return = "plot")
+pkonfound(.4, 2, 100, 3, to_return = "print")
 ```
 
 ### konfound() for models fit in R
