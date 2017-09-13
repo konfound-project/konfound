@@ -61,17 +61,27 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"jrosen48/rsensitivity"</span>)</code></pre></div>
 </div>
-<div id="use" class="section level1">
+<div id="use-of-konfound" class="section level1">
 <h1 class="hasAnchor">
-<a href="#use" class="anchor"></a>Use</h1>
+<a href="#use-of-konfound" class="anchor"></a>Use of konfound</h1>
 <div id="pkonfound-for-published-studies" class="section level3">
 <h3 class="hasAnchor">
 <a href="#pkonfound-for-published-studies" class="anchor"></a>pkonfound() for published studies</h3>
 <p><code><a href="reference/pkonfound.html">pkonfound()</a></code>, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)
-<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>)
-<span class="co">#&gt; To invalidate the inference, 60.31% of the estimate would have to be due to bias.</span>
-<span class="co">#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.</span></code></pre></div>
+<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"df"</span>)
+<span class="co">#&gt; # A tibble: 1 x 3</span>
+<span class="co">#&gt;       inference percent observations</span>
+<span class="co">#&gt;           &lt;chr&gt;   &lt;dbl&gt;        &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 to_invalidate   60.31           60</span>
+<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"print"</span>)
+<span class="co">#&gt; To invalidate the inference, 60.31 % of the estimate would have to be due to bias.</span>
+<span class="co">#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.</span>
+<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"plot"</span>)</code></pre></div>
+<p><img src="README-unnamed-chunk-2-1.png" width="672"></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"print"</span>)
+<span class="co">#&gt; To sustain the inference,  89.92 % of the estimate would have to be due to bias.</span>
+<span class="co">#&gt; To sustain the inference,  90  of the cases with 0 effect would have to be replaced with cases at the threshold of inference.</span></code></pre></div>
 </div>
 <div id="konfound-for-models-fit-in-r" class="section level3">
 <h3 class="hasAnchor">
@@ -89,14 +99,79 @@ arm<span class="op">::</span><span class="kw">display</span>(m1)
 <span class="co">#&gt; residual sd = 2.59, R-Squared = 0.83</span></code></pre></div>
 <p>Sensitivity analysis for the effect for <code>wt</code> on <code>mpg</code> can be carried out as follows, specifying the fitted model object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/konfound.html">konfound</a></span>(m1, wt)
-<span class="co">#&gt; To invalidate the inference, 66.72% of the estimate would have to be due to bias.</span>
+<span class="co">#&gt; To invalidate the inference, 66.72 % of the estimate would have to be due to bias.</span>
 <span class="co">#&gt; To invalidate the inference, 21 observations would have to be replaced with cases for which there is no effect.</span></code></pre></div>
+</div>
+<div id="mkonfound-for-meta-analyses-including-sensitivity-analysis" class="section level3">
+<h3 class="hasAnchor">
+<a href="#mkonfound-for-meta-analyses-including-sensitivity-analysis" class="anchor"></a>mkonfound for meta-analyses including sensitivity analysis</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)
+
+df &lt;-<span class="st"> </span><span class="kw">tribble</span>(
+  <span class="op">~</span>unstd_beta, <span class="op">~</span>standard_error, <span class="op">~</span>n_obs, <span class="op">~</span>n_covariates,
+  <span class="dv">2</span>,           .<span class="dv">3</span>,              <span class="dv">70</span>,      <span class="dv">3</span>,
+  <span class="dv">10</span>,          <span class="fl">2.9</span>,             <span class="dv">405</span>,     <span class="dv">4</span>,
+  <span class="fl">1.7</span>,         <span class="fl">1.5</span>,             <span class="dv">200</span>,     <span class="dv">1</span>,
+  <span class="op">-</span><span class="dv">3</span>,          <span class="fl">1.3</span>,             <span class="dv">125</span>,     <span class="dv">2</span>
+)
+
+out &lt;-<span class="st"> </span><span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(df)
+knitr<span class="op">::</span><span class="kw">kable</span>(out)</code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">unstd_beta</th>
+<th align="right">standard_error</th>
+<th align="right">n_obs</th>
+<th align="right">n_covariates</th>
+<th align="left">inference</th>
+<th align="right">percent</th>
+<th align="right">observations</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">2.0</td>
+<td align="right">0.3</td>
+<td align="right">70</td>
+<td align="right">3</td>
+<td align="left">to_invalidate</td>
+<td align="right">70.06</td>
+<td align="right">49</td>
+</tr>
+<tr class="even">
+<td align="right">10.0</td>
+<td align="right">2.9</td>
+<td align="right">405</td>
+<td align="right">4</td>
+<td align="left">to_invalidate</td>
+<td align="right">42.99</td>
+<td align="right">174</td>
+</tr>
+<tr class="odd">
+<td align="right">1.7</td>
+<td align="right">1.5</td>
+<td align="right">200</td>
+<td align="right">1</td>
+<td align="left">to_sustain</td>
+<td align="right">42.53</td>
+<td align="right">85</td>
+</tr>
+<tr class="even">
+<td align="right">-3.0</td>
+<td align="right">1.3</td>
+<td align="right">125</td>
+<td align="right">2</td>
+<td align="left">to_invalidate</td>
+<td align="right">14.22</td>
+<td align="right">18</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div id="shiny-version-for-published-studies" class="section level1">
 <h1 class="hasAnchor">
 <a href="#shiny-version-for-published-studies" class="anchor"></a>Shiny Version for published studies</h1>
-<p>A shiny version for sensitivity analysis for published studies is available <a href="https://jmichaelrosenberg.shinyapps.io/shinykonfound/">here</a></p>
+<p>A shiny version for sensitivity analysis for published studies is available <a href="https://jmichaelrosenberg.shinyapps.io/shinykonfound/">here</a>.</p>
 </div>
 </div>
   </div>
@@ -107,8 +182,7 @@ arm<span class="op">::</span><span class="kw">display</span>(m1)
 <p><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE.html">LICENSE</a></p>
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Kenneth A Frank <br><small class="roles"> Maintainer </small> </li>
-<li>Joshua M Rosenberg <br><small class="roles"> Author </small> </li>
+<li>Joshua M Rosenberg <br><small class="roles"> Author, maintainer </small> </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
@@ -117,7 +191,7 @@ arm<span class="op">::</span><span class="kw">display</span>(m1)
 
 
       <footer><div class="copyright">
-  <p>Developed by Kenneth A Frank, Joshua M Rosenberg.</p>
+  <p>Developed by Joshua M Rosenberg.</p>
 </div>
 
 <div class="pkgdown">

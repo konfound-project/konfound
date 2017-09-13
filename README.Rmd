@@ -32,7 +32,7 @@ devtools::install_github("jrosen48/rsensitivity")
 `pkonfound()`, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:
 
 ```{r}
-# library(konfound)
+library(konfound)
 pkonfound(2, .4, 100, 3, to_return = "df")
 pkonfound(2, .4, 100, 3, to_return = "print")
 pkonfound(2, .4, 100, 3, to_return = "plot")
@@ -56,7 +56,9 @@ konfound(m1, wt)
 
 ### mkonfound for meta-analyses including sensitivity analysis
 
-```{r, eval = F}
+```{r, eval = T}
+library(dplyr, warn.conflicts = FALSE)
+
 df <- tribble(
   ~unstd_beta, ~standard_error, ~n_obs, ~n_covariates,
   2,           .3,              70,      3,
@@ -65,9 +67,10 @@ df <- tribble(
   -3,          1.3,             125,     2
 )
 
-mkonfound(df)
+out <- mkonfound(df)
+knitr::kable(out)
 ```
 
 # Shiny Version for published studies 
 
-A shiny version for sensitivity analysis for published studies is available [here](https://jmichaelrosenberg.shinyapps.io/shinykonfound/)
+A shiny version for sensitivity analysis for published studies is available [here](https://jmichaelrosenberg.shinyapps.io/shinykonfound/).

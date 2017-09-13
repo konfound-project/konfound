@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Perform sensitivity analysis for published studies — pkonfound • konfound</title>
+<title>Perform meta-analyses including sensitivity analysis — mkonfound • konfound</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -69,34 +69,21 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Perform sensitivity analysis for published studies</h1>
+    <h1>Perform meta-analyses including sensitivity analysis</h1>
     </div>
 
     
-    <p>For published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient.</p>
+    <p>For fitted models, this command carries out sensitivity analysis for a number of models, when their parameters stored in a data.frame.</p>
     
 
-    <pre class="usage"><span class='fu'>pkonfound</span>(<span class='no'>unstd_beta</span>, <span class='no'>standard_error</span>, <span class='no'>n_obs</span>, <span class='kw'>n_covariates</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
-  <span class='kw'>tails</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"print"</span>)</pre>
+    <pre class="usage"><span class='fu'>mkonfound</span>(<span class='no'>df</span>, <span class='no'>alpha</span>, <span class='no'>tails</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>unstd_beta</th>
-      <td><p>an unstandardized regression coefficient</p></td>
-    </tr>
-    <tr>
-      <th>standard_error</th>
-      <td><p>the standard error of the estimate of the unstandardized regression coefficient</p></td>
-    </tr>
-    <tr>
-      <th>n_obs</th>
-      <td><p>the number of observations in the sample</p></td>
-    </tr>
-    <tr>
-      <th>n_covariates</th>
-      <td><p>the number of covariates in the regression model</p></td>
+      <th>df</th>
+      <td><p>a data.frame with columns for the 'unstd_beta', 'standard_error', 'n_obs', and 'n_covariates' arguments (see ?pkonfound for more information on these)</p></td>
     </tr>
     <tr>
       <th>alpha</th>
@@ -106,21 +93,13 @@
       <th>tails</th>
       <td><p>integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)</p></td>
     </tr>
-    <tr>
-      <th>to_return</th>
-      <td><p>whether to return a data.frame (by specifying this argument to euqal "df") or a plot ("plot"); default is to print the output to the console</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference</p>
+    <p>prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference for each of the cases in the data.frame</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; To invalidate the inference, 60.31 % of the estimate would have to be due to bias.
-#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.</div><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>.4</span>, <span class='fl'>2</span>, <span class='fl'>100</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; To sustain the inference,  89.92 % of the estimate would have to be due to bias.
-#&gt; To sustain the inference,  90  of the cases with 0 effect would have to be replaced with cases at the threshold of inference.</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -128,9 +107,7 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>
