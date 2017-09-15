@@ -4,10 +4,10 @@
 \alias{mkonfound}
 \title{Perform meta-analyses including sensitivity analysis}
 \usage{
-mkonfound(df, alpha, tails)
+mkonfound(df, alpha = 0.05, tails = 2)
 }
 \arguments{
-\item{df}{a data.frame with columns for the 'unstd_beta', 'standard_error', 'n_obs', and 'n_covariates' arguments (see ?pkonfound for more information on these)}
+\item{df}{a data.frame with columns for the 'unstd_beta', 'std_err', 'n_obs', and 'n_covariates' arguments (see ?pkonfound for more information on these)}
 
 \item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
@@ -18,4 +18,8 @@ prints the bias and the number of cases that would have to be replaced with case
 }
 \description{
 For fitted models, this command carries out sensitivity analysis for a number of models, when their parameters stored in a data.frame.
+}
+\examples{
+df <- data.frame(unstd_beta = c(2, 10, 1.7), std_error = c(.3, 2.9, 1.5), n_obs = c(70, 405, 200), n_covs = c(3, 4, 1))
+mkonfound(df)
 }

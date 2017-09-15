@@ -15,6 +15,11 @@ You can install konfound from GitHub with:
 devtools::install_github("jrosen48/rsensitivity")
 ```
 
+``` r
+devtools::load_all(".")
+#> Loading konfound
+```
+
 Use of konfound
 ===============
 
@@ -24,24 +29,21 @@ Use of konfound
 
 ``` r
 library(konfound)
+```
+
+``` r
 pkonfound(2, .4, 100, 3, to_return = "df")
 #> # A tibble: 1 x 3
 #>       inference percent observations
 #>           <chr>   <dbl>        <dbl>
-#> 1 to_invalidate   60.31           60
+#> 1 to_invalidate    60.3           60
 pkonfound(2, .4, 100, 3, to_return = "print")
-#> To invalidate the inference, 60.31 % of the estimate would have to be due to bias.
+#> To invalidate the inference, 60.3 % of the estimate would have to be due to bias.
 #> To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.
 pkonfound(2, .4, 100, 3, to_return = "plot")
 ```
 
-![](README-unnamed-chunk-2-1.png)
-
-``` r
-pkonfound(.4, 2, 100, 3, to_return = "print")
-#> To sustain the inference,  89.92 % of the estimate would have to be due to bias.
-#> To sustain the inference,  90  of the cases with 0 effect would have to be replaced with cases at the threshold of inference.
-```
+![](README-unnamed-chunk-4-1.png)
 
 ### konfound() for models fit in R
 
@@ -49,22 +51,33 @@ pkonfound(.4, 2, 100, 3, to_return = "print")
 
 ``` r
 m1 <- lm(mpg ~ wt + hp, data = mtcars)
-arm::display(m1)
+summary(m1)
+#> 
+#> Call:
 #> lm(formula = mpg ~ wt + hp, data = mtcars)
-#>             coef.est coef.se
-#> (Intercept) 37.23     1.60  
-#> wt          -3.88     0.63  
-#> hp          -0.03     0.01  
+#> 
+#> Residuals:
+#>    Min     1Q Median     3Q    Max 
+#> -3.941 -1.600 -0.182  1.050  5.854 
+#> 
+#> Coefficients:
+#>             Estimate Std. Error t value Pr(>|t|)    
+#> (Intercept) 37.22727    1.59879  23.285  < 2e-16 ***
+#> wt          -3.87783    0.63273  -6.129 1.12e-06 ***
+#> hp          -0.03177    0.00903  -3.519  0.00145 ** 
 #> ---
-#> n = 32, k = 3
-#> residual sd = 2.59, R-Squared = 0.83
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> Residual standard error: 2.593 on 29 degrees of freedom
+#> Multiple R-squared:  0.8268, Adjusted R-squared:  0.8148 
+#> F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
 ```
 
 Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as follows, specifying the fitted model object:
 
 ``` r
 konfound(m1, wt)
-#> To invalidate the inference, 66.72 % of the estimate would have to be due to bias.
+#> To invalidate the inference, 66.68 % of the estimate would have to be due to bias.
 #> To invalidate the inference, 21 observations would have to be replaced with cases for which there is no effect.
 ```
 
@@ -74,23 +87,20 @@ konfound(m1, wt)
 library(dplyr, warn.conflicts = FALSE)
 
 df <- tribble(
-  ~unstd_beta, ~standard_error, ~n_obs, ~n_covariates,
-  2,           .3,              70,      3,
-  10,          2.9,             405,     4,
-  1.7,         1.5,             200,     1,
-  -3,          1.3,             125,     2
+  ~unstd_beta, ~std_err, ~n_obs, ~n_covs,
+  2,           .3,       70,     3,
+  10,          2.9,      405,    4,
+  1.7,         1.5,      200,    1
 )
 
-out <- mkonfound(df)
-knitr::kable(out)
+mkonfound(df)
+#> # A tibble: 3 x 7
+#>   unstd_beta std_err n_obs n_covs     inference percent observations
+#>        <dbl>   <dbl> <dbl>  <dbl>         <chr>   <dbl>        <dbl>
+#> 1        2.0     0.3    70      3 to_invalidate   70.05           49
+#> 2       10.0     2.9   405      4 to_invalidate   42.99          174
+#> 3        1.7     1.5   200      1    to_sustain   42.53           85
 ```
-
-|  unstd\_beta|  standard\_error|  n\_obs|  n\_covariates| inference      |  percent|  observations|
-|------------:|----------------:|-------:|--------------:|:---------------|--------:|-------------:|
-|          2.0|              0.3|      70|              3| to\_invalidate |    70.06|            49|
-|         10.0|              2.9|     405|              4| to\_invalidate |    42.99|           174|
-|          1.7|              1.5|     200|              1| to\_sustain    |    42.53|            85|
-|         -3.0|              1.3|     125|              2| to\_invalidate |    14.22|            18|
 
 Shiny Version for published studies
 ===================================

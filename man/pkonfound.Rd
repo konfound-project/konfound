@@ -4,13 +4,13 @@
 \alias{pkonfound}
 \title{Perform sensitivity analysis for published studies}
 \usage{
-pkonfound(unstd_beta, standard_error, n_obs, n_covariates = 1, alpha = 0.05,
-  tails = 2, to_return = "print")
+pkonfound(unstd_beta, std_err, n_obs, n_covariates = 1, alpha = 0.05,
+  tails = 2, nu = 0, to_return = "print")
 }
 \arguments{
 \item{unstd_beta}{an unstandardized regression coefficient}
 
-\item{standard_error}{the standard error of the estimate of the unstandardized regression coefficient}
+\item{std_err}{the standard error of the estimate of the unstandardized regression coefficient}
 
 \item{n_obs}{the number of observations in the sample}
 
@@ -19,6 +19,8 @@ pkonfound(unstd_beta, standard_error, n_obs, n_covariates = 1, alpha = 0.05,
 \item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
 \item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
+
+\item{nu}{what hypothesis to be tested; defaults to testing whether unstd_beta is significantly different from 0}
 
 \item{to_return}{whether to return a data.frame (by specifying this argument to euqal "df") or a plot ("plot"); default is to print the output to the console}
 }
