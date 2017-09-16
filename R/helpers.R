@@ -80,3 +80,6 @@ test_sensitivity <- function(unstd_beta,
     else if (to_return == "print") return(output_print(beta_diff, beta_threshhold, bias, sustain, recase))
     else stop("to_return must be set to df, print, or plot")
 }    
+
+## quiets concerns (notes) of R CMD check re: the vars that are evaluated using non-standard evaluation
+if (getRversion() >= "2.15.1")  utils::globalVariables(c("inference", "key", "observations", "percent", "val"))

@@ -34,9 +34,3 @@ konfound <- function(model_object,
                          tails = tails,
                          nu = 0,
                          to_return = "print") } }
-# else if (class(model_object) == "glm") {
-#     
-#     
-# } 
-# else {
-#     stop("input must be an object of class lm or glm")} }

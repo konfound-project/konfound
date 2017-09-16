@@ -5,7 +5,10 @@
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference for each of the cases in the data.frame
 #' @examples 
-#' df <- data.frame(unstd_beta = c(2, 10, 1.7), std_error = c(.3, 2.9, 1.5), n_obs = c(70, 405, 200), n_covs = c(3, 4, 1))
+#' df <- data.frame(unstd_beta = c(2, 10, 1.7),
+#'                  std_error = c(.3, 2.9, 1.5), 
+#'                  n_obs = c(70, 405, 200), 
+#'                  n_covs = c(3, 4, 1))
 #' mkonfound(df)
 #' @export
 
