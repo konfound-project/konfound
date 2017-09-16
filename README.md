@@ -34,9 +34,9 @@ library(konfound)
 ``` r
 pkonfound(2, .4, 100, 3, to_return = "df")
 #> # A tibble: 1 x 3
-#>       inference percent observations
-#>           <chr>   <dbl>        <dbl>
-#> 1 to_invalidate    60.3           60
+#>       inference percent_bias replace_null_cases
+#>           <chr>        <dbl>              <dbl>
+#> 1 to_invalidate         60.3                 60
 pkonfound(2, .4, 100, 3, to_return = "print")
 #> To invalidate the inference, 60.3 % of the estimate would have to be due to bias.
 #> To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.
@@ -95,11 +95,12 @@ df <- tribble(
 
 mkonfound(df)
 #> # A tibble: 3 x 7
-#>   unstd_beta std_err n_obs n_covs     inference percent observations
-#>        <dbl>   <dbl> <dbl>  <dbl>         <chr>   <dbl>        <dbl>
-#> 1        2.0     0.3    70      3 to_invalidate   70.05           49
-#> 2       10.0     2.9   405      4 to_invalidate   42.99          174
-#> 3        1.7     1.5   200      1    to_sustain   42.53           85
+#>   unstd_beta std_err n_obs n_covs     inference percent_bias
+#>        <dbl>   <dbl> <dbl>  <dbl>         <chr>        <dbl>
+#> 1        2.0     0.3    70      3 to_invalidate        70.05
+#> 2       10.0     2.9   405      4 to_invalidate        42.99
+#> 3        1.7     1.5   200      1    to_sustain        42.53
+#> # ... with 1 more variables: replace_null_cases <dbl>
 ```
 
 Shiny Version for published studies
