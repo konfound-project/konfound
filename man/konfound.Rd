@@ -4,7 +4,8 @@
 \alias{konfound}
 \title{Perform sensitivity analysis on fitted models}
 \usage{
-konfound(model_object, tested_variable, alpha = 0.05, tails = 2)
+konfound(model_object, tested_variable, alpha = 0.05, tails = 2,
+  to_return = "print")
 }
 \arguments{
 \item{model_object}{output from a model (currently works for: lm)}
@@ -14,6 +15,8 @@ konfound(model_object, tested_variable, alpha = 0.05, tails = 2)
 \item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
 \item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
+
+\item{to_return}{whether to return a data.frame (by specifying this argument to euqal "df") or a plot ("plot"); default is to print the output to the console}
 }
 \value{
 prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference

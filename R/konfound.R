@@ -3,7 +3,9 @@
 #' @param model_object output from a model (currently works for: lm)
 #' @param tested_variable Variable associated with the unstandardized beta coefficient to be tested
 #' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
+#' @param to_return whether to return a data.frame (by specifying this argument to euqal "df") or a plot ("plot"); default is to print the output to the console
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
+
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
 #' m1 <- lm(mpg ~ wt + hp, data = mtcars)
@@ -13,7 +15,8 @@
 konfound <- function(model_object, 
                      tested_variable, 
                      alpha = .05, 
-                     tails = 2) {
+                     tails = 2,
+                     to_return = "print") {
     tested_variable_enquo <- rlang::enquo(tested_variable) # dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
     tested_variable_string <- rlang::quo_name(tested_variable_enquo)
     tidy_output <- broom::tidy(model_object) # tidying output
@@ -33,4 +36,4 @@ konfound <- function(model_object,
                          alpha = alpha,
                          tails = tails,
                          nu = 0,
-                         to_return = "print") } }
+                         to_return = to_return)} }
