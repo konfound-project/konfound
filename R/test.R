@@ -1,3 +1,15 @@
+# improve bias plot
+# add histogram for mkonfound
+# add option to return for all coef
+# konfound for glm
+# * directly use coefficient and se
+# * average partial effect (option)
+# * p / (1-p)
+# * average across all possible values of x
+# konfound for mlm
+# * correlation-based approach
+# update shiny
+
 t_sensitivity <- function(unstd_beta,
                           std_err,
                           n_obs, 
@@ -27,14 +39,15 @@ t_sensitivity <- function(unstd_beta,
     
     print(itcv)
     
-local `x'impact =  string(``x'itcv',"%6.4f")
-local `x'r_con = string(sqrt(abs(``x'itcv')),"%6.3f")
-local `x'nr_con = -1 * ``x'r_con'
-local `x'r_ycv = string(``x'r_con' * sqrt(1-(``x'RsqYZ')),"%6.3f")
-local `x'r_xcv = string(``x'r_con' * sqrt(1-(``x'RsqXZ')),"%6.3f")
-local `x'nr_xcv = -1 * ``x'r_xcv'
-local `x'un_impact = string(``x'itcv'*sqrt(1-(``x'RsqYZ'))*sqrt(1-(``x'RsqXZ')),"%6.4f")
-}
+    impact <- itcv
+    r_con <- sqrt(abs(itcv))
+    nr_con <- -1 * rcon
+    r_ycv <- r_con * sqrt(1 - RsqYZ)
+    r_xcv <- r_con * sqrt(1 - RsqXZ)
+    nr_xcv <- -1 * r_xcv
+    un_impact <- itcv * sqrt(1 - RsqYZ * sqrt(1 - RsqXZ))
+
+    }
 
 t_sensitivity(.4, .1, 100, 4, .05, 2)
 
