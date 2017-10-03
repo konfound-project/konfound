@@ -45,6 +45,21 @@ pkonfound(2, .4, 100, 3, to_return = "plot")
 
 ![](README-unnamed-chunk-4-1.png)
 
+``` r
+
+pkonfound(.4, 2, 200, 5, to_return = "df")
+#> # A tibble: 1 x 3
+#>    inference percent_bias replace_null_cases
+#>        <chr>        <dbl>              <dbl>
+#> 1 to_sustain        89.86                180
+pkonfound(.4, 2, 200, 5, to_return = "print")
+#> To sustain the inference,  89.86 % of the estimate would have to be due to bias.
+#> To sustain the inference,  180  of the cases with 0 effect would have to be replaced with cases at the threshold of inference.
+pkonfound(.4, .4, 200, 5, to_return = "plot")
+```
+
+![](README-unnamed-chunk-4-2.png)
+
 ### konfound() for models fit in R
 
 `konfound()` calculates the same for models fit in R. For example, here is the output from a linear model fit with `lm()` using the built-in dataset `mtcars`:
@@ -106,4 +121,4 @@ mkonfound(df)
 Shiny Version for published studies
 ===================================
 
-A shiny version for sensitivity analysis for published studies is available [here](https://jmichaelrosenberg.shinyapps.io/shinykonfound/).
+A shiny version for sensitivity analysis for published studies is also available [here](https://jmichaelrosenberg.shinyapps.io/shinykonfound/).

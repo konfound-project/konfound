@@ -60,6 +60,8 @@
 <p>You can install konfound from GitHub with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"jrosen48/rsensitivity"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">load_all</span>(<span class="st">"."</span>)
+<span class="co">#&gt; Loading konfound</span></code></pre></div>
 </div>
 <div id="use-of-konfound" class="section level1">
 <h1 class="hasAnchor">
@@ -68,38 +70,57 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 <h3 class="hasAnchor">
 <a href="#pkonfound-for-published-studies" class="anchor"></a>pkonfound() for published studies</h3>
 <p><code><a href="reference/pkonfound.html">pkonfound()</a></code>, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)
-<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"df"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"df"</span>)
 <span class="co">#&gt; # A tibble: 1 x 3</span>
-<span class="co">#&gt;       inference percent observations</span>
-<span class="co">#&gt;           &lt;chr&gt;   &lt;dbl&gt;        &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 to_invalidate   60.31           60</span>
+<span class="co">#&gt;       inference percent_bias replace_null_cases</span>
+<span class="co">#&gt;           &lt;chr&gt;        &lt;dbl&gt;              &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 to_invalidate         60.3                 60</span>
 <span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"print"</span>)
-<span class="co">#&gt; To invalidate the inference, 60.31 % of the estimate would have to be due to bias.</span>
+<span class="co">#&gt; To invalidate the inference, 60.3 % of the estimate would have to be due to bias.</span>
 <span class="co">#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.</span>
 <span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"plot"</span>)</code></pre></div>
-<p><img src="README-unnamed-chunk-2-1.png" width="672"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"print"</span>)
-<span class="co">#&gt; To sustain the inference,  89.92 % of the estimate would have to be due to bias.</span>
-<span class="co">#&gt; To sustain the inference,  90  of the cases with 0 effect would have to be replaced with cases at the threshold of inference.</span></code></pre></div>
+<p><img src="README-unnamed-chunk-4-1.png" width="672"></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
+<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">200</span>, <span class="dv">5</span>, <span class="dt">to_return =</span> <span class="st">"df"</span>)
+<span class="co">#&gt; # A tibble: 1 x 3</span>
+<span class="co">#&gt;    inference percent_bias replace_null_cases</span>
+<span class="co">#&gt;        &lt;chr&gt;        &lt;dbl&gt;              &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 to_sustain        89.86                180</span>
+<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">200</span>, <span class="dv">5</span>, <span class="dt">to_return =</span> <span class="st">"print"</span>)
+<span class="co">#&gt; To sustain the inference,  89.86 % of the estimate would have to be due to bias.</span>
+<span class="co">#&gt; To sustain the inference,  180  of the cases with 0 effect would have to be replaced with cases at the threshold of inference.</span>
+<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, .<span class="dv">4</span>, <span class="dv">200</span>, <span class="dv">5</span>, <span class="dt">to_return =</span> <span class="st">"plot"</span>)</code></pre></div>
+<p><img src="README-unnamed-chunk-4-2.png" width="672"></p>
 </div>
 <div id="konfound-for-models-fit-in-r" class="section level3">
 <h3 class="hasAnchor">
 <a href="#konfound-for-models-fit-in-r" class="anchor"></a>konfound() for models fit in R</h3>
 <p><code><a href="reference/konfound.html">konfound()</a></code> calculates the same for models fit in R. For example, here is the output from a linear model fit with <code>lm()</code> using the built-in dataset <code>mtcars</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>hp, <span class="dt">data =</span> mtcars)
-arm<span class="op">::</span><span class="kw">display</span>(m1)
+<span class="kw">summary</span>(m1)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
 <span class="co">#&gt; lm(formula = mpg ~ wt + hp, data = mtcars)</span>
-<span class="co">#&gt;             coef.est coef.se</span>
-<span class="co">#&gt; (Intercept) 37.23     1.60  </span>
-<span class="co">#&gt; wt          -3.88     0.63  </span>
-<span class="co">#&gt; hp          -0.03     0.01  </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;    Min     1Q Median     3Q    Max </span>
+<span class="co">#&gt; -3.941 -1.600 -0.182  1.050  5.854 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept) 37.22727    1.59879  23.285  &lt; 2e-16 ***</span>
+<span class="co">#&gt; wt          -3.87783    0.63273  -6.129 1.12e-06 ***</span>
+<span class="co">#&gt; hp          -0.03177    0.00903  -3.519  0.00145 ** </span>
 <span class="co">#&gt; ---</span>
-<span class="co">#&gt; n = 32, k = 3</span>
-<span class="co">#&gt; residual sd = 2.59, R-Squared = 0.83</span></code></pre></div>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 2.593 on 29 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.8268, Adjusted R-squared:  0.8148 </span>
+<span class="co">#&gt; F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</span></code></pre></div>
 <p>Sensitivity analysis for the effect for <code>wt</code> on <code>mpg</code> can be carried out as follows, specifying the fitted model object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/konfound.html">konfound</a></span>(m1, wt)
-<span class="co">#&gt; To invalidate the inference, 66.72 % of the estimate would have to be due to bias.</span>
+<span class="co">#&gt; To invalidate the inference, 66.68 % of the estimate would have to be due to bias.</span>
 <span class="co">#&gt; To invalidate the inference, 21 observations would have to be replaced with cases for which there is no effect.</span></code></pre></div>
 </div>
 <div id="mkonfound-for-meta-analyses-including-sensitivity-analysis" class="section level3">
@@ -108,70 +129,26 @@ arm<span class="op">::</span><span class="kw">display</span>(m1)
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)
 
 df &lt;-<span class="st"> </span><span class="kw">tribble</span>(
-  <span class="op">~</span>unstd_beta, <span class="op">~</span>standard_error, <span class="op">~</span>n_obs, <span class="op">~</span>n_covariates,
-  <span class="dv">2</span>,           .<span class="dv">3</span>,              <span class="dv">70</span>,      <span class="dv">3</span>,
-  <span class="dv">10</span>,          <span class="fl">2.9</span>,             <span class="dv">405</span>,     <span class="dv">4</span>,
-  <span class="fl">1.7</span>,         <span class="fl">1.5</span>,             <span class="dv">200</span>,     <span class="dv">1</span>,
-  <span class="op">-</span><span class="dv">3</span>,          <span class="fl">1.3</span>,             <span class="dv">125</span>,     <span class="dv">2</span>
+  <span class="op">~</span>unstd_beta, <span class="op">~</span>std_err, <span class="op">~</span>n_obs, <span class="op">~</span>n_covs,
+  <span class="dv">2</span>,           .<span class="dv">3</span>,       <span class="dv">70</span>,     <span class="dv">3</span>,
+  <span class="dv">10</span>,          <span class="fl">2.9</span>,      <span class="dv">405</span>,    <span class="dv">4</span>,
+  <span class="fl">1.7</span>,         <span class="fl">1.5</span>,      <span class="dv">200</span>,    <span class="dv">1</span>
 )
 
-out &lt;-<span class="st"> </span><span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(df)
-knitr<span class="op">::</span><span class="kw">kable</span>(out)</code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="right">unstd_beta</th>
-<th align="right">standard_error</th>
-<th align="right">n_obs</th>
-<th align="right">n_covariates</th>
-<th align="left">inference</th>
-<th align="right">percent</th>
-<th align="right">observations</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="right">2.0</td>
-<td align="right">0.3</td>
-<td align="right">70</td>
-<td align="right">3</td>
-<td align="left">to_invalidate</td>
-<td align="right">70.06</td>
-<td align="right">49</td>
-</tr>
-<tr class="even">
-<td align="right">10.0</td>
-<td align="right">2.9</td>
-<td align="right">405</td>
-<td align="right">4</td>
-<td align="left">to_invalidate</td>
-<td align="right">42.99</td>
-<td align="right">174</td>
-</tr>
-<tr class="odd">
-<td align="right">1.7</td>
-<td align="right">1.5</td>
-<td align="right">200</td>
-<td align="right">1</td>
-<td align="left">to_sustain</td>
-<td align="right">42.53</td>
-<td align="right">85</td>
-</tr>
-<tr class="even">
-<td align="right">-3.0</td>
-<td align="right">1.3</td>
-<td align="right">125</td>
-<td align="right">2</td>
-<td align="left">to_invalidate</td>
-<td align="right">14.22</td>
-<td align="right">18</td>
-</tr>
-</tbody>
-</table>
+<span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(df)
+<span class="co">#&gt; # A tibble: 3 x 7</span>
+<span class="co">#&gt;   unstd_beta std_err n_obs n_covs     inference percent_bias</span>
+<span class="co">#&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;         &lt;chr&gt;        &lt;dbl&gt;</span>
+<span class="co">#&gt; 1        2.0     0.3    70      3 to_invalidate        70.05</span>
+<span class="co">#&gt; 2       10.0     2.9   405      4 to_invalidate        42.99</span>
+<span class="co">#&gt; 3        1.7     1.5   200      1    to_sustain        42.53</span>
+<span class="co">#&gt; # ... with 1 more variables: replace_null_cases &lt;dbl&gt;</span></code></pre></div>
 </div>
 </div>
 <div id="shiny-version-for-published-studies" class="section level1">
 <h1 class="hasAnchor">
 <a href="#shiny-version-for-published-studies" class="anchor"></a>Shiny Version for published studies</h1>
-<p>A shiny version for sensitivity analysis for published studies is available <a href="https://jmichaelrosenberg.shinyapps.io/shinykonfound/">here</a>.</p>
+<p>A shiny version for sensitivity analysis for published studies is also available <a href="https://jmichaelrosenberg.shinyapps.io/shinykonfound/">here</a>.</p>
 </div>
 </div>
   </div>

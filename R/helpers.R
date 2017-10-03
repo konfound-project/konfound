@@ -15,12 +15,12 @@ output_df <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL, r
 # Function to output the plot
 
 output_plot <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL, recase) {
-    x <- output_df(beta_diff, beta_threshhold, bias, sustain, recase)
-    x <- dplyr::mutate(x, remainder = 100 - percent_bias)
-    x <- tidyr::gather(x, key, val, -inference, -replace_null_cases)
-    x <- dplyr::mutate(x, inference = dplyr::case_when(
-        inference == "to_invalidate" ~ "To Invalidate",
-        inference == "to_sustain" ~ "To Sustain"))
+    output_df(beta_diff, beta_threshhold, bias, sustain, recase) %>% 
+        dplyr::mutate(remainder = 100 - percent_bias) %>% 
+        tidyr::gather(key, val, -inference, -replace_null_cases) %>%
+        dplyr::mutate(inference = dplyr::case_when(
+            inference == "to_invalidate" ~ "To Invalidate",
+            inference == "to_sustain" ~ "To Sustain"))
     ggplot2::ggplot(x, ggplot2::aes_string(x = "inference", y = "val", fill = "key")) +
         ggplot2::geom_col(position = ggplot2::position_fill(reverse = TRUE)) +
         ggplot2::theme(legend.position = "none") +
@@ -39,10 +39,9 @@ output_print <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL
         cat("To sustain the inference, ", round(sustain, 2), "% of the estimate would have to be due to bias.\n")
         cat("To sustain the inference, ", round(recase, 3), " of the cases with 0 effect would have to be replaced with cases at the threshold of inference.") } 
     else if (beta_diff == beta_threshhold) {
-        warning("The coefficient is exactly equal to the threshold.") }
-}
+        warning("The coefficient is exactly equal to the threshold.") } }
 
-# Main function to test sensitivity to be wrapped with pkonfound() and konfound()
+# Main function to test sensitivity to be wrapped with pkonfound(), konfound(), and mkonfound()
 
 test_sensitivity <- function(unstd_beta,
                              std_err,
@@ -74,8 +73,7 @@ test_sensitivity <- function(unstd_beta,
     if (to_return == "df") return(output_df(beta_diff, beta_threshhold, bias, sustain, recase))
     else if (to_return == "plot") return(output_plot(beta_diff, beta_threshhold, bias, sustain, recase)) 
     else if (to_return == "print") return(output_print(beta_diff, beta_threshhold, bias, sustain, recase))
-    else stop("to_return must be set to df, print, or plot")
-}    
+    else stop("to_return must be set to df, print, or plot") }    
 
 ## quiets concerns (notes) of R CMD check re: the vars that are evaluated using non-standard evaluation
 if (getRversion() >= "2.15.1")  utils::globalVariables(c("inference", "key", "replace_null_cases", "percent_bias", "val"))
