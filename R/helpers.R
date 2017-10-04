@@ -80,5 +80,5 @@ test_sensitivity <- function(unstd_beta,
 if (getRversion() >= "2.15.1")  utils::globalVariables(c("inference", "key", "replace_null_cases", "percent_bias", "val"))
 
 .onAttach <- function(libname, pkgname) {
-    packageStartupMessage("Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).\nSee https://jmichaelrosenberg.shinyapps.io/shinykonfound/ for more information.")
+    packageStartupMessage("Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).\nFind more information at https://jmichaelrosenberg.shinyapps.io/shinykonfound/")
 }

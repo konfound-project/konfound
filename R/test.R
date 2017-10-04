@@ -10,45 +10,39 @@
 # * correlation-based approach
 # # update shiny
 # 
-# t_sensitivity <- function(unstd_beta,
-#                           std_err,
-#                           n_obs,
-#                           n_covariates,
-#                           alpha,
-#                           tails,
-#                           nu,
-#                           to_return) {
-#     # calculating statistics used in every case
-#     if (unstd_beta < 0) {
-#         critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) * -1 }
-#     else {critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) }
-# 
-#     # local `x'be_th = ``x'criticalt' * ``x'sd' +`nu'
-#     # local `x't_critr = ``x'be_th'/``x'sd'
-# 
-#     critical_r <- critical_t / sqrt((critical_t ^ 2) + (n_obs - n_covariates - 2))
-# 
-#     obs_r <- (unstd_beta / std_err) / sqrt((unstd_beta / std_err ^ 2) + n_obs - n_covariates - 2)
-# 
-#     print(critical_r)
-#     print(obs_r)
-# 
-#     if ((obs_r - critical_r) >= 0) {
-#         itcv = (obs_r - critical_r) / (1 - critical_r)
-#     } else { itcv = (obs_r - critical_r) / (1 - critical_r) }
-# 
-#     print(itcv)
-# 
-#     impact <- itcv
-#     r_con <- sqrt(abs(itcv))
-#     nr_con <- -1 * rcon
-#     r_ycv <- r_con * sqrt(1 - RsqYZ)
-#     r_xcv <- r_con * sqrt(1 - RsqXZ)
-#     nr_xcv <- -1 * r_xcv
-#     un_impact <- itcv * sqrt(1 - RsqYZ * sqrt(1 - RsqXZ))
-# 
-#     }
-# 
+t_sensitivity <- function(unstd_beta,
+                          std_err,
+                          n_obs,
+                          n_covariates,
+                          alpha,
+                          tails,
+                          nu,
+                          to_return) {
+    # calculating statistics used in every case
+    if (unstd_beta < 0) {
+        critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) * -1 }
+    else {critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) }
+    
+    critical_r <- critical_t / sqrt((critical_t ^ 2) + (n_obs - n_covariates - 2))
+    
+    obs_r <- (unstd_beta / std_err) / sqrt(((unstd_beta / std_err) ^ 2) + (n_obs - n_covariates - 2))
+    
+    if ((obs_r - critical_r) >= 0) {
+        itcv = (obs_r - critical_r) / (1 - critical_r)
+    } else { itcv = (obs_r - critical_r) / (1 - critical_r) 
+    }
+    
+    r_con <- sqrt(abs(itcv))
+    nr_con <- -1 * r_con
+    # r_ycv <- r_con * sqrt(1 - RsqYZ)
+    # r_xcv <- r_con * sqrt(1 - RsqXZ)
+    # nr_xcv <- -1 * r_xcv
+    # un_impact <- itcv * sqrt(1 - RsqYZ * sqrt(1 - RsqXZ))
+    
+    cat("An omitted variable would have to be correlated at ", r_con, " with the outcome and at ", "r_con", "with the predictor of interest (conditioning on observed covariates) to sustain an inference.")
+}
+
+# t_sensitivity(2, .4, 100, 3, .05, 2)
 # t_sensitivity(.4, .1, 100, 4, .05, 2)
 
 # 
