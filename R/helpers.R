@@ -15,16 +15,16 @@ output_df <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL, r
 # Function to output the plot
 
 output_plot <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL, recase) {
-    output_df(beta_diff, beta_threshhold, bias, sustain, recase) %>% 
+    to_plot <- output_df(beta_diff, beta_threshhold, bias, sustain, recase) %>% 
         dplyr::mutate(remainder = 100 - percent_bias) %>% 
         tidyr::gather(key, val, -inference, -replace_null_cases) %>%
         dplyr::mutate(inference = dplyr::case_when(
             inference == "to_invalidate" ~ "To Invalidate",
-            inference == "to_sustain" ~ "To Sustain")) %>% 
-    ggplot2::ggplot(ggplot2::aes_string(x = "inference", y = "val", fill = "key")) +
+            inference == "to_sustain" ~ "To Sustain"),
+            key = as.factor(key))
+    ggplot2::ggplot(to_plot, ggplot2::aes_string(x = "inference", y = "val", fill = "key")) +
         ggplot2::geom_col(position = ggplot2::position_fill(reverse = TRUE)) +
-        ggplot2::theme(legend.position = "none") +
-        ggplot2::scale_fill_manual("", values = c("cyan4", "lightgray"), breaks = "percent_bias") +
+        ggplot2::scale_fill_manual("", values = c("cyan4", "lightgray"), breaks = c("percent_bias", "remainder")) +
         ggplot2::xlab("") +
         ggplot2::ylab("%") +
         ggplot2::ggtitle("Percentage of Effect Needed to Invalidate or Sustain the Inference") 
@@ -78,3 +78,7 @@ test_sensitivity <- function(unstd_beta,
 
 ## quiets concerns (notes) of R CMD check re: the vars that are evaluated using non-standard evaluation
 if (getRversion() >= "2.15.1")  utils::globalVariables(c("inference", "key", "replace_null_cases", "percent_bias", "val"))
+
+.onAttach <- function(libname, pkgname) {
+    packageStartupMessage("Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).\nSee https://jmichaelrosenberg.shinyapps.io/shinykonfound/ for more information.")
+}
