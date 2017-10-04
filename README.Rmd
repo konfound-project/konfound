@@ -87,13 +87,6 @@ df <- tribble(
 results_df <- mkonfound(df)
 
 # add a histogram - for percent_bias to invalidate
-
-library(ggplot2)
-
-results_df %>% 
-    filter(inference == "to_invalidate") %>% 
-    ggplot(aes(x = percent_bias)) +
-        geom_histogram(bins = 20)
 ```
 
 # Shiny Version for published studies 

@@ -20,14 +20,15 @@ output_plot <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL,
         tidyr::gather(key, val, -inference, -replace_null_cases) %>%
         dplyr::mutate(inference = dplyr::case_when(
             inference == "to_invalidate" ~ "To Invalidate",
-            inference == "to_sustain" ~ "To Sustain"))
-    ggplot2::ggplot(x, ggplot2::aes_string(x = "inference", y = "val", fill = "key")) +
+            inference == "to_sustain" ~ "To Sustain")) %>% 
+    ggplot2::ggplot(ggplot2::aes_string(x = "inference", y = "val", fill = "key")) +
         ggplot2::geom_col(position = ggplot2::position_fill(reverse = TRUE)) +
         ggplot2::theme(legend.position = "none") +
         ggplot2::scale_fill_manual("", values = c("cyan4", "lightgray"), breaks = "percent_bias") +
         ggplot2::xlab("") +
         ggplot2::ylab("%") +
-        ggplot2::ggtitle("Percentage of Effect Needed to Invalidate or Sustain the Inference") } 
+        ggplot2::ggtitle("Percentage of Effect Needed to Invalidate or Sustain the Inference") 
+    } 
 
 # Function to output printed text
 
