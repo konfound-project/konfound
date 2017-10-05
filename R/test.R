@@ -6,6 +6,9 @@ t_sensitivity <- function(unstd_beta,
                           tails,
                           nu,
                           to_return) {
+    
+    # NOTE: the next two parts are the same for both approaches
+    
     # calculating statistics used in every case
     if (unstd_beta < 0) {
         critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) * -1 }
@@ -15,8 +18,6 @@ t_sensitivity <- function(unstd_beta,
     if (nu != 0) {
         beta_diff <- abs(unstd_beta - nu) } else {
             beta_diff <- unstd_beta - 0 } # this is just to make what this is doing evident
-
-    # be_th <- (critical_t * std_err) + nu
     
     # transforming t into r and finding critical t
     obs_r <- (beta_diff / std_err) / sqrt(((n_obs - n_covariates - 1) + ((beta_diff / std_err) ^ 2)))
@@ -28,6 +29,9 @@ t_sensitivity <- function(unstd_beta,
     }
     # finding correlation of confound to invalidate / sustain inference
     r_con <- round(sqrt(abs(itcv)), 3)
+    
+    # also need to add component correlations
+    
     # output
     if (abs(obs_r) > abs(critical_r)) {
         cat("An omitted variable would have to be correlated at", r_con, "with the outcome and at", r_con, "with the predictor of interest (conditioning on observed covariates) to invalidate an inference.") }
@@ -38,5 +42,5 @@ t_sensitivity <- function(unstd_beta,
 
 }
 
-t_sensitivity(2, .4, 100, 3, .05, 2, 0)
-t_sensitivity(.4, 2, 100, 3, .05, 2, 0)
+# t_sensitivity(2, .4, 100, 3, .05, 2, 0)
+# t_sensitivity(.4, 2, 100, 3, .05, 2, 0)
