@@ -25,7 +25,9 @@ konfound <- function(model_object,
                      test_all = FALSE) {
     
     if (class(model_object)[1] %in% c("merMod", "lme")) {
-        stop("We recommend carrying out sensitivity analysis for mixed-effects or multi-level models using pkonfound()")
+        # stop("We recommend carrying out sensitivity analysis for mixed-effects or multi-level models using pkonfound()")
+        tidy_output <- broom::tidy(model_object) # tidying output
+        glance_output <- broom::glance(model_object)
     }
     
     if (!(class(model_object)[1] %in% c("lm", "glm", "merMod", "lme"))) {
@@ -94,10 +96,14 @@ konfound <- function(model_object,
 # konfound(m1, hp)
 # konfound(m1, test_all = TRUE)
 # 
-# m2 <- glm(vs ~wt + hp, family = binomial(link = "logit"), data = mtcars)
+# m2 <-glm(am ~ cyl + hp * wt, data = mtcars, family = binomial)
 # m2
-# margins::margins(m2)
-# konfound(m2, wt)
+# x <- margins::margins(m2)
+# konfound(m2, cyl)
+# 
+# library("margins")
+# x <- lm(mpg ~ cyl * hp + wt, data = mtcars)
+# (m <- margins(x))
 # 
 # library(nlme)
 # fm1 <- lme(distance ~ age, data = Orthodont) # random is ~ age
@@ -108,3 +114,6 @@ konfound <- function(model_object,
 # dat <- gamSim(1,n=400,dist="normal",scale=2)
 # b <- gam(y~s(x0)+s(x1)+s(x2)+s(x3),data=dat)
 # konfound(b, x0)
+# 
+# xx <- KRmodcomp(fm1, sm)
+# ?getKR(xx, "ddf") # get denominator degrees of freedom.

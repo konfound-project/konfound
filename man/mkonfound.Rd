@@ -4,7 +4,7 @@
 \alias{mkonfound}
 \title{Perform meta-analyses including sensitivity analysis}
 \usage{
-mkonfound(df, alpha = 0.05, tails = 2)
+mkonfound(df, alpha = 0.05, tails = 2, return_plot = FALSE)
 }
 \arguments{
 \item{df}{a data.frame with columns for the 'unstd_beta', 'std_err', 'n_obs', and 'n_covariates' arguments (see ?pkonfound for more information on these)}
@@ -12,6 +12,8 @@ mkonfound(df, alpha = 0.05, tails = 2)
 \item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
 \item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
+
+\item{return_plot}{whether to return a plot of the percent bias; defaults to FALSE}
 }
 \value{
 prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference for each of the cases in the data.frame

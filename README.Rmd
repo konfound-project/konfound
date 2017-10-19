@@ -92,3 +92,9 @@ results_df <- mkonfound(df)
 # Shiny Version for published studies 
 
 A shiny version for sensitivity analysis for published studies is also available [here](https://jmichaelrosenberg.shinyapps.io/shinykonfound/).
+
+# Things that we are presently working on
+
+* Improving the figure for the replacement of cases approach
+* Adding a figure for the correlation-based approach
+* Adding the component correlations
