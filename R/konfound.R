@@ -8,14 +8,13 @@
 #' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
-#' m1 <- lm(mpg ~ wt + hp, data = mtcars)
-#' konfound(m1, wt)
-#' @export
-
 #' df <- data.frame(unstd_beta = c(2, 10, 1.7),
 #'                  std_error = c(.3, 2.9, 1.5), 
 #'                  n_obs = c(70, 405, 200), 
 #'                  n_covs = c(3, 4, 1))
+#' m1 <- lm(mpg ~ wt + hp, data = mtcars)
+#' konfound(m1, wt)
+#' @export
 
 konfound <- function(model_object, 
                      tested_variable,
@@ -38,7 +37,7 @@ konfound <- function(model_object,
     glance_output <- broom::glance(model_object)
     
     # Dispatching based on class
-
+    
     if (class(model_object)[1] == "lm") {
         
         if (test_all == FALSE) {

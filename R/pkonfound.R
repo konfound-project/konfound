@@ -21,7 +21,8 @@ pkonfound <- function(unstd_beta,
                       alpha = .05, 
                       tails = 2, 
                       nu = 0,
-                      to_return = "print") {
+                      to_return = "print",
+                      component_correlations = FALSE) {
     test_sensitivity(unstd_beta = unstd_beta,
                      std_err = std_err,
                      n_obs = n_obs, 
@@ -29,4 +30,5 @@ pkonfound <- function(unstd_beta,
                      alpha = alpha, 
                      tails = tails,
                      nu = nu,
-                     to_return = to_return) }
+                     to_return = to_return,
+                     component_correlations = component_correlations) }
