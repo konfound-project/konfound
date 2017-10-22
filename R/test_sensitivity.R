@@ -67,8 +67,8 @@ test_sensitivity <- function(unstd_beta,
     # needs obs_r, critical_r, and r_con
     
     # output dispatch
-    if (to_return == "df") return(output_df(beta_diff, beta_threshhold, bias, sustain, recase, obs_r, critical_r, r_con))
-    else if (to_return == "plot") return(output_plot(beta_diff, beta_threshhold, bias, sustain, recase, obs_r, critical_r, r_con))
+    if (to_return == "df") return(output_df(beta_diff, beta_threshhold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con))
+    else if (to_return == "plot") return(output_plot(beta_diff, beta_threshhold, unstd_beta, obs_r, critical_r, r_con))
     else if (to_return == "print") return(output_print(beta_diff, beta_threshhold, bias, sustain, recase, obs_r, critical_r, r_con))
     else stop("to_return must be set to df, print, or plot")
 }
