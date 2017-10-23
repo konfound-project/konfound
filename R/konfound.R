@@ -6,6 +6,7 @@
 #' @param to_return whether to return a data.frame (by specifying this argument to euqal "df") or a plot ("plot"); default is to print the output to the console
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
 #' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
+#' @param component_correlations whether to return the component correlations as part of the correlation-based approach
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
 #' m1 <- lm(mpg ~ wt + hp, data = mtcars)

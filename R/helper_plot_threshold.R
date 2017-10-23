@@ -8,7 +8,7 @@ plot_threshold <- function(beta_threshold, unstd_beta) {
         dd <- dplyr::rename(dd, `Below Threshold` = beta_threshold)
     } else if (unstd_beta < beta_threshold) {
         dd <- dplyr::data_frame(unstd_beta = unstd_beta, beta_threshold = beta_threshold)
-        dd <- plyr::mutate(dd, `Above Threshold` = abs(unstd_beta - beta_threshold))
+        dd <- dplyr::mutate(dd, `Above Threshold` = abs(unstd_beta - beta_threshold))
         dd <- dplyr::mutate(dd, `Below Threshold` = unstd_beta)
         dd <- dplyr::select(dd, -beta_threshold)
     }

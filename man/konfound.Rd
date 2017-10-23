@@ -19,6 +19,8 @@ konfound(model_object, tested_variable, alpha = 0.05, tails = 2,
 \item{to_return}{whether to return a data.frame (by specifying this argument to euqal "df") or a plot ("plot"); default is to print the output to the console}
 
 \item{test_all}{whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)}
+
+\item{component_correlations}{whether to return the component correlations as part of the correlation-based approach}
 }
 \value{
 prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference

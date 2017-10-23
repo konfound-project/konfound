@@ -15,8 +15,10 @@ Imports: broom,
     dplyr,
     ggplot2,
     tidyr,
-    purrr
-Suggets: margins
+    purrr,
+    margins
+Suggets: forcats,
+    devtools
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1

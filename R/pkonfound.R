@@ -8,6 +8,7 @@
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
 #' @param nu what hypothesis to be tested; defaults to testing whether unstd_beta is significantly different from 0
 #' @param to_return whether to return a data.frame (by specifying this argument to euqal "df") or a plot ("plot"); default is to print the output to the console
+#' @param component_correlations whether to return the component correlations as part of the correlation-based approach
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
 #' pkonfound(2, .4, 100, 3)

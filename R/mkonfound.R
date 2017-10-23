@@ -4,6 +4,7 @@
 #' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
 #' @param return_plot whether to return a plot of the percent bias; defaults to FALSE
+#' @param component_correlations whether to return the component correlations as part of the correlation-based approach
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference for each of the cases in the data.frame
 #' @examples 
 #' df <- data.frame(unstd_beta = c(2, 10, 1.7, .4, 3.2, 1.0, 2.3, 4.1, .9),
@@ -13,7 +14,7 @@
 #' mkonfound(df)
 #' @export
 
-mkonfound <- function(df, alpha = .05, tails = 2, return_plot = FALSE) {
+mkonfound <- function(df, alpha = .05, tails = 2, return_plot = FALSE, component_correlations = FALSE) {
     args <- list(as.list(dplyr::pull(df, 1)), 
                  as.list(dplyr::pull(df, 2)), 
                  as.list(dplyr::pull(df, 3)), 
@@ -24,9 +25,9 @@ mkonfound <- function(df, alpha = .05, tails = 2, return_plot = FALSE) {
     if (return_plot == TRUE) {
         to_plot <- dplyr::filter(results_df, replacement_of_cases_inference == "to_invalidate")
         p <- ggplot2::ggplot(to_plot, ggplot2::aes(x = percent_bias)) +
-            ggplot2::geom_histogram(color = "#1F78B4") +
+            ggplot2::geom_histogram(fill = "#1F78B4") +
             ggplot2::theme_bw() +
-            ggplot2::ggtitle("Plot of bias")
+            ggplot2::ggtitle("Bias plot")
         return(p)
     }
     return(results_df)

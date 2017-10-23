@@ -24,6 +24,8 @@ pkonfound(unstd_beta, std_err, n_obs, n_covariates = 1, alpha = 0.05,
 \item{nu}{what hypothesis to be tested; defaults to testing whether unstd_beta is significantly different from 0}
 
 \item{to_return}{whether to return a data.frame (by specifying this argument to euqal "df") or a plot ("plot"); default is to print the output to the console}
+
+\item{component_correlations}{whether to return the component correlations as part of the correlation-based approach}
 }
 \value{
 prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
