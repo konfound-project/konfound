@@ -31,6 +31,9 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="articles/index.html">Articles</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -59,73 +62,54 @@
 <a href="#installation" class="anchor"></a>Installation</h1>
 <p>You can install konfound from GitHub with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
-devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"jrosen48/rsensitivity"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">load_all</span>(<span class="st">"."</span>)
-<span class="co">#&gt; Loading konfound</span></code></pre></div>
+devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"jrosen48/konfound"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)</code></pre></div>
+<pre><code>#&gt; Loading konfound
+#&gt; Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).
+#&gt; For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.
+#&gt; You can also find more information by running the function launch_shiny()</code></pre>
 </div>
 <div id="use-of-konfound" class="section level1">
 <h1 class="hasAnchor">
 <a href="#use-of-konfound" class="anchor"></a>Use of konfound</h1>
-<div id="pkonfound-for-published-studies" class="section level3">
-<h3 class="hasAnchor">
-<a href="#pkonfound-for-published-studies" class="anchor"></a>pkonfound() for published studies</h3>
+<div id="pkonfound-for-published-studies" class="section level4">
+<h4 class="hasAnchor">
+<a href="#pkonfound-for-published-studies" class="anchor"></a>pkonfound() for published studies</h4>
 <p><code><a href="reference/pkonfound.html">pkonfound()</a></code>, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"df"</span>)
-<span class="co">#&gt; # A tibble: 1 x 3</span>
-<span class="co">#&gt;       inference percent_bias replace_null_cases</span>
-<span class="co">#&gt;           &lt;chr&gt;        &lt;dbl&gt;              &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 to_invalidate         60.3                 60</span>
-<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"print"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>)
 <span class="co">#&gt; To invalidate the inference, 60.3 % of the estimate would have to be due to bias.</span>
 <span class="co">#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.</span>
-<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"plot"</span>)</code></pre></div>
-<p><img src="README-unnamed-chunk-4-1.png" width="672"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
-<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">200</span>, <span class="dv">5</span>, <span class="dt">to_return =</span> <span class="st">"df"</span>)
-<span class="co">#&gt; # A tibble: 1 x 3</span>
-<span class="co">#&gt;    inference percent_bias replace_null_cases</span>
-<span class="co">#&gt;        &lt;chr&gt;        &lt;dbl&gt;              &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 to_sustain        89.86                180</span>
-<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">200</span>, <span class="dv">5</span>, <span class="dt">to_return =</span> <span class="st">"print"</span>)
-<span class="co">#&gt; To sustain the inference,  89.86 % of the estimate would have to be due to bias.</span>
-<span class="co">#&gt; To sustain the inference,  180  of the cases with 0 effect would have to be replaced with cases at the threshold of inference.</span>
-<span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, .<span class="dv">4</span>, <span class="dv">200</span>, <span class="dv">5</span>, <span class="dt">to_return =</span> <span class="st">"plot"</span>)</code></pre></div>
-<p><img src="README-unnamed-chunk-4-2.png" width="672"></p>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.</span>
+<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.754 to invalidate an inference.</span></code></pre></div>
 </div>
-<div id="konfound-for-models-fit-in-r" class="section level3">
-<h3 class="hasAnchor">
-<a href="#konfound-for-models-fit-in-r" class="anchor"></a>konfound() for models fit in R</h3>
-<p><code><a href="reference/konfound.html">konfound()</a></code> calculates the same for models fit in R. For example, here is the output from a linear model fit with <code>lm()</code> using the built-in dataset <code>mtcars</code>:</p>
+<div id="konfound-for-models-fit-in-r" class="section level4">
+<h4 class="hasAnchor">
+<a href="#konfound-for-models-fit-in-r" class="anchor"></a>konfound() for models fit in R</h4>
+<p><code><a href="reference/konfound.html">konfound()</a></code> calculates the same for models fit in R. For example, here are the coefficients for a linear model fit with <code>lm()</code> using the built-in dataset <code>mtcars</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>hp, <span class="dt">data =</span> mtcars)
-<span class="kw">summary</span>(m1)
+m1
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
 <span class="co">#&gt; lm(formula = mpg ~ wt + hp, data = mtcars)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Residuals:</span>
-<span class="co">#&gt;    Min     1Q Median     3Q    Max </span>
-<span class="co">#&gt; -3.941 -1.600 -0.182  1.050  5.854 </span>
-<span class="co">#&gt; </span>
 <span class="co">#&gt; Coefficients:</span>
-<span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span>
-<span class="co">#&gt; (Intercept) 37.22727    1.59879  23.285  &lt; 2e-16 ***</span>
-<span class="co">#&gt; wt          -3.87783    0.63273  -6.129 1.12e-06 ***</span>
-<span class="co">#&gt; hp          -0.03177    0.00903  -3.519  0.00145 ** </span>
-<span class="co">#&gt; ---</span>
-<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Residual standard error: 2.593 on 29 degrees of freedom</span>
-<span class="co">#&gt; Multiple R-squared:  0.8268, Adjusted R-squared:  0.8148 </span>
-<span class="co">#&gt; F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</span></code></pre></div>
+<span class="co">#&gt; (Intercept)           wt           hp  </span>
+<span class="co">#&gt;    37.22727     -3.87783     -0.03177</span></code></pre></div>
 <p>Sensitivity analysis for the effect for <code>wt</code> on <code>mpg</code> can be carried out as follows, specifying the fitted model object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/konfound.html">konfound</a></span>(m1, wt)
-<span class="co">#&gt; To invalidate the inference, 66.68 % of the estimate would have to be due to bias.</span>
-<span class="co">#&gt; To invalidate the inference, 21 observations would have to be replaced with cases for which there is no effect.</span></code></pre></div>
+<span class="co">#&gt; To invalidate the inference, 66.664 % of the estimate would have to be due to bias.</span>
+<span class="co">#&gt; To invalidate the inference, 21 observations would have to be replaced with cases for which there is no effect.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.</span>
+<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.887 to invalidate an inference.</span>
+<span class="co"># we need to be able to list multiple variables--one or all may cover most cases</span>
+<span class="co"># or, just return the statistics for all variables</span></code></pre></div>
 </div>
-<div id="mkonfound-for-meta-analyses-including-sensitivity-analysis" class="section level3">
-<h3 class="hasAnchor">
-<a href="#mkonfound-for-meta-analyses-including-sensitivity-analysis" class="anchor"></a>mkonfound for meta-analyses including sensitivity analysis</h3>
+<div id="mkonfound-for-meta-analyses-including-sensitivity-analysis" class="section level4">
+<h4 class="hasAnchor">
+<a href="#mkonfound-for-meta-analyses-including-sensitivity-analysis" class="anchor"></a>mkonfound for meta-analyses including sensitivity analysis</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)
 
 df &lt;-<span class="st"> </span><span class="kw">tribble</span>(
@@ -136,19 +120,50 @@ df &lt;-<span class="st"> </span><span class="kw">tribble</span>(
 )
 
 <span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(df)
-<span class="co">#&gt; # A tibble: 3 x 7</span>
-<span class="co">#&gt;   unstd_beta std_err n_obs n_covs     inference percent_bias</span>
-<span class="co">#&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;         &lt;chr&gt;        &lt;dbl&gt;</span>
-<span class="co">#&gt; 1        2.0     0.3    70      3 to_invalidate        70.05</span>
-<span class="co">#&gt; 2       10.0     2.9   405      4 to_invalidate        42.99</span>
-<span class="co">#&gt; 3        1.7     1.5   200      1    to_sustain        42.53</span>
-<span class="co">#&gt; # ... with 1 more variables: replace_null_cases &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 3 x 10</span>
+<span class="co">#&gt;   unstd_beta std_err n_obs n_covs replacement_of_cases_inference</span>
+<span class="co">#&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;                          &lt;chr&gt;</span>
+<span class="co">#&gt; 1        2.0     0.3    70      3                  to_invalidate</span>
+<span class="co">#&gt; 2       10.0     2.9   405      4                  to_invalidate</span>
+<span class="co">#&gt; 3        1.7     1.5   200      1                     to_sustain</span>
+<span class="co">#&gt; # ... with 5 more variables: percent_bias &lt;dbl&gt;, replace_null_cases &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   beta_threshhold &lt;dbl&gt;, correlation_inference &lt;chr&gt;,</span>
+<span class="co">#&gt; #   omitted_variable_corr &lt;dbl&gt;</span></code></pre></div>
 </div>
 </div>
-<div id="shiny-version-for-published-studies" class="section level1">
+<div id="other-information" class="section level1">
 <h1 class="hasAnchor">
-<a href="#shiny-version-for-published-studies" class="anchor"></a>Shiny Version for published studies</h1>
-<p>A shiny version for sensitivity analysis for published studies is also available <a href="https://jmichaelrosenberg.shinyapps.io/shinykonfound/">here</a>.</p>
+<a href="#other-information" class="anchor"></a>Other information</h1>
+<div id="how-to-learn-more-about-sensitivity-analysis" class="section level2">
+<h2 class="hasAnchor">
+<a href="#how-to-learn-more-about-sensitivity-analysis" class="anchor"></a>How to learn more about sensitivity analysis</h2>
+<p>For more information, please see:</p>
+<ul>
+<li>The Introduction to konfound vignette, with detailed information about each of the functions (<code><a href="reference/pkonfound.html">pkonfound()</a></code>, <code><a href="reference/konfound.html">konfound()</a></code>, and <code>mkounfound()</code>)</li>
+<li>Ken Frank’s website <a href="https://msu.edu/~kenfrank/research.htm">here</a>
+</li>
+<li>The <a href="https://jmichaelrosenberg.shinyapps.io/shinykonfound/">konfound interactive web application</a>, with links to PowerPoints and key publications</li>
+</ul>
+</div>
+<div id="feedback-issues-and-feature-requests" class="section level2">
+<h2 class="hasAnchor">
+<a href="#feedback-issues-and-feature-requests" class="anchor"></a>Feedback, issues, and feature requests</h2>
+<p>We prefer for issues to be filed via GitHub (link to the issues page for konfound <a href="https://github.com/jrosen48/konfound/issues">here</a>) though we also welcome questions or feedback via <a href="jrosen@msu.edu">email</a>.</p>
+<p>Here are a few things we are working on at present:</p>
+<ul>
+<li>Adding the option to output component correlations</li>
+<li>Providing options for <code><a href="reference/konfound.html">konfound()</a></code> to work with mixed effects or multi-level models</li>
+<li>Fixing threshplot for negative coefficients (presently does not work)</li>
+</ul>
+</div>
+<div id="code-of-conduct" class="section level2">
+<h2 class="hasAnchor">
+<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h2>
+<p>Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms below. This Code of Conduct is adapted from the Contributor Covenant (<a href="http:contributor-covenant.org" class="uri">http:contributor-covenant.org</a>), version 1.0.0, available at <a href="http://contributor-covenant.org/version/1/0/0/" class="uri">http://contributor-covenant.org/version/1/0/0/</a></p>
+<blockquote>
+<p>As contributors and maintainers of this project, we pledge to respect all people who contribute through reporting issues, posting feature requests, updating documentation, submitting pull requests or patches, and other activities. We are committed to making participation in this project a harassment-free experience for everyone, regardless of level of experience, gender, gender identity and expression, sexual orientation, disability, personal appearance, body size, race, ethnicity, age, or religion. Examples of unacceptable behavior by participants include the use of sexual language or imagery, derogatory comments or personal attacks, trolling, public or private harassment, insults, or other unprofessional conduct. Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct. Project maintainers who do not follow the Code of Conduct may be removed from the project team. Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening an issue or contacting one or more of the project maintainers.</p>
+</blockquote>
+</div>
 </div>
 </div>
   </div>

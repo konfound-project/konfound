@@ -54,6 +54,9 @@
         <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../articles/index.html">Articles</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -77,7 +80,8 @@
     
 
     <pre class="usage"><span class='fu'>pkonfound</span>(<span class='no'>unstd_beta</span>, <span class='no'>std_err</span>, <span class='no'>n_obs</span>, <span class='kw'>n_covariates</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
-  <span class='kw'>tails</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"print"</span>)</pre>
+  <span class='kw'>tails</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"print"</span>,
+  <span class='kw'>component_correlations</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -114,6 +118,10 @@
       <th>to_return</th>
       <td><p>whether to return a data.frame (by specifying this argument to euqal "df") or a plot ("plot"); default is to print the output to the console</p></td>
     </tr>
+    <tr>
+      <th>component_correlations</th>
+      <td><p>whether to return the component correlations as part of the correlation-based approach</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -123,8 +131,14 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; To invalidate the inference, 60.3 % of the estimate would have to be due to bias.
-#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.</div><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>.4</span>, <span class='fl'>2</span>, <span class='fl'>100</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; To sustain the inference,  89.92 % of the estimate would have to be due to bias.
-#&gt; To sustain the inference,  90  of the cases with 0 effect would have to be replaced with cases at the threshold of inference.</div></pre>
+#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.
+#&gt; 
+#&gt; An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
+#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.754 to invalidate an inference.</div><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>.4</span>, <span class='fl'>2</span>, <span class='fl'>100</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; To sustain the inference,  89.924 % of the estimate would have to be due to bias.
+#&gt; To sustain the inference,  90  of the cases with 0 effect would have to be replaced with cases at the threshold of inference.
+#&gt; 
+#&gt; An omitted variable would have to be correlated at 0.387 with the outcome and at 0.387 with the predictor of interest (conditioning on observed covariates) to sustain an inference.
+#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.622 to sustain an inference.</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
