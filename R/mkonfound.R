@@ -6,10 +6,10 @@
 #' @param return_plot whether to return a plot of the percent bias; defaults to FALSE
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference for each of the cases in the data.frame
 #' @examples 
-#' df <- data.frame(unstd_beta = c(2, 10, 1.7),
-#'                  std_error = c(.3, 2.9, 1.5), 
-#'                  n_obs = c(70, 405, 200), 
-#'                  n_covs = c(3, 4, 1))
+#' df <- data.frame(unstd_beta = c(2, 10, 1.7, .4, 3.2, 1.0, 2.3, 4.1, .9),
+#'                  std_error = c(.3, 2.9, 1.5, 2, .1, .04, .1, 3, .5),
+#'                  n_obs = c(70, 405, 200, 100, 103, 20, 50, 721, 320),
+#'                  n_covs = c(3, 4, 1, 3, 10, 4, 1, 1, 0))
 #' mkonfound(df)
 #' @export
 
