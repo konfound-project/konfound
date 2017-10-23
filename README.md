@@ -69,8 +69,6 @@ konfound(m1, wt)
 #> 
 #> An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
 #> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.887 to invalidate an inference.
-# we need to be able to list multiple variables--one or all may cover most cases
-# or, just return the statistics for all variables
 ```
 
 #### mkonfound for meta-analyses including sensitivity analysis
@@ -105,7 +103,7 @@ How to learn more about sensitivity analysis
 
 For more information, please see:
 
--   The Introduction to konfound vignette, with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
+-   The [Introduction to konfound vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
 -   Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm)
 -   The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
 

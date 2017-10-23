@@ -60,8 +60,6 @@ Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as foll
 
 ```{r}
 konfound(m1, wt)
-# we need to be able to list multiple variables--one or all may cover most cases
-# or, just return the statistics for all variables
 ```
 
 #### mkonfound for meta-analyses including sensitivity analysis
@@ -85,7 +83,7 @@ mkonfound(df)
 
 For more information, please see:
 
-* The Introduction to konfound vignette, with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
+* The [Introduction to konfound vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
 * Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm)
 * The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
 
