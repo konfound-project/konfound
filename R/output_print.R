@@ -10,16 +10,16 @@ output_print <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL
     else if (beta_diff == beta_threshhold) {
         warning("The coefficient is exactly equal to the threshold.\n") }
     
-    cat("# -------------------------------------------------\n")
+    cat("\n")
     
     if (abs(obs_r) > abs(critical_r)) {
         cat("An omitted variable would have to be correlated at", r_con, "with the outcome and at", r_con, 
-            "with the predictor of interest (conditioning on observed covariates) to invalidate an inference.\n",
-            "Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be", round(sqrt(r_con), 3), "to invalidate an inference.")  }
+            "with the predictor of interest (conditioning on observed covariates) to invalidate an inference.\n")
+        cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be", round(sqrt(r_con), 3), "to invalidate an inference.\n")  }
     else if (abs(obs_r) < abs(critical_r)) {
         cat("An omitted variable would have to be correlated at", r_con, "with the outcome and at", r_con, 
-            "with the predictor of interest (conditioning on observed covariates) to sustain an inference.\n",
-            "Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be", round(sqrt(r_con), 3), "to sustain an inference.") }
+            "with the predictor of interest (conditioning on observed covariates) to sustain an inference.\n")
+        cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be", round(sqrt(r_con), 3), "to sustain an inference.\n") }
     else if (r_con == itcv) {
         warning("The correlation is exactly equal to the threshold.\n") }
 }

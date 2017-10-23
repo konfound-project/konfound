@@ -31,7 +31,7 @@ devtools::load_all(".")
 
 # Use of konfound
 
-### pkonfound() for published studies
+#### pkonfound() for published studies
 
 `pkonfound()`, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:
 
@@ -40,26 +40,16 @@ library(konfound)
 ```
 
 ```{r}
-pkonfound(2, .4, 100, 3, to_return = "df")
-pkonfound(2, .4, 100, 3, to_return = "print")
-pkonfound(2, .4, 100, 3, to_return = "plot")
-
-pkonfound(.4, 2, 200, 5, to_return = "df")
-pkonfound(.4, 2, 200, 5, to_return = "print")
-pkonfound(.4, .4, 200, 5, to_return = "plot") 
-# this gets a bit hard to interpret, maybe
-# estimate is always one color
-# to invalidate: this is okay
-# to sustain: bottom part of figure becomes gray 
+pkonfound(2, .4, 100, 3)
 ```
 
-### konfound() for models fit in R
+#### konfound() for models fit in R
 
-`konfound()` calculates the same for models fit in R. For example, here is the output from a linear model fit with `lm()` using the built-in dataset `mtcars`:
+`konfound()` calculates the same for models fit in R. For example, here are the coefficients for a linear model fit with `lm()` using the built-in dataset `mtcars`:
 
 ```{r}
 m1 <- lm(mpg ~ wt + hp, data = mtcars)
-summary(m1)
+m1
 ```
 
 Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as follows, specifying the fitted model object:
@@ -68,11 +58,9 @@ Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as foll
 konfound(m1, wt)
 # we need to be able to list multiple variables--one or all may cover most cases
 # or, just return the statistics for all variables
-
-# if it's l1, just l1 DF
 ```
 
-### mkonfound for meta-analyses including sensitivity analysis
+#### mkonfound for meta-analyses including sensitivity analysis
 
 ```{r, eval = T}
 library(dplyr, warn.conflicts = FALSE)
@@ -84,17 +72,12 @@ df <- tribble(
   1.7,         1.5,      200,    1
 )
 
-results_df <- mkonfound(df)
-
-# add a histogram - for percent_bias to invalidate
+mkonfound(df)
 ```
 
-# Shiny Version for published studies 
+# How to find more information
 
-A shiny version for sensitivity analysis for published studies is also available [here](https://jmichaelrosenberg.shinyapps.io/shinykonfound/).
+For more information, visit:
 
-# Things that we are presently working on
-
-* Improving the figure for the replacement of cases approach
-* Adding a figure for the correlation-based approach
-* Adding the component correlations
+* The Introduction to konfound vignette, with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
+* The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications

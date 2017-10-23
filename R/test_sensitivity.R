@@ -13,7 +13,7 @@ test_sensitivity <- function(unstd_beta,
     if (unstd_beta < 0) {
         critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) * -1 }
     else {critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) }
-    beta_threshhold <- critical_t * std_err
+    beta_threshold <- critical_t * std_err
     # dealing with cases where hypotheses other than whether unstd_beta differs from 0
     if (nu != 0) {
         beta_diff <- abs(unstd_beta - nu) } else {
@@ -22,13 +22,13 @@ test_sensitivity <- function(unstd_beta,
     # for replacement of cases approach
     
     # calculating percentage of effect and number of observations to sustain or invalidate inference
-    if (abs(beta_diff) > abs(beta_threshhold)) {
-        bias <- 100 * (1 - (beta_threshhold / beta_diff))
+    if (abs(beta_diff) > abs(beta_threshold)) {
+        bias <- 100 * (1 - (beta_threshold / beta_diff))
         recase <- round(n_obs * (bias / 100)) }
-    else if (abs(beta_diff) < abs(beta_threshhold)) {
-        sustain <- 100 * (1 - (beta_diff / beta_threshhold))
+    else if (abs(beta_diff) < abs(beta_threshold)) {
+        sustain <- 100 * (1 - (beta_diff / beta_threshold))
         recase <- round(n_obs * (sustain / 100)) }
-    else if (beta_diff == beta_threshhold) {
+    else if (beta_diff == beta_threshold) {
         stop("The coefficient is exactly equal to the threshold.") }
     
     # for correlation-based approach
@@ -48,27 +48,28 @@ test_sensitivity <- function(unstd_beta,
     # finding correlation of confound to invalidate / sustain inference
     r_con <- round(sqrt(abs(itcv)), 3)
     
-    if (component_correlations == TRUE){
-        rsq <- # has to come from some kind of model object
-            varY <- # has to come from some kind of model object
-            varX <- # has to come from some kind of model object
-            sdX <- # has to come from some kind of model object
-            
-            rsqYZ = (((obs_r ^ 2) - Rsq) / ((obs_r ^ 2) - 1))
-        
-        rsqXZ = max(0, 1 - ((VarY * (1 - RSQ))) / (VarX * (n_obs - n_covariates - 2) * (sdx * 2)))
-        
-        r_ycv = r_con * sqrt(1 - rsqYZ)
-        r_xcv = r_con * sqrt(1 - rsqXZ)  
-        # before conditioning on observed covariates
-    }
+    # if (component_correlations == FALSE){
+    #     rsq <- # has to come from some kind of model object
+    #         varY <- # has to come from some kind of model object
+    #         varX <- # has to come from some kind of model object
+    #         sdX <- # has to come from some kind of model object
+    #         
+    #         rsqYZ = (((obs_r ^ 2) - Rsq) / ((obs_r ^ 2) - 1))
+    #     
+    #     rsqXZ = max(0, 1 - ((VarY * (1 - RSQ))) / (VarX * (n_obs - n_covariates - 2) * (sdx * 2)))
+    #     
+    #     r_ycv = r_con * sqrt(1 - rsqYZ)
+    #     r_xcv = r_con * sqrt(1 - rsqXZ)  
+    #     # before conditioning on observed covariates
+    # }
     
     
     # needs obs_r, critical_r, and r_con
     
     # output dispatch
-    if (to_return == "df") return(output_df(beta_diff, beta_threshhold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con))
-    else if (to_return == "plot") return(output_plot(beta_diff, beta_threshhold, unstd_beta, obs_r, critical_r, r_con))
-    else if (to_return == "print") return(output_print(beta_diff, beta_threshhold, bias, sustain, recase, obs_r, critical_r, r_con))
+    if (to_return == "df") return(output_df(beta_diff, beta_threshold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con))
+    else if (to_return == "threshold_plot") {return(plot_threshold(beta_threshold = beta_threshold, unstd_beta = unstd_beta)) }
+    else if (to_return == "correlation_plot") {return(plot_correlation(r_con = r_con)) }
+    else if (to_return == "print") return(output_print(beta_diff, beta_threshold, bias, sustain, recase, obs_r, critical_r, r_con))
     else stop("to_return must be set to df, print, or plot")
 }
