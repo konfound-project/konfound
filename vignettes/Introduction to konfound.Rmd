@@ -49,6 +49,7 @@ konfound(m1, test_all = T)
 
 ### For generalized linear models fit with glm()
 
+Effects for these models are interpreted on the basis of average partial (or marginal) effects (calculated using the margins package).
 
 ```{r}
 # if forcats is not installed, install it first using install.packages("forcats")

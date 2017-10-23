@@ -24,7 +24,8 @@ mkonfound <- function(df, alpha = .05, tails = 2, return_plot = FALSE) {
     if (return_plot == TRUE) {
         to_plot <- dplyr::filter(results_df, inference == "to_invalidate")
         p <- ggplot2::ggplot(to_plot, ggplot2::aes(x = percent_bias)) +
-             ggplot2::geom_histogram()
+            ggplot2::geom_histogram(color = "#1F78B4") +
+            ggplot2::theme_bw()
         return(p)
     }
     return(results_df)
