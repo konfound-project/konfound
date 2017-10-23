@@ -5,7 +5,8 @@
 \title{Perform sensitivity analysis for published studies}
 \usage{
 pkonfound(unstd_beta, std_err, n_obs, n_covariates = 1, alpha = 0.05,
-  tails = 2, nu = 0, to_return = "print")
+  tails = 2, nu = 0, to_return = "print",
+  component_correlations = FALSE)
 }
 \arguments{
 \item{unstd_beta}{an unstandardized regression coefficient}

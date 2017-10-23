@@ -62,14 +62,11 @@ test_sensitivity <- function(unstd_beta,
     #     r_xcv = r_con * sqrt(1 - rsqXZ)  
     #     # before conditioning on observed covariates
     # }
-    
-    
-    # needs obs_r, critical_r, and r_con
-    
+
     # output dispatch
     if (to_return == "df") return(output_df(beta_diff, beta_threshold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con))
-    else if (to_return == "threshold_plot") {return(plot_threshold(beta_threshold = beta_threshold, unstd_beta = unstd_beta)) }
-    else if (to_return == "correlation_plot") {return(plot_correlation(r_con = r_con)) }
+    else if (to_return == "thresh_plot") {return(plot_threshold(beta_threshold = beta_threshold, unstd_beta = unstd_beta)) }
+    else if (to_return == "corr_plot") {return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r)) }
     else if (to_return == "print") return(output_print(beta_diff, beta_threshold, bias, sustain, recase, obs_r, critical_r, r_con))
     else stop("to_return must be set to df, print, or plot")
 }

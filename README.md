@@ -12,16 +12,17 @@ You can install konfound from GitHub with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("jrosen48/rsensitivity")
+devtools::install_github("jrosen48/konfound")
 ```
 
 ``` r
-devtools::load_all(".")
-#> Loading konfound
-#> Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).
-#> For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.
-#> You can also find more information by running the function launch_shiny()
+library(konfound)
 ```
+
+    #> Loading konfound
+    #> Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).
+    #> For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.
+    #> You can also find more information by running the function launch_shiny()
 
 Use of konfound
 ===============
@@ -85,21 +86,43 @@ df <- tribble(
 )
 
 mkonfound(df)
-#> # A tibble: 3 x 11
+#> # A tibble: 3 x 10
 #>   unstd_beta std_err n_obs n_covs replacement_of_cases_inference
 #>        <dbl>   <dbl> <dbl>  <dbl>                          <chr>
 #> 1        2.0     0.3    70      3                  to_invalidate
 #> 2       10.0     2.9   405      4                  to_invalidate
 #> 3        1.7     1.5   200      1                     to_sustain
-#> # ... with 6 more variables: percent_bias <dbl>, replace_null_cases <dbl>,
-#> #   unstd_beta1 <dbl>, beta_threshhold <dbl>, correlation_inference <chr>,
+#> # ... with 5 more variables: percent_bias <dbl>, replace_null_cases <dbl>,
+#> #   beta_threshhold <dbl>, correlation_inference <chr>,
 #> #   omitted_variable_corr <dbl>
 ```
 
-How to find more information
-============================
+Other information
+=================
 
-For more information, visit:
+How to learn more about sensitivity analysis
+--------------------------------------------
+
+For more information, please see:
 
 -   The Introduction to konfound vignette, with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
+-   Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm)
 -   The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
+
+Feedback, issues, and feature requests
+--------------------------------------
+
+We prefer for issues to be filed via GitHub (link to the issues page for konfound [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via [email](jrosen@msu.edu).
+
+Here are a few things we are working on at present:
+
+-   Adding the option to output component correlations
+-   Providing options for `konfound()` to work with mixed effects or multi-level models
+-   Fixing threshplot for negative coefficients (presently does not work)
+
+Code of Conduct
+---------------
+
+Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms below. This Code of Conduct is adapted from the Contributor Covenant (<http:contributor-covenant.org>), version 1.0.0, available at <http://contributor-covenant.org/version/1/0/0/>
+
+> As contributors and maintainers of this project, we pledge to respect all people who contribute through reporting issues, posting feature requests, updating documentation, submitting pull requests or patches, and other activities. We are committed to making participation in this project a harassment-free experience for everyone, regardless of level of experience, gender, gender identity and expression, sexual orientation, disability, personal appearance, body size, race, ethnicity, age, or religion. Examples of unacceptable behavior by participants include the use of sexual language or imagery, derogatory comments or personal attacks, trolling, public or private harassment, insults, or other unprofessional conduct. Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct. Project maintainers who do not follow the Code of Conduct may be removed from the project team. Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening an issue or contacting one or more of the project maintainers.

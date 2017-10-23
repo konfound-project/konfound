@@ -8,10 +8,6 @@
 #' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
-#' df <- data.frame(unstd_beta = c(2, 10, 1.7),
-#'                  std_error = c(.3, 2.9, 1.5), 
-#'                  n_obs = c(70, 405, 200), 
-#'                  n_covs = c(3, 4, 1))
 #' m1 <- lm(mpg ~ wt + hp, data = mtcars)
 #' konfound(m1, wt)
 #' @export
@@ -21,16 +17,17 @@ konfound <- function(model_object,
                      alpha = .05, 
                      tails = 2,
                      to_return = "print",
-                     test_all = FALSE) {
+                     test_all = FALSE, 
+                     component_correlations = F) {
     
-    if (class(model_object)[1] %in% c("merMod", "lme")) {
-        # stop("We recommend carrying out sensitivity analysis for mixed-effects or multi-level models using pkonfound()")
-        tidy_output <- broom::tidy(model_object) # tidying output
-        glance_output <- broom::glance(model_object)
+    if (class(model_object)[1] %in% c("merMod", "lme", "nlme")) {
+        stop("We recommend carrying out sensitivity analysis for mixed-effects or multi-level models using pkonfound()")
+        # tidy_output <- broom::tidy(model_object) # tidying output
+        # glance_output <- broom::glance(model_object)
     }
     
     if (!(class(model_object)[1] %in% c("lm", "glm", "merMod", "lme"))) {
-        stop("konfound() is currently implemented for models estimated with lm(), glm(), nlme::lme(), and lme4::lmer()")
+        stop("konfound() is currently implemented for models estimated with lm() and glm()")
     }
     
     tidy_output <- broom::tidy(model_object) # tidying output
@@ -53,15 +50,22 @@ konfound <- function(model_object,
         n_covariates = glance_output$df - 2 # (for intercept and coefficient)
         
         if (test_all == FALSE) {
-            test_sensitivity(unstd_beta = unstd_beta,
-                             std_err = std_err,
-                             n_obs = n_obs,
-                             n_covariates = n_covariates,
-                             alpha = alpha,
-                             tails = tails,
-                             nu = 0,
-                             to_return = to_return)
-        } else { mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates)) } }
+            return(test_sensitivity(unstd_beta = unstd_beta,
+                                    std_err = std_err,
+                                    n_obs = n_obs,
+                                    n_covariates = n_covariates,
+                                    alpha = alpha,
+                                    tails = tails,
+                                    nu = 0,
+                                    to_return = to_return,
+                                    component_correlations = component_correlations))
+        } else { 
+            o <- mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates))
+            term_names <- dplyr::select(tidy_output, var_name = term) # remove the first row for intercept
+            term_names <- dplyr::filter(term_names, var_name != "(Intercept)")
+            o <- dplyr::bind_cols(term_names, o)
+        } 
+    }
     
     if (class(model_object)[1] == "glm") {
         if (test_all == FALSE) {
@@ -79,40 +83,22 @@ konfound <- function(model_object,
         n_covariates = glance_output$df.null - 2 # (for intercept and coefficient)
         
         if (test_all == FALSE) {
-            test_sensitivity(unstd_beta = unstd_beta,
-                             std_err = std_err,
-                             n_obs = n_obs,
-                             n_covariates = n_covariates,
-                             alpha = alpha,
-                             tails = tails,
-                             nu = 0,
-                             to_return = to_return)
-        } else { mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates)) } }
+            return(test_sensitivity(unstd_beta = unstd_beta,
+                                    std_err = std_err,
+                                    n_obs = n_obs,
+                                    n_covariates = n_covariates,
+                                    alpha = alpha,
+                                    tails = tails,
+                                    nu = 0,
+                                    to_return = to_return,
+                                    component_correlations = component_correlations))
+        } else { 
+            o <- mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates))
+            term_names <- dplyr::select(tidy_output, var_name = term) # remove the first row for intercept
+            term_names <- dplyr::filter(term_names, var_name != "(Intercept)")
+            o <- dplyr::bind_cols(term_names, o)
+        } 
+    }
     
+    return(o)
 }
-
-# m1 <- lm(mpg ~ wt + hp, data = mtcars)
-# konfound(m1, hp)
-# konfound(m1, test_all = TRUE)
-# 
-# m2 <-glm(am ~ cyl + hp * wt, data = mtcars, family = binomial)
-# m2
-# x <- margins::margins(m2)
-# konfound(m2, cyl)
-# 
-# library("margins")
-# x <- lm(mpg ~ cyl * hp + wt, data = mtcars)
-# (m <- margins(x))
-# 
-# library(nlme)
-# fm1 <- lme(distance ~ age, data = Orthodont) # random is ~ age
-# konfound(fm1, age)
-# 
-# library(mgcv)
-# set.seed(2) ## simulate some data...
-# dat <- gamSim(1,n=400,dist="normal",scale=2)
-# b <- gam(y~s(x0)+s(x1)+s(x2)+s(x3),data=dat)
-# konfound(b, x0)
-# 
-# xx <- KRmodcomp(fm1, sm)
-# ?getKR(xx, "ddf") # get denominator degrees of freedom.

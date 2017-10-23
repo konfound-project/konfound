@@ -1,6 +1,6 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "Introduction to konfound"
+author: "Joshua Rosenberg, Ran Xu, and Ken Frank"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -9,50 +9,63 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+# Abstract (needs to be expanded)
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+`konfound` is an `R` package to easily carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin's (1974) causal model. 
 
-## Vignette Info
+# Background
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+* Background on sensitivity analysis and causal inference
+* Background on replacement of cases approach
+* Background on correlation based approach
 
-## Styles
+# Use of pkonfound()
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```{r}
+# library(konfound)
+devtools::load_all(".")
+pkonfound(2, .4, 100, 3)
+pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
+pkonfound(2, .4, 100, 3, to_return = "corr_plot")
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+```{r}
+pkonfound(.4, 2, 100, 3)
+pkonfound(.4, 2, 100, 3, to_return = "thresh_plot")
+pkonfound(.4, 2, 100, 3, to_return = "corr_plot")
 ```
 
-Also a quote using `>`:
+# Use of konfound()
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+### For linear models fit with lm()
+
+```{r}
+m1 <- lm(mpg ~ wt + hp, data = mtcars)
+m1
+
+konfound(m1, hp)
+konfound(m1, test_all = T)
+```
+
+### For generalized linear models fit with glm()
+
+
+```{r}
+# if forcats is not installed, install it first using install.packages("forcats")
+d <- forcats::gss_cat
+d$married <- ifelse(d$marital == "Married", 1, 0)
+
+m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
+konfound(m2, age)
+```
+
+# Use of mkonfound()
+
+```{r}
+df <- data.frame(unstd_beta = c(2, 10, 1.7),
+                 std_error = c(.3, 2.9, 1.5), 
+                 n_obs = c(70, 405, 200), 
+                 n_covs = c(3, 4, 1))
+mkonfound(df)
+mkonfound(df, return_plot = TRUE)
+```

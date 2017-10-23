@@ -20,6 +20,7 @@ mkonfound <- function(df, alpha = .05, tails = 2, return_plot = FALSE) {
                  as.list(dplyr::pull(df, 4)))
     x <- purrr::pmap_dfr(args, pkonfound, alpha = alpha, tails = tails, to_return = "df")
     results_df <- dplyr::bind_cols(df, x)
+    results_df <- dplyr::select(results_df, -unstd_beta1)
     if (return_plot == TRUE) {
         to_plot <- dplyr::filter(results_df, inference == "to_invalidate")
         p <- ggplot2::ggplot(to_plot, ggplot2::aes(x = percent_bias)) +

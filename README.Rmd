@@ -22,10 +22,14 @@ You can install konfound from GitHub with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
-devtools::install_github("jrosen48/rsensitivity")
+devtools::install_github("jrosen48/konfound")
 ```
 
-```{r}
+```{r, eval = F}
+library(konfound)
+```
+
+```{r, echo = F}
 devtools::load_all(".")
 ```
 
@@ -75,9 +79,28 @@ df <- tribble(
 mkonfound(df)
 ```
 
-# How to find more information
+# Other information
 
-For more information, visit:
+## How to learn more about sensitivity analysis
+
+For more information, please see:
 
 * The Introduction to konfound vignette, with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
+* Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm)
 * The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
+
+## Feedback, issues, and feature requests
+
+We prefer for issues to be filed via GitHub (link to the issues page for konfound [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via [email](jrosen@msu.edu).
+
+Here are a few things we are working on at present:
+
+* Adding the option to output component correlations
+* Providing options for `konfound()` to work with mixed effects or multi-level models
+* Fixing threshplot for negative coefficients (presently does not work)
+
+## Code of Conduct
+
+Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms below. This Code of Conduct is adapted from the Contributor Covenant (http:contributor-covenant.org), version 1.0.0, available at [http://contributor-covenant.org/version/1/0/0/](http://contributor-covenant.org/version/1/0/0/)
+
+> As contributors and maintainers of this project, we pledge to respect all people who contribute through reporting issues, posting feature requests, updating documentation, submitting pull requests or patches, and other activities. We are committed to making participation in this project a harassment-free experience for everyone, regardless of level of experience, gender, gender identity and expression, sexual orientation, disability, personal appearance, body size, race, ethnicity, age, or religion. Examples of unacceptable behavior by participants include the use of sexual language or imagery, derogatory comments or personal attacks, trolling, public or private harassment, insults, or other unprofessional conduct. Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct. Project maintainers who do not follow the Code of Conduct may be removed from the project team. Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening an issue or contacting one or more of the project maintainers.
