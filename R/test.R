@@ -1,5 +1,7 @@
 # test
 
+
+
 #m1 <- lm(mpg ~ wt + hp, data = mtcars)
 # # 
 # m2 <-glm(am ~ cyl + hp * wt, data = mtcars, family = binomial)

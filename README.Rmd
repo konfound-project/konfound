@@ -2,6 +2,31 @@
 output: github_document
 ---
 
+# To do: 
+
+change RoC for non-0 hypothesis
+
+"Replacement of Cases Approach"
+"Correlation-Based Approach"
+
+"change omitted variable to "defined as the product of the correlation between the omitted variable and the predictor of interest and the correlation between the omitted variable and the outcome as in Frank"
+
+Frank, 2000
+
+conditional on Z
+
+round beat threshold
+
+remove RoC and correlalation inference
+
+make y-axis continuous 
+
+histogram of percent bias to invalidate the inference
+one plot to sustain the inference
+one plot to invalidate
+
+link here: https://msu.edu/~kenfrank/research.htm#causal
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, echo = FALSE}
@@ -99,6 +124,4 @@ Here are a few things we are working on at present:
 
 ## Code of Conduct
 
-Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms below. This Code of Conduct is adapted from the Contributor Covenant (http:contributor-covenant.org), version 1.0.0, available at [http://contributor-covenant.org/version/1/0/0/](http://contributor-covenant.org/version/1/0/0/)
-
-> As contributors and maintainers of this project, we pledge to respect all people who contribute through reporting issues, posting feature requests, updating documentation, submitting pull requests or patches, and other activities. We are committed to making participation in this project a harassment-free experience for everyone, regardless of level of experience, gender, gender identity and expression, sexual orientation, disability, personal appearance, body size, race, ethnicity, age, or religion. Examples of unacceptable behavior by participants include the use of sexual language or imagery, derogatory comments or personal attacks, trolling, public or private harassment, insults, or other unprofessional conduct. Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct. Project maintainers who do not follow the Code of Conduct may be removed from the project team. Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening an issue or contacting one or more of the project maintainers.
+Please note that this project is released with a Contributor Code of Conduct available at [http://contributor-covenant.org/version/1/0/0/](http://contributor-covenant.org/version/1/0/0/)
