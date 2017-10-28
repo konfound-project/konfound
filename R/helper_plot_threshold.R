@@ -19,7 +19,7 @@ plot_threshold <- function(beta_threshold, unstd_beta) {
         cols <- c("#A6CEE3", "#1F78B4") # dark blue and light blue
         
     } else if (abs(unstd_beta) < abs(beta_threshold)) { # beta is below threshold
-        print("hi!")
+
         dd <- dplyr::data_frame(unstd_beta = unstd_beta, beta_threshold = beta_threshold)
         dd <- dplyr::mutate(dd, `Above Threshold` = abs(unstd_beta - beta_threshold))
         dd <- dplyr::mutate(dd, `Below Threshold` = unstd_beta)
@@ -29,7 +29,6 @@ plot_threshold <- function(beta_threshold, unstd_beta) {
         dd <- tidyr::gather(dd, key, val)
         dd <- dplyr::mutate(dd, inference = "group")
         
-        print(dd)
         y_thresh <- sum(abs(dd$val))
         if (unstd_beta < 0) {
             y_thresh <- y_thresh * -1
