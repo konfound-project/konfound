@@ -115,12 +115,6 @@ Feedback, issues, and feature requests
 
 We prefer for issues to be filed via GitHub (link to the issues page for konfound [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via [email](jrosen@msu.edu).
 
-Here are a few things we are working on at present:
-
--   Adding the option to output component correlations
--   Providing options for `konfound()` to work with mixed effects or multi-level models
--   Fixing threshplot for negative coefficients (presently does not work)
-
 Code of Conduct
 ---------------
 
