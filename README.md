@@ -22,7 +22,6 @@ library(konfound)
     #> Loading konfound
     #> Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).
     #> For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.
-    #> You can also find more information by running the function launch_shiny()
 
 Use of konfound
 ===============
@@ -37,11 +36,13 @@ library(konfound)
 
 ``` r
 pkonfound(2, .4, 100, 3)
+#> Replacement of Cases Approach:
 #> To invalidate the inference, 60.3 % of the estimate would have to be due to bias.
-#> To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.
+#> To invalidate the inference, 60 observations would have to be replaced with cases for which the effect is 0 .
 #> 
+#> Correlation-based Approach:
 #> An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.754 to invalidate an inference.
+#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 * 0.568 = 0.754 to sustain an inference.
 ```
 
 #### konfound() for models fit in R
@@ -64,11 +65,13 @@ Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as foll
 
 ``` r
 konfound(m1, wt)
+#> Replacement of Cases Approach:
 #> To invalidate the inference, 66.664 % of the estimate would have to be due to bias.
-#> To invalidate the inference, 21 observations would have to be replaced with cases for which there is no effect.
+#> To invalidate the inference, 21 observations would have to be replaced with cases for which the effect is 0 .
 #> 
+#> Correlation-based Approach:
 #> An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.887 to invalidate an inference.
+#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 * 0.787 = 0.887 to sustain an inference.
 ```
 
 #### mkonfound for meta-analyses including sensitivity analysis
@@ -104,7 +107,7 @@ How to learn more about sensitivity analysis
 For more information, please see:
 
 -   The [Introduction to konfound vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
--   Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm)
+-   The causal inference section of Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm#causal)
 -   The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
 
 Feedback, issues, and feature requests
@@ -121,6 +124,15 @@ Here are a few things we are working on at present:
 Code of Conduct
 ---------------
 
-Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms below. This Code of Conduct is adapted from the Contributor Covenant (<http:contributor-covenant.org>), version 1.0.0, available at <http://contributor-covenant.org/version/1/0/0/>
+Please note that this project is released with a Contributor Code of Conduct available at <http://contributor-covenant.org/version/1/0/0/>
 
-> As contributors and maintainers of this project, we pledge to respect all people who contribute through reporting issues, posting feature requests, updating documentation, submitting pull requests or patches, and other activities. We are committed to making participation in this project a harassment-free experience for everyone, regardless of level of experience, gender, gender identity and expression, sexual orientation, disability, personal appearance, body size, race, ethnicity, age, or religion. Examples of unacceptable behavior by participants include the use of sexual language or imagery, derogatory comments or personal attacks, trolling, public or private harassment, insults, or other unprofessional conduct. Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct. Project maintainers who do not follow the Code of Conduct may be removed from the project team. Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening an issue or contacting one or more of the project maintainers.
+References
+----------
+
+Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to Change an Inference?: Using Rubin’s Causal Model to Interpret the Robustness of Causal Inferences. Education, Evaluation and Policy Analysis. Vol 35: 437-460. <https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx>
+
+Frank, K.A., Gary Sykes, Dorothea Anagnostopoulos, Marisa Cannata, Linda Chard, Ann Krause, Raven McCrory. 2008. Extended Influence: National Board Certified Teachers as Help Providers. Education, Evaluation, and Policy Analysis. Vol 30(1): 3-30. <https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc>
+
+Frank, K. A. and Min, K. 2007. Indices of Robustness for Sample Representation. Sociological Methodology. Vol 37, 349-392. <https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc> \*co first authors.
+
+Frank, K. 2000. "Impact of a Confounding Variable on the Inference of a Regression Coefficient." Sociological Methods and Research, 29(2), 147-194 <https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf>

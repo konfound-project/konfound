@@ -50,7 +50,7 @@
       <h1>Introduction to konfound</h1>
                         <h4 class="author">Joshua Rosenberg, Ran Xu, and Ken Frank</h4>
             
-            <h4 class="date">2017-10-22</h4>
+            <h4 class="date">2017-10-28</h4>
           </div>
 
     
@@ -76,28 +76,31 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)</code></pre></div>
 <pre><code>## Loading konfound</code></pre>
 <pre><code>## Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).
-## For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.
-## You can also find more information by running the function launch_shiny()</code></pre>
+## For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.</code></pre>
 </div>
 <div id="use-of-pkonfound" class="section level1">
 <h1 class="hasAnchor">
 <a href="#use-of-pkonfound" class="anchor"></a>Use of pkonfound()</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>)</code></pre></div>
-<pre><code>## To invalidate the inference, 60.3 % of the estimate would have to be due to bias.
-## To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.
+<pre><code>## Replacement of Cases Approach:
+## To invalidate the inference, 60.3 % of the estimate would have to be due to bias.
+## To invalidate the inference, 60 observations would have to be replaced with cases for which the effect is 0 .
 ## 
+## Correlation-based Approach:
 ## An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.754 to invalidate an inference.</code></pre>
+## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 * 0.568 = 0.754 to sustain an inference.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"thresh_plot"</span>)</code></pre></div>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-3-1.png" width="480"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"corr_plot"</span>)</code></pre></div>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>)</code></pre></div>
-<pre><code>## To sustain the inference,  89.924 % of the estimate would have to be due to bias.
-## To sustain the inference,  90  of the cases with 0 effect would have to be replaced with cases at the threshold of inference.
+<pre><code>## Replacement of Cases Approach:
+## To sustain the inference,  89.924 % of the estimate would have to be due to bias.
+## To sustain the inference,  90  of the cases with 0  effect would have to be replaced with cases at the threshold of inference.
 ## 
+## Correlation-based Approach:
 ## An omitted variable would have to be correlated at 0.387 with the outcome and at 0.387 with the predictor of interest (conditioning on observed covariates) to sustain an inference.
-## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.622 to sustain an inference.</code></pre>
+## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.387 * 0.387 = 0.622 to invalidate an inference.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"thresh_plot"</span>)</code></pre></div>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-5-1.png" width="480"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"corr_plot"</span>)</code></pre></div>
@@ -119,11 +122,13 @@ m1</code></pre></div>
 ## (Intercept)           wt           hp  
 ##    37.22727     -3.87783     -0.03177</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m1, hp)</code></pre></div>
-<pre><code>## To invalidate the inference, 42.561 % of the estimate would have to be due to bias.
-## To invalidate the inference, 14 observations would have to be replaced with cases for which there is no effect.
+<pre><code>## Replacement of Cases Approach:
+## To invalidate the inference, 42.561 % of the estimate would have to be due to bias.
+## To invalidate the inference, 14 observations would have to be replaced with cases for which the effect is 0 .
 ## 
+## Correlation-based Approach:
 ## An omitted variable would have to be correlated at 0.556 with the outcome and at 0.556 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.746 to invalidate an inference.</code></pre>
+## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.556 * 0.556 = 0.746 to sustain an inference.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m1, <span class="dt">test_all =</span> T)</code></pre></div>
 <pre><code>##   var_name unstd_beta std_err n_obs n_covariates
 ## 1       wt     -3.878   0.633    32            1
@@ -145,11 +150,13 @@ d<span class="op">$</span>married &lt;-<span class="st"> </span><span class="kw"
 
 m2 &lt;-<span class="st"> </span><span class="kw">glm</span>(married <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> d, <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">"logit"</span>))
 <span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m2, age)</code></pre></div>
-<pre><code>## To sustain the inference,  80.978 % of the estimate would have to be due to bias.
-## To sustain the inference,  17334  of the cases with 0 effect would have to be replaced with cases at the threshold of inference.
+<pre><code>## Replacement of Cases Approach:
+## To sustain the inference,  80.978 % of the estimate would have to be due to bias.
+## To sustain the inference,  17334  of the cases with 0  effect would have to be replaced with cases at the threshold of inference.
 ## 
+## Correlation-based Approach:
 ## An omitted variable would have to be correlated at 5.535 with the outcome and at 5.535 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 2.353 to invalidate an inference.</code></pre>
+## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 5.535 * 5.535 = 2.353 to sustain an inference.</code></pre>
 </div>
 </div>
 <div id="use-of-mkonfound" class="section level1">
@@ -195,6 +202,14 @@ m2 &lt;-<span class="st"> </span><span class="kw">glm</span>(married <span class
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-9-1.png" width="480"></p>
 </div>
+<div id="references" class="section level1">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
+<p>Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to Change an Inference?: Using Rubin’s Causal Model to Interpret the Robustness of Causal Inferences. Education, Evaluation and Policy Analysis. Vol 35: 437-460. <a href="https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx">https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx</a></p>
+<p>Frank, K.A., Gary Sykes, Dorothea Anagnostopoulos, Marisa Cannata, Linda Chard, Ann Krause, Raven McCrory. 2008. Extended Influence: National Board Certified Teachers as Help Providers. Education, Evaluation, and Policy Analysis. Vol 30(1): 3-30. <a href="https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc">https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc</a></p>
+<p>Frank, K. A. and Min, K. 2007. Indices of Robustness for Sample Representation. Sociological Methodology. Vol 37, 349-392. <a href="https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc">https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc</a> *co first authors.</p>
+<p>Frank, K. 2000. “Impact of a Confounding Variable on the Inference of a Regression Coefficient.” Sociological Methods and Research, 29(2), 147-194 <a href="https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf">https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf</a></p>
+</div>
 </div>
   </div>
 
@@ -209,6 +224,7 @@ m2 &lt;-<span class="st"> </span><span class="kw">glm</span>(married <span class
       <li><a href="#use-of-pkonfound">Use of pkonfound()</a></li>
       <li><a href="#use-of-konfound">Use of konfound()</a></li>
       <li><a href="#use-of-mkonfound">Use of mkonfound()</a></li>
+      <li><a href="#references">References</a></li>
       </ul>
 </div>
       </div>

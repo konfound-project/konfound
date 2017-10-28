@@ -130,15 +130,19 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; To invalidate the inference, 60.3 % of the estimate would have to be due to bias.
-#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which there is no effect.
+    <pre class="examples"><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; Replacement of Cases Approach:
+#&gt; To invalidate the inference, 60.3 % of the estimate would have to be due to bias.
+#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which the effect is 0 .
 #&gt; 
+#&gt; Correlation-based Approach:
 #&gt; An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.754 to invalidate an inference.</div><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>.4</span>, <span class='fl'>2</span>, <span class='fl'>100</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; To sustain the inference,  89.924 % of the estimate would have to be due to bias.
-#&gt; To sustain the inference,  90  of the cases with 0 effect would have to be replaced with cases at the threshold of inference.
+#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 * 0.568 = 0.754 to sustain an inference.</div><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>.4</span>, <span class='fl'>2</span>, <span class='fl'>100</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; Replacement of Cases Approach:
+#&gt; To sustain the inference,  89.924 % of the estimate would have to be due to bias.
+#&gt; To sustain the inference,  90  of the cases with 0  effect would have to be replaced with cases at the threshold of inference.
 #&gt; 
+#&gt; Correlation-based Approach:
 #&gt; An omitted variable would have to be correlated at 0.387 with the outcome and at 0.387 with the predictor of interest (conditioning on observed covariates) to sustain an inference.
-#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.622 to sustain an inference.</div></pre>
+#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.387 * 0.387 = 0.622 to invalidate an inference.</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
