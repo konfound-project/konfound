@@ -2,7 +2,7 @@
 if (getRversion() >= "2.15.1")  utils::globalVariables(c("inference", "key", "replace_null_cases", "percent_bias", "val"))
 
 .onAttach <- function(libname, pkgname) {
-    packageStartupMessage("Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).\nFor more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.\nYou can also find more information by running the function launch_shiny()")
+    packageStartupMessage("Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).\nFor more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.")
 }
 
 #' Open codebook

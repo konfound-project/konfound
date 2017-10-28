@@ -1,6 +1,6 @@
 # Function to output the data frame
 
-output_df <- function(beta_diff, beta_threshhold, unstd_beta, bias = NULL, sustain = NULL, recase, obs_r, critical_r, r_con) {
+output_df <- function(beta_diff, beta_threshhold, unstd_beta, bias = NULL, sustain = NULL, recase, obs_r, critical_r, r_con, non_linear) {
     if (abs(beta_diff) > abs(beta_threshhold)) {
         df  <- dplyr::data_frame(replacement_of_cases_inference = "to_invalidate",
                                  percent_bias = round(bias, 3),

@@ -23,11 +23,23 @@ mkonfound <- function(df, alpha = .05, tails = 2, return_plot = FALSE, component
     results_df <- dplyr::bind_cols(df, x)
     results_df <- dplyr::select(results_df, -unstd_beta1)
     if (return_plot == TRUE) {
-        to_plot <- dplyr::filter(results_df, replacement_of_cases_inference == "to_invalidate")
-        p <- ggplot2::ggplot(to_plot, ggplot2::aes(x = percent_bias)) +
-            ggplot2::geom_histogram(fill = "#1F78B4") +
+        
+        results_df$correlation_inference <- dplyr::case_when(
+            results_df$correlation_inference == "to_invalidate" ~ "To Invalidate",
+            results_df$correlation_inference == "to_sustain" ~ "To Sustain"
+        )
+        
+        p <- ggplot2::ggplot(results_df, ggplot2::aes(x = percent_bias, fill = correlation_inference)) +
+            ggplot2::geom_histogram() +
+            ggplot2::scale_fill_manual("", values = c("#1F78B4", "#A6CEE3")) +
             ggplot2::theme_bw() +
-            ggplot2::ggtitle("Bias plot")
+            ggplot2::ggtitle("Histogram of Percent Bias") +
+            ggplot2::facet_grid(~ correlation_inference) +
+            ggplot2::scale_y_continuous(breaks = 1:nrow(results_df)) +
+            ggplot2::theme(legend.position = "none") +
+            ggplot2::ylab("Count") +
+            ggplot2::xlab("Percent Bias")
+        
         return(p)
     }
     return(results_df)

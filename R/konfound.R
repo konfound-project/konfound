@@ -59,7 +59,8 @@ konfound <- function(model_object,
                                     tails = tails,
                                     nu = 0,
                                     to_return = to_return,
-                                    component_correlations = component_correlations))
+                                    component_correlations = component_correlations,
+                                    non_linear = FALSE))
         } else { 
             o <- mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates))
             term_names <- dplyr::select(tidy_output, var_name = term) # remove the first row for intercept
@@ -92,13 +93,15 @@ konfound <- function(model_object,
                                     tails = tails,
                                     nu = 0,
                                     to_return = to_return,
-                                    component_correlations = component_correlations))
+                                    component_correlations = component_correlations,
+                                    non_linear = TRUE))
         } else { 
             o <- mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates))
             term_names <- dplyr::select(tidy_output, var_name = term) # remove the first row for intercept
             term_names <- dplyr::filter(term_names, var_name != "(Intercept)")
             o <- dplyr::bind_cols(term_names, o)
         } 
+        message("For a non-linear mode, impact threshold should not be used.")
     }
     
     return(o)

@@ -8,7 +8,8 @@ test_sensitivity <- function(unstd_beta,
                              tails,
                              nu,
                              to_return,
-                             component_correlations) {
+                             component_correlations, 
+                             non_linear) {
     # calculating statistics used in every case
     if (unstd_beta < 0) {
         critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) * -1 }
@@ -67,6 +68,6 @@ test_sensitivity <- function(unstd_beta,
     if (to_return == "df") return(output_df(beta_diff, beta_threshold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con))
     else if (to_return == "thresh_plot") {return(plot_threshold(beta_threshold = beta_threshold, unstd_beta = unstd_beta)) }
     else if (to_return == "corr_plot") {return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r)) }
-    else if (to_return == "print") return(output_print(beta_diff, beta_threshold, bias, sustain, recase, obs_r, critical_r, r_con))
-    else stop("to_return must be set to df, print, or plot")
+    else if (to_return == "print") return(output_print(beta_diff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con))
+    else stop("to_return must be set to 'df', 'print', 'thresh_plot', or 'corr_plot'")
 }
