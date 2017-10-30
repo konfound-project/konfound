@@ -121,15 +121,14 @@ df &lt;-<span class="st"> </span><span class="kw">tribble</span>(
 )
 
 <span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(df)
-<span class="co">#&gt; # A tibble: 3 x 10</span>
-<span class="co">#&gt;   unstd_beta std_err n_obs n_covs replacement_of_cases_inference</span>
-<span class="co">#&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;                          &lt;chr&gt;</span>
-<span class="co">#&gt; 1        2.0     0.3    70      3                  to_invalidate</span>
-<span class="co">#&gt; 2       10.0     2.9   405      4                  to_invalidate</span>
-<span class="co">#&gt; 3        1.7     1.5   200      1                     to_sustain</span>
-<span class="co">#&gt; # ... with 5 more variables: percent_bias &lt;dbl&gt;, replace_null_cases &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   beta_threshhold &lt;dbl&gt;, correlation_inference &lt;chr&gt;,</span>
-<span class="co">#&gt; #   omitted_variable_corr &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 3 x 9</span>
+<span class="co">#&gt;   unstd_beta std_err n_obs n_covs     inference percent_bias</span>
+<span class="co">#&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;         &lt;chr&gt;        &lt;dbl&gt;</span>
+<span class="co">#&gt; 1        2.0     0.3    70      3 to_invalidate       70.052</span>
+<span class="co">#&gt; 2       10.0     2.9   405      4 to_invalidate       42.989</span>
+<span class="co">#&gt; 3        1.7     1.5   200      1    to_sustain       42.529</span>
+<span class="co">#&gt; # ... with 3 more variables: replace_null_cases &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   beta_threshhold &lt;dbl&gt;, omitted_variable_corr &lt;dbl&gt;</span></code></pre></div>
 </div>
 </div>
 <div id="other-information" class="section level1">
@@ -159,10 +158,12 @@ df &lt;-<span class="st"> </span><span class="kw">tribble</span>(
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
-<p>Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to Change an Inference?: Using Rubin’s Causal Model to Interpret the Robustness of Causal Inferences. Education, Evaluation and Policy Analysis. Vol 35: 437-460. <a href="https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx">https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx</a></p>
-<p>Frank, K.A., Gary Sykes, Dorothea Anagnostopoulos, Marisa Cannata, Linda Chard, Ann Krause, Raven McCrory. 2008. Extended Influence: National Board Certified Teachers as Help Providers. Education, Evaluation, and Policy Analysis. Vol 30(1): 3-30. <a href="https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc">https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc</a></p>
-<p>Frank, K. A. and Min, K. 2007. Indices of Robustness for Sample Representation. Sociological Methodology. Vol 37, 349-392. <a href="https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc">https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc</a> *co first authors.</p>
-<p>Frank, K. 2000. “Impact of a Confounding Variable on the Inference of a Regression Coefficient.” Sociological Methods and Research, 29(2), 147-194 <a href="https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf">https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf</a></p>
+<ul>
+<li><p>Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to Change an Inference?: Using Rubin’s Causal Model to Interpret the Robustness of Causal Inferences. Education, Evaluation and Policy Analysis. Vol 35: 437-460. <a href="https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx">https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx</a></p></li>
+<li><p>Frank, K.A., Gary Sykes, Dorothea Anagnostopoulos, Marisa Cannata, Linda Chard, Ann Krause, Raven McCrory. 2008. Extended Influence: National Board Certified Teachers as Help Providers. Education, Evaluation, and Policy Analysis. Vol 30(1): 3-30. <a href="https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc">https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc</a></p></li>
+<li><p>Frank, K. A. and Min, K. 2007. Indices of Robustness for Sample Representation. Sociological Methodology. Vol 37, 349-392. <a href="https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc">https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc</a> *co first authors.</p></li>
+<li><p>Frank, K. 2000. “Impact of a Confounding Variable on the Inference of a Regression Coefficient.” Sociological Methods and Research, 29(2), 147-194 <a href="https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf">https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf</a></p></li>
+</ul>
 </div>
 </div>
 </div>

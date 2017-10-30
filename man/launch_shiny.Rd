@@ -2,7 +2,7 @@
 % Please edit documentation in R/helper_other.R
 \name{launch_shiny}
 \alias{launch_shiny}
-\title{Open codebook}
+\title{Open interactive web application for konfound}
 \usage{
 launch_shiny()
 }
@@ -10,7 +10,7 @@ launch_shiny()
 Launches a web browser
 }
 \description{
-Open codebook
+Open interactive web application for konfound
 }
 \details{
 Open the Shiny interactive web application in a browser

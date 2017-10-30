@@ -87,15 +87,14 @@ df <- tribble(
 )
 
 mkonfound(df)
-#> # A tibble: 3 x 10
-#>   unstd_beta std_err n_obs n_covs replacement_of_cases_inference
-#>        <dbl>   <dbl> <dbl>  <dbl>                          <chr>
-#> 1        2.0     0.3    70      3                  to_invalidate
-#> 2       10.0     2.9   405      4                  to_invalidate
-#> 3        1.7     1.5   200      1                     to_sustain
-#> # ... with 5 more variables: percent_bias <dbl>, replace_null_cases <dbl>,
-#> #   beta_threshhold <dbl>, correlation_inference <chr>,
-#> #   omitted_variable_corr <dbl>
+#> # A tibble: 3 x 9
+#>   unstd_beta std_err n_obs n_covs     inference percent_bias
+#>        <dbl>   <dbl> <dbl>  <dbl>         <chr>        <dbl>
+#> 1        2.0     0.3    70      3 to_invalidate       70.052
+#> 2       10.0     2.9   405      4 to_invalidate       42.989
+#> 3        1.7     1.5   200      1    to_sustain       42.529
+#> # ... with 3 more variables: replace_null_cases <dbl>,
+#> #   beta_threshhold <dbl>, omitted_variable_corr <dbl>
 ```
 
 Other information
@@ -123,10 +122,10 @@ Please note that this project is released with a Contributor Code of Conduct ava
 References
 ----------
 
-Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to Change an Inference?: Using Rubin’s Causal Model to Interpret the Robustness of Causal Inferences. Education, Evaluation and Policy Analysis. Vol 35: 437-460. <https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx>
+-   Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to Change an Inference?: Using Rubin’s Causal Model to Interpret the Robustness of Causal Inferences. Education, Evaluation and Policy Analysis. Vol 35: 437-460. <https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx>
 
-Frank, K.A., Gary Sykes, Dorothea Anagnostopoulos, Marisa Cannata, Linda Chard, Ann Krause, Raven McCrory. 2008. Extended Influence: National Board Certified Teachers as Help Providers. Education, Evaluation, and Policy Analysis. Vol 30(1): 3-30. <https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc>
+-   Frank, K.A., Gary Sykes, Dorothea Anagnostopoulos, Marisa Cannata, Linda Chard, Ann Krause, Raven McCrory. 2008. Extended Influence: National Board Certified Teachers as Help Providers. Education, Evaluation, and Policy Analysis. Vol 30(1): 3-30. <https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc>
 
-Frank, K. A. and Min, K. 2007. Indices of Robustness for Sample Representation. Sociological Methodology. Vol 37, 349-392. <https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc> \*co first authors.
+-   Frank, K. A. and Min, K. 2007. Indices of Robustness for Sample Representation. Sociological Methodology. Vol 37, 349-392. <https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc> \*co first authors.
 
-Frank, K. 2000. "Impact of a Confounding Variable on the Inference of a Regression Coefficient." Sociological Methods and Research, 29(2), 147-194 <https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf>
+-   Frank, K. 2000. "Impact of a Confounding Variable on the Inference of a Regression Coefficient." Sociological Methods and Research, 29(2), 147-194 <https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf>

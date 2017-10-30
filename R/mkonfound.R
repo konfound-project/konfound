@@ -24,17 +24,17 @@ mkonfound <- function(df, alpha = .05, tails = 2, return_plot = FALSE, component
     results_df <- dplyr::select(results_df, -unstd_beta1)
     if (return_plot == TRUE) {
         
-        results_df$correlation_inference <- dplyr::case_when(
-            results_df$correlation_inference == "to_invalidate" ~ "To Invalidate",
-            results_df$correlation_inference == "to_sustain" ~ "To Sustain"
+        results_df$inference <- dplyr::case_when(
+            results_df$inference == "to_invalidate" ~ "To Invalidate",
+            results_df$inference == "to_sustain" ~ "To Sustain"
         )
         
-        p <- ggplot2::ggplot(results_df, ggplot2::aes(x = percent_bias, fill = correlation_inference)) +
+        p <- ggplot2::ggplot(results_df, ggplot2::aes(x = percent_bias, fill = inference)) +
             ggplot2::geom_histogram() +
             ggplot2::scale_fill_manual("", values = c("#1F78B4", "#A6CEE3")) +
             ggplot2::theme_bw() +
             ggplot2::ggtitle("Histogram of Percent Bias") +
-            ggplot2::facet_grid(~ correlation_inference) +
+            ggplot2::facet_grid(~ inference) +
             ggplot2::scale_y_continuous(breaks = 1:nrow(results_df)) +
             ggplot2::theme(legend.position = "none") +
             ggplot2::ylab("Count") +

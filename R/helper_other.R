@@ -5,11 +5,11 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("inference", "key", "re
     packageStartupMessage("Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).\nFor more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.")
 }
 
-#' Open codebook
+#' Open interactive web application for konfound
 #' @details Open the Shiny interactive web application in a browser
 #' @return Launches a web browser
 #' @export
 
 launch_shiny <- function() {
-    browseURL("https://jmichaelrosenberg.shinyapps.io/shinykonfound/")
+    utils::browseURL("https://jmichaelrosenberg.shinyapps.io/shinykonfound/")
 }
