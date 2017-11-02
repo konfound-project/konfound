@@ -13,3 +13,6 @@ if (getRversion() >= "2.15.1")  utils::globalVariables(c("inference", "key", "re
 launch_shiny <- function() {
     utils::browseURL("https://jmichaelrosenberg.shinyapps.io/shinykonfound/")
 }
+
+# addresses concerns (notes) of R CMD check re: the vars that are evaluated using non-standard evaluation
+if (getRversion() >= "2.15.1") utils::globalVariables(c("itcv", "term", "unstd_beta1", "var_name", "x", "y"))

@@ -10,7 +10,7 @@ output_table <- function(model_object, tested_variable) {
     for (i in seq(covariate_names)) {
         cov_row <- model_output$term == covariate_names[i]
         d <- model_object$model
-        cor_df <- as.data.frame(cor(d))
+        cor_df <- as.data.frame(stats::cor(d))
         model_output$impact.k[cov_row] <- round(abs(cor_df[cov_row, 1]) * abs(cor_df[cov_row, tested_variable]), 3) # r_zy * r_zx
     }
     

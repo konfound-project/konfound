@@ -3,4 +3,5 @@
 ^docs$
 ^README\.Rmd$
 ^README-.*\.png$
-^tutorial for sensitivity analysis in STATA (1).docx$
+^docx$
+^tutorial for sensitivity analysis in STATA (1)\.docx$
