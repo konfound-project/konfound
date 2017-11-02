@@ -16,7 +16,7 @@ konfound(model_object, tested_variable, alpha = 0.05, tails = 2,
 
 \item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
 
-\item{to_return}{whether to return a data.frame (by specifying this argument to euqal "df") or a plot ("plot"); default is to print the output to the console}
+\item{to_return}{whether to return a data.frame (by specifying this argument to equal "df"), table ("table"), or a plot ("plot"); default is to print the output to the console}
 
 \item{test_all}{whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)}
 

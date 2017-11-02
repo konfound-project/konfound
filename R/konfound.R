@@ -3,7 +3,7 @@
 #' @param model_object output from a model (currently works for: lm)
 #' @param tested_variable Variable associated with the unstandardized beta coefficient to be tested
 #' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
-#' @param to_return whether to return a data.frame (by specifying this argument to euqal "df") or a plot ("plot"); default is to print the output to the console
+#' @param to_return whether to return a data.frame (by specifying this argument to equal "df"), table ("table"), or a plot ("plot"); default is to print the output to the console
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
 #' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
 #' @param component_correlations whether to return the component correlations as part of the correlation-based approach
@@ -60,7 +60,9 @@ konfound <- function(model_object,
                                     nu = 0,
                                     to_return = to_return,
                                     component_correlations = component_correlations,
-                                    non_linear = FALSE))
+                                    non_linear = FALSE,
+                                    model_object = model_object,
+                                    tested_variable = tested_variable_string))
         } else { 
             o <- mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates))
             term_names <- dplyr::select(tidy_output, var_name = term) # remove the first row for intercept
@@ -94,7 +96,9 @@ konfound <- function(model_object,
                                     nu = 0,
                                     to_return = to_return,
                                     component_correlations = component_correlations,
-                                    non_linear = TRUE))
+                                    non_linear = TRUE,
+                                    model_object = model_object,
+                                    tested_variable = tested_variable_string))
         } else { 
             o <- mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates))
             term_names <- dplyr::select(tidy_output, var_name = term) # remove the first row for intercept
