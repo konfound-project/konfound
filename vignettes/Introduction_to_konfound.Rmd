@@ -78,7 +78,7 @@ konfound(m1, wt, to_return = "table")
 
 Effects for these models are interpreted on the basis of average partial (or marginal) effects (calculated using the `margins` package).
 
-```{r}
+```{r, message = F}
 # if forcats is not installed, this install it first using install.packages("forcats") for this to run
 if (requireNamespace("forcats")) {
     d <- forcats::gss_cat

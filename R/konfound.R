@@ -72,6 +72,8 @@ konfound <- function(model_object,
     }
     
     if (class(model_object)[1] == "glm") {
+        warning("For a non-linear mode, impact threshold should not be used.")
+        
         if (test_all == FALSE) {
             tested_variable_enquo <- rlang::enquo(tested_variable) # dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
             tested_variable_string <- rlang::quo_name(tested_variable_enquo)
@@ -105,7 +107,6 @@ konfound <- function(model_object,
             term_names <- dplyr::filter(term_names, var_name != "(Intercept)")
             o <- dplyr::bind_cols(term_names, o)
         } 
-        message("For a non-linear mode, impact threshold should not be used.")
     }
     
     return(o)
