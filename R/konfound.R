@@ -8,6 +8,7 @@
 #' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
 #' @param component_correlations whether to return the component correlations as part of the correlation-based approach
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
+#' @importFrom rlang .data
 #' @examples
 #' m1 <- lm(mpg ~ wt + hp, data = mtcars)
 #' konfound(m1, wt)
@@ -70,8 +71,8 @@ konfound <- function(model_object,
                                     tested_variable = tested_variable_string))
         } else { 
             o <- mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates))
-            term_names <- dplyr::select(tidy_output, var_name = term) # remove the first row for intercept
-            term_names <- dplyr::filter(term_names, var_name != "(Intercept)")
+            term_names <- dplyr::select(tidy_output, var_name = .data$term) # remove the first row for intercept
+            term_names <- dplyr::filter(term_names, .data$var_name != "(Intercept)")
             o <- dplyr::bind_cols(term_names, o)
         } 
     }
@@ -108,8 +109,8 @@ konfound <- function(model_object,
                                     tested_variable = tested_variable_string))
         } else { 
             o <- mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates))
-            term_names <- dplyr::select(tidy_output, var_name = term) # remove the first row for intercept
-            term_names <- dplyr::filter(term_names, var_name != "(Intercept)")
+            term_names <- dplyr::select(tidy_output, var_name = .data$term) # remove the first row for intercept
+            term_names <- dplyr::filter(term_names, .data$var_name != "(Intercept)")
             o <- dplyr::bind_cols(term_names, o)
         } 
     }

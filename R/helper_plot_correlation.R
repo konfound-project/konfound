@@ -11,7 +11,7 @@ plot_correlation <- function(r_con, obs_r, critical_r){
         the_title <- "Inference and critical r are exactly equal"
     }
 
-    p <- ggplot2::ggplot(d, ggplot2::aes(x = x, y = y)) +
+    p <- ggplot2::ggplot(d, ggplot2::aes_string(x = "x", y = "y")) +
         
         # main arrows
         ggplot2::geom_segment(ggplot2::aes(y = .1), xend = 0, yend = .9, arrow = ggplot2::arrow(), size = 2.5, color = "#A6CEE3") + # straight up

@@ -21,7 +21,7 @@ mkonfound <- function(df, alpha = .05, tails = 2, return_plot = FALSE, component
                  as.list(dplyr::pull(df, 4)))
     x <- purrr::pmap_dfr(args, pkonfound, alpha = alpha, tails = tails, to_return = "df")
     results_df <- dplyr::bind_cols(df, x)
-    results_df <- dplyr::select(results_df, -unstd_beta1)
+    results_df <- dplyr::select(results_df, -.data$unstd_beta1)
     if (return_plot == TRUE) {
         
         results_df$inference <- dplyr::case_when(

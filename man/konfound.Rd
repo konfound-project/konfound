@@ -31,4 +31,6 @@ For fitted models, this command calculates (1) how much bias there must be in an
 \examples{
 m1 <- lm(mpg ~ wt + hp, data = mtcars)
 konfound(m1, wt)
+konfound(m1, wt, test_all = TRUE)
+konfound(m1, wt, to_return = "table")
 }

@@ -36,4 +36,7 @@ For published studies, this command calculates (1) how much bias there must be i
 \examples{
 pkonfound(2, .4, 100, 3)
 pkonfound(.4, 2, 100, 3)
+pkonfound(-2, .4, 200, 3)
+pkonfound(2, .4, 200, 3, to_return = "thresh_plot")
+pkonfound(2, .4, 200, 3, to_return = "corr_plot")
 }

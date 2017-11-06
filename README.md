@@ -38,11 +38,11 @@ library(konfound)
 pkonfound(2, .4, 100, 3)
 #> Replacement of Cases Approach:
 #> To invalidate the inference, 60.3 % of the estimate would have to be due to bias.
-#> To invalidate the inference, 60 observations would have to be replaced with cases for which the effect is 0 .
+#> To invalidate the inference, 60 observations would have to be replaced with cases for which the effect is 0.
 #> 
 #> Correlation-based Approach:
 #> An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 * 0.568 = 0.754 to sustain an inference.
+#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.754 to sustain an inference.
 ```
 
 #### konfound() for models fit in R
@@ -67,11 +67,11 @@ Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as foll
 konfound(m1, wt)
 #> Replacement of Cases Approach:
 #> To invalidate the inference, 66.664 % of the estimate would have to be due to bias.
-#> To invalidate the inference, 21 observations would have to be replaced with cases for which the effect is 0 .
+#> To invalidate the inference, 21 observations would have to be replaced with cases for which the effect is 0.
 #> 
 #> Correlation-based Approach:
 #> An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 * 0.787 = 0.887 to sustain an inference.
+#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.887 to sustain an inference.
 ```
 
 #### mkonfound for meta-analyses including sensitivity analysis

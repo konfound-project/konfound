@@ -5,8 +5,10 @@ plot_threshold <- function(beta_threshold, unstd_beta) {
     beta_threshold <- abs(beta_threshold)
     unstd_beta = abs(unstd_beta)
     
-    if (abs(unstd_beta) > abs(beta_threshold)) { # beta is above threshold
-        dd <- dplyr::data_frame(unstd_beta = unstd_beta, beta_threshold = beta_threshold)
+    if (unstd_beta > beta_threshold) { # beta is above threshold
+        dd <- dplyr::data_frame(unstd_beta = unstd_beta, 
+                                beta_threshold = beta_threshold)
+        
         dd <- dplyr::mutate(dd, `Above Threshold` = unstd_beta - beta_threshold)
         dd <- dplyr::rename(dd, `Below Threshold` = beta_threshold)
         
@@ -22,10 +24,10 @@ plot_threshold <- function(beta_threshold, unstd_beta) {
         
         cols <- c("#A6CEE3", "#1F78B4") # dark blue and light blue
         
-    } else if (abs(unstd_beta) < abs(beta_threshold)) { # beta is below threshold
-
+    } else if (unstd_beta < beta_threshold) { # beta is below threshold
+        
         dd <- dplyr::data_frame(unstd_beta = unstd_beta, beta_threshold = beta_threshold)
-        dd <- dplyr::mutate(dd, `Above Threshold` = abs(unstd_beta - beta_threshold))
+        dd <- dplyr::mutate(dd, `Above Effect, Below Threshold` = abs(unstd_beta - beta_threshold))
         dd <- dplyr::mutate(dd, `Below Threshold` = unstd_beta)
         dd <- dplyr::select(dd, -beta_threshold)
         
@@ -41,12 +43,9 @@ plot_threshold <- function(beta_threshold, unstd_beta) {
         y_thresh_text <- y_thresh + sqrt(.005 * abs(y_thresh))
         effect_text <- unstd_beta + sqrt(.025 * abs(unstd_beta)) # y-value of text
         
-        dd <- dplyr::filter(dd, key != "Above Threshold")
-        
-        cols <- c("#B2DF8A", "#1F78B4") # dark blue and green (green not used right now)
+        cols <- c("lightgray", "#1F78B4") # dark blue and green (green not used right now)
         
     }
-
     
     p <- ggplot2::ggplot(dd, ggplot2::aes(x = inference, y = val, fill = key)) +
         ggplot2::geom_col(position = "stack") +
@@ -56,6 +55,7 @@ plot_threshold <- function(beta_threshold, unstd_beta) {
         
         ggplot2::geom_hline(yintercept = y_thresh, color = "red") +
         ggplot2::annotate("text", x = 1, y = y_thresh_text, label = "Threshold") +
+        # ggplot2::geom_text(aes(label = "Effect"), vjust = -.5) + this is discussed here: https://github.com/jrosen48/konfound/issues/5
         
         ggplot2::scale_fill_manual("", values = cols) +
         ggplot2::theme_bw() +
