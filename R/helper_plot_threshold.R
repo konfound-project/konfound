@@ -1,6 +1,10 @@
 # Function to output the plot
 
 plot_threshold <- function(beta_threshold, unstd_beta) {
+    
+    beta_threshold <- abs(beta_threshold)
+    unstd_beta = abs(unstd_beta)
+    
     if (abs(unstd_beta) > abs(beta_threshold)) { # beta is above threshold
         dd <- dplyr::data_frame(unstd_beta = unstd_beta, beta_threshold = beta_threshold)
         dd <- dplyr::mutate(dd, `Above Threshold` = unstd_beta - beta_threshold)
