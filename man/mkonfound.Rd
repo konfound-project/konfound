@@ -30,4 +30,5 @@ df <- data.frame(unstd_beta = c(2, 10, 1.7, .4, 3.2, 1.0, 2.3, 4.1, .9),
                  n_obs = c(70, 405, 200, 100, 103, 20, 50, 721, 320),
                  n_covs = c(3, 4, 1, 3, 10, 4, 1, 1, 0))
 mkonfound(df)
+mkonfound(df, return_plot = TRUE)
 }

@@ -12,6 +12,7 @@
 #'                  n_obs = c(70, 405, 200, 100, 103, 20, 50, 721, 320),
 #'                  n_covs = c(3, 4, 1, 3, 10, 4, 1, 1, 0))
 #' mkonfound(df)
+#' mkonfound(df, return_plot = TRUE)
 #' @export
 
 mkonfound <- function(df, alpha = .05, tails = 2, return_plot = FALSE, component_correlations = FALSE) {
