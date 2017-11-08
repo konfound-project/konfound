@@ -1,6 +1,6 @@
 # Function to output printed text
 
-output_print <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL, nu, recase, obs_r, critical_r, r_con, non_linear) {
+output_print <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL, nu, recase, obs_r, critical_r, r_con, itcv, non_linear) {
     cat("Replacement of Cases Approach:\n")
     if (abs(beta_diff) > abs(beta_threshhold)) {
         cat("To invalidate the inference,", round(bias, 3), "% of the estimate would have to be due to bias.\n")
@@ -16,10 +16,10 @@ output_print <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL
     if (abs(obs_r) > abs(critical_r)) {
         cat("An omitted variable would have to be correlated at", r_con, "with the outcome and at", r_con, 
             "with the predictor of interest (conditioning on observed covariates) to invalidate an inference.\n")
-        cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be", r_con, "X", r_con, "=", round(sqrt(r_con), 3), "to sustain an inference.\n") }
+        cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be", r_con, "X", r_con, "=", round(r_con ^ 2, 3), "to sustain an inference.\n") }
     else if (abs(obs_r) < abs(critical_r)) {
         cat("An omitted variable would have to be correlated at", r_con, "with the outcome and at", r_con, "with the predictor of interest (conditioning on observed covariates) to sustain an inference.\n")
-        cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be", r_con, "X", r_con, "=", round(sqrt(r_con), 3), "to invalidate an inference.\n") }
+        cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be", r_con, "X", r_con, "=", round(r_con ^ 2, 3), "to invalidate an inference.\n") }
     else if (obs_r == critical_r) {
         warning("The correlation is exactly equal to the threshold.\n") }
 }

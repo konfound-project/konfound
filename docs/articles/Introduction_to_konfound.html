@@ -50,7 +50,7 @@
       <h1>Introduction to konfound</h1>
                         <h4 class="author">Joshua Rosenberg, Ran Xu, and Ken Frank</h4>
             
-            <h4 class="date">2017-11-05</h4>
+            <h4 class="date">2017-11-08</h4>
           </div>
 
     
@@ -59,8 +59,8 @@
 <div id="abstract" class="section level1">
 <h1 class="hasAnchor">
 <a href="#abstract" class="anchor"></a>Abstract</h1>
-<p><em>This abstract is adapted from Xu, Frank, and Maroulis’ STATA tutorial “What would it take to Change your Inference? Quantifying the Discourse about Causal Inferences in the Social Sciences”</em></p>
-<p>Statistical methods that quantify the discourse about causal inferences in terms of possible sources of biases, or “sensitivity analysis,” is becoming more important to a variety of social science fields, including research in education, public policy, and political science. A series of recent works by Frank and colleagues on sensitivity analysis points to limitations in earlier methods and aims to extend beyond them. We implement these developments, which previously have been implemented in <code>Stata</code>, in <code>R</code> through the <code>konfound</code> package. In particular, we provide functions for quantifying the bias necessary to alter an inference, from the framework of Rubin’s (1974) causal model, as well as the robustness of causal inference in terms of correlations associated with unobserved variables.</p>
+<p><em>This abstract is adapted from Xu, Frank, and Maroulis’ STATA tutorial “What would it take to Change your Inference? Quantifying the Discourse about Causal Inferences in the Social Sciences.”</em></p>
+<p>Statistical methods that quantify the discourse about causal inferences in terms of possible sources of biases, or “sensitivity analysis,” are becoming more important to a variety of social science fields, including research in education, public policy, and political science. A series of recent works by Frank and colleagues on sensitivity analysis points to limitations in earlier methods and aims to extend beyond them. We implement these developments, which previously have been implemented in <code>Stata</code>, in <code>R</code> through the <code>konfound</code> package. In particular, we provide functions for quantifying the bias necessary to alter an inference, from the framework of Rubin’s (1974) causal model, as well as the robustness of causal inference in terms of the impact threshold of a confounding variable.</p>
 </div>
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
@@ -70,12 +70,19 @@
 <h1 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h1>
 <p><code>konfound</code> is an <code>R</code> package to easily carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model.</p>
+<div id="installation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h3>
+<p>You can install konfound from GitHub (it will be available on CRAN and therefore via <code>install.packages("konfound")</code> soon) with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
+devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"jrosen48/konfound"</span>)</code></pre></div>
+</div>
 <div id="loading-konfound" class="section level3">
 <h3 class="hasAnchor">
 <a href="#loading-konfound" class="anchor"></a>Loading konfound</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)</code></pre></div>
 <pre><code>## Loading konfound</code></pre>
-<pre><code>## Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).
+<pre><code>## Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).
 ## For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.</code></pre>
 </div>
 <div id="use-of-pkonfound" class="section level3">
@@ -88,7 +95,7 @@
 ## 
 ## Correlation-based Approach:
 ## An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.754 to sustain an inference.</code></pre>
+## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to sustain an inference.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"thresh_plot"</span>)</code></pre></div>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-3-1.png" width="480"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"corr_plot"</span>)</code></pre></div>
@@ -100,7 +107,7 @@
 ## 
 ## Correlation-based Approach:
 ## An omitted variable would have to be correlated at 0.387 with the outcome and at 0.387 with the predictor of interest (conditioning on observed covariates) to sustain an inference.
-## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.387 X 0.387 = 0.622 to invalidate an inference.</code></pre>
+## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.387 X 0.387 = 0.15 to invalidate an inference.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"thresh_plot"</span>)</code></pre></div>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-5-1.png" width="480"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="fl">1.2</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"corr_plot"</span>)</code></pre></div>
@@ -128,7 +135,7 @@ m1</code></pre></div>
 ## 
 ## Correlation-based Approach:
 ## An omitted variable would have to be correlated at 0.322 with the outcome and at 0.322 with the predictor of interest (conditioning on observed covariates) to sustain an inference.
-## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.322 X 0.322 = 0.567 to invalidate an inference.</code></pre>
+## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.322 X 0.322 = 0.104 to invalidate an inference.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m1, <span class="dt">test_all =</span> T)</code></pre></div>
 <pre><code>##   var_name unstd_beta std_err n_obs n_covariates     inference
 ## 1       wt     -4.359   0.753    32            2 to_invalidate
@@ -137,7 +144,11 @@ m1</code></pre></div>
 ##   percent_bias replace_null_cases beta_threshhold omitted_variable_corr
 ## 1       64.669                 21     -1.54005792                 0.772
 ## 2       41.327                 13     -0.03067844                 0.322
-## 3       43.087                 14      0.89785581                 0.329</code></pre>
+## 3       43.087                 14      0.89785581                 0.329
+##         itcv
+## 1 -0.5963300
+## 2  0.1033755
+## 3 -0.1080756</code></pre>
 <p>You can also return a table with some key output from the correlation-based approach.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m1, wt, <span class="dt">to_return =</span> <span class="st">"table"</span>)</code></pre></div>
 <pre><code>## Dependent variable is mpg</code></pre>
@@ -168,7 +179,7 @@ m1</code></pre></div>
 ## 
 ## Correlation-based Approach:
 ## An omitted variable would have to be correlated at 5.535 with the outcome and at 5.535 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 5.535 X 5.535 = 2.353 to sustain an inference.</code></pre>
+## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 5.535 X 5.535 = 30.636 to sustain an inference.</code></pre>
 </div>
 </div>
 <div id="use-of-mkonfound" class="section level3">
@@ -190,16 +201,16 @@ m1</code></pre></div>
 ## 7        2.3      0.10    50      1 to_invalidate       91.258
 ## 8        4.1      3.00   721      1    to_sustain       30.388
 ## 9        0.9      0.50   320      0    to_sustain        8.510
-##   replace_null_cases beta_threshhold omitted_variable_corr
-## 1                 49      0.59896933                 0.725
-## 2                174      5.70114580                 0.283
-## 3                 85      2.95802622                 0.227
-## 4                 90      3.96996862                 0.387
-## 5                 97      0.19860863                 0.974
-## 6                 18      0.08525798                 0.990
-## 7                 46      0.20106348                 0.971
-## 8                219      5.88980656                 0.144
-## 9                 27      0.98371419                 0.091</code></pre>
+##   replace_null_cases beta_threshhold omitted_variable_corr        itcv
+## 1                 49      0.59896933                 0.725  0.52521938
+## 2                174      5.70114580                 0.283  0.08010979
+## 3                 85      2.95802622                 0.227 -0.05159630
+## 4                 90      3.96996862                 0.387 -0.14988727
+## 5                 97      0.19860863                 0.974  0.94812468
+## 6                 18      0.08525798                 0.990  0.97914830
+## 7                 46      0.20106348                 0.971  0.94295173
+## 8                219      5.88980656                 0.144 -0.02064123
+## 9                 27      0.98371419                 0.091 -0.00833270</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mkonfound.html">mkonfound</a></span>(df, <span class="dt">return_plot =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-10-1.png" width="480"></p>

@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 # konfound
 
-The goal of konfound is to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin's (1974) causal model. 
+The goal of konfound is to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.
 
 # Installation
 

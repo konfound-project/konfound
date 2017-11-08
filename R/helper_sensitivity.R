@@ -67,10 +67,10 @@ test_sensitivity <- function(unstd_beta,
     # }
 
     # output dispatch
-    if (to_return == "df") return(output_df(beta_diff, beta_threshold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con, non_linear = FALSE))
+    if (to_return == "df") return(output_df(beta_diff, beta_threshold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE))
     else if (to_return == "thresh_plot") return(plot_threshold(beta_threshold = beta_threshold, unstd_beta = unstd_beta))
     else if (to_return == "corr_plot") return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
-    else if (to_return == "print") return(output_print(beta_diff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, non_linear = FALSE))
+    else if (to_return == "print") return(output_print(beta_diff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE))
     else if (to_return == "table") return(output_table(model_object, tested_variable))
     else stop("to_return must be set to 'df', 'print', 'thresh_plot', or 'corr_plot'")
 }

@@ -3,7 +3,7 @@
 konfound
 ========
 
-The goal of konfound is to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin's (1974) causal model.
+The goal of konfound is to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.
 
 Installation
 ============
@@ -20,7 +20,7 @@ library(konfound)
 ```
 
     #> Loading konfound
-    #> Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).
+    #> Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).
     #> For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.
 
 Use of konfound
@@ -42,7 +42,7 @@ pkonfound(2, .4, 100, 3)
 #> 
 #> Correlation-based Approach:
 #> An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.754 to sustain an inference.
+#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to sustain an inference.
 ```
 
 #### konfound() for models fit in R
@@ -71,7 +71,7 @@ konfound(m1, wt)
 #> 
 #> Correlation-based Approach:
 #> An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.887 to sustain an inference.
+#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to sustain an inference.
 ```
 
 #### mkonfound for meta-analyses including sensitivity analysis
@@ -87,14 +87,14 @@ df <- tribble(
 )
 
 mkonfound(df)
-#> # A tibble: 3 x 9
+#> # A tibble: 3 x 10
 #>   unstd_beta std_err n_obs n_covs     inference percent_bias
 #>        <dbl>   <dbl> <dbl>  <dbl>         <chr>        <dbl>
 #> 1        2.0     0.3    70      3 to_invalidate       70.052
 #> 2       10.0     2.9   405      4 to_invalidate       42.989
 #> 3        1.7     1.5   200      1    to_sustain       42.529
-#> # ... with 3 more variables: replace_null_cases <dbl>,
-#> #   beta_threshhold <dbl>, omitted_variable_corr <dbl>
+#> # ... with 4 more variables: replace_null_cases <dbl>,
+#> #   beta_threshhold <dbl>, omitted_variable_corr <dbl>, itcv <dbl>
 ```
 
 Other information

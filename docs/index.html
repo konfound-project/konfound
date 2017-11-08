@@ -55,7 +55,7 @@
 <div id="konfound" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#konfound" class="anchor"></a>konfound</h1></div>
-<p>The goal of konfound is to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model.</p>
+<p>The goal of konfound is to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.</p>
 </div>
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">
@@ -65,7 +65,7 @@
 devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"jrosen48/konfound"</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)</code></pre></div>
 <pre><code>#&gt; Loading konfound
-#&gt; Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013).
+#&gt; Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).
 #&gt; For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.</code></pre>
 </div>
 <div id="use-of-konfound" class="section level1">
@@ -83,7 +83,7 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Correlation-based Approach:</span>
 <span class="co">#&gt; An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.</span>
-<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.754 to sustain an inference.</span></code></pre></div>
+<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to sustain an inference.</span></code></pre></div>
 </div>
 <div id="konfound-for-models-fit-in-r" class="section level4">
 <h4 class="hasAnchor">
@@ -106,7 +106,7 @@ m1
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Correlation-based Approach:</span>
 <span class="co">#&gt; An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.</span>
-<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.887 to sustain an inference.</span></code></pre></div>
+<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to sustain an inference.</span></code></pre></div>
 </div>
 <div id="mkonfound-for-meta-analyses-including-sensitivity-analysis" class="section level4">
 <h4 class="hasAnchor">
@@ -121,14 +121,14 @@ df &lt;-<span class="st"> </span><span class="kw">tribble</span>(
 )
 
 <span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(df)
-<span class="co">#&gt; # A tibble: 3 x 9</span>
+<span class="co">#&gt; # A tibble: 3 x 10</span>
 <span class="co">#&gt;   unstd_beta std_err n_obs n_covs     inference percent_bias</span>
 <span class="co">#&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;         &lt;chr&gt;        &lt;dbl&gt;</span>
 <span class="co">#&gt; 1        2.0     0.3    70      3 to_invalidate       70.052</span>
 <span class="co">#&gt; 2       10.0     2.9   405      4 to_invalidate       42.989</span>
 <span class="co">#&gt; 3        1.7     1.5   200      1    to_sustain       42.529</span>
-<span class="co">#&gt; # ... with 3 more variables: replace_null_cases &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   beta_threshhold &lt;dbl&gt;, omitted_variable_corr &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt; # ... with 4 more variables: replace_null_cases &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   beta_threshhold &lt;dbl&gt;, omitted_variable_corr &lt;dbl&gt;, itcv &lt;dbl&gt;</span></code></pre></div>
 </div>
 </div>
 <div id="other-information" class="section level1">

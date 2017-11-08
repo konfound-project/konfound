@@ -16,15 +16,24 @@ knitr::opts_chunk$set(echo = TRUE, fig.height = 5, fig.width = 5, cache = FALSE)
 
 # Abstract
 
-*This abstract is adapted from Xu, Frank, and Maroulis' STATA tutorial "What would it take to Change your Inference? Quantifying the Discourse about Causal Inferences in the Social Sciences"*
+*This abstract is adapted from Xu, Frank, and Maroulis' STATA tutorial "What would it take to Change your Inference? Quantifying the Discourse about Causal Inferences in the Social Sciences."*
 
-Statistical methods that quantify the discourse about causal inferences in terms of possible sources of biases, or “sensitivity analysis,” is becoming more important to a variety of social science fields, including research in education, public policy, and political science.  A series of recent works by Frank and colleagues on sensitivity analysis points to limitations in earlier methods and aims to extend beyond them. We implement these developments, which previously have been implemented in `Stata`, in `R` through the `konfound` package. In particular, we provide functions for quantifying the bias necessary to alter an inference, from the framework of Rubin's (1974) causal model, as well as the robustness of causal inference in terms of correlations associated with unobserved variables.
+Statistical methods that quantify the discourse about causal inferences in terms of possible sources of biases, or “sensitivity analysis,” are becoming more important to a variety of social science fields, including research in education, public policy, and political science.  A series of recent works by Frank and colleagues on sensitivity analysis points to limitations in earlier methods and aims to extend beyond them. We implement these developments, which previously have been implemented in `Stata`, in `R` through the `konfound` package. In particular, we provide functions for quantifying the bias necessary to alter an inference, from the framework of Rubin's (1974) causal model, as well as the robustness of causal inference in terms of the impact threshold of a confounding variable.
 
 # Introduction
 
 # Examples
 
 `konfound` is an `R` package to easily carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin's (1974) causal model.
+
+### Installation
+
+You can install konfound from GitHub (it will be available on CRAN and therefore via `install.packages("konfound")` soon) with:
+
+```{r gh-installation, eval = FALSE}
+# install.packages("devtools")
+devtools::install_github("jrosen48/konfound")
+```
 
 ### Loading konfound
 
