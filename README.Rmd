@@ -21,7 +21,7 @@ The goal of konfound is to carry out sensitivity analysis as described in Frank,
 You can install konfound from GitHub with:
 
 ```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
+install.packages("devtools")
 devtools::install_github("jrosen48/konfound")
 ```
 
@@ -54,6 +54,7 @@ pkonfound(2, .4, 100, 3)
 ```{r}
 m1 <- lm(mpg ~ wt + hp, data = mtcars)
 m1
+summary(m1)
 ```
 
 Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as follows, specifying the fitted model object:

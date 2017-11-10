@@ -31,7 +31,7 @@ Statistical methods that quantify the discourse about causal inferences in terms
 You can install konfound from GitHub (it will be available on CRAN and therefore via `install.packages("konfound")` soon) with:
 
 ```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
+install.packages("devtools")
 devtools::install_github("jrosen48/konfound")
 ```
 
@@ -47,23 +47,40 @@ devtools::load_all(".")
 
 ### Use of pkonfound()
 
+`pkonfound()` is used when we have values from an already-conducted analysis, such as one in an already-published study or from an analysis carried out using other software.
+
+For example, in the use below, we simply enter the values for the unstandardardized beta coefficient (`2`), its standard error (`.4`), the sample size (`100`), and the number of covariates (`3`)
+
 ```{r}
 pkonfound(2, .4, 100, 3)
-pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 ```
+
+**SHOW WHAT THE THRESHOLD IS AND STATE THAT ITS BASED ON STATISTICAL SIGNIFICANCE**
+
+Here is another example, but one in which the unstandardized beta coefficient is smaller than its standard error:
+
+```{r}
+pkonfound(.4, 2, 100, 3)
+```
+
+We can also choose from a number of forms of output to return, such as a plot of the output from the correlation-based approach:
 
 ```{r, fig.height = 7, fig.width = 7}
 pkonfound(2, .4, 100, 3, to_return = "corr_plot")
 ```
 
+**CHANGE EFFECT TO ESTIMATED EFFECT**
+**CHANGE IMPACT TO Rx.cv | z**
+**ADD ARROW EXTENDING OUT FROM IMPACT**
+**MAKE WIDTH OF ARROWS REPRESENT CORRELATIONS**
+
+And the threshold plot associated with the replacement of cases approach:
+
 ```{r}
-pkonfound(.4, 2, 100, 3)
 pkonfound(.4, 2, 100, 3, to_return = "thresh_plot")
 ```
 
-```{r, fig.height = 7, fig.width = 7}
-pkonfound(1.2, 2, 100, 3, to_return = "corr_plot")
-```
+**ADD THE ABILITY TO RETURN MULTIPLE FORMS OF OUTPUT AT ONCE***
 
 ### Use of konfound()
 
@@ -83,6 +100,10 @@ You can also return a table with some key output from the correlation-based appr
 konfound(m1, wt, to_return = "table")
 ```
 
+If the impact threshhold is greater than the impacts of the `Z`s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference. 
+
+Note that in fields in which there is a lot known about covariates given the outcome of interest, then the omitted ones are likely less important than those that are known an included (i.e., for educational achievement, we have a good sense of the factors that matter).
+
 ##### For generalized linear models fit with glm()
 
 Effects for these models are interpreted on the basis of average partial (or marginal) effects (calculated using the `margins` package).
@@ -99,6 +120,8 @@ if (requireNamespace("forcats")) {
 }
 ```
 
+**LOOK INTO PAE VERSUS APE**
+
 ### Use of mkonfound()
 
 Here, `df` represents output from a number of past studies. 
@@ -111,6 +134,10 @@ df <- data.frame(unstd_beta = c(2, 10, 1.7, .4, 3.2, 1.0, 2.3, 4.1, .9),
 mkonfound(df)
 mkonfound(df, return_plot = TRUE)
 ```
+
+**CHANGE INFERENCE TO ACTION**
+**CHANGE INFERENCE TO REJECT THE NULL VERSUS FAIL TO REJECT THE NULL**
+**CHANGE PERCENT BIAS TO PERCENT BIAS TO CHANGE THE INFERENCE**
 
 # References
 
