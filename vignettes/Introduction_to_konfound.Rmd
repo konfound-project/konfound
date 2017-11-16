@@ -52,10 +52,8 @@ devtools::load_all(".")
 For example, in the use below, we simply enter the values for the unstandardardized beta coefficient (`2`), its standard error (`.4`), the sample size (`100`), and the number of covariates (`3`)
 
 ```{r}
-pkonfound(2, .4, 100, 3)
+pkonfound(.4, 2, 100, 3)
 ```
-
-**SHOW WHAT THE THRESHOLD IS AND STATE THAT ITS BASED ON STATISTICAL SIGNIFICANCE**
 
 Here is another example, but one in which the unstandardized beta coefficient is smaller than its standard error:
 
@@ -69,18 +67,11 @@ We can also choose from a number of forms of output to return, such as a plot of
 pkonfound(2, .4, 100, 3, to_return = "corr_plot")
 ```
 
-**CHANGE EFFECT TO ESTIMATED EFFECT**
-**CHANGE IMPACT TO Rx.cv | z**
-**ADD ARROW EXTENDING OUT FROM IMPACT**
-**MAKE WIDTH OF ARROWS REPRESENT CORRELATIONS**
-
 And the threshold plot associated with the replacement of cases approach:
 
 ```{r}
 pkonfound(.4, 2, 100, 3, to_return = "thresh_plot")
 ```
-
-**ADD THE ABILITY TO RETURN MULTIPLE FORMS OF OUTPUT AT ONCE***
 
 ### Use of konfound()
 
@@ -120,8 +111,6 @@ if (requireNamespace("forcats")) {
 }
 ```
 
-**LOOK INTO PAE VERSUS APE**
-
 ### Use of mkonfound()
 
 Here, `df` represents output from a number of past studies. 
@@ -134,10 +123,6 @@ df <- data.frame(unstd_beta = c(2, 10, 1.7, .4, 3.2, 1.0, 2.3, 4.1, .9),
 mkonfound(df)
 mkonfound(df, return_plot = TRUE)
 ```
-
-**CHANGE INFERENCE TO ACTION**
-**CHANGE INFERENCE TO REJECT THE NULL VERSUS FAIL TO REJECT THE NULL**
-**CHANGE PERCENT BIAS TO PERCENT BIAS TO CHANGE THE INFERENCE**
 
 # References
 

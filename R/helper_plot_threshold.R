@@ -27,7 +27,7 @@ plot_threshold <- function(beta_threshold, unstd_beta) {
     } else if (unstd_beta < beta_threshold) { # beta is below threshold
         
         dd <- dplyr::data_frame(unstd_beta = unstd_beta, beta_threshold = beta_threshold)
-        dd <- dplyr::mutate(dd, `Above Effect, Below Threshold` = abs(unstd_beta - beta_threshold))
+        dd <- dplyr::mutate(dd, `Above Estimated Effect, Below Threshold` = abs(unstd_beta - beta_threshold))
         dd <- dplyr::mutate(dd, `Below Threshold` = unstd_beta)
         dd <- dplyr::select(dd, -beta_threshold)
         
@@ -51,7 +51,7 @@ plot_threshold <- function(beta_threshold, unstd_beta) {
         ggplot2::geom_col(position = "stack") +
         
         ggplot2::geom_hline(yintercept = unstd_beta, color = "black") +
-        ggplot2::annotate("text", x = 1, y = effect_text, label = "Effect") +
+        ggplot2::annotate("text", x = 1, y = effect_text, label = "Estimated Effect") +
         
         ggplot2::geom_hline(yintercept = y_thresh, color = "red") +
         ggplot2::annotate("text", x = 1, y = y_thresh_text, label = "Threshold") +

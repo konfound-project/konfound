@@ -2,8 +2,9 @@
 
 output_df <- function(beta_diff, beta_threshhold, unstd_beta, bias = NULL, sustain = NULL, recase, obs_r, critical_r, r_con, itcv, non_linear) {
     if (abs(beta_diff) > abs(beta_threshhold)) {
-        df  <- dplyr::data_frame(inference = "to_invalidate",
-                                 percent_bias = round(bias, 3),
+        df  <- dplyr::data_frame(action = "to_invalidate",
+                                 inference = "reject_null",
+                                 percent_bias_to_change_inference = round(bias, 3),
                                  replace_null_cases = round(recase, 3),
                                  unstd_beta = unstd_beta,
                                  beta_threshhold = beta_threshhold,
@@ -11,8 +12,9 @@ output_df <- function(beta_diff, beta_threshhold, unstd_beta, bias = NULL, susta
                                  itcv = itcv)
     }
     else if (abs(beta_diff) < abs(beta_threshhold)) {
-        df <- dplyr::data_frame(inference = "to_sustain",
-                                percent_bias = round(sustain, 3),
+        df <- dplyr::data_frame(action = "to_sustain",
+                                inference = "fail_to_reject_null",
+                                percent_bias_to_change_inference = round(sustain, 3),
                                 replace_null_cases = round(recase, 3),
                                 unstd_beta = unstd_beta,
                                 beta_threshhold = beta_threshhold,

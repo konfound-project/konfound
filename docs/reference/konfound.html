@@ -123,16 +123,20 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'>lm</span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
 <span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>)</div><div class='output co'>#&gt; Replacement of Cases Approach:
-#&gt; To invalidate the inference, 66.664 % of the estimate would have to be due to bias.To invalidate the inference, 21 observations would have to be replaced with cases for which the effect is 0.
+#&gt; To invalidate the inference, 66.664% of the estimate would have to be due to bias based on a threshold of -1.293 and statistical significance.
+#&gt; To invalidate the inference, 21 observations would have to be replaced with cases for which the effect is 0.
 #&gt; 
 #&gt; Correlation-based Approach:
-#&gt; An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference.</div><div class='input'><span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>, <span class='kw'>test_all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   var_name unstd_beta std_err n_obs n_covariates     inference percent_bias
-#&gt; 1       wt     -3.878   0.633    32            1 to_invalidate       66.664
-#&gt; 2       hp     -0.032   0.009    32            1 to_invalidate       42.561
-#&gt;   replace_null_cases beta_threshhold omitted_variable_corr       itcv
-#&gt; 1                 21     -1.29275846                 0.787 -0.6199455
-#&gt; 2                 14     -0.01838045                 0.556 -0.3088738</div><div class='input'><span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"table"</span>)</div><div class='output co'>#&gt; Dependent variable is mpg </div><div class='output co'>#&gt;          term estimate std.error statistic p.value  itcv impact
+#&gt; An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of -0.36 and statistical significance.
+#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference.</div><div class='input'><span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>, <span class='kw'>test_all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   var_name unstd_beta std_err n_obs n_covariates        action   inference
+#&gt; 1       wt     -3.878   0.633    32            1 to_invalidate reject_null
+#&gt; 2       hp     -0.032   0.009    32            1 to_invalidate reject_null
+#&gt;   percent_bias_to_change_inference replace_null_cases beta_threshhold
+#&gt; 1                           66.664                 21     -1.29275846
+#&gt; 2                           42.561                 14     -0.01838045
+#&gt;   omitted_variable_corr       itcv
+#&gt; 1                 0.787 -0.6199455
+#&gt; 2                 0.556 -0.3088738</div><div class='input'><span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"table"</span>)</div><div class='output co'>#&gt; Dependent variable is mpg </div><div class='output co'>#&gt;          term estimate std.error statistic p.value  itcv impact
 #&gt; 1 (Intercept)   37.227     1.599    23.285   0.000    NA     NA
 #&gt; 2          wt   -3.878     0.633    -6.129   0.000 0.243     NA
 #&gt; 3          hp   -0.032     0.009    -3.519   0.001    NA  0.511</div></pre>

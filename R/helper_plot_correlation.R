@@ -29,10 +29,12 @@ plot_correlation <- function(r_con, obs_r, critical_r){
         ggplot2::geom_curve(ggplot2::aes(x = .04, y = .325, xend = .35, yend = .825), curvature = -.35, size = 2.5, color = "#1F78B4", arrow = ggplot2::arrow()) +
         ggplot2::geom_curve(ggplot2::aes(x = .225, y = .23, xend = .4, yend = .8), curvature = .35, size = 2.5, color = "#1F78B4", arrow = ggplot2::arrow()) +
         
+        ggplot2::geom_segment(ggplot2::aes(x = .37, y = .81), xend = .465, yend = .925, arrow = ggplot2::arrow(), size = 2.5, color = "#1F78B4") + # straight across
+        
         # corr. annotations
         ggplot2::annotate("text", x = -.125, y = .5, label = paste0("Rx.cv | Z =\n ", r_con), fontface = 1) +
         ggplot2::annotate("text", x = .575, y = .35, label = paste0("Ry.cv | Z =\n", r_con), fontface = 1) +
-        ggplot2::annotate("text", x = .25, y = .525, label = paste0("Rx.cv * Ry.cv | Z =\n", round(r_con ^ 2, 3)), fontface = 1) +
+        ggplot2::annotate("text", x = .25, y = .525, label = paste0("Rx.cv | Z * Ry.cv | Z =\n", round(r_con ^ 2, 3)), fontface = 1) +
         
         # plot modifications
         ggplot2::xlim(-.15, 1.1) +

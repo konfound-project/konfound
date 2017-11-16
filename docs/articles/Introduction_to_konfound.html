@@ -50,7 +50,7 @@
       <h1>Introduction to konfound</h1>
                         <h4 class="author">Joshua Rosenberg, Ran Xu, and Ken Frank</h4>
             
-            <h4 class="date">2017-11-09</h4>
+            <h4 class="date">2017-11-16</h4>
           </div>
 
     
@@ -90,31 +90,31 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 <a href="#use-of-pkonfound" class="anchor"></a>Use of pkonfound()</h3>
 <p><code><a href="../reference/pkonfound.html">pkonfound()</a></code> is used when we have values from an already-conducted analysis, such as one in an already-published study or from an analysis carried out using other software.</p>
 <p>For example, in the use below, we simply enter the values for the unstandardardized beta coefficient (<code>2</code>), its standard error (<code>.4</code>), the sample size (<code>100</code>), and the number of covariates (<code>3</code>)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>)</code></pre></div>
-<pre><code>## Replacement of Cases Approach:
-## To invalidate the inference, 60.3 % of the estimate would have to be due to bias.To invalidate the inference, 60 observations would have to be replaced with cases for which the effect is 0.
-## 
-## Correlation-based Approach:
-## An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
-## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference.</code></pre>
-<p><strong>SHOW WHAT THE THRESHOLD IS AND STATE THAT ITS BASED ON STATISTICAL SIGNIFICANCE</strong></p>
-<p>Here is another example, but one in which the unstandardized beta coefficient is smaller than its standard error:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>)</code></pre></div>
 <pre><code>## Replacement of Cases Approach:
-## To sustain the inference, 89.924 % of the estimate would have to be due to bias.To sustain the inference, 90  of the cases with 0 
+## To sustain the inference, 89.924% of the estimate would have to be due to bias based on a threshold of 3.97 and statistical significance.
+## To sustain the inference, 90 of the cases with 0
 ##  effect would have to be replaced with cases at the threshold of inference.
 ## 
 ## Correlation-based Approach:
-## An omitted variable would have to be correlated at 0.387 with the outcome and at 0.387 with the predictor of interest (conditioning on observed covariates) to sustain an inference.
+## An omitted variable would have to be correlated at 0.387 with the outcome and at 0.387 with the predictor of interest (conditioning on observed covariates) to sustain an inference based on a threshold of 3.97 and statistical significance.
+## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.387 X 0.387 = 0.15 to sustain an inference.</code></pre>
+<p>Here is another example, but one in which the unstandardized beta coefficient is smaller than its standard error:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>)</code></pre></div>
+<pre><code>## Replacement of Cases Approach:
+## To sustain the inference, 89.924% of the estimate would have to be due to bias based on a threshold of 3.97 and statistical significance.
+## To sustain the inference, 90 of the cases with 0
+##  effect would have to be replaced with cases at the threshold of inference.
+## 
+## Correlation-based Approach:
+## An omitted variable would have to be correlated at 0.387 with the outcome and at 0.387 with the predictor of interest (conditioning on observed covariates) to sustain an inference based on a threshold of 3.97 and statistical significance.
 ## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.387 X 0.387 = 0.15 to sustain an inference.</code></pre>
 <p>We can also choose from a number of forms of output to return, such as a plot of the output from the correlation-based approach:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"corr_plot"</span>)</code></pre></div>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
-<p><strong>CHANGE EFFECT TO ESTIMATED EFFECT</strong> <strong>CHANGE IMPACT TO Rx.cv | z</strong> <strong>ADD ARROW EXTENDING OUT FROM IMPACT</strong> <strong>MAKE WIDTH OF ARROWS REPRESENT CORRELATIONS</strong></p>
 <p>And the threshold plot associated with the replacement of cases approach:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"thresh_plot"</span>)</code></pre></div>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-6-1.png" width="480"></p>
-<p><strong>ADD THE ABILITY TO RETURN MULTIPLE FORMS OF OUTPUT AT ONCE</strong>*</p>
 </div>
 <div id="use-of-konfound" class="section level3">
 <h3 class="hasAnchor">
@@ -133,25 +133,26 @@ m1</code></pre></div>
 ##    27.61053     -4.35880     -0.01782      0.51083</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m1, hp)</code></pre></div>
 <pre><code>## Replacement of Cases Approach:
-## To sustain the inference, 41.327 % of the estimate would have to be due to bias.To sustain the inference, 13  of the cases with 0 
+## To sustain the inference, 41.327% of the estimate would have to be due to bias based on a threshold of -0.031 and statistical significance.
+## To sustain the inference, 13 of the cases with 0
 ##  effect would have to be replaced with cases at the threshold of inference.
 ## 
 ## Correlation-based Approach:
-## An omitted variable would have to be correlated at 0.322 with the outcome and at 0.322 with the predictor of interest (conditioning on observed covariates) to sustain an inference.
+## An omitted variable would have to be correlated at 0.322 with the outcome and at 0.322 with the predictor of interest (conditioning on observed covariates) to sustain an inference based on a threshold of -0.031 and statistical significance.
 ## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.322 X 0.322 = 0.104 to sustain an inference.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m1, <span class="dt">test_all =</span> T)</code></pre></div>
-<pre><code>##   var_name unstd_beta std_err n_obs n_covariates     inference
+<pre><code>##   var_name unstd_beta std_err n_obs n_covariates        action
 ## 1       wt     -4.359   0.753    32            2 to_invalidate
 ## 2       hp     -0.018   0.015    32            2    to_sustain
 ## 3     qsec      0.511   0.439    32            2    to_sustain
-##   percent_bias replace_null_cases beta_threshhold omitted_variable_corr
-## 1       64.669                 21     -1.54005792                 0.772
-## 2       41.327                 13     -0.03067844                 0.322
-## 3       43.087                 14      0.89785581                 0.329
-##         itcv
-## 1 -0.5963300
-## 2  0.1033755
-## 3 -0.1080756</code></pre>
+##             inference percent_bias_to_change_inference replace_null_cases
+## 1         reject_null                           64.669                 21
+## 2 fail_to_reject_null                           41.327                 13
+## 3 fail_to_reject_null                           43.087                 14
+##   beta_threshhold omitted_variable_corr       itcv
+## 1     -1.54005792                 0.772 -0.5963300
+## 2     -0.03067844                 0.322  0.1033755
+## 3      0.89785581                 0.329 -0.1080756</code></pre>
 <p>You can also return a table with some key output from the correlation-based approach.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m1, wt, <span class="dt">to_return =</span> <span class="st">"table"</span>)</code></pre></div>
 <pre><code>## Dependent variable is mpg</code></pre>
@@ -179,13 +180,13 @@ m1</code></pre></div>
 <pre><code>## Warning in konfound(m2, age): For a non-linear mode, impact threshold
 ## should not be used.</code></pre>
 <pre><code>## Replacement of Cases Approach:
-## To sustain the inference, 80.978 % of the estimate would have to be due to bias.To sustain the inference, 17334  of the cases with 0 
+## To sustain the inference, 80.978% of the estimate would have to be due to bias based on a threshold of 0.013 and statistical significance.
+## To sustain the inference, 17334 of the cases with 0
 ##  effect would have to be replaced with cases at the threshold of inference.
 ## 
 ## Correlation-based Approach:
-## An omitted variable would have to be correlated at 5.535 with the outcome and at 5.535 with the predictor of interest (conditioning on observed covariates) to invalidate an inference.
+## An omitted variable would have to be correlated at 5.535 with the outcome and at 5.535 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 1.003 and statistical significance.
 ## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 5.535 X 5.535 = 30.636 to invalidate an inference.</code></pre>
-<p><strong>LOOK INTO PAE VERSUS APE</strong></p>
 </div>
 </div>
 <div id="use-of-mkonfound" class="section level3">
@@ -197,30 +198,39 @@ m1</code></pre></div>
                  <span class="dt">n_obs =</span> <span class="kw">c</span>(<span class="dv">70</span>, <span class="dv">405</span>, <span class="dv">200</span>, <span class="dv">100</span>, <span class="dv">103</span>, <span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">721</span>, <span class="dv">320</span>),
                  <span class="dt">n_covs =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>))
 <span class="kw"><a href="../reference/mkonfound.html">mkonfound</a></span>(df)</code></pre></div>
-<pre><code>##   unstd_beta std_error n_obs n_covs     inference percent_bias
-## 1        2.0      0.30    70      3 to_invalidate       70.052
-## 2       10.0      2.90   405      4 to_invalidate       42.989
-## 3        1.7      1.50   200      1    to_sustain       42.529
-## 4        0.4      2.00   100      3    to_sustain       89.924
-## 5        3.2      0.10   103     10 to_invalidate       93.793
-## 6        1.0      0.04    20      4 to_invalidate       91.474
-## 7        2.3      0.10    50      1 to_invalidate       91.258
-## 8        4.1      3.00   721      1    to_sustain       30.388
-## 9        0.9      0.50   320      0    to_sustain        8.510
-##   replace_null_cases beta_threshhold omitted_variable_corr        itcv
-## 1                 49      0.59896933                 0.725  0.52521938
-## 2                174      5.70114580                 0.283  0.08010979
-## 3                 85      2.95802622                 0.227 -0.05159630
-## 4                 90      3.96996862                 0.387 -0.14988727
-## 5                 97      0.19860863                 0.974  0.94812468
-## 6                 18      0.08525798                 0.990  0.97914830
-## 7                 46      0.20106348                 0.971  0.94295173
-## 8                219      5.88980656                 0.144 -0.02064123
-## 9                 27      0.98371419                 0.091 -0.00833270</code></pre>
+<pre><code>##   unstd_beta std_error n_obs n_covs        action           inference
+## 1        2.0      0.30    70      3 to_invalidate         reject_null
+## 2       10.0      2.90   405      4 to_invalidate         reject_null
+## 3        1.7      1.50   200      1    to_sustain fail_to_reject_null
+## 4        0.4      2.00   100      3    to_sustain fail_to_reject_null
+## 5        3.2      0.10   103     10 to_invalidate         reject_null
+## 6        1.0      0.04    20      4 to_invalidate         reject_null
+## 7        2.3      0.10    50      1 to_invalidate         reject_null
+## 8        4.1      3.00   721      1    to_sustain fail_to_reject_null
+## 9        0.9      0.50   320      0    to_sustain fail_to_reject_null
+##   percent_bias_to_change_inference replace_null_cases beta_threshhold
+## 1                           70.052                 49      0.59896933
+## 2                           42.989                174      5.70114580
+## 3                           42.529                 85      2.95802622
+## 4                           89.924                 90      3.96996862
+## 5                           93.793                 97      0.19860863
+## 6                           91.474                 18      0.08525798
+## 7                           91.258                 46      0.20106348
+## 8                           30.388                219      5.88980656
+## 9                            8.510                 27      0.98371419
+##   omitted_variable_corr        itcv
+## 1                 0.725  0.52521938
+## 2                 0.283  0.08010979
+## 3                 0.227 -0.05159630
+## 4                 0.387 -0.14988727
+## 5                 0.974  0.94812468
+## 6                 0.990  0.97914830
+## 7                 0.971  0.94295173
+## 8                 0.144 -0.02064123
+## 9                 0.091 -0.00833270</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mkonfound.html">mkonfound</a></span>(df, <span class="dt">return_plot =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-10-1.png" width="480"></p>
-<p><strong>CHANGE INFERENCE TO ACTION</strong> <strong>CHANGE INFERENCE TO REJECT THE NULL VERSUS FAIL TO REJECT THE NULL</strong> <strong>CHANGE PERCENT BIAS TO PERCENT BIAS TO CHANGE THE INFERENCE</strong></p>
 </div>
 </div>
 <div id="references" class="section level1">
