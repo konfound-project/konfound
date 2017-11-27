@@ -16,6 +16,7 @@
 #' pkonfound(-2, .4, 200, 3)
 #' pkonfound(2, .4, 200, 3, to_return = "thresh_plot")
 #' pkonfound(2, .4, 200, 3, to_return = "corr_plot")
+#' pkonfound(2, .4, 200, 3, to_return = c("df", "thresh_plot", "corr_plot"))
 #' @export
 
 pkonfound <- function(unstd_beta,
@@ -27,7 +28,7 @@ pkonfound <- function(unstd_beta,
                       nu = 0,
                       to_return = "print",
                       component_correlations = FALSE) {
-    if (to_return == "table") stop("a table can only be output when using konfound")
+    if ("table" %in% to_return) stop("a table can only be output when using konfound")
     test_sensitivity(unstd_beta = unstd_beta,
                      std_err = std_err,
                      n_obs = n_obs, 
@@ -36,4 +37,5 @@ pkonfound <- function(unstd_beta,
                      tails = tails,
                      nu = nu,
                      to_return = to_return,
-                     component_correlations = component_correlations) }
+                     component_correlations = component_correlations)
+}

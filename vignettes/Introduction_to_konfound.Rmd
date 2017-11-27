@@ -73,6 +73,14 @@ And the threshold plot associated with the replacement of cases approach:
 pkonfound(.4, 2, 100, 3, to_return = "thresh_plot")
 ```
 
+You can also specify multiple forms of output at once. There are two ways to do this; the first is to save the output to an object.
+
+```{r}
+output_from_pkonfound <- pkonfound(2, .4, 200, 3, to_return = c("df", "thresh_plot", "corr_plot"))
+```
+
+When we type the name of the object, we see
+
 ### Use of konfound()
 
 ##### For linear models fit with lm()

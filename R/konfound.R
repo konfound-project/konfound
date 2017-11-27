@@ -114,7 +114,7 @@ konfound <- function(model_object,
             o <- dplyr::bind_cols(term_names, o)
         } 
     }
-    # 
+xw
     # if (class(model_object) == "lme") {
     #     
     #     if (test_all == FALSE) {

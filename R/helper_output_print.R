@@ -7,7 +7,7 @@ output_print <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL
         cat("To invalidate the inference, ", round(recase, 3), " observations would have to be replaced with cases for which the effect is ", nu, ".\n", sep = "") }
     else if (abs(beta_diff) < abs(beta_threshhold)) {
         cat("To sustain the inference, ", round(sustain, 3), "% of the estimate would have to be due to bias based on a threshold of ", round(beta_threshhold, 3), " and statistical significance.\n", sep = "")
-        cat("To sustain the inference, ", round(recase, 3), " of the cases with ", nu, " effect would have to be replaced with cases at the threshold of inference.", fill = T, sep = "") }
+        cat("To sustain the inference, ", round(recase, 3), " of the cases with ", nu, " effect would have to be replaced with cases at the threshold of inference.\n", sep = "") }
     else if (beta_diff == beta_threshhold) {
         warning("The coefficient is exactly equal to the threshold.\n") }
     
@@ -16,11 +16,11 @@ output_print <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL
     if (abs(obs_r) > abs(critical_r)) {
         cat("An omitted variable would have to be correlated at ", r_con, " with the outcome and at ", r_con, 
             " with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of ", round(critical_r, 3), " and statistical significance.\n", sep = "")
-        cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be", r_con, "X", r_con, "=", round(r_con ^ 2, 3), "to invalidate an inference.\n") }
+        cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ", r_con, " X ", r_con, " = ", round(r_con ^ 2, 3), " to invalidate an inference.\n", sep = "") }
     else if (abs(obs_r) < abs(critical_r)) {
         cat("An omitted variable would have to be correlated at ", r_con, " with the outcome and at ", r_con, 
             " with the predictor of interest (conditioning on observed covariates) to sustain an inference based on a threshold of ", round(beta_threshhold, 3), " and statistical significance.\n", sep = "")
-        cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be", r_con, "X", r_con, "=", round(r_con ^ 2, 3), "to sustain an inference.\n") }
+        cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ", r_con, " X ", r_con, " = ", round(r_con ^ 2, 3), " to sustain an inference.\n", sep = "") }
     else if (obs_r == critical_r) {
         warning("The correlation is exactly equal to the threshold.\n") }
 }

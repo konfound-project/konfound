@@ -1,3 +1,50 @@
+# helpers for the core sensitivity analysis function
+
+create_konfound_class <- function(x) {
+    structure(x, class = "konfound")
+}
+
+#' Concise summary of konfound output
+#' @details Prints a concise summary of konfound output with multiple types of data specified in the to_return argument
+#' @param object A `konfound` object
+#' @param ... Additional arguments
+#' @export
+
+summary.konfound <- function(konfound_object){
+    print("X1")
+    x_quo <- rlang::enquo(konfound_object)
+    x_text <- rlang::quo_text(x_quo)
+    
+    cat("Created", length(konfound_object), "forms of output. To access type: \n")
+    cat("\n")
+    
+    for (name in names(konfound_object)) {
+        cat(x_text, "$", name, "\n", sep = "")
+        # cat(name, "\n")
+    }
+}
+
+#' Print method with concise summary of konfound output
+#' @details Prints a concise summary of konfound output with multiple types of data specified in the to_return argument
+#' @param object A `konfound` object
+#' @param ... Additional arguments
+#' @export
+
+# print.konfound <- function(x, ...){
+#     x_quo <- rlang::quo(x)
+#     x_text <- rlang::quo_text(x_quo)
+#     
+#     cat("Created", length(x), "forms of output - to access, type: \n")
+#     cat("\n")
+#     
+#     for (name in names(x)) {
+#         cat(x_text, "$", name, "\n", sep = "")
+#         # cat(name, "\n")
+#     }
+#     
+# }
+
+
 # Main function to test sensitivity to be wrapped with pkonfound(), konfound(), and mkonfound()
 
 test_sensitivity <- function(unstd_beta,
@@ -65,12 +112,33 @@ test_sensitivity <- function(unstd_beta,
     #     r_xcv = r_con * sqrt(1 - rsqXZ)  
     #     # before conditioning on observed covariates
     # }
-
+    
     # output dispatch
-    if (to_return == "df") return(output_df(beta_diff, beta_threshold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE))
+    
+    if (length(to_return) > 1) {
+        to_return <-to_return[!(to_return == "print")]
+        konfound_output <- purrr::map(to_return,
+                                      ~ test_sensitivity(
+                                          unstd_beta = unstd_beta,
+                                          std_err = std_err,
+                                          n_obs = n_obs, 
+                                          n_covariates = n_covariates,
+                                          alpha = alpha, 
+                                          tails = tails,
+                                          nu = nu,
+                                          to_return = .,
+                                          component_correlations = component_correlations))
+        konfound_output <- create_konfound_class(konfound_output)
+        names(konfound_output) <- to_return
+        output_print(beta_diff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE)
+        message("Index list output with names specified in to_return or use or summary() on the output.")
+        invisible(konfound_output) } 
+    else if (to_return == "df") return(output_df(beta_diff, beta_threshold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE))
     else if (to_return == "thresh_plot") return(plot_threshold(beta_threshold = beta_threshold, unstd_beta = unstd_beta))
     else if (to_return == "corr_plot") return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
     else if (to_return == "print") return(output_print(beta_diff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE))
     else if (to_return == "table") return(output_table(model_object, tested_variable))
-    else stop("to_return must be set to 'df', 'print', 'thresh_plot', or 'corr_plot'")
+    else {
+        stop("to_return must be set to 'df', 'print', 'table', 'thresh_plot', or 'corr_plot' or some combination thereof")
+    }
 }

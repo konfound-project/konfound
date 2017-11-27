@@ -39,4 +39,5 @@ pkonfound(.4, 2, 100, 3)
 pkonfound(-2, .4, 200, 3)
 pkonfound(2, .4, 200, 3, to_return = "thresh_plot")
 pkonfound(2, .4, 200, 3, to_return = "corr_plot")
+pkonfound(2, .4, 200, 3, to_return = c("df", "thresh_plot", "corr_plot"))
 }
