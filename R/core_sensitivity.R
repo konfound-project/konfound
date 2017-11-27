@@ -11,15 +11,15 @@ create_konfound_class <- function(x) {
 #' @export
 
 summary.konfound <- function(konfound_object){
-    print("X1")
-    x_quo <- rlang::enquo(konfound_object)
-    x_text <- rlang::quo_text(x_quo)
+
+    # x_quo <- rlang::enquo(konfound_object)
+    # x_text <- rlang::quo_text(x_quo)
     
     cat("Created", length(konfound_object), "forms of output. To access type: \n")
     cat("\n")
     
     for (name in names(konfound_object)) {
-        cat(x_text, "$", name, "\n", sep = "")
+        cat(rlang::expr_text(substitute(konfound_object)), "$", name, "\n", sep = "")
         # cat(name, "\n")
     }
 }
@@ -131,7 +131,7 @@ test_sensitivity <- function(unstd_beta,
         konfound_output <- create_konfound_class(konfound_output)
         names(konfound_output) <- to_return
         output_print(beta_diff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE)
-        message("Index list output with names specified in to_return or use or summary() on the output.")
+        message("Index list output with names specified in to_return (or use summary() on the output).")
         invisible(konfound_output) } 
     else if (to_return == "df") return(output_df(beta_diff, beta_threshold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE))
     else if (to_return == "thresh_plot") return(plot_threshold(beta_threshold = beta_threshold, unstd_beta = unstd_beta))

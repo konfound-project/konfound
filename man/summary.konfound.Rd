@@ -4,12 +4,12 @@
 \alias{summary.konfound}
 \title{Concise summary of konfound output}
 \usage{
-\method{summary}{konfound}(x, ...)
+\method{summary}{konfound}(konfound_object)
 }
 \arguments{
-\item{...}{Additional arguments}
-
 \item{object}{A `konfound` object}
+
+\item{...}{Additional arguments}
 }
 \description{
 Concise summary of konfound output
