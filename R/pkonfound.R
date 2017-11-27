@@ -7,7 +7,7 @@
 #' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
 #' @param nu what hypothesis to be tested; defaults to testing whether unstd_beta is significantly different from 0
-#' @param to_return whether to return a data.frame (by specifying this argument to equal "df") or a plot ("plot"); default is to print the output to the console
+#' @param to_return whether to return a data.frame (by specifying this argument to equal "df") or a plot ("plot"); default is to print the output to the console; can specify a vector of output to return
 #' @param component_correlations whether to return the component correlations as part of the correlation-based approach
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
@@ -16,7 +16,12 @@
 #' pkonfound(-2, .4, 200, 3)
 #' pkonfound(2, .4, 200, 3, to_return = "thresh_plot")
 #' pkonfound(2, .4, 200, 3, to_return = "corr_plot")
-#' pkonfound(2, .4, 200, 3, to_return = c("df", "thresh_plot", "corr_plot"))
+#' 
+#' pkonfound_output <- pkonfound(2, .4, 200, 3, to_return = c("df", "thresh_plot", "corr_plot"))
+#' summary(pkonfound_output)
+#' pkonfound_output$df
+#' pkonfound_output$thresh_plot
+#' pkonfound_output$corr_plot
 #' @export
 
 pkonfound <- function(unstd_beta,
@@ -27,15 +32,34 @@ pkonfound <- function(unstd_beta,
                       tails = 2, 
                       nu = 0,
                       to_return = "print",
-                      component_correlations = FALSE) {
+                      component_correlations = FALSE,
+                      t = NULL,
+                      df = NULL) {
     if ("table" %in% to_return) stop("a table can only be output when using konfound")
-    test_sensitivity(unstd_beta = unstd_beta,
-                     std_err = std_err,
-                     n_obs = n_obs, 
-                     n_covariates = n_covariates,
-                     alpha = alpha, 
-                     tails = tails,
-                     nu = nu,
-                     to_return = to_return,
-                     component_correlations = component_correlations)
+    
+    if(!is.null(t) & !is.null(df)) {
+        test_sensitivity(unstd_beta = NULL,
+                         std_err = NULL,
+                         n_obs = NULL, 
+                         n_covariates = 1, 
+                         alpha = alpha,
+                         tails = tails,
+                         nu = nu,
+                         to_return = to_return,
+                         component_correlations = component_correlations,
+                         t = t,
+                         df = df)    
+    } else {
+        test_sensitivity(unstd_beta = unstd_beta,
+                         std_err = std_err,
+                         n_obs = n_obs, 
+                         n_covariates = n_covariates,
+                         alpha = alpha, 
+                         tails = tails,
+                         nu = nu,
+                         to_return = to_return,
+                         component_correlations = component_correlations)
+    }
+    
+    
 }

@@ -5,7 +5,8 @@
 \title{Print method with concise summary of konfound output}
 \usage{
 test_sensitivity(unstd_beta, std_err, n_obs, n_covariates, alpha, tails, nu,
-  to_return, component_correlations, non_linear, model_object, tested_variable)
+  to_return, component_correlations, non_linear, model_object, tested_variable,
+  t, df)
 }
 \arguments{
 \item{object}{A `konfound` object}

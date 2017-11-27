@@ -81,7 +81,7 @@
 
     <pre class="usage"><span class='fu'>pkonfound</span>(<span class='no'>unstd_beta</span>, <span class='no'>std_err</span>, <span class='no'>n_obs</span>, <span class='kw'>n_covariates</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
   <span class='kw'>tails</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"print"</span>,
-  <span class='kw'>component_correlations</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>component_correlations</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>t</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>df</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -116,7 +116,7 @@
     </tr>
     <tr>
       <th>to_return</th>
-      <td><p>whether to return a data.frame (by specifying this argument to equal "df") or a plot ("plot"); default is to print the output to the console</p></td>
+      <td><p>whether to return a data.frame (by specifying this argument to equal "df") or a plot ("plot"); default is to print the output to the console; can specify a vector of output to return</p></td>
     </tr>
     <tr>
       <th>component_correlations</th>
@@ -148,13 +148,23 @@
 #&gt; 
 #&gt; Correlation-based Approach:
 #&gt; An omitted variable would have to be correlated at 0.479 with the outcome and at 0.479 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of -0.14 and statistical significance.
-#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.479 X 0.479 = 0.229 to invalidate an inference.</div><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>200</span>, <span class='fl'>3</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"thresh_plot"</span>)</div><img src='pkonfound-8.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>200</span>, <span class='fl'>3</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"corr_plot"</span>)</div><img src='pkonfound-10.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>200</span>, <span class='fl'>3</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"df"</span>, <span class='st'>"thresh_plot"</span>, <span class='st'>"corr_plot"</span>))</div><div class='output co'>#&gt; Replacement of Cases Approach:
+#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.479 X 0.479 = 0.229 to invalidate an inference.</div><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>200</span>, <span class='fl'>3</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"thresh_plot"</span>)</div><img src='pkonfound-8.png' alt='' width='540' height='400' /><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>200</span>, <span class='fl'>3</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"corr_plot"</span>)</div><img src='pkonfound-10.png' alt='' width='540' height='400' /><div class='input'>
+<span class='no'>pkonfound_output</span> <span class='kw'>&lt;-</span> <span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>200</span>, <span class='fl'>3</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"df"</span>, <span class='st'>"thresh_plot"</span>, <span class='st'>"corr_plot"</span>))</div><div class='output co'>#&gt; Replacement of Cases Approach:
 #&gt; To invalidate the inference, 60.557% of the estimate would have to be due to bias based on a threshold of 0.789 and statistical significance.
 #&gt; To invalidate the inference, 121 observations would have to be replaced with cases for which the effect is 0.
 #&gt; 
 #&gt; Correlation-based Approach:
 #&gt; An omitted variable would have to be correlated at 0.479 with the outcome and at 0.479 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.14 and statistical significance.
-#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.479 X 0.479 = 0.229 to invalidate an inference.</div><div class='output co'>#&gt; <span class='message'>Index list output with names specified in to_return (or use summary() on the output).</span></div></pre>
+#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.479 X 0.479 = 0.229 to invalidate an inference.</div><div class='output co'>#&gt; <span class='message'>Index list output with names specified in to_return (or use summary() on the output).</span></div><div class='input'><span class='fu'>summary</span>(<span class='no'>pkonfound_output</span>)</div><div class='output co'>#&gt; Created 3 forms of output. To access type: 
+#&gt; 
+#&gt; pkonfound_output$df
+#&gt; pkonfound_output$thresh_plot
+#&gt; pkonfound_output$corr_plot</div><div class='input'><span class='no'>pkonfound_output</span>$<span class='no'>df</span></div><div class='output co'>#&gt; # A tibble: 1 x 8
+#&gt;          action   inference percent_bias_to_change_inference replace_null_cases
+#&gt;           &lt;chr&gt;       &lt;chr&gt;                            &lt;dbl&gt;              &lt;dbl&gt;
+#&gt; 1 to_invalidate reject_null                           60.557                121
+#&gt; # ... with 4 more variables: unstd_beta &lt;dbl&gt;, beta_threshhold &lt;dbl&gt;,
+#&gt; #   omitted_variable_corr &lt;dbl&gt;, itcv &lt;dbl&gt;</div><div class='input'><span class='no'>pkonfound_output</span>$<span class='no'>thresh_plot</span></div><img src='pkonfound-19.png' alt='' width='540' height='400' /><div class='input'><span class='no'>pkonfound_output</span>$<span class='no'>corr_plot</span></div><img src='pkonfound-21.png' alt='' width='540' height='400' /></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

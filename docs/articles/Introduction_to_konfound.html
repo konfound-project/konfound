@@ -216,8 +216,22 @@ m1</code></pre></div>
 <div id="use-of-mkonfound" class="section level3">
 <h3 class="hasAnchor">
 <a href="#use-of-mkonfound" class="anchor"></a>Use of mkonfound()</h3>
-<p>Here, <code>df</code> represents output from a number of past studies.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">unstd_beta =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">10</span>, <span class="fl">1.7</span>, .<span class="dv">4</span>, <span class="fl">3.2</span>, <span class="fl">1.0</span>, <span class="fl">2.3</span>, <span class="fl">4.1</span>, .<span class="dv">9</span>),
+<p>Here, <code>df</code> represents output from a number of past studies. You can read a data file with results from 30 (hypothetical) studies. Note that this example data only had <code>t</code> and <code>df</code> values, and so sensible values for the number of observations and the [STILL WORKING ON THIS].</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)</code></pre></div>
+<pre><code>## 
+## Attaching package: 'dplyr'</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># df &lt;- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")</span>
+<span class="co"># </span>
+<span class="co"># df %&gt;% </span>
+<span class="co">#     mutate(n_covs = )</span>
+
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">unstd_beta =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">10</span>, <span class="fl">1.7</span>, .<span class="dv">4</span>, <span class="fl">3.2</span>, <span class="fl">1.0</span>, <span class="fl">2.3</span>, <span class="fl">4.1</span>, .<span class="dv">9</span>),
                  <span class="dt">std_error =</span> <span class="kw">c</span>(.<span class="dv">3</span>, <span class="fl">2.9</span>, <span class="fl">1.5</span>, <span class="dv">2</span>, .<span class="dv">1</span>, .<span class="dv">04</span>, .<span class="dv">1</span>, <span class="dv">3</span>, .<span class="dv">5</span>),
                  <span class="dt">n_obs =</span> <span class="kw">c</span>(<span class="dv">70</span>, <span class="dv">405</span>, <span class="dv">200</span>, <span class="dv">100</span>, <span class="dv">103</span>, <span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">721</span>, <span class="dv">320</span>),
                  <span class="dt">n_covs =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>))

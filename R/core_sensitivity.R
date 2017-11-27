@@ -58,7 +58,10 @@ test_sensitivity <- function(unstd_beta,
                              component_correlations, 
                              non_linear,
                              model_object,
-                             tested_variable) {
+                             tested_variable,
+                             t, 
+                             df) {
+    
     # calculating statistics used in every case
     if (unstd_beta < 0) {
         critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) * -1 }

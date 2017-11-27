@@ -4,9 +4,9 @@ plot_correlation <- function(r_con, obs_r, critical_r){
     d <- data.frame(x = c(0), y = c(0))
     
     if (abs(obs_r) > abs(critical_r)) {
-        the_title <- "To sustain an inference"
+        the_title <- "To invalidate an inference"
     } else if (abs(obs_r) < abs(critical_r)) {
-        the_title <- "To invalidate an inference"    
+        the_title <- "To sustain an inference"    
     } else {
         the_title <- "Inference and critical r are exactly equal"
     }
