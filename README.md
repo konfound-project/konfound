@@ -96,17 +96,34 @@ konfound(m1, wt)
 
 #### mkonfound for meta-analyses including sensitivity analysis
 
+We can use an existing dataset, such as the CSV file [here]().
+
 ``` r
 library(dplyr, warn.conflicts = FALSE)
 
-df <- tribble(
-  ~unstd_beta, ~std_err, ~n_obs, ~n_covs,
-  2,           .3,       70,     3,
-  10,          2.9,      405,    4,
-  1.7,         1.5,      200,    1
+d <- read.csv("")
+
+d <- select(d, unstd_beta = ,
+            std_error = ,
+            n_obs = ,
+            n_covs = )
+
+mkonfound(d)
+```
+
+We can also use data in `R`
+
+``` r
+library(dplyr, warn.conflicts = FALSE)
+
+d <- dplyr::tribble(
+    ~unstd_beta, ~std_err, ~n_obs, ~n_covs,
+    2,           .3,       70,     3,
+    10,          2.9,      405,    4,
+    1.7,         1.5,      200,    1
 )
 
-mkonfound(df)
+mkonfound(d)
 #> # A tibble: 3 x 11
 #>   unstd_beta std_err n_obs n_covs        action           inference
 #>        <dbl>   <dbl> <dbl>  <dbl>         <chr>               <chr>

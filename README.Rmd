@@ -67,7 +67,7 @@ konfound(m1, wt)
 
 We can use an existing dataset, such as the CSV file [here]().
 
-```{r, eval = T}
+```{r, eval = F}
 library(dplyr, warn.conflicts = FALSE)
 
 d <- read.csv("")
@@ -84,7 +84,9 @@ mkonfound(d)
 We can also use data in `R`
 
 ```{r}
-d <- tribble(
+library(dplyr, warn.conflicts = FALSE)
+
+d <- dplyr::tribble(
     ~unstd_beta, ~std_err, ~n_obs, ~n_covs,
     2,           .3,       70,     3,
     10,          2.9,      405,    4,

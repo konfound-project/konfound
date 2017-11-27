@@ -77,6 +77,7 @@ You can also specify multiple forms of output at once.
 
 ```{r}
 model_output <- pkonfound(2, .4, 200, 3, to_return = c("df", "thresh_plot", "corr_plot"))
+summary(model_output)
 ```
 
 When we type the name of the object, we see that we created three types of output that we can access as follows:
