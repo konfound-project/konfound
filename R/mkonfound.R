@@ -45,3 +45,37 @@ mkonfound <- function(df, alpha = .05, tails = 2, return_plot = FALSE, component
     }
     return(results_df)
 } 
+
+# df <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
+# # calculating statistics used in every case
+# 
+# mkonfound <- function(t, df, alpha = .05, tails = 2) {
+#     critical_t <- stats::qt(1 - (alpha / tails), df)
+#     critical_t
+#     
+#     if (abs(t) > abs(critical_t)) {
+#         bias <- 100 * (1 - (critical_t / t)) }
+#     else if (abs(t) < abs(critical_t)) {
+#         sustain <- 100 * (1 - (t / critical_t)) }
+#     else if (t == critical_t) {
+#         bias <- NA
+#         sustain <- NA
+#     }
+#     
+#     critical_r <- critical_t / sqrt((critical_t ^ 2) + df)
+#     
+#     obs_r <- (beta_diff / std_err) / sqrt(((n_obs - n_covariates - 3) + ((beta_diff / std_err) ^ 2)))
+#     
+#     if ((abs(obs_r) > abs(critical_r)) & ((obs_r * critical_r) > 0)) {
+#         mp <- -1
+#     } else {
+#         mp <- 1
+#     }
+#     
+#     return(list(critical_t, bias, sustain))
+#     
+#     
+# }
+# 
+# x <- mkonfound(6, 100)
+# x

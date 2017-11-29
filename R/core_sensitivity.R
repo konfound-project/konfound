@@ -40,6 +40,7 @@ test_sensitivity <- function(unstd_beta,
     if (unstd_beta < 0) {
         critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) * -1 }
     else {critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) }
+    
     beta_threshold <- critical_t * std_err
     # dealing with cases where hypotheses other than whether unstd_beta differs from 0
     if (nu != 0) {
