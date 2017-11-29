@@ -6,44 +6,18 @@ create_konfound_class <- function(x) {
 
 #' Concise summary of konfound output
 #' @details Prints a concise summary of konfound output with multiple types of data specified in the to_return argument
-#' @param object A `konfound` object
+#' @param konfound_output A `konfound` object
 #' @param ... Additional arguments
 #' @export
 
-summary.konfound <- function(konfound_object){
-
-    # x_quo <- rlang::enquo(konfound_object)
-    # x_text <- rlang::quo_text(x_quo)
-    
-    cat("Created", length(konfound_object), "forms of output. To access type: \n")
+summary.konfound <- function(konfound_output){
+    cat("Created", length(konfound_output), "forms of output. To access type: \n")
     cat("\n")
     
-    for (name in names(konfound_object)) {
-        cat(rlang::expr_text(substitute(konfound_object)), "$", name, "\n", sep = "")
-        # cat(name, "\n")
+    for (name in names(konfound_output)) {
+        cat(rlang::expr_text(substitute(konfound_output)), "$", name, "\n", sep = "")
     }
 }
-
-#' Print method with concise summary of konfound output
-#' @details Prints a concise summary of konfound output with multiple types of data specified in the to_return argument
-#' @param object A `konfound` object
-#' @param ... Additional arguments
-#' @export
-
-# print.konfound <- function(x, ...){
-#     x_quo <- rlang::quo(x)
-#     x_text <- rlang::quo_text(x_quo)
-#     
-#     cat("Created", length(x), "forms of output - to access, type: \n")
-#     cat("\n")
-#     
-#     for (name in names(x)) {
-#         cat(x_text, "$", name, "\n", sep = "")
-#         # cat(name, "\n")
-#     }
-#     
-# }
-
 
 # Main function to test sensitivity to be wrapped with pkonfound(), konfound(), and mkonfound()
 
@@ -134,8 +108,13 @@ test_sensitivity <- function(unstd_beta,
         konfound_output <- create_konfound_class(konfound_output)
         names(konfound_output) <- to_return
         output_print(beta_diff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE)
-        message("Index list output with names specified in to_return (or use summary() on the output).")
-        invisible(konfound_output) } 
+        
+        cat("\n")
+        message(paste("Print output created by default. Created", length(konfound_output), "other forms of output. Use list indexing or run summary() on the output to see how to access."))
+        
+        invisible(konfound_output) 
+        
+        } 
     else if (to_return == "df") return(output_df(beta_diff, beta_threshold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE))
     else if (to_return == "thresh_plot") return(plot_threshold(beta_threshold = beta_threshold, unstd_beta = unstd_beta))
     else if (to_return == "corr_plot") return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
