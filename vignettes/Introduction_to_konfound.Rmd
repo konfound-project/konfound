@@ -128,7 +128,7 @@ if (requireNamespace("forcats")) {
 
 ### Use of mkonfound()
 
-Here, `df` represents output from a number of past studies. You can read a data file with results from 30 (hypothetical) studies. Note that this example data only had `t` and `df` values, and so sensible values for the number of observations and the [STILL WORKING ON THIS].
+Here, `df` represents output from a number of past studies.
 
 ```{r, warning = F}
 
