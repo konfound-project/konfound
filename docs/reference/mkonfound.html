@@ -117,36 +117,7 @@
                  <span class='kw'>std_error</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.3</span>, <span class='fl'>2.9</span>, <span class='fl'>1.5</span>, <span class='fl'>2</span>, <span class='fl'>.1</span>, <span class='fl'>.04</span>, <span class='fl'>.1</span>, <span class='fl'>3</span>, <span class='fl'>.5</span>),
                  <span class='kw'>n_obs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>70</span>, <span class='fl'>405</span>, <span class='fl'>200</span>, <span class='fl'>100</span>, <span class='fl'>103</span>, <span class='fl'>20</span>, <span class='fl'>50</span>, <span class='fl'>721</span>, <span class='fl'>320</span>),
                  <span class='kw'>n_covs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>10</span>, <span class='fl'>4</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>))
-<span class='fu'>mkonfound</span>(<span class='no'>df</span>)</div><div class='output co'>#&gt;   unstd_beta std_error n_obs n_covs        action           inference
-#&gt; 1        2.0      0.30    70      3 to_invalidate         reject_null
-#&gt; 2       10.0      2.90   405      4 to_invalidate         reject_null
-#&gt; 3        1.7      1.50   200      1    to_sustain fail_to_reject_null
-#&gt; 4        0.4      2.00   100      3    to_sustain fail_to_reject_null
-#&gt; 5        3.2      0.10   103     10 to_invalidate         reject_null
-#&gt; 6        1.0      0.04    20      4 to_invalidate         reject_null
-#&gt; 7        2.3      0.10    50      1 to_invalidate         reject_null
-#&gt; 8        4.1      3.00   721      1    to_sustain fail_to_reject_null
-#&gt; 9        0.9      0.50   320      0    to_sustain fail_to_reject_null
-#&gt;   percent_bias_to_change_inference replace_null_cases beta_threshhold
-#&gt; 1                           70.052                 49      0.59896933
-#&gt; 2                           42.989                174      5.70114580
-#&gt; 3                           42.529                 85      2.95802622
-#&gt; 4                           89.924                 90      3.96996862
-#&gt; 5                           93.793                 97      0.19860863
-#&gt; 6                           91.474                 18      0.08525798
-#&gt; 7                           91.258                 46      0.20106348
-#&gt; 8                           30.388                219      5.88980656
-#&gt; 9                            8.510                 27      0.98371419
-#&gt;   omitted_variable_corr        itcv
-#&gt; 1                 0.725  0.52521938
-#&gt; 2                 0.283  0.08010979
-#&gt; 3                 0.227 -0.05159630
-#&gt; 4                 0.387 -0.14988727
-#&gt; 5                 0.974  0.94812468
-#&gt; 6                 0.990  0.97914830
-#&gt; 7                 0.971  0.94295173
-#&gt; 8                 0.144 -0.02064123
-#&gt; 9                 0.091 -0.00833270</div><div class='input'><span class='fu'>mkonfound</span>(<span class='no'>df</span>, <span class='kw'>return_plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></div><img src='mkonfound-5.png' alt='' width='540' height='400' /></pre>
+<span class='fu'>mkonfound</span>(<span class='no'>df</span>)</div><div class='output co'>#&gt; <span class='error'>Error in stats::qt(1 - (alpha/tails), df): argument "df" is missing, with no default</span></div><div class='input'><span class='fu'>mkonfound</span>(<span class='no'>df</span>, <span class='kw'>return_plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in mkonfound(df, return_plot = TRUE): unused argument (return_plot = TRUE)</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

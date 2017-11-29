@@ -50,7 +50,7 @@
       <h1>Introduction to konfound</h1>
                         <h4 class="author">Joshua Rosenberg, Ran Xu, and Ken Frank</h4>
             
-            <h4 class="date">2017-11-27</h4>
+            <h4 class="date">2017-11-29</h4>
           </div>
 
     
@@ -122,7 +122,7 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 ## Correlation-based Approach:
 ## An omitted variable would have to be correlated at 0.479 with the outcome and at 0.479 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.14 and statistical significance.
 ## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.479 X 0.479 = 0.229 to invalidate an inference.</code></pre>
-<pre><code>## Index list output with names specified in to_return (or use summary() on the output).</code></pre>
+<pre><code>## Print output created by default. Created 3 other forms of output. Use list indexing or run summary() on the output to see how to access.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(model_output)</code></pre></div>
 <pre><code>## Created 3 forms of output. To access type: 
 ## 
@@ -216,7 +216,7 @@ m1</code></pre></div>
 <div id="use-of-mkonfound" class="section level3">
 <h3 class="hasAnchor">
 <a href="#use-of-mkonfound" class="anchor"></a>Use of mkonfound()</h3>
-<p>Here, <code>df</code> represents output from a number of past studies. You can read a data file with results from 30 (hypothetical) studies. Note that this example data only had <code>t</code> and <code>df</code> values, and so sensible values for the number of observations and the [STILL WORKING ON THIS].</p>
+<p>Here, <code>df</code> represents output from a number (9 in this illustrative case) of past studies.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)</code></pre></div>
 <pre><code>## 
 ## Attaching package: 'dplyr'</code></pre>
@@ -226,12 +226,7 @@ m1</code></pre></div>
 <pre><code>## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># df &lt;- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")</span>
-<span class="co"># </span>
-<span class="co"># df %&gt;% </span>
-<span class="co">#     mutate(n_covs = )</span>
-
-df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">unstd_beta =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">10</span>, <span class="fl">1.7</span>, .<span class="dv">4</span>, <span class="fl">3.2</span>, <span class="fl">1.0</span>, <span class="fl">2.3</span>, <span class="fl">4.1</span>, .<span class="dv">9</span>),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">unstd_beta =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">10</span>, <span class="fl">1.7</span>, .<span class="dv">4</span>, <span class="fl">3.2</span>, <span class="fl">1.0</span>, <span class="fl">2.3</span>, <span class="fl">4.1</span>, .<span class="dv">9</span>),
                  <span class="dt">std_error =</span> <span class="kw">c</span>(.<span class="dv">3</span>, <span class="fl">2.9</span>, <span class="fl">1.5</span>, <span class="dv">2</span>, .<span class="dv">1</span>, .<span class="dv">04</span>, .<span class="dv">1</span>, <span class="dv">3</span>, .<span class="dv">5</span>),
                  <span class="dt">n_obs =</span> <span class="kw">c</span>(<span class="dv">70</span>, <span class="dv">405</span>, <span class="dv">200</span>, <span class="dv">100</span>, <span class="dv">103</span>, <span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">721</span>, <span class="dv">320</span>),
                  <span class="dt">n_covs =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>))

@@ -128,7 +128,7 @@ if (requireNamespace("forcats")) {
 
 ### Use of mkonfound()
 
-Here, `df` represents output from a number of past studies.
+Here, `df` represents output from a number (9 in this illustrative case) of past studies.
 
 ```{r, warning = F}
 
