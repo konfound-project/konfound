@@ -73,17 +73,23 @@ And the threshold plot associated with the replacement of cases approach:
 pkonfound(.4, 2, 100, 3, to_return = "thresh_plot")
 ```
 
+Finally, you can return the raw output, useful for use in other analyses. 
+
+```{r}
+pkonfound(.4, 2, 100, 3, to_return = "raw_output")
+```
+
 You can also specify multiple forms of output at once. 
 
 ```{r}
-model_output <- pkonfound(2, .4, 200, 3, to_return = c("df", "thresh_plot", "corr_plot"))
+model_output <- pkonfound(2, .4, 200, 3, to_return = c("raw_output", "thresh_plot", "corr_plot"))
 summary(model_output)
 ```
 
 When we type the name of the object, we see that we created three types of output that we can access as follows:
 
 ```{r}
-model_output$df
+model_output$raw_output
 model_output$thresh_plot
 model_output$corr_plot
 ```
@@ -128,18 +134,19 @@ if (requireNamespace("forcats")) {
 
 ### Use of mkonfound()
 
-Here, `df` represents output from a number (9 in this illustrative case) of past studies.
+Here, `d` represents output from a number (9 in this illustrative case) of past studies.
 
 ```{r, warning = F}
 
 library(dplyr)
 
-df <- data.frame(unstd_beta = c(2, 10, 1.7, .4, 3.2, 1.0, 2.3, 4.1, .9),
+d <- data.frame(unstd_beta = c(2, 10, 1.7, .4, 3.2, 1.0, 2.3, 4.1, .9),
                  std_error = c(.3, 2.9, 1.5, 2, .1, .04, .1, 3, .5),
                  n_obs = c(70, 405, 200, 100, 103, 20, 50, 721, 320),
                  n_covs = c(3, 4, 1, 3, 10, 4, 1, 1, 0))
-mkonfound(df)
-mkonfound(df, return_plot = TRUE)
+
+mkonfound(d)
+mkonfound(d, return_plot = TRUE)
 ```
 
 # References

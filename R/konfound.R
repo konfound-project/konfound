@@ -1,9 +1,9 @@
 #' Perform sensitivity analysis on fitted models
 #' @description For fitted models, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient. Currently works for: models created with lm() (linear models).
 #' @param model_object output from a model (currently works for: lm)
-#' @param tested_variable Variable associated with the unstandardized beta coefficient to be tested
+#' @param tested_variable_string Variable associated with the unstandardized beta coefficient to be tested
 #' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
-#' @param to_return whether to return a data.frame (by specifying this argument to equal "df"), table ("table"), or a plot ("plot"); default is to print the output to the console
+#' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output"), table ("table"), or a plot ("plot"); default is to print the output to the console
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
 #' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
 #' @param component_correlations whether to return the component correlations as part of the correlation-based approach
@@ -14,6 +14,21 @@
 #' konfound(m1, wt)
 #' konfound(m1, wt, test_all = TRUE)
 #' konfound(m1, wt, to_return = "table")
+#' 
+#' if (requireNamespace("forcats")) {
+#' d <- forcats::gss_cat
+#'
+#' d$married <- ifelse(d$marital == "Married", 1, 0)
+#' 
+#' m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
+#' konfound(m2, age)
+#' }
+#' 
+#' #' if (requireNamespace("lmer")) {
+#' m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+#' konfound(m3, Days)
+#' }
+#'
 #' @export
 
 konfound <- function(model_object, 
@@ -24,139 +39,70 @@ konfound <- function(model_object,
                      test_all = FALSE, 
                      component_correlations = F) {
     
-    # if (class(model_object)[1] %in% c("merMod",)) {
-    #     stop("We recommend carrying out sensitivity analysis for mixed-effects or multi-level models using pkonfound().",
-    #          "If using lme4, consider use of the lmerTest::lmer() function, which outputs degrees of freedom.")
-    #     # tidy_output <- broom::tidy(model_object) # tidying output
-    #     # glance_output <- broom::glance(model_object)
-    # }
-    
-    if (!(class(model_object)[1] %in% c("lm", "glm", "merMod", "lme"))) {
-        stop("konfound() is currently implemented for models estimated with lm(), glm(), nlme::lme(), and lme4::lmer()")
+    # Stop messages
+    if (!(class(model_object)[1] %in% c("lm", "glm", "lmerMod"))) {
+        stop("konfound() is currently implemented for models estimated with lm(), glm(), and lme4::lmer(); consider using pkonfound() instead")
     }
     
     if (to_return == "table" & test_all == TRUE) stop("cannot return a table when test_all is set to TRUE")
     
-    # Dispatching based on class
+    # Dealing with non-standard evaluation
+    tested_variable_enquo <- rlang::enquo(tested_variable) # dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
+    tested_variable_string <- rlang::quo_name(tested_variable_enquo)
     
+    # Dispatching based on class
     if (class(model_object)[1] == "lm") {
         
-        tidy_output <- broom::tidy(model_object) # tidying output
-        glance_output <- broom::glance(model_object)
+        output <- konfound_lm(model_object = model_object,
+                              tested_variable_string = tested_variable_string,
+                              test_all = test_all,
+                              alpha = alpha,
+                              tails = tails,
+                              to_return = to_return)
         
-        if (test_all == FALSE) {
-            tested_variable_enquo <- rlang::enquo(tested_variable) # dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
-            tested_variable_string <- rlang::quo_name(tested_variable_enquo)
-            coef_df <- tidy_output[tidy_output$term == tested_variable_string, ] 
-        } else {
-            coef_df <- tidy_output[-1, ] } # to remove intercept
-        
-        unstd_beta = round(coef_df$estimate, 3)
-        std_err = round(coef_df$std.error, 3)
-        n_obs = glance_output$df + glance_output$df.residual
-        n_covariates = glance_output$df - 2 # (for intercept and coefficient)
-        
-        if (test_all == FALSE) {
-            return(test_sensitivity(unstd_beta = unstd_beta,
-                                    std_err = std_err,
-                                    n_obs = n_obs,
-                                    n_covariates = n_covariates,
-                                    alpha = alpha,
-                                    tails = tails,
-                                    nu = 0,
-                                    to_return = to_return,
-                                    component_correlations = component_correlations,
-                                    non_linear = FALSE,
-                                    model_object = model_object,
-                                    tested_variable = tested_variable_string))
-        } else { 
-            o <- mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates))
-            term_names <- dplyr::select(tidy_output, var_name = .data$term) # remove the first row for intercept
-            term_names <- dplyr::filter(term_names, .data$var_name != "(Intercept)")
-            o <- dplyr::bind_cols(term_names, o)
-        } 
     }
-    
-    if (class(model_object)[1] == "glm") {
-        warning("For a non-linear mode, impact threshold should not be used.")
-        
-        tidy_output <- broom::tidy(model_object) # tidying output
-        glance_output <- broom::glance(model_object)
-        
-        if (test_all == FALSE) {
-            tested_variable_enquo <- rlang::enquo(tested_variable) # dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
-            tested_variable_string <- rlang::quo_name(tested_variable_enquo)
-            coef_df <- tidy_output[tidy_output$term == tested_variable_string, ] 
-        } else {
-            coef_df <- tidy_output[-1, ]
-            coef_df$unstd_beta <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string]) } # to remove intercept
-        
-        unstd_beta = round(coef_df$estimate, 3)
-        unstd_beta <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
-        std_err = round(coef_df$std.error, 3)
-        n_obs = glance_output$df.null
-        n_covariates = glance_output$df.null - 2 # (for intercept and coefficient)
-        
-        if (test_all == FALSE) {
-            return(test_sensitivity(unstd_beta = unstd_beta,
-                                    std_err = std_err,
-                                    n_obs = n_obs,
-                                    n_covariates = n_covariates,
-                                    alpha = alpha,
-                                    tails = tails,
-                                    nu = 0,
-                                    to_return = to_return,
-                                    component_correlations = component_correlations,
-                                    non_linear = TRUE,
-                                    model_object = model_object,
-                                    tested_variable = tested_variable_string))
-        } else { 
-            o <- mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates))
-            term_names <- dplyr::select(tidy_output, var_name = .data$term) # remove the first row for intercept
-            term_names <- dplyr::filter(term_names, .data$var_name != "(Intercept)")
-            o <- dplyr::bind_cols(term_names, o)
-        } 
-    }
-    # 
-    # if (class(model_object) == "lme") {
-    # 
-    #     tidy_output <- nlme::fixef(model_object) # tidying output
-    #     glance_output <- broom::glance(model_object)
+    # if (length(to_return) > 1) {
+    #     to_return <-to_return[!(to_return == "print")]
+    #     konfound_output <- purrr::map(to_return,
+    #                                   ~ test_sensitivity(
+    #                                       unstd_beta = unstd_beta,
+    #                                       std_err = std_err,
+    #                                       n_obs = n_obs, 
+    #                                       n_covariates = n_covariates,
+    #                                       alpha = alpha, 
+    #                                       tails = tails,
+    #                                       nu = nu,
+    #                                       to_return = .,
+    #                                       component_correlations = component_correlations))
+    #     konfound_output <- create_konfound_class(konfound_output)
+    #     names(konfound_output) <- to_return
+    #     output_print(beta_diff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE)
     #     
-    #     if (test_all == FALSE) {
-    #         tested_variable_enquo <- rlang::enquo(tested_variable) # dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
-    #         tested_variable_string <- rlang::quo_name(tested_variable_enquo)
-    #         coef_df <- tidy_output[names(tidy_output) == tested_variable_string]
-    #     } else {
-    #         coef_df <- tidy_output[-1]
-    #         # coef_df$unstd_beta <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string]) } # to remove intercept
-    # 
-    #     unstd_beta = round(coef_df, 3)
-    #     # unstd_beta <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
-    #     std_err = round(coef_df$std.error, 3)
-    #     n_obs = glance_output$df.null
-    #     n_covariates = glance_output$df.null - 2 # (for intercept and coefficient)
-    # 
-    #     if (test_all == FALSE) {
-    #         return(test_sensitivity(unstd_beta = unstd_beta,
-    #                                 std_err = std_err,
-    #                                 n_obs = n_obs,
-    #                                 n_covariates = n_covariates,
-    #                                 alpha = alpha,
-    #                                 tails = tails,
-    #                                 nu = 0,
-    #                                 to_return = to_return,
-    #                                 component_correlations = component_correlations,
-    #                                 non_linear = TRUE,
-    #                                 model_object = model_object,
-    #                                 tested_variable = tested_variable_string))
-    #     } else {
-    #         o <- mkonfound(data.frame(unstd_beta, std_err, n_obs, n_covariates))
-    #         term_names <- dplyr::select(tidy_output, var_name = term) # remove the first row for intercept
-    #         term_names <- dplyr::filter(term_names, var_name != "(Intercept)")
-    #         o <- dplyr::bind_cols(term_names, o)
-    #     }
-    #}
+    #     cat("\n")
+    #     message(paste("Print output created by default. Created", length(konfound_output), "other forms of output. Use list indexing or run summary() on the output to see how to access."))
+    #     
+    #     invisible(konfound_output) 
+    # }
     
-    return(o)
+    if (inherits(model_object, "glm")) {
+        warning("For a non-linear model, impact threshold should not be used.")
+        
+        output <- konfound_glm(model_object = model_object,
+                               tested_variable_string = tested_variable_string,
+                               test_all = test_all,
+                               alpha = alpha,
+                               tails = tails,
+                               to_return = to_return)
+    }
+    if (inherits(model_object, "lmerMod")) {
+        
+        output <- konfound_lmer(model_object = model_object,
+                                tested_variable_string = tested_variable_string,
+                                test_all = test_all,
+                                alpha = alpha,
+                                tails = tails,
+                                to_return = to_return)
+        
+    }
+    return(output)
 }

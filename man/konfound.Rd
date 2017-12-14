@@ -10,17 +10,17 @@ konfound(model_object, tested_variable, alpha = 0.05, tails = 2,
 \arguments{
 \item{model_object}{output from a model (currently works for: lm)}
 
-\item{tested_variable}{Variable associated with the unstandardized beta coefficient to be tested}
-
 \item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
 \item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
 
-\item{to_return}{whether to return a data.frame (by specifying this argument to equal "df"), table ("table"), or a plot ("plot"); default is to print the output to the console}
+\item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output"), table ("table"), or a plot ("plot"); default is to print the output to the console}
 
 \item{test_all}{whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)}
 
 \item{component_correlations}{whether to return the component correlations as part of the correlation-based approach}
+
+\item{tested_variable_string}{Variable associated with the unstandardized beta coefficient to be tested}
 }
 \value{
 prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
@@ -33,4 +33,19 @@ m1 <- lm(mpg ~ wt + hp, data = mtcars)
 konfound(m1, wt)
 konfound(m1, wt, test_all = TRUE)
 konfound(m1, wt, to_return = "table")
+
+if (requireNamespace("forcats")) {
+d <- forcats::gss_cat
+
+d$married <- ifelse(d$marital == "Married", 1, 0)
+
+m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
+konfound(m2, age)
+}
+
+#' if (requireNamespace("lmer")) {
+m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+konfound(m3, Days)
+}
+
 }

@@ -23,7 +23,7 @@ pkonfound(unstd_beta, std_err, n_obs, n_covariates = 1, alpha = 0.05,
 
 \item{nu}{what hypothesis to be tested; defaults to testing whether unstd_beta is significantly different from 0}
 
-\item{to_return}{whether to return a data.frame (by specifying this argument to equal "df") or a plot ("plot"); default is to print the output to the console; can specify a vector of output to return}
+\item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output") or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
 
 \item{component_correlations}{whether to return the component correlations as part of the correlation-based approach}
 }
@@ -40,7 +40,7 @@ pkonfound(-2, .4, 200, 3)
 pkonfound(2, .4, 200, 3, to_return = "thresh_plot")
 pkonfound(2, .4, 200, 3, to_return = "corr_plot")
 
-pkonfound_output <- pkonfound(2, .4, 200, 3, to_return = c("df", "thresh_plot", "corr_plot"))
+pkonfound_output <- pkonfound(2, .4, 200, 3, to_return = c("raw_output", "thresh_plot", "corr_plot"))
 summary(pkonfound_output)
 pkonfound_output$df
 pkonfound_output$thresh_plot

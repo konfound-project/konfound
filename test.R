@@ -25,18 +25,18 @@ merMod_p <- function(fit, p.kr) {
         cs <- as.data.frame(cs)
         # get KR DF
         df.kr <- suppressMessages(pbkrtest::get_Lb_ddf(fit, lme4::fixef(fit)))
-        # compute p-values, assuming an approximate t-dist
-        pv <- 2 * stats::pt(abs(cs$`t value`), df = df.kr, lower.tail = FALSE)
-        # name vector
-        names(pv) <- coef_names
-    } else {
-        message("Computing p-values via Wald-statistics approximation (treating t as Wald z).")
-        pv <- 2 * stats::pnorm(abs(cs[, 3]), lower.tail = FALSE)
-    }
-    
+        # # compute p-values, assuming an approximate t-dist
+        # pv <- 2 * stats::pt(abs(cs$`t value`), df = df.kr, lower.tail = FALSE)
+        # # name vector
+        # names(pv) <- coef_names
     pv
 }
 
 library(lme4)
-fit <- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
-merMod_p(fit, p.kr = T)
+library(railtrails)
+
+d <- railtrails %>% 
+    unnest(raw_reviews)
+    
+fit <- lmer(mean_review ~ distance + (1|state), data = d)
+df.kr <- suppressMessages(pbkrtest::get_Lb_ddf(fm1, lme4::fixef(fm1)))
