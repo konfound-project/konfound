@@ -37,7 +37,8 @@ core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
 
 #' Perform meta-analyses including sensitivity analysis
 #' @description For fitted models, this command carries out sensitivity analysis for a number of models, when their parameters stored in a data.frame. 
-#' @param df a data.frame with columns for the 'unstd_beta', 'std_err', 'n_obs', and 'n_covariates' arguments (see ?pkonfound for more information on these)
+#' @param t t-statistic or vector of t-statistics
+#' @param df degrees of freedom or vector of degrees of freedom associated with the t-statistics in the t argument
 #' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
 #' @param return_plot whether to return a plot of the percent bias; defaults to FALSE

@@ -37,7 +37,8 @@ konfound <- function(model_object,
                      tails = 2,
                      to_return = "print",
                      test_all = FALSE, 
-                     component_correlations = F) {
+                     component_correlations = F,
+                     p_kr = FALSE) {
     
     # Stop messages
     if (!(class(model_object)[1] %in% c("lm", "glm", "lmerMod"))) {
@@ -101,7 +102,8 @@ konfound <- function(model_object,
                                 test_all = test_all,
                                 alpha = alpha,
                                 tails = tails,
-                                to_return = to_return)
+                                to_return = to_return,
+                                p_kr = p_kr)
         
     }
     return(output)
