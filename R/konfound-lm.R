@@ -16,7 +16,7 @@ konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, t
     n_covariates = glance_output$df - 2 # (for intercept and coefficient)
     
     if (test_all == FALSE) {
-        return(test_sensitivity(unstd_beta = unstd_beta,
+        invisible(test_sensitivity(unstd_beta = unstd_beta,
                                 std_err = std_err,
                                 n_obs = n_obs,
                                 n_covariates = n_covariates,
@@ -24,8 +24,6 @@ konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, t
                                 tails = tails,
                                 nu = 0,
                                 to_return = to_return,
-                                component_correlations = component_correlations,
-                                non_linear = FALSE,
                                 model_object = model_object,
                                 tested_variable = tested_variable_string))
     } else { 

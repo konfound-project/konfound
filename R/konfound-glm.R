@@ -11,9 +11,9 @@ konfound_glm <- function(model_object, tested_variable_string, test_all, alpha, 
         coef_df <- tidy_output[-1, ]
         coef_df$unstd_beta <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string]) } # to remove intercept
     
-    unstd_beta = round(coef_df$estimate, 3)
+    unstd_beta <- round(coef_df$estimate, 3)
     unstd_beta <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
-    std_err = round(coef_df$std.error, 3)
+    std_err <- round(coef_df$std.error, 3)
     n_obs = glance_output$df.null
     n_covariates = glance_output$df.null - 2 # (for intercept and coefficient)
     

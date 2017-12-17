@@ -29,8 +29,6 @@ test_sensitivity <- function(unstd_beta,
                              tails,
                              nu,
                              to_return,
-                             component_correlations, 
-                             non_linear,
                              model_object,
                              tested_variable) {
     
@@ -90,9 +88,10 @@ test_sensitivity <- function(unstd_beta,
     # }
     
     # output dispatch
-    
+
     if (length(to_return) > 1) {
         to_return <-to_return[!(to_return == "print")]
+
         konfound_output <- purrr::map(to_return,
                                       ~ test_sensitivity(
                                           unstd_beta = unstd_beta,
@@ -102,23 +101,23 @@ test_sensitivity <- function(unstd_beta,
                                           alpha = alpha, 
                                           tails = tails,
                                           nu = nu,
-                                          to_return = .,
-                                          component_correlations = component_correlations))
+                                          to_return = .))
         konfound_output <- create_konfound_class(konfound_output)
         names(konfound_output) <- to_return
-        output_print(beta_diff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE)
+        output_print(unstd_beta, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE)
         
         cat("\n")
         message(paste("Print output created by default. Created", length(konfound_output), "other forms of output. Use list indexing or run summary() on the output to see how to access."))
         
         invisible(konfound_output) 
         
-        } 
-    else if (to_return == "raw_output") return(output_df(beta_diff, beta_threshold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE))
-    else if (to_return == "thresh_plot") return(plot_threshold(beta_threshold = beta_threshold, unstd_beta = unstd_beta))
-    else if (to_return == "corr_plot") return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
+    } 
+    
+    else if (to_return == "raw_output") invisible(output_df(beta_diff, beta_threshold, unstd_beta, bias, sustain, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE))
+    else if (to_return == "thresh_plot") invisible(plot_threshold(beta_threshold = beta_threshold, unstd_beta = unstd_beta))
+    else if (to_return == "corr_plot") invisible(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
     else if (to_return == "print") return(output_print(beta_diff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE))
-    else if (to_return == "table") return(output_table(model_object, tested_variable))
+    else if (to_return == "table") invisible(output_table(model_object, tested_variable))
     else {
         stop("to_return must be set to 'raw_output', 'print', 'table', 'thresh_plot', or 'corr_plot' or some combination thereof")
     }

@@ -30,6 +30,9 @@ core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
     
     out <- dplyr::data_frame(t, df, action, inference, pct_bias, itcv, r_con)
     names(out) <- c("t", "df", "action", "inference", "pct_bias_to_change_inference", "itcv", "r_con")
+    
+    out$pct_bias_to_change_inference <- round(out$pct_bias_to_change_inference, 3)
+    out$itcv <- round(out$itcv, 3)
     out$action <- as.character(out$action)
     out$inference <- as.character(out$inference)
     return(out)
@@ -37,12 +40,14 @@ core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
 
 #' Perform meta-analyses including sensitivity analysis
 #' @description For fitted models, this command carries out sensitivity analysis for a number of models, when their parameters stored in a data.frame. 
+#' @param d data.frame or tibble with the t-statistics and associated degrees of freedom
 #' @param t t-statistic or vector of t-statistics
 #' @param df degrees of freedom or vector of degrees of freedom associated with the t-statistics in the t argument
-#' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
-#' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
+#' @inheritParams konfound
 #' @param return_plot whether to return a plot of the percent bias; defaults to FALSE
 #' @param component_correlations whether to return the component correlations as part of the correlation-based approach
+#' @import rlang
+#' @import dplyr
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference for each of the cases in the data.frame
 #' @examples 
 #' df <- data.frame(unstd_beta = c(2, 10, 1.7, .4, 3.2, 1.0, 2.3, 4.1, .9),
@@ -54,39 +59,42 @@ core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
 #' 
 #' d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
 #' d
-#' mkonfound(d$t, d$df)
+#' mkonfound(d, t, df)
 #' @export
 #'
 
-mkonfound <- function(t, df, alpha = .05, tails = 2, return_plot = FALSE) {
+mkonfound <- function(d, t, df, alpha = .05, tails = 2, return_plot = FALSE) {
     
-    args <- list(as.list(t),
-                 as.list(df))
+    t_enquo <- enquo(t)
+    df_enquo <- enquo(df)
     
-    results_df <- purrr::pmap_dfr(args, core_sensitivity_mkonfound, alpha = alpha, tails = tails)
+    t_vec = pull(select(d, !!t_enquo))
+    df_vec = pull(select(d, !!df_enquo))
     
-        if (return_plot == TRUE) {
-
-            results_df$action <- dplyr::case_when(
-                results_df$action == "to_invalidate" ~ "To Invalidate",
-                results_df$action == "to_sustain" ~ "To Sustain"
-            )
-
-            p <- ggplot2::ggplot(results_df, ggplot2::aes(x = pct_bias_to_change_inference, fill = action)) +
-                ggplot2::geom_histogram() +
-                ggplot2::scale_fill_manual("", values = c("#1F78B4", "#A6CEE3")) +
-                ggplot2::theme_bw() +
-                ggplot2::ggtitle("Histogram of Percent Bias") +
-                ggplot2::facet_grid(~ action) +
-                ggplot2::scale_y_continuous(breaks = 1:nrow(results_df)) +
-                ggplot2::theme(legend.position = "none") +
-                ggplot2::ylab("Count") +
-                ggplot2::xlab("Percent Bias")
-
-            return(p)
-        }
+    results_df <- purrr::map2_dfr(.x = t_vec, .y = df_vec, .f = core_sensitivity_mkonfound)
     
-    return(dplyr::as_tibble(results_df))
+    if (return_plot == TRUE) {
+        
+        results_df$action <- dplyr::case_when(
+            results_df$action == "to_invalidate" ~ "To Invalidate",
+            results_df$action == "to_sustain" ~ "To Sustain"
+        )
+        
+        p <- ggplot2::ggplot(results_df, ggplot2::aes(x = pct_bias_to_change_inference, fill = action)) +
+            ggplot2::geom_histogram() +
+            ggplot2::scale_fill_manual("", values = c("#1F78B4", "#A6CEE3")) +
+            ggplot2::theme_bw() +
+            ggplot2::ggtitle("Histogram of Percent Bias") +
+            ggplot2::facet_grid(~ action) +
+            ggplot2::scale_y_continuous(breaks = 1:nrow(results_df)) +
+            ggplot2::theme(legend.position = "none") +
+            ggplot2::ylab("Count") +
+            ggplot2::xlab("Percent Bias")
+        
+        return(p)
+    } else {
+        return(results_df)
+    }
     
 }
 
@@ -115,6 +123,9 @@ mkonfound_d <- function(df, alpha = .05, tails = 2, return_plot = FALSE, compone
     x <- purrr::pmap_dfr(args, pkonfound, alpha = alpha, tails = tails, to_return = "df")
     results_df <- dplyr::bind_cols(df, x)
     results_df <- dplyr::select(results_df, -.data$unstd_beta1)
+    
+    message("Note that this output may differ slightly from the output from pkonfound, as different calculations are used.")
+    
     if (return_plot == TRUE) {
         
         results_df$action <- dplyr::case_when(
@@ -135,5 +146,6 @@ mkonfound_d <- function(df, alpha = .05, tails = 2, return_plot = FALSE, compone
         
         return(p)
     }
+    
     return(results_df)
 } 

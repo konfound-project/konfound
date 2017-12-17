@@ -4,10 +4,14 @@
 \alias{mkonfound}
 \title{Perform meta-analyses including sensitivity analysis}
 \usage{
-mkonfound(t, df, alpha = 0.05, tails = 2, return_plot = FALSE)
+mkonfound(d, t, df, alpha = 0.05, tails = 2, return_plot = FALSE)
 }
 \arguments{
-\item{df}{a data.frame with columns for the 'unstd_beta', 'std_err', 'n_obs', and 'n_covariates' arguments (see ?pkonfound for more information on these)}
+\item{d}{data.frame or tibble with the t-statistics and associated degrees of freedom}
+
+\item{t}{t-statistic or vector of t-statistics}
+
+\item{df}{degrees of freedom or vector of degrees of freedom associated with the t-statistics in the t argument}
 
 \item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
@@ -33,5 +37,5 @@ mkonfound(df, return_plot = TRUE)
 
 d <- read.csv("https://msu.edu/~kenfrank/example\%20dataset\%20for\%20mkonfound.csv")
 d
-mkonfound(d$t, d$df)
+mkonfound(d, t, df)
 }

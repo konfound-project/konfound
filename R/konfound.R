@@ -2,9 +2,7 @@
 #' @description For fitted models, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient. Currently works for: models created with lm() (linear models).
 #' @param model_object output from a model (currently works for: lm)
 #' @param tested_variable_string Variable associated with the unstandardized beta coefficient to be tested
-#' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
-#' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output"), table ("table"), or a plot ("plot"); default is to print the output to the console
-#' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
+#' @inheritParams konfound
 #' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
 #' @param component_correlations whether to return the component correlations as part of the correlation-based approach
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
@@ -45,7 +43,7 @@ konfound <- function(model_object,
         stop("konfound() is currently implemented for models estimated with lm(), glm(), and lme4::lmer(); consider using pkonfound() instead")
     }
     
-    if (to_return == "table" & test_all == TRUE) stop("cannot return a table when test_all is set to TRUE")
+    if ("table" %in% to_return & test_all == TRUE) stop("cannot return a table when test_all is set to TRUE")
     
     # Dealing with non-standard evaluation
     tested_variable_enquo <- rlang::enquo(tested_variable) # dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
@@ -61,30 +59,10 @@ konfound <- function(model_object,
                               tails = tails,
                               to_return = to_return)
         
+        invisible(output)
+        
     }
-    # if (length(to_return) > 1) {
-    #     to_return <-to_return[!(to_return == "print")]
-    #     konfound_output <- purrr::map(to_return,
-    #                                   ~ test_sensitivity(
-    #                                       unstd_beta = unstd_beta,
-    #                                       std_err = std_err,
-    #                                       n_obs = n_obs, 
-    #                                       n_covariates = n_covariates,
-    #                                       alpha = alpha, 
-    #                                       tails = tails,
-    #                                       nu = nu,
-    #                                       to_return = .,
-    #                                       component_correlations = component_correlations))
-    #     konfound_output <- create_konfound_class(konfound_output)
-    #     names(konfound_output) <- to_return
-    #     output_print(beta_diff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE)
-    #     
-    #     cat("\n")
-    #     message(paste("Print output created by default. Created", length(konfound_output), "other forms of output. Use list indexing or run summary() on the output to see how to access."))
-    #     
-    #     invisible(konfound_output) 
-    # }
-    
+
     if (inherits(model_object, "glm")) {
         warning("For a non-linear model, impact threshold should not be used.")
         
@@ -95,6 +73,7 @@ konfound <- function(model_object,
                                tails = tails,
                                to_return = to_return)
     }
+    
     if (inherits(model_object, "lmerMod")) {
         
         output <- konfound_lmer(model_object = model_object,
@@ -106,5 +85,15 @@ konfound <- function(model_object,
                                 p_kr = p_kr)
         
     }
-    return(output)
+    
+    if (!("table" %in% to_return)) {
+        message("For more detailed output, consider setting `to_return` to table")
+    }
+    
+    if (test_all == FALSE) {
+        message("To consider other predictors of interest, consider setting `test_all` to TRUE.")
+    } else {
+        message("Note that presently these predictors of interest are tested independently; future output may use the approach used in mkonfound.")
+    }
+
 }

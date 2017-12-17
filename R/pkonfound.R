@@ -7,7 +7,7 @@
 #' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
 #' @param nu what hypothesis to be tested; defaults to testing whether unstd_beta is significantly different from 0
-#' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output") or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return
+#' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return
 #' @param component_correlations whether to return the component correlations as part of the correlation-based approach
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
@@ -37,29 +37,19 @@ pkonfound <- function(unstd_beta,
                       df = NULL) {
     if ("table" %in% to_return) stop("a table can only be output when using konfound")
     
-    if(!is.null(t) & !is.null(df)) {
-        test_sensitivity(unstd_beta = NULL,
-                         std_err = NULL,
-                         n_obs = NULL, 
-                         n_covariates = 1, 
-                         alpha = alpha,
-                         tails = tails,
-                         nu = nu,
-                         to_return = to_return,
-                         component_correlations = component_correlations,
-                         t = t,
-                         df = df)    
-    } else {
-        test_sensitivity(unstd_beta = unstd_beta,
-                         std_err = std_err,
-                         n_obs = n_obs, 
-                         n_covariates = n_covariates,
-                         alpha = alpha, 
-                         tails = tails,
-                         nu = nu,
-                         to_return = to_return,
-                         component_correlations = component_correlations)
+    test_sensitivity(unstd_beta = unstd_beta,
+                     std_err = std_err,
+                     n_obs = n_obs, 
+                     n_covariates = n_covariates,
+                     alpha = alpha, 
+                     tails = tails,
+                     nu = nu,
+                     to_return = to_return)
+    
+    if (to_return == "print") {
+        message("For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.")
     }
     
+    message("For models fit in R, consider use of konfound().")
     
 }

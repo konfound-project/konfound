@@ -5,7 +5,8 @@
 \title{Perform sensitivity analysis on fitted models}
 \usage{
 konfound(model_object, tested_variable, alpha = 0.05, tails = 2,
-  to_return = "print", test_all = FALSE, component_correlations = F)
+  to_return = "print", test_all = FALSE, component_correlations = F,
+  p_kr = FALSE)
 }
 \arguments{
 \item{model_object}{output from a model (currently works for: lm)}
