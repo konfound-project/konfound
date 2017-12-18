@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Perform meta-analyses including sensitivity analysis — mkonfound • konfound</title>
+<title>Perform meta-analyses including sensitivity analysis — mkonfound_d • konfound</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -79,22 +79,23 @@
     <p>For fitted models, this command carries out sensitivity analysis for a number of models, when their parameters stored in a data.frame.</p>
     
 
-    <pre class="usage"><span class='fu'>mkonfound</span>(<span class='no'>d</span>, <span class='no'>t</span>, <span class='no'>df</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>tails</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>return_plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>mkonfound_d</span>(<span class='no'>df</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>tails</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>return_plot</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>component_correlations</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>d</th>
-      <td><p>data.frame or tibble with the t-statistics and associated degrees of freedom</p></td>
-    </tr>
-    <tr>
-      <th>t</th>
-      <td><p>t-statistic or vector of t-statistics</p></td>
-    </tr>
-    <tr>
       <th>df</th>
-      <td><p>degrees of freedom or vector of degrees of freedom associated with the t-statistics in the t argument</p></td>
+      <td><p>a data.frame with columns for the 'unstd_beta', 'std_err', 'n_obs', and 'n_covariates' arguments (see ?pkonfound for more information on these)</p></td>
+    </tr>
+    <tr>
+      <th>alpha</th>
+      <td><p>probability of rejecting the null hypothesis (defaults to 0.05)</p></td>
+    </tr>
+    <tr>
+      <th>tails</th>
+      <td><p>integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)</p></td>
     </tr>
     <tr>
       <th>return_plot</th>
@@ -112,24 +113,11 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'>read.csv</span>(<span class='st'>"https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv"</span>)
-<span class='fu'>str</span>(<span class='no'>d</span>)</div><div class='output co'>#&gt; 'data.frame':	30 obs. of  2 variables:
-#&gt;  $ t : num  7.08 4.13 1.89 -4.17 -1.19 ...
-#&gt;  $ df: int  178 193 47 138 97 87 117 75 137 195 ...</div><div class='input'><span class='fu'>mkonfound</span>(<span class='no'>d</span>, <span class='no'>t</span>, <span class='no'>df</span>)</div><div class='output co'>#&gt; # A tibble: 30 x 7
-#&gt;            t    df        action           inference
-#&gt;        &lt;dbl&gt; &lt;int&gt;         &lt;chr&gt;               &lt;chr&gt;
-#&gt;  1  7.076763   178 to_invalidate         reject_null
-#&gt;  2  4.127893   193 to_invalidate         reject_null
-#&gt;  3  1.893137    47    to_sustain fail_to_reject_null
-#&gt;  4 -4.166395   138 to_invalidate         reject_null
-#&gt;  5 -1.187599    97    to_sustain fail_to_reject_null
-#&gt;  6  3.585478    87 to_invalidate         reject_null
-#&gt;  7  0.281938   117    to_sustain fail_to_reject_null
-#&gt;  8  2.549647    75 to_invalidate         reject_null
-#&gt;  9 -4.436048   137 to_invalidate         reject_null
-#&gt; 10 -2.045373   195 to_invalidate         reject_null
-#&gt; # ... with 20 more rows, and 3 more variables:
-#&gt; #   pct_bias_to_change_inference &lt;dbl&gt;, itcv &lt;dbl&gt;, r_con &lt;dbl&gt;</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>unstd_beta</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>10</span>, <span class='fl'>1.7</span>, <span class='fl'>.4</span>, <span class='fl'>3.2</span>, <span class='fl'>1.0</span>, <span class='fl'>2.3</span>, <span class='fl'>4.1</span>, <span class='fl'>.9</span>),
+                 <span class='kw'>std_error</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.3</span>, <span class='fl'>2.9</span>, <span class='fl'>1.5</span>, <span class='fl'>2</span>, <span class='fl'>.1</span>, <span class='fl'>.04</span>, <span class='fl'>.1</span>, <span class='fl'>3</span>, <span class='fl'>.5</span>),
+                 <span class='kw'>n_obs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>70</span>, <span class='fl'>405</span>, <span class='fl'>200</span>, <span class='fl'>100</span>, <span class='fl'>103</span>, <span class='fl'>20</span>, <span class='fl'>50</span>, <span class='fl'>721</span>, <span class='fl'>320</span>),
+                 <span class='kw'>n_covs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>10</span>, <span class='fl'>4</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>))
+<span class='fu'><a href='mkonfound.html'>mkonfound</a></span>(<span class='no'>df</span>)</div><div class='output co'>#&gt; <span class='error'>Error: `var` must be a value between 0 and 0 (excluding zero), not -1</span></div><div class='input'><span class='fu'><a href='mkonfound.html'>mkonfound</a></span>(<span class='no'>df</span>, <span class='kw'>return_plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error: `var` must be a value between 0 and 0 (excluding zero), not -1</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

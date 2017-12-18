@@ -83,7 +83,8 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Correlation-based Approach:</span>
 <span class="co">#&gt; An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.201 and statistical significance.</span>
-<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference.</span></code></pre></div>
+<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference.</span>
+<span class="co">#&gt; NULL</span></code></pre></div>
 </div>
 <div id="konfound-for-models-fit-in-r" class="section level4">
 <h4 class="hasAnchor">
@@ -120,48 +121,23 @@ m1
 <span class="co">#&gt; F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</span></code></pre></div>
 <p>Sensitivity analysis for the effect for <code>wt</code> on <code>mpg</code> can be carried out as follows, specifying the fitted model object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/konfound.html">konfound</a></span>(m1, wt)
+<span class="co">#&gt; Note that this output is calculated based on the correlation-based approach used in mkonfound()</span>
 <span class="co">#&gt; Replacement of Cases Approach:</span>
 <span class="co">#&gt; To invalidate the inference, 66.664% of the estimate would have to be due to bias based on a threshold of -1.293 and statistical significance.</span>
 <span class="co">#&gt; To invalidate the inference, 21 observations would have to be replaced with cases for which the effect is 0.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Correlation-based Approach:</span>
 <span class="co">#&gt; An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of -0.36 and statistical significance.</span>
-<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference.</span></code></pre></div>
+<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference.</span>
+<span class="co">#&gt; NULL</span></code></pre></div>
 </div>
 <div id="mkonfound-for-meta-analyses-including-sensitivity-analysis" class="section level4">
 <h4 class="hasAnchor">
 <a href="#mkonfound-for-meta-analyses-including-sensitivity-analysis" class="anchor"></a>mkonfound for meta-analyses including sensitivity analysis</h4>
-<p>We can use an existing dataset, such as the CSV file <a href="">here</a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)
-
-d &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">""</span>)
-
-d &lt;-<span class="st"> </span><span class="kw">select</span>(d, <span class="dt">unstd_beta =</span> ,
-            <span class="dt">std_error =</span> ,
-            <span class="dt">n_obs =</span> ,
-            <span class="dt">n_covs =</span> )
-
-<span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(d)</code></pre></div>
-<p>We can also use data in <code>R</code></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)
-
-d &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">tribble</span>(
-    <span class="op">~</span>unstd_beta, <span class="op">~</span>std_err, <span class="op">~</span>n_obs, <span class="op">~</span>n_covs,
-    <span class="dv">2</span>,           .<span class="dv">3</span>,       <span class="dv">70</span>,     <span class="dv">3</span>,
-    <span class="dv">10</span>,          <span class="fl">2.9</span>,      <span class="dv">405</span>,    <span class="dv">4</span>,
-    <span class="fl">1.7</span>,         <span class="fl">1.5</span>,      <span class="dv">200</span>,    <span class="dv">1</span>
-)
-
-<span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(d)
-<span class="co">#&gt; # A tibble: 3 x 11</span>
-<span class="co">#&gt;   unstd_beta std_err n_obs n_covs        action           inference</span>
-<span class="co">#&gt;        &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;         &lt;chr&gt;               &lt;chr&gt;</span>
-<span class="co">#&gt; 1        2.0     0.3    70      3 to_invalidate         reject_null</span>
-<span class="co">#&gt; 2       10.0     2.9   405      4 to_invalidate         reject_null</span>
-<span class="co">#&gt; 3        1.7     1.5   200      1    to_sustain fail_to_reject_null</span>
-<span class="co">#&gt; # ... with 5 more variables: percent_bias_to_change_inference &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   replace_null_cases &lt;dbl&gt;, beta_threshhold &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   omitted_variable_corr &lt;dbl&gt;, itcv &lt;dbl&gt;</span></code></pre></div>
+<p>We can use an existing dataset, such as the CSV file <a href="https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv">here</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">"https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv"</span>)
+<span class="kw">head</span>(d)
+<span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(d, t, df)</code></pre></div>
 </div>
 </div>
 <div id="other-information" class="section level1">
