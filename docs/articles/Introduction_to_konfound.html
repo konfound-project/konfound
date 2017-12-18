@@ -202,7 +202,9 @@ m1
 <span class="co">#&gt;        &lt;chr&gt;               &lt;chr&gt;                            &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 to_sustain fail_to_reject_null                           41.327</span>
 <span class="co">#&gt; # ... with 5 more variables: replace_null_cases &lt;dbl&gt;, unstd_beta &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   beta_threshhold &lt;dbl&gt;, omitted_variable_corr &lt;dbl&gt;, itcv &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt; #   beta_threshhold &lt;dbl&gt;, omitted_variable_corr &lt;dbl&gt;, itcv &lt;dbl&gt;</span>
+konfound_output<span class="op">$</span>thresh_plot</code></pre></div>
+<p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
 <p>We can also test all of the variables as predictors of interest:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m1, wt, <span class="dt">test_all =</span> <span class="ot">TRUE</span>)
 <span class="co">#&gt;   var_name         t df        action           inference</span>
