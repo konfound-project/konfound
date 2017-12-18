@@ -15,10 +15,6 @@ install.packages("devtools")
 devtools::install_github("jrosen48/konfound")
 ```
 
-``` r
-library(konfound)
-```
-
     #> Loading konfound
     #> Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).
     #> For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.

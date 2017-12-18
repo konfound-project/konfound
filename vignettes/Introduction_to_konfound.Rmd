@@ -117,6 +117,7 @@ summary(konfound_output)
 We can then type each of those, i.e.:
 ```{r}
 konfound_output$raw_output
+konfound_output$thresh_plot
 ```
 
 We can also test all of the variables as predictors of interest:
