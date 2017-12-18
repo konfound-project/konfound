@@ -22,7 +22,7 @@
 #' konfound(m2, age)
 #' }
 #' 
-#' #' if (requireNamespace("lmer")) {
+#' if (requireNamespace("lme4")) {
 #' m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
 #' konfound(m3, Days)
 #' }
@@ -59,12 +59,12 @@ konfound <- function(model_object,
                               tails = tails,
                               to_return = to_return)
         
-        invisible(output)
+        return(output)
         
     }
 
     if (inherits(model_object, "glm")) {
-        warning("For a non-linear model, impact threshold should not be used.")
+        message("Note that for a non-linear model, impact threshold should not be interpreted.")
         
         output <- konfound_glm(model_object = model_object,
                                tested_variable_string = tested_variable_string,
@@ -72,17 +72,23 @@ konfound <- function(model_object,
                                alpha = alpha,
                                tails = tails,
                                to_return = to_return)
+        
+        return(output)
     }
     
     if (inherits(model_object, "lmerMod")) {
         
+        stop("konfound does not presently work with output from models fit with lmer()")
+        
         output <- konfound_lmer(model_object = model_object,
-                                tested_variable_string = tested_variable_string,
-                                test_all = test_all,
-                                alpha = alpha,
-                                tails = tails,
-                                to_return = to_return,
-                                p_kr = p_kr)
+                               tested_variable_string = tested_variable_string,
+                               test_all = test_all,
+                               alpha = alpha,
+                               tails = tails,
+                               to_return = to_return,
+                               p_kr = FALSE)
+        
+        return(output)
         
     }
     

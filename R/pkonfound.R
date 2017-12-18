@@ -37,14 +37,16 @@ pkonfound <- function(unstd_beta,
                       df = NULL) {
     if ("table" %in% to_return) stop("a table can only be output when using konfound")
     
-    test_sensitivity(unstd_beta = unstd_beta,
-                     std_err = std_err,
-                     n_obs = n_obs, 
-                     n_covariates = n_covariates,
-                     alpha = alpha, 
-                     tails = tails,
-                     nu = nu,
-                     to_return = to_return)
+    out <- test_sensitivity(unstd_beta = unstd_beta,
+                            std_err = std_err,
+                            n_obs = n_obs, 
+                            n_covariates = n_covariates,
+                            alpha = alpha, 
+                            tails = tails,
+                            nu = nu,
+                            to_return = to_return)
+    
+    return(out)
     
     if (to_return == "print") {
         message("For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.")

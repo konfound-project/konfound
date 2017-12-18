@@ -43,6 +43,7 @@ pkonfound(2, .4, 100, 3)
 #> Correlation-based Approach:
 #> An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.201 and statistical significance.
 #> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference.
+#> NULL
 ```
 
 #### konfound() for models fit in R
@@ -85,6 +86,7 @@ Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as foll
 
 ``` r
 konfound(m1, wt)
+#> Note that this output is calculated based on the correlation-based approach used in mkonfound()
 #> Replacement of Cases Approach:
 #> To invalidate the inference, 66.664% of the estimate would have to be due to bias based on a threshold of -1.293 and statistical significance.
 #> To invalidate the inference, 21 observations would have to be replaced with cases for which the effect is 0.
@@ -92,47 +94,17 @@ konfound(m1, wt)
 #> Correlation-based Approach:
 #> An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of -0.36 and statistical significance.
 #> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference.
+#> NULL
 ```
 
 #### mkonfound for meta-analyses including sensitivity analysis
 
-We can use an existing dataset, such as the CSV file [here]().
+We can use an existing dataset, such as the CSV file [here](https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv).
 
 ``` r
-library(dplyr, warn.conflicts = FALSE)
-
-d <- read.csv("")
-
-d <- select(d, unstd_beta = ,
-            std_error = ,
-            n_obs = ,
-            n_covs = )
-
-mkonfound(d)
-```
-
-We can also use data in `R`
-
-``` r
-library(dplyr, warn.conflicts = FALSE)
-
-d <- dplyr::tribble(
-    ~unstd_beta, ~std_err, ~n_obs, ~n_covs,
-    2,           .3,       70,     3,
-    10,          2.9,      405,    4,
-    1.7,         1.5,      200,    1
-)
-
-mkonfound(d)
-#> # A tibble: 3 x 11
-#>   unstd_beta std_err n_obs n_covs        action           inference
-#>        <dbl>   <dbl> <dbl>  <dbl>         <chr>               <chr>
-#> 1        2.0     0.3    70      3 to_invalidate         reject_null
-#> 2       10.0     2.9   405      4 to_invalidate         reject_null
-#> 3        1.7     1.5   200      1    to_sustain fail_to_reject_null
-#> # ... with 5 more variables: percent_bias_to_change_inference <dbl>,
-#> #   replace_null_cases <dbl>, beta_threshhold <dbl>,
-#> #   omitted_variable_corr <dbl>, itcv <dbl>
+d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
+head(d)
+mkonfound(d, t, df)
 ```
 
 Other information

@@ -13,10 +13,6 @@ mkonfound(d, t, df, alpha = 0.05, tails = 2, return_plot = FALSE)
 
 \item{df}{degrees of freedom or vector of degrees of freedom associated with the t-statistics in the t argument}
 
-\item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
-
-\item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
-
 \item{return_plot}{whether to return a plot of the percent bias; defaults to FALSE}
 
 \item{component_correlations}{whether to return the component correlations as part of the correlation-based approach}
@@ -28,14 +24,7 @@ prints the bias and the number of cases that would have to be replaced with case
 For fitted models, this command carries out sensitivity analysis for a number of models, when their parameters stored in a data.frame.
 }
 \examples{
-df <- data.frame(unstd_beta = c(2, 10, 1.7, .4, 3.2, 1.0, 2.3, 4.1, .9),
-                 std_error = c(.3, 2.9, 1.5, 2, .1, .04, .1, 3, .5),
-                 n_obs = c(70, 405, 200, 100, 103, 20, 50, 721, 320),
-                 n_covs = c(3, 4, 1, 3, 10, 4, 1, 1, 0))
-mkonfound(df)
-mkonfound(df, return_plot = TRUE)
-
 d <- read.csv("https://msu.edu/~kenfrank/example\%20dataset\%20for\%20mkonfound.csv")
-d
+str(d)
 mkonfound(d, t, df)
 }

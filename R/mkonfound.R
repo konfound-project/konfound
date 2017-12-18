@@ -1,8 +1,10 @@
 core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
+    
     critical_t <- stats::qt(1 - (alpha / tails), df)
     critical_r <- critical_t / sqrt((critical_t ^ 2) + df)
     
-    obs_r <- t / sqrt(df + (t ^ 2))
+    # For replacement of cases approach
+    obs_r <- abs(t / sqrt(df + (t ^ 2)))
     
     if (abs(obs_r) > abs(critical_r)) {
         action <- "to_invalidate"
@@ -18,14 +20,15 @@ core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
         pct_bias <- NA
     }
     
+    # For correlation based approach (for calculating ITCV)
+    
     if ((abs(obs_r) > abs(critical_r)) & ((obs_r * critical_r) > 0)) {
         mp <- -1
     } else {
         mp <- 1
     }
-    # calculating impact of the confounding variable
+    
     itcv <- (obs_r - critical_r) / (1 + mp * abs(critical_r))
-    # finding correlation of confound to invalidate / sustain inference
     r_con <- round(sqrt(abs(itcv)), 3)
     
     out <- dplyr::data_frame(t, df, action, inference, pct_bias, itcv, r_con)
@@ -35,6 +38,7 @@ core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
     out$itcv <- round(out$itcv, 3)
     out$action <- as.character(out$action)
     out$inference <- as.character(out$inference)
+    
     return(out)
 }
 
@@ -50,15 +54,8 @@ core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
 #' @import dplyr
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference for each of the cases in the data.frame
 #' @examples 
-#' df <- data.frame(unstd_beta = c(2, 10, 1.7, .4, 3.2, 1.0, 2.3, 4.1, .9),
-#'                  std_error = c(.3, 2.9, 1.5, 2, .1, .04, .1, 3, .5),
-#'                  n_obs = c(70, 405, 200, 100, 103, 20, 50, 721, 320),
-#'                  n_covs = c(3, 4, 1, 3, 10, 4, 1, 1, 0))
-#' mkonfound(df)
-#' mkonfound(df, return_plot = TRUE)
-#' 
 #' d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
-#' d
+#' str(d)
 #' mkonfound(d, t, df)
 #' @export
 #'
@@ -70,6 +67,10 @@ mkonfound <- function(d, t, df, alpha = .05, tails = 2, return_plot = FALSE) {
     
     t_vec = pull(select(d, !!t_enquo))
     df_vec = pull(select(d, !!df_enquo))
+    
+    if (length(t_vec) <= 1) {
+        stop("To carry out sensitivity analysis for a single study, use pkonfound()")
+    }
     
     results_df <- purrr::map2_dfr(.x = t_vec, .y = df_vec, .f = core_sensitivity_mkonfound)
     

@@ -23,7 +23,7 @@ pkonfound(unstd_beta, std_err, n_obs, n_covariates = 1, alpha = 0.05,
 
 \item{nu}{what hypothesis to be tested; defaults to testing whether unstd_beta is significantly different from 0}
 
-\item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output") or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
+\item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
 
 \item{component_correlations}{whether to return the component correlations as part of the correlation-based approach}
 }
