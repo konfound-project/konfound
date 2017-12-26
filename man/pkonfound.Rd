@@ -5,7 +5,7 @@
 \title{Perform sensitivity analysis for published studies}
 \usage{
 pkonfound(est_eff, std_err, n_obs, n_covariates = 1, alpha = 0.05,
-  tails = 2, nu = 0, to_return = "print", t = NULL, df = NULL)
+  tails = 2, nu = 0, to_return = "print")
 }
 \arguments{
 \item{est_eff}{the estimated effect (such as an unstandardized beta coefficient or a group mean difference)}
@@ -38,7 +38,8 @@ pkonfound(.5, 3, 200, 3)
 pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 pkonfound(2, .4, 100, 3, to_return = "corr_plot")
 
-pkonfound_output <- pkonfound(2, .4, 200, 3, to_return = c("raw_output", "thresh_plot", "corr_plot"))
+pkonfound_output <- pkonfound(2, .4, 200, 3, 
+                              to_return = c("raw_output", "thresh_plot", "corr_plot"))
 summary(pkonfound_output)
 pkonfound_output$raw_output
 pkonfound_output$thresh_plot

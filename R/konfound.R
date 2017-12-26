@@ -1,7 +1,7 @@
 #' Perform sensitivity analysis on fitted models
 #' @description For fitted models, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient. Currently works for: models created with lm() (linear models).
 #' @param model_object output from a model (currently works for: lm)
-#' @param tested_variable_string Variable associated with the unstandardized beta coefficient to be tested
+#' @param tested_variable Variable associated with the unstandardized beta coefficient to be tested
 #' @inheritParams pkonfound
 #' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
@@ -25,7 +25,8 @@
 #' 
 #' # using lme4 for mixed effects (or multi-level) models
 #' if (requireNamespace("lme4")) {
-#' m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+#' library(lme4)
+#' m3 <- fm1 <- lme4::lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
 #' konfound(m3, Days)
 #' }
 #'
@@ -36,9 +37,7 @@ konfound <- function(model_object,
                      alpha = .05, 
                      tails = 2,
                      to_return = "print",
-                     test_all = FALSE, 
-                     component_correlations = F,
-                     p_kr = FALSE) {
+                     test_all = FALSE) {
     
     # Stop messages
     if (!(class(model_object)[1] %in% c("lm", "glm", "lmerMod"))) {

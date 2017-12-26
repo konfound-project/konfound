@@ -4,7 +4,7 @@ get_kr_df <- function(model_object) {
     L <- diag(rep(1, length(lme4::fixef(model_object))))
     L <- as.data.frame(L)
     out <- purrr::map_dbl(L, pbkrtest::get_Lb_ddf, object = model_object)
-    names(out) <- names(fixef(model_object))
+    names(out) <- names(lme4::fixef(model_object))
     out
 }
 
@@ -36,7 +36,7 @@ konfound_lmer <- function(model_object, tested_variable_string, test_all, alpha,
                                 tested_variable = tested_variable_string))
     } else {
         d <- data.frame(t = est_eff / std_err, df = df_kr)
-        o <- mkonfound(d, t, df)
+        o <- mkonfound(d, .data$t, .data$df)
         term_names <- dplyr::select(tidy_output, var_name = .data$term) # remove the first row for intercept
         term_names <- dplyr::filter(term_names, .data$var_name != "(Intercept)")
         return(dplyr::bind_cols(term_names, o))

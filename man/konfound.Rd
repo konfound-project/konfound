@@ -5,11 +5,12 @@
 \title{Perform sensitivity analysis on fitted models}
 \usage{
 konfound(model_object, tested_variable, alpha = 0.05, tails = 2,
-  to_return = "print", test_all = FALSE, component_correlations = F,
-  p_kr = FALSE)
+  to_return = "print", test_all = FALSE)
 }
 \arguments{
 \item{model_object}{output from a model (currently works for: lm)}
+
+\item{tested_variable}{Variable associated with the unstandardized beta coefficient to be tested}
 
 \item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
@@ -18,8 +19,6 @@ konfound(model_object, tested_variable, alpha = 0.05, tails = 2,
 \item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
 
 \item{test_all}{whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)}
-
-\item{tested_variable_string}{Variable associated with the unstandardized beta coefficient to be tested}
 }
 \value{
 prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
@@ -46,7 +45,8 @@ konfound(m2, age)
 
 # using lme4 for mixed effects (or multi-level) models
 if (requireNamespace("lme4")) {
-m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+library(lme4)
+m3 <- fm1 <- lme4::lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
 konfound(m3, Days)
 }
 

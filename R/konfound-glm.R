@@ -35,7 +35,7 @@ konfound_glm <- function(model_object, tested_variable_string, test_all, alpha, 
 
         stop("Multiple variables cannot presently be tested for models fit using glm(); this will be added in the future.")
         d <- data.frame(t = est_eff / std_err, df = (n_obs - n_covariates - 1))
-        o <- mkonfound(d, t, df)
+        o <- mkonfound(d, .data$t, .data$df)
         term_names <- dplyr::select(tidy_output, var_name = .data$term) # remove the first row for intercept
         term_names <- dplyr::filter(term_names, .data$var_name != "(Intercept)")
         return(dplyr::bind_cols(term_names, o))

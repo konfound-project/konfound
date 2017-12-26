@@ -13,9 +13,11 @@ mkonfound(d, t, df, alpha = 0.05, tails = 2, return_plot = FALSE)
 
 \item{df}{degrees of freedom or vector of degrees of freedom associated with the t-statistics in the t argument}
 
-\item{return_plot}{whether to return a plot of the percent bias; defaults to FALSE}
+\item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
-\item{component_correlations}{whether to return the component correlations as part of the correlation-based approach}
+\item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
+
+\item{return_plot}{whether to return a plot of the percent bias; defaults to FALSE}
 }
 \value{
 prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference for each of the cases in the data.frame

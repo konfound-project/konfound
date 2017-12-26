@@ -26,5 +26,6 @@ Suggests: knitr,
     rmarkdown,
     forcats,
     devtools,
-    testthat
+    testthat,
+    lme4
 VignetteBuilder: knitr

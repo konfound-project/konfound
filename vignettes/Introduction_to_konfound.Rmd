@@ -23,11 +23,7 @@ In social science (and educational) research, we often wish to understand how ro
 * Quantifying the bias necessary to alter an inference from the framework of Rubin's (1974) causal model
 * The robustness of causal inference in terms of the impact threshold of a confounding variable
 
-# Examples
-
-`konfound` is an `R` package to easily carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin's (1974) causal model.
-
-### Installation
+### Installation konfound
 
 Presently, `konfound` is available only on GitHub. You can install `konfound` from GitHub with:
 
@@ -36,7 +32,7 @@ install.packages("devtools")
 devtools::install_github("jrosen48/konfound")
 ```
 
-### Loading konfound
+You can then load konfound with the `library()` function:
 
 ```{r, eval = F}
 library(konfound)
@@ -46,11 +42,11 @@ library(konfound)
 devtools::load_all(".")
 ```
 
-### Use of pkonfound() for values from an already-conducted analysis
+# Use of pkonfound() for values from an already-conducted analysis
 
-`pkonfound()` is used when we have values from an already-conducted analysis, such as one in an already-published study or from an analysis carried out using other software.
+`pkonfound()` is used when we have values from an already-conducted analysis (like a regression analysis), such as one in an already-published study or from an analysis carried out using other software. 
 
-For example, in the use below, we simply enter the values for the estimated effect (an unstandardardized beta coefficient) (`2`), its standard error (`.4`), the sample size (`100`), and the number of covariates (`3`):
+In the case of a regression analysis, values from the analysis would simply be used as the inputs to the `pkonfound()` function. For example, in the use below, we simply enter the values for the estimated effect (an unstandardardized beta coefficient) (`2`), its standard error (`.4`), the sample size (`100`), and the number of covariates (`3`):
 
 ```{r}
 pkonfound(2, .4, 100, 3)
@@ -104,7 +100,7 @@ Finally, you can return the raw output, for use in other analyses.
 pkonfound(.4, 2, 100, 3, to_return = "raw_output")
 ```
 
-### Use of konfound()
+# Use of konfound() for models fit in R
 
 Where `pkonfound()` can be used with values from already-conducted analyses, `konfound()` can be used with models (`lm()`, `glm()`, and `lme4::lmer()`) fit in R.
 
@@ -177,11 +173,11 @@ if (requireNamespace("lme4")) {
 }
 ```
 
-### Use of mkonfound()
+# Use of mkonfound() for meta-analyses that include sensitivity analysis
 
 We can also use `konfound` to carry out sensitivity analysis as part of meta-analyses. For example, here, `d` represents output from a number (30 in this case) of past studies, read in a CSV file from a website:
 
-```{r, warning = F}
+```{r}
 d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
 head(d)
 mkonfound(d, t, df)

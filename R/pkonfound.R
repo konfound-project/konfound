@@ -17,7 +17,8 @@
 #' pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 #' pkonfound(2, .4, 100, 3, to_return = "corr_plot")
 #' 
-#' pkonfound_output <- pkonfound(2, .4, 200, 3, to_return = c("raw_output", "thresh_plot", "corr_plot"))
+#' pkonfound_output <- pkonfound(2, .4, 200, 3, 
+#'                               to_return = c("raw_output", "thresh_plot", "corr_plot"))
 #' summary(pkonfound_output)
 #' pkonfound_output$raw_output
 #' pkonfound_output$thresh_plot
@@ -31,9 +32,7 @@ pkonfound <- function(est_eff,
                       alpha = .05, 
                       tails = 2, 
                       nu = 0,
-                      to_return = "print",
-                      t = NULL,
-                      df = NULL) {
+                      to_return = "print") {
     if ("table" %in% to_return) stop("a table can only be output when using konfound")
     
     out <- test_sensitivity(est_eff = est_eff,

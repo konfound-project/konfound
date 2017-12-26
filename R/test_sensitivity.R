@@ -6,16 +6,16 @@ create_konfound_class <- function(x) {
 
 #' Concise summary of konfound output
 #' @details Prints a concise summary of konfound output with multiple types of data specified in the to_return argument
-#' @param konfound_output A `konfound` object
+#' @param object A `konfound` object
 #' @param ... Additional arguments
 #' @export
 
-summary.konfound <- function(konfound_output){
-    cat("Created", length(konfound_output), "forms of output. To access type: \n")
+summary.konfound <- function(object, ...){
+    cat("Created", length(object), "forms of output. To access type: \n")
     cat("\n")
     
-    for (name in names(konfound_output)) {
-        cat(rlang::expr_text(substitute(konfound_output)), "$", name, "\n", sep = "")
+    for (name in names(object)) {
+        cat(rlang::expr_text(substitute(object)), "$", name, "\n", sep = "")
     }
 }
 
