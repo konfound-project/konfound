@@ -87,7 +87,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>df</th>
-      <td><p>a data.frame with columns for the 'unstd_beta', 'std_err', 'n_obs', and 'n_covariates' arguments (see ?pkonfound for more information on these)</p></td>
+      <td><p>a data.frame with columns for the 'est_eff', 'std_err', 'n_obs', and 'n_covariates' arguments (see ?pkonfound for more information on these)</p></td>
     </tr>
     <tr>
       <th>alpha</th>
@@ -113,7 +113,7 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>unstd_beta</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>10</span>, <span class='fl'>1.7</span>, <span class='fl'>.4</span>, <span class='fl'>3.2</span>, <span class='fl'>1.0</span>, <span class='fl'>2.3</span>, <span class='fl'>4.1</span>, <span class='fl'>.9</span>),
+    <pre class="examples"><div class='input'><span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>est_eff</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>2</span>, <span class='fl'>10</span>, <span class='fl'>1.7</span>, <span class='fl'>.4</span>, <span class='fl'>3.2</span>, <span class='fl'>1.0</span>, <span class='fl'>2.3</span>, <span class='fl'>4.1</span>, <span class='fl'>.9</span>),
                  <span class='kw'>std_error</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.3</span>, <span class='fl'>2.9</span>, <span class='fl'>1.5</span>, <span class='fl'>2</span>, <span class='fl'>.1</span>, <span class='fl'>.04</span>, <span class='fl'>.1</span>, <span class='fl'>3</span>, <span class='fl'>.5</span>),
                  <span class='kw'>n_obs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>70</span>, <span class='fl'>405</span>, <span class='fl'>200</span>, <span class='fl'>100</span>, <span class='fl'>103</span>, <span class='fl'>20</span>, <span class='fl'>50</span>, <span class='fl'>721</span>, <span class='fl'>320</span>),
                  <span class='kw'>n_covs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>3</span>, <span class='fl'>4</span>, <span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>10</span>, <span class='fl'>4</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>))

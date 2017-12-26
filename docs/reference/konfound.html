@@ -91,12 +91,20 @@
       <td><p>output from a model (currently works for: lm)</p></td>
     </tr>
     <tr>
-      <th>test_all</th>
-      <td><p>whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)</p></td>
+      <th>alpha</th>
+      <td><p>probability of rejecting the null hypothesis (defaults to 0.05)</p></td>
     </tr>
     <tr>
-      <th>component_correlations</th>
-      <td><p>whether to return the component correlations as part of the correlation-based approach</p></td>
+      <th>tails</th>
+      <td><p>integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)</p></td>
+    </tr>
+    <tr>
+      <th>to_return</th>
+      <td><p>whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return</p></td>
+    </tr>
+    <tr>
+      <th>test_all</th>
+      <td><p>whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)</p></td>
     </tr>
     <tr>
       <th>tested_variable_string</th>
@@ -110,7 +118,8 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'>lm</span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+    <pre class="examples"><div class='input'><span class='co'># using lm() for linear models</span>
+<span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'>lm</span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
 <span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>)</div><div class='output co'>#&gt; <span class='message'>Note that this output is calculated based on the correlation-based approach used in mkonfound()</span></div><div class='output co'>#&gt; Replacement of Cases Approach:
 #&gt; To invalidate the inference, 66.664% of the estimate would have to be due to bias based on a threshold of -1.293 and statistical significance.
 #&gt; To invalidate the inference, 21 observations would have to be replaced with cases for which the effect is 0.
@@ -126,6 +135,7 @@
 #&gt; 1 (Intercept)   37.227     1.599    23.285   0.000    NA     NA
 #&gt; 2          wt   -3.878     0.633    -6.129   0.000 0.243     NA
 #&gt; 3          hp   -0.032     0.009    -3.519   0.001    NA  0.511</div><div class='input'>
+<span class='co'># using glm() for non-linear models</span>
 <span class='kw'>if</span> (<span class='fu'>requireNamespace</span>(<span class='st'>"forcats"</span>)) {
 <span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='kw'>forcats</span><span class='kw'>::</span><span class='no'>gss_cat</span>
 
@@ -133,11 +143,12 @@
 
 <span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'>glm</span>(<span class='no'>married</span> ~ <span class='no'>age</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>d</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'>binomial</span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>))
 <span class='fu'>konfound</span>(<span class='no'>m2</span>, <span class='no'>age</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Note that for a non-linear model, impact threshold should not be interpreted.</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(predvars, data, env): object 'age' not found</span></div><div class='input'>
+}</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: forcats</span></div><div class='output co'>#&gt; <span class='message'>Note that for a non-linear model, impact threshold should not be interpreted.</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(model[["call"]][["data"]], env): object 'd' not found</span></div><div class='input'>
+<span class='co'># using lme4 for mixed effects (or multi-level) models</span>
 <span class='kw'>if</span> (<span class='fu'>requireNamespace</span>(<span class='st'>"lme4"</span>)) {
 <span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='no'>fm1</span> <span class='kw'>&lt;-</span> <span class='fu'>lmer</span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='no'>sleepstudy</span>)
 <span class='fu'>konfound</span>(<span class='no'>m3</span>, <span class='no'>Days</span>)
-}</div><div class='output co'>#&gt; <span class='error'>Error in konfound(m3, Days): konfound does not presently work with output from models fit with lmer()</span></div><div class='input'>
+}</div><div class='output co'>#&gt; <span class='error'>Error in lmer(Reaction ~ Days + (1 | Subject), sleepstudy): could not find function "lmer"</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

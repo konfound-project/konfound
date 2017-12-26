@@ -50,21 +50,20 @@
       <h1>Introduction to konfound</h1>
                         <h4 class="author">Joshua Rosenberg, Ran Xu, and Ken Frank</h4>
             
-            <h4 class="date">2017-12-18</h4>
+            <h4 class="date">2017-12-26</h4>
           </div>
 
     
     
 <div class="contents">
-<div id="abstract" class="section level1">
+<div id="background" class="section level1">
 <h1 class="hasAnchor">
-<a href="#abstract" class="anchor"></a>Abstract</h1>
-<p><em>This abstract is adapted from Xu, Frank, and Maroulis’ STATA tutorial “What would it take to Change your Inference? Quantifying the Discourse about Causal Inferences in the Social Sciences.”</em></p>
-<p>Statistical methods that quantify the discourse about causal inferences in terms of possible sources of biases, or “sensitivity analysis,” are becoming more important to a variety of social science fields, including research in education, public policy, and political science. A series of recent works by Frank and colleagues on sensitivity analysis points to limitations in earlier methods and aims to extend beyond them. We implement these developments, which previously have been implemented in <code>Stata</code>, in <code>R</code> through the <code>konfound</code> package. In particular, we provide functions for quantifying the bias necessary to alter an inference, from the framework of Rubin’s (1974) causal model, as well as the robustness of causal inference in terms of the impact threshold of a confounding variable.</p>
-</div>
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<a href="#background" class="anchor"></a>Background</h1>
+<p>In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias. The goal of <code>konfound</code> is to carry out sensitivity analysis to help analysts to <em>quantify how robust inferences are to potential sources of bias</em>. This package provides functions based on developments in sensitivity analysis by Frank and colleagues, which previously have been implemented in <code>Stata</code> and through an Excel spreadsheet, in <code>R</code> through the <code>konfound</code> package. In particular, we provide functions for both <em>values from analyses carried out outside of R as well as from models (<code>lm()</code>, <code>glm()</code>, and <code>lme4::lmer()</code> fit in R)</em> for:</p>
+<ul>
+<li>Quantifying the bias necessary to alter an inference from the framework of Rubin’s (1974) causal model</li>
+<li>The robustness of causal inference in terms of the impact threshold of a confounding variable</li>
+</ul>
 </div>
 <div id="examples" class="section level1">
 <h1 class="hasAnchor">
@@ -73,7 +72,7 @@
 <div id="installation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h3>
-<p>You can install konfound from GitHub (it will be available on CRAN and therefore via <code>install.packages("konfound")</code> soon) with:</p>
+<p>Presently, <code>konfound</code> is available only on GitHub. You can install <code>konfound</code> from GitHub with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"devtools"</span>)
 devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"jrosen48/konfound"</span>)</code></pre></div>
 </div>
@@ -85,20 +84,22 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 #&gt; Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).
 #&gt; For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.</code></pre>
 </div>
-<div id="use-of-pkonfound" class="section level3">
+<div id="use-of-pkonfound-for-values-from-an-already-conducted-analysis" class="section level3">
 <h3 class="hasAnchor">
-<a href="#use-of-pkonfound" class="anchor"></a>Use of pkonfound()</h3>
+<a href="#use-of-pkonfound-for-values-from-an-already-conducted-analysis" class="anchor"></a>Use of pkonfound() for values from an already-conducted analysis</h3>
 <p><code><a href="../reference/pkonfound.html">pkonfound()</a></code> is used when we have values from an already-conducted analysis, such as one in an already-published study or from an analysis carried out using other software.</p>
-<p>For example, in the use below, we simply enter the values for the unstandardardized beta coefficient (<code>2</code>), its standard error (<code>.4</code>), the sample size (<code>100</code>), and the number of covariates (<code>3</code>)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>)
+<p>For example, in the use below, we simply enter the values for the estimated effect (an unstandardardized beta coefficient) (<code>2</code>), its standard error (<code>.4</code>), the sample size (<code>100</code>), and the number of covariates (<code>3</code>):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>)
 <span class="co">#&gt; Replacement of Cases Approach:</span>
-<span class="co">#&gt; To sustain the inference, 89.924% of the estimate would have to be due to bias based on a threshold of 3.97 and statistical significance.</span>
-<span class="co">#&gt; To sustain the inference, 90 of the cases with 0 effect would have to be replaced with cases at the threshold of inference.</span>
+<span class="co">#&gt; To invalidate the inference, 60.3% of the estimate would have to be due to bias based on a threshold of 0.794 and statistical significance.</span>
+<span class="co">#&gt; To invalidate the inference, 60 observations would have to be replaced with cases for which the effect is 0.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Correlation-based Approach:</span>
-<span class="co">#&gt; An omitted variable would have to be correlated at 0.387 with the outcome and at 0.387 with the predictor of interest (conditioning on observed covariates) to sustain an inference based on a threshold of 3.97 and statistical significance.</span>
-<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.387 X 0.387 = 0.15 to sustain an inference.</span>
-<span class="co">#&gt; NULL</span></code></pre></div>
+<span class="co">#&gt; An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.201 and statistical significance.</span>
+<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference.</span>
+<span class="co">#&gt; For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span>
+<span class="co">#&gt; For models fit in R, consider use of konfound().</span></code></pre></div>
+<p>For this set of values, around 60% would need to be false due to a source of bias for the inference to be invalidated (based on statistical significance and a p-value (or alpha) of .05), possible a very robust effect. An omitted, confounding variable (sometimes referred to as a covariate) would need to have an impact (defined as the product of the confounding variable’s correlation with both the predictor of interest and the outcome) of 0.323, presenting a different interpretation of how robust this (hypothetical) effect is to a variable which is important but not included in the analysis.</p>
 <p>Here is another example, but one in which the unstandardized beta coefficient is smaller than its standard error:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>)
 <span class="co">#&gt; Replacement of Cases Approach:</span>
@@ -108,21 +109,27 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 <span class="co">#&gt; Correlation-based Approach:</span>
 <span class="co">#&gt; An omitted variable would have to be correlated at 0.387 with the outcome and at 0.387 with the predictor of interest (conditioning on observed covariates) to sustain an inference based on a threshold of 3.97 and statistical significance.</span>
 <span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.387 X 0.387 = 0.15 to sustain an inference.</span>
-<span class="co">#&gt; NULL</span></code></pre></div>
-<p>We can also choose from a number of forms of output to return, such as a plot of the output from the correlation-based approach:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"corr_plot"</span>)</code></pre></div>
-<p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
-<p>And the threshold plot associated with the replacement of cases approach:</p>
+<span class="co">#&gt; For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span>
+<span class="co">#&gt; For models fit in R, consider use of konfound().</span></code></pre></div>
+<p>Note that this use of <code><a href="../reference/pkonfound.html">pkonfound()</a></code> is equivalent to naming the arguments, i.e. for a different set of values:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="dt">est_eff =</span> <span class="op">-</span><span class="fl">2.2</span>,
+          <span class="dt">std_err =</span> .<span class="dv">65</span>, 
+          <span class="dt">n_obs =</span> <span class="dv">200</span>,
+          <span class="dt">n_covariates =</span> <span class="dv">3</span>)
+<span class="co">#&gt; Replacement of Cases Approach:</span>
+<span class="co">#&gt; To invalidate the inference, 41.732% of the estimate would have to be due to bias based on a threshold of -1.282 and statistical significance.</span>
+<span class="co">#&gt; To invalidate the inference, 83 observations would have to be replaced with cases for which the effect is 0.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Correlation-based Approach:</span>
+<span class="co">#&gt; An omitted variable would have to be correlated at 0.334 with the outcome and at 0.334 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of -0.14 and statistical significance.</span>
+<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.334 X 0.334 = 0.112 to invalidate an inference.</span>
+<span class="co">#&gt; For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span>
+<span class="co">#&gt; For models fit in R, consider use of konfound().</span></code></pre></div>
+<p>We notice that the output includes a message that says we can view other forms of output by changing the <code>to_return</code> argument. Here are the two plots - for the bias necessary to alter an inference (<code>thresh_plot</code>) and for the robustness of an inference in terms of the impact of a confounding variable (<code>corr_plot</code>) that can be returned:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"thresh_plot"</span>)</code></pre></div>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
-<p>Finally, you can return the raw output, for use in other analyses.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"raw_output"</span>)
-<span class="co">#&gt; # A tibble: 1 x 8</span>
-<span class="co">#&gt;       action           inference percent_bias_to_change_inference</span>
-<span class="co">#&gt;        &lt;chr&gt;               &lt;chr&gt;                            &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 to_sustain fail_to_reject_null                           89.924</span>
-<span class="co">#&gt; # ... with 5 more variables: replace_null_cases &lt;dbl&gt;, unstd_beta &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   beta_threshhold &lt;dbl&gt;, omitted_variable_corr &lt;dbl&gt;, itcv &lt;dbl&gt;</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"corr_plot"</span>)</code></pre></div>
+<p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
 <p>You can also specify multiple forms of output at once.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_output &lt;-<span class="st"> </span><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">200</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="kw">c</span>(<span class="st">"raw_output"</span>, <span class="st">"thresh_plot"</span>, <span class="st">"corr_plot"</span>))
 <span class="co">#&gt; Replacement of Cases Approach:</span>
@@ -151,13 +158,20 @@ model_output<span class="op">$</span>thresh_plot</code></pre></div>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model_output<span class="op">$</span>corr_plot</code></pre></div>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-9-2.png" width="672"></p>
+<p>Finally, you can return the raw output, for use in other analyses.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"raw_output"</span>)
+<span class="co">#&gt; # A tibble: 1 x 8</span>
+<span class="co">#&gt;       action           inference percent_bias_to_change_inference</span>
+<span class="co">#&gt;        &lt;chr&gt;               &lt;chr&gt;                            &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 to_sustain fail_to_reject_null                           89.924</span>
+<span class="co">#&gt; # ... with 5 more variables: replace_null_cases &lt;dbl&gt;, unstd_beta &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   beta_threshhold &lt;dbl&gt;, omitted_variable_corr &lt;dbl&gt;, itcv &lt;dbl&gt;</span></code></pre></div>
 </div>
 <div id="use-of-konfound" class="section level3">
 <h3 class="hasAnchor">
 <a href="#use-of-konfound" class="anchor"></a>Use of konfound()</h3>
-<div id="for-linear-models-fit-with-lm" class="section level5">
-<h5 class="hasAnchor">
-<a href="#for-linear-models-fit-with-lm" class="anchor"></a>For linear models fit with lm()</h5>
+<p>Where <code><a href="../reference/pkonfound.html">pkonfound()</a></code> can be used with values from already-conducted analyses, <code><a href="../reference/konfound.html">konfound()</a></code> can be used with models (<code>lm()</code>, <code>glm()</code>, and <code>lme4::lmer()</code>) fit in R.</p>
+<p><strong>For linear models fit with lm()</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>hp <span class="op">+</span><span class="st"> </span>qsec, <span class="dt">data =</span> mtcars)
 m1
 <span class="co">#&gt; </span>
@@ -178,7 +192,7 @@ m1
 <span class="co">#&gt; An omitted variable would have to be correlated at 0.322 with the outcome and at 0.322 with the predictor of interest (conditioning on observed covariates) to sustain an inference based on a threshold of -0.031 and statistical significance.</span>
 <span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.322 X 0.322 = 0.104 to sustain an inference.</span>
 <span class="co">#&gt; NULL</span></code></pre></div>
-<p>We can also output multiple forms of output at once:</p>
+<p>Like with <code><a href="../reference/pkonfound.html">pkonfound()</a></code>, we can also output multiple forms of output at once with <code><a href="../reference/konfound.html">konfound()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">konfound_output &lt;-<span class="st"> </span><span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m1, hp, <span class="dt">to_return =</span> <span class="kw">c</span>(<span class="st">"raw_output"</span>, <span class="st">"thresh_plot"</span>, <span class="st">"corr_plot"</span>))
 <span class="co">#&gt; Note that this output is calculated based on the correlation-based approach used in mkonfound()</span>
 <span class="co">#&gt; Replacement of Cases Approach:</span>
@@ -195,7 +209,7 @@ m1
 <span class="co">#&gt; konfound_output$raw_output</span>
 <span class="co">#&gt; konfound_output$thresh_plot</span>
 <span class="co">#&gt; konfound_output$corr_plot</span></code></pre></div>
-<p>We can then type each of those, i.e.:</p>
+<p>Again, we can type each of those, i.e.:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">konfound_output<span class="op">$</span>raw_output
 <span class="co">#&gt; # A tibble: 1 x 8</span>
 <span class="co">#&gt;       action           inference percent_bias_to_change_inference</span>
@@ -204,7 +218,7 @@ m1
 <span class="co">#&gt; # ... with 5 more variables: replace_null_cases &lt;dbl&gt;, unstd_beta &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   beta_threshhold &lt;dbl&gt;, omitted_variable_corr &lt;dbl&gt;, itcv &lt;dbl&gt;</span>
 konfound_output<span class="op">$</span>thresh_plot</code></pre></div>
-<p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
 <p>We can also test all of the variables as predictors of interest:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m1, wt, <span class="dt">test_all =</span> <span class="ot">TRUE</span>)
 <span class="co">#&gt;   var_name         t df        action           inference</span>
@@ -215,7 +229,7 @@ konfound_output<span class="op">$</span>thresh_plot</code></pre></div>
 <span class="co">#&gt; 1                       51.508  0.585 0.765</span>
 <span class="co">#&gt; 2                       38.740 -0.102 0.319</span>
 <span class="co">#&gt; 3                       40.494 -0.106 0.326</span></code></pre></div>
-<p>You can also return a table with some key output from the correlation-based approach.</p>
+<p>Whereas this cannot be carried out with <code><a href="../reference/pkonfound.html">pkonfound()</a></code>, with <code><a href="../reference/konfound.html">konfound()</a></code> you can also return a table with some key output from the correlation-based approach.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m1, wt, <span class="dt">to_return =</span> <span class="st">"table"</span>)
 <span class="co">#&gt; Note that this output is calculated based on the correlation-based approach used in mkonfound()</span>
 <span class="co">#&gt; Dependent variable is mpg</span>
@@ -224,12 +238,8 @@ konfound_output<span class="op">$</span>thresh_plot</code></pre></div>
 <span class="co">#&gt; 2          wt   -4.359     0.753    -5.791   0.000 0.243     NA</span>
 <span class="co">#&gt; 3          hp   -0.018     0.015    -1.190   0.244    NA  0.511</span>
 <span class="co">#&gt; 4        qsec    0.511     0.439     1.163   0.255    NA  0.073</span></code></pre></div>
-<p>If the impact threshhold is greater than the impacts of the <code>Z</code>s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference.</p>
-<p>Note that in fields in which there is a lot known about covariates given the outcome of interest, then the omitted ones are likely less important than those that are known an included (i.e., for educational achievement, we have a good sense of the factors that matter).</p>
-</div>
-<div id="for-generalized-linear-models-fit-with-glm" class="section level5">
-<h5 class="hasAnchor">
-<a href="#for-generalized-linear-models-fit-with-glm" class="anchor"></a>For generalized linear models fit with glm()</h5>
+<p>If the impact threshhold is greater than the impacts of the <code>Z</code>s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference. Note that in fields in which there is a lot known about covariates given the outcome of interest, then the omitted ones are likely less important than those that are known an included (i.e., we have a good sense of the factors that matter in terms of educational achievement).</p>
+<p><strong>For generalized linear models fit with glm()</strong></p>
 <p>Effects for these models are interpreted on the basis of average partial (or marginal) effects (calculated using the <code>margins</code> package).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># if forcats is not installed, this install it first using install.packages("forcats") for this to run</span>
 <span class="cf">if</span> (<span class="kw">requireNamespace</span>(<span class="st">"forcats"</span>)) {
@@ -248,14 +258,39 @@ konfound_output<span class="op">$</span>thresh_plot</code></pre></div>
 <span class="co">#&gt; An omitted variable would have to be correlated at 5.535 with the outcome and at 5.535 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 1.003 and statistical significance.</span>
 <span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 5.535 X 5.535 = 30.636 to invalidate an inference.</span>
 <span class="co">#&gt; NULL</span></code></pre></div>
-<p>As with models fit with <code>lm()</code>, multiple forms of output can be specified with the <code>to_return</code> argument to <code><a href="../reference/konfound.html">konfound()</a></code>, i.e. <code><a href="../reference/konfound.html">konfound(m2, age, to_return = c("raw_output", "corr_plot", "thresh_plot"))</a></code>.</p>
-</div>
+<p>As with models fit with <code>lm()</code> (and use of <code><a href="../reference/pkonfound.html">pkonfound()</a></code>), multiple forms of output can be specified with the <code>to_return</code> argument to <code><a href="../reference/konfound.html">konfound()</a></code>, i.e. <code><a href="../reference/konfound.html">konfound(m2, age, to_return = c("raw_output", "corr_plot", "thresh_plot"))</a></code>.</p>
+<p><strong>For mixed effects (or multi-level) models fit with the lmer() function from the lme4 package</strong></p>
+<p><code>konfound</code> also works with models fit with the <code>lmer()</code> function from the package <code>lme4</code>, for mixed-effects or multi-level models. One challenge with carrying out sensitivity analysis for fixed effects in mixed effects models is calculating the correct denominator degrees of freedom for the t-test associated with the coefficients. This is not unique to sensitivity analysis, as, for example, <code>lmer()</code> does not report degrees of freedom (or p-values) for fixed effects predictors (see this information in the <code>lme4</code> FAQ <a href="http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have">here</a>). While it may be possible to determine the correct degrees of freedom for some models (i.e., models with relatively simple random effects structures), it is difficult to generalize this approach, and so in this package the Kenward-Roger approximation for the denominator degrees of freedom as implemented in the <code>pbkrtest</code> package (described in <a href="https://www.jstatsoft.org/htaccess.php?volume=59&amp;type=i&amp;issue=09&amp;paper=true">Halekoh and Højsgaard, 2014</a>).</p>
+<p>Here is an example of the use of <code><a href="../reference/konfound.html">konfound()</a></code> with a model fit with <code>lmer()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="kw">requireNamespace</span>(<span class="st">"lme4"</span>)) {
+    <span class="kw">library</span>(lme4)
+    m3 &lt;-<span class="st"> </span>fm1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Subject), sleepstudy)
+    <span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m3, Days)
+}
+<span class="co">#&gt; Loading required package: Matrix</span>
+<span class="co">#&gt; Replacement of Cases Approach:</span>
+<span class="co">#&gt; To invalidate the inference, 84.83% of the estimate would have to be due to bias based on a threshold of 1.588 and statistical significance.</span>
+<span class="co">#&gt; To invalidate the inference, 137 observations would have to be replaced with cases for which the effect is 0.</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Correlation-based Approach:</span>
+<span class="co">#&gt; An omitted variable would have to be correlated at 0.817 with the outcome and at 0.817 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.155 and statistical significance.</span>
+<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.817 X 0.817 = 0.667 to invalidate an inference.</span>
+<span class="co">#&gt; Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest.</span>
+<span class="co">#&gt; NULL</span></code></pre></div>
 </div>
 <div id="use-of-mkonfound" class="section level3">
 <h3 class="hasAnchor">
 <a href="#use-of-mkonfound" class="anchor"></a>Use of mkonfound()</h3>
-<p>Here, <code>d</code> represents output from a number (30 in this case) of past studies, read in a CSV file from a website:</p>
+<p>We can also use <code>konfound</code> to carry out sensitivity analysis as part of meta-analyses. For example, here, <code>d</code> represents output from a number (30 in this case) of past studies, read in a CSV file from a website:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">"https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv"</span>)
+<span class="kw">head</span>(d)
+<span class="co">#&gt;           t  df</span>
+<span class="co">#&gt; 1  7.076763 178</span>
+<span class="co">#&gt; 2  4.127893 193</span>
+<span class="co">#&gt; 3  1.893137  47</span>
+<span class="co">#&gt; 4 -4.166395 138</span>
+<span class="co">#&gt; 5 -1.187599  97</span>
+<span class="co">#&gt; 6  3.585478  87</span>
 <span class="kw"><a href="../reference/mkonfound.html">mkonfound</a></span>(d, t, df)
 <span class="co">#&gt; # A tibble: 30 x 7</span>
 <span class="co">#&gt;            t    df        action           inference</span>
@@ -271,21 +306,47 @@ konfound_output<span class="op">$</span>thresh_plot</code></pre></div>
 <span class="co">#&gt;  9 -4.436048   137 to_invalidate         reject_null</span>
 <span class="co">#&gt; 10 -2.045373   195 to_invalidate         reject_null</span>
 <span class="co">#&gt; # ... with 20 more rows, and 3 more variables:</span>
-<span class="co">#&gt; #   pct_bias_to_change_inference &lt;dbl&gt;, itcv &lt;dbl&gt;, r_con &lt;dbl&gt;</span>
-<span class="kw"><a href="../reference/mkonfound.html">mkonfound</a></span>(d, t, df, <span class="dt">return_plot =</span> T)
+<span class="co">#&gt; #   pct_bias_to_change_inference &lt;dbl&gt;, itcv &lt;dbl&gt;, r_con &lt;dbl&gt;</span></code></pre></div>
+<p>We can also return a plot summarizing the percent bias needed to sustan or invalidate an inference across all of the past studies:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mkonfound.html">mkonfound</a></span>(d, t, df, <span class="dt">return_plot =</span> T)
 <span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></code></pre></div>
-<p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-16-1.png" width="672"></p>
+<p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
 </div>
 </div>
-<div id="references" class="section level1">
+<div id="other-information" class="section level1">
 <h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<a href="#other-information" class="anchor"></a>Other information</h1>
+<div id="how-to-learn-more-about-sensitivity-analysis" class="section level3">
+<h3 class="hasAnchor">
+<a href="#how-to-learn-more-about-sensitivity-analysis" class="anchor"></a>How to learn more about sensitivity analysis</h3>
+<p>To learn more about sensitivity analysis, please visit:</p>
+<ul>
+<li>The <a href="https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html">Introduction to konfound vignette</a>, with detailed information about each of the functions (<code><a href="../reference/pkonfound.html">pkonfound()</a></code>, <code><a href="../reference/konfound.html">konfound()</a></code>, and <code>mkounfound()</code>)</li>
+<li>The causal inference section of Ken Frank’s website <a href="https://msu.edu/~kenfrank/research.htm#causal">here</a>
+</li>
+<li>The <a href="https://jmichaelrosenberg.shinyapps.io/shinykonfound/">konfound interactive web application</a>, with links to PowerPoints and key publications</li>
+</ul>
+</div>
+<div id="feedback-issues-and-feature-requests" class="section level3">
+<h3 class="hasAnchor">
+<a href="#feedback-issues-and-feature-requests" class="anchor"></a>Feedback, issues, and feature requests</h3>
+<p><code>konfound</code> is actively under development as of January, 2018. We welcome feedback and requests for improvement. We prefer for issues to be filed via GitHub (link to the issues page for <code>konfound</code> <a href="https://github.com/jrosen48/konfound/issues">here</a>) though we also welcome questions or feedback via <a href="jrosen@msu.edu">email</a>.</p>
+</div>
+<div id="code-of-conduct" class="section level3">
+<h3 class="hasAnchor">
+<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h3>
+<p>Please note that this project is released with a Contributor Code of Conduct available at <a href="http://contributor-covenant.org/version/1/0/0/" class="uri">http://contributor-covenant.org/version/1/0/0/</a></p>
+</div>
+<div id="references" class="section level3">
+<h3 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h3>
 <ul>
 <li><p>Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?: Using Rubin’s causal model to interpret the robustness of causal inferences. <em>Education, Evaluation and Policy Analysis</em>. Vol 35: 437-460. <a href="https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx">https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx</a></p></li>
 <li><p>Frank, K.A., Gary Sykes, Dorothea Anagnostopoulos, Marisa Cannata, Linda Chard, Ann Krause, Raven McCrory. 2008. Extended influence: National Board Certified Teachers as help providers. <em>Education, Evaluation, and Policy Analysis</em>. Vol 30(1): 3-30. <a href="https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc">https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc</a></p></li>
 <li><p>Frank, K. A. and Min, K. 2007. Indices of Robustness for Sample Representation. <em>Sociological Methodology</em>. Vol 37, 349-392. <a href="https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc">https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc</a> (co first authors)</p></li>
 <li><p>Frank, K. 2000. “Impact of a Confounding Variable on the Inference of a Regression Coefficient.” <em>Sociological Methods and Research</em>, 29(2), 147-194 <a href="https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf">https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf</a></p></li>
 </ul>
+</div>
 </div>
 </div>
   </div>
@@ -295,10 +356,9 @@ konfound_output<span class="op">$</span>thresh_plot</code></pre></div>
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#abstract">Abstract</a></li>
-      <li><a href="#introduction">Introduction</a></li>
+<li><a href="#background">Background</a></li>
       <li><a href="#examples">Examples</a></li>
-      <li><a href="#references">References</a></li>
+      <li><a href="#other-information">Other information</a></li>
       </ul>
 </div>
       </div>
