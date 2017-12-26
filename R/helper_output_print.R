@@ -1,14 +1,14 @@
 # Function to output printed text
 
-output_print <- function(beta_diff, beta_threshhold, bias = NULL, sustain = NULL, nu, recase, obs_r, critical_r, r_con, itcv, non_linear) {
+output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL, nu, recase, obs_r, critical_r, r_con, itcv, non_linear) {
     cat("Replacement of Cases Approach:\n")
-    if (abs(beta_diff) > abs(beta_threshhold)) {
+    if (abs(eff_diff) > abs(beta_threshhold)) {
         cat("To invalidate the inference, ", round(bias, 3), "% of the estimate would have to be due to bias based on a threshold of ", round(beta_threshhold, 3), " and statistical significance.\n", sep = "")
         cat("To invalidate the inference, ", round(recase, 3), " observations would have to be replaced with cases for which the effect is ", nu, ".\n", sep = "") }
-    else if (abs(beta_diff) < abs(beta_threshhold)) {
+    else if (abs(eff_diff) < abs(beta_threshhold)) {
         cat("To sustain the inference, ", round(sustain, 3), "% of the estimate would have to be due to bias based on a threshold of ", round(beta_threshhold, 3), " and statistical significance.\n", sep = "")
         cat("To sustain the inference, ", round(recase, 3), " of the cases with ", nu, " effect would have to be replaced with cases at the threshold of inference.\n", sep = "") }
-    else if (beta_diff == beta_threshhold) {
+    else if (eff_diff == beta_threshhold) {
         warning("The coefficient is exactly equal to the threshold.\n") }
     
     cat("\n")

@@ -11,9 +11,13 @@ konfound(model_object, tested_variable, alpha = 0.05, tails = 2,
 \arguments{
 \item{model_object}{output from a model (currently works for: lm)}
 
-\item{test_all}{whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)}
+\item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
-\item{component_correlations}{whether to return the component correlations as part of the correlation-based approach}
+\item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
+
+\item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
+
+\item{test_all}{whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)}
 
 \item{tested_variable_string}{Variable associated with the unstandardized beta coefficient to be tested}
 }
@@ -24,11 +28,13 @@ prints the bias and the number of cases that would have to be replaced with case
 For fitted models, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient. Currently works for: models created with lm() (linear models).
 }
 \examples{
+# using lm() for linear models
 m1 <- lm(mpg ~ wt + hp, data = mtcars)
 konfound(m1, wt)
 konfound(m1, wt, test_all = TRUE)
 konfound(m1, wt, to_return = "table")
 
+# using glm() for non-linear models
 if (requireNamespace("forcats")) {
 d <- forcats::gss_cat
 
@@ -38,6 +44,7 @@ m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
 konfound(m2, age)
 }
 
+# using lme4 for mixed effects (or multi-level) models
 if (requireNamespace("lme4")) {
 m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
 konfound(m3, Days)

@@ -1,7 +1,7 @@
 # Function to output the data frame
 
-output_df <- function(beta_diff, beta_threshhold, unstd_beta, bias = NULL, sustain = NULL, recase, obs_r, critical_r, r_con, itcv, non_linear) {
-    if (abs(beta_diff) > abs(beta_threshhold)) {
+output_df <- function(est_eff, beta_threshhold, unstd_beta, bias = NULL, sustain = NULL, recase, obs_r, critical_r, r_con, itcv, non_linear) {
+    if (abs(est_eff) > abs(beta_threshhold)) {
         df  <- dplyr::data_frame(action = "to_invalidate",
                                  inference = "reject_null",
                                  percent_bias_to_change_inference = round(bias, 3),
@@ -11,7 +11,7 @@ output_df <- function(beta_diff, beta_threshhold, unstd_beta, bias = NULL, susta
                                  omitted_variable_corr = r_con,
                                  itcv = itcv)
     }
-    else if (abs(beta_diff) < abs(beta_threshhold)) {
+    else if (abs(est_eff) < abs(beta_threshhold)) {
         df <- dplyr::data_frame(action = "to_sustain",
                                 inference = "fail_to_reject_null",
                                 percent_bias_to_change_inference = round(sustain, 3),
@@ -21,7 +21,7 @@ output_df <- function(beta_diff, beta_threshhold, unstd_beta, bias = NULL, susta
                                 omitted_variable_corr = r_con,
                                 itcv = itcv)
     }
-    else if (beta_diff == beta_threshhold) {
+    else if (est_eff == beta_threshhold) {
         warning("The coefficient is exactly equal to the threshold.") }
     
     # if (abs(obs_r) > abs(critical_r)) {
@@ -30,7 +30,7 @@ output_df <- function(beta_diff, beta_threshhold, unstd_beta, bias = NULL, susta
     # else if (abs(obs_r) < abs(critical_r)) {
     #     df$omitted_variable_corr <- r_con
     # }
-    else if (beta_diff == beta_threshhold) {
+    else if (est_eff == beta_threshhold) {
         warning("The coefficient is exactly equal to the threshold.\n") }
     
     df

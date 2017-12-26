@@ -9,17 +9,17 @@ konfound_glm <- function(model_object, tested_variable_string, test_all, alpha, 
         coef_df <- tidy_output[tidy_output$term == tested_variable_string, ]
     } else {
         coef_df <- tidy_output[-1, ]
-        coef_df$unstd_beta <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string]) } # to remove intercept
+        coef_df$est_eff <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string]) } # to remove intercept
     
-    unstd_beta <- round(coef_df$estimate, 3)
-    unstd_beta <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
+    est_eff <- round(coef_df$estimate, 3)
+    est_eff <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
     std_err <- round(coef_df$std.error, 3)
     n_obs = glance_output$df.null
     n_covariates = glance_output$df.null - 2 # (for intercept and coefficient)
     
     if (test_all == FALSE) {
         message("Note that this output is calculated based on the correlation-based approach used in mkonfound()")
-        out <- test_sensitivity(unstd_beta = unstd_beta,
+        out <- test_sensitivity(est_eff = est_eff,
                                 std_err = std_err,
                                 n_obs = n_obs,
                                 n_covariates = n_covariates,
@@ -34,7 +34,7 @@ konfound_glm <- function(model_object, tested_variable_string, test_all, alpha, 
     } else { 
 
         stop("Multiple variables cannot presently be tested for models fit using glm(); this will be added in the future.")
-        d <- data.frame(t = unstd_beta / std_err, df = (n_obs - n_covariates - 1))
+        d <- data.frame(t = est_eff / std_err, df = (n_obs - n_covariates - 1))
         o <- mkonfound(d, t, df)
         term_names <- dplyr::select(tidy_output, var_name = .data$term) # remove the first row for intercept
         term_names <- dplyr::filter(term_names, .data$var_name != "(Intercept)")

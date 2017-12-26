@@ -4,12 +4,11 @@
 \alias{pkonfound}
 \title{Perform sensitivity analysis for published studies}
 \usage{
-pkonfound(unstd_beta, std_err, n_obs, n_covariates = 1, alpha = 0.05,
-  tails = 2, nu = 0, to_return = "print",
-  component_correlations = FALSE, t = NULL, df = NULL)
+pkonfound(est_eff, std_err, n_obs, n_covariates = 1, alpha = 0.05,
+  tails = 2, nu = 0, to_return = "print", t = NULL, df = NULL)
 }
 \arguments{
-\item{unstd_beta}{an unstandardized regression coefficient}
+\item{est_eff}{the estimated effect (such as an unstandardized beta coefficient or a group mean difference)}
 
 \item{std_err}{the standard error of the estimate of the unstandardized regression coefficient}
 
@@ -21,11 +20,9 @@ pkonfound(unstd_beta, std_err, n_obs, n_covariates = 1, alpha = 0.05,
 
 \item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
 
-\item{nu}{what hypothesis to be tested; defaults to testing whether unstd_beta is significantly different from 0}
+\item{nu}{what hypothesis to be tested; defaults to testing whether est_eff is significantly different from 0}
 
 \item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
-
-\item{component_correlations}{whether to return the component correlations as part of the correlation-based approach}
 }
 \value{
 prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
@@ -35,14 +32,15 @@ For published studies, this command calculates (1) how much bias there must be i
 }
 \examples{
 pkonfound(2, .4, 100, 3)
-pkonfound(.4, 2, 100, 3)
-pkonfound(-2, .4, 200, 3)
-pkonfound(2, .4, 200, 3, to_return = "thresh_plot")
-pkonfound(2, .4, 200, 3, to_return = "corr_plot")
+pkonfound(-2.2, .65, 200, 3)
+pkonfound(.5, 3, 200, 3)
+
+pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
+pkonfound(2, .4, 100, 3, to_return = "corr_plot")
 
 pkonfound_output <- pkonfound(2, .4, 200, 3, to_return = c("raw_output", "thresh_plot", "corr_plot"))
 summary(pkonfound_output)
-pkonfound_output$df
+pkonfound_output$raw_output
 pkonfound_output$thresh_plot
 pkonfound_output$corr_plot
 }

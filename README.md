@@ -3,12 +3,12 @@
 konfound
 ========
 
-The goal of konfound is to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.
+In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias. The goal of `konfound` is to carry out sensitivity analysis to help analysts to *quantify how robust inferences are to potential sources of bias*. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.
 
 Installation
 ============
 
-You can install konfound from GitHub with:
+Presently, `konfound` is available only on GitHub. You can install `konfound` from GitHub with:
 
 ``` r
 install.packages("devtools")
@@ -39,7 +39,8 @@ pkonfound(2, .4, 100, 3)
 #> Correlation-based Approach:
 #> An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.201 and statistical significance.
 #> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference.
-#> NULL
+#> For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.
+#> For models fit in R, consider use of konfound().
 ```
 
 #### konfound() for models fit in R
@@ -100,38 +101,46 @@ We can use an existing dataset, such as the CSV file [here](https://msu.edu/~ken
 ``` r
 d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
 head(d)
+#>           t  df
+#> 1  7.076763 178
+#> 2  4.127893 193
+#> 3  1.893137  47
+#> 4 -4.166395 138
+#> 5 -1.187599  97
+#> 6  3.585478  87
 mkonfound(d, t, df)
+#> # A tibble: 30 x 7
+#>            t    df        action           inference
+#>        <dbl> <int>         <chr>               <chr>
+#>  1  7.076763   178 to_invalidate         reject_null
+#>  2  4.127893   193 to_invalidate         reject_null
+#>  3  1.893137    47    to_sustain fail_to_reject_null
+#>  4 -4.166395   138 to_invalidate         reject_null
+#>  5 -1.187599    97    to_sustain fail_to_reject_null
+#>  6  3.585478    87 to_invalidate         reject_null
+#>  7  0.281938   117    to_sustain fail_to_reject_null
+#>  8  2.549647    75 to_invalidate         reject_null
+#>  9 -4.436048   137 to_invalidate         reject_null
+#> 10 -2.045373   195 to_invalidate         reject_null
+#> # ... with 20 more rows, and 3 more variables:
+#> #   pct_bias_to_change_inference <dbl>, itcv <dbl>, r_con <dbl>
 ```
 
 Other information
 =================
 
-How to learn more about sensitivity analysis
---------------------------------------------
+### How to learn more about sensitivity analysis
 
-For more information, please see:
+To learn more about sensitivity analysis, please visit:
 
 -   The [Introduction to konfound vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
 -   The causal inference section of Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm#causal)
 -   The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
 
-Feedback, issues, and feature requests
---------------------------------------
+### Feedback, issues, and feature requests
 
-We prefer for issues to be filed via GitHub (link to the issues page for konfound [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via [email](jrosen@msu.edu).
+We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via [email](jrosen@msu.edu).
 
-Code of Conduct
----------------
+### Code of Conduct
 
 Please note that this project is released with a Contributor Code of Conduct available at <http://contributor-covenant.org/version/1/0/0/>
-
-References
-----------
-
--   Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?: Using Rubin’s causal model to interpret the robustness of causal inferences. *Education, Evaluation and Policy Analysis*. Vol 35: 437-460. <https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx>
-
--   Frank, K.A., Gary Sykes, Dorothea Anagnostopoulos, Marisa Cannata, Linda Chard, Ann Krause, Raven McCrory. 2008. Extended influence: National Board Certified Teachers as help providers. *Education, Evaluation, and Policy Analysis*. Vol 30(1): 3-30. <https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc>
-
--   Frank, K. A. and Min, K. 2007. Indices of Robustness for Sample Representation. *Sociological Methodology*. Vol 37, 349-392. <https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc> (co first authors)
-
--   Frank, K. 2000. "Impact of a Confounding Variable on the Inference of a Regression Coefficient." *Sociological Methods and Research*, 29(2), 147-194 <https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf>

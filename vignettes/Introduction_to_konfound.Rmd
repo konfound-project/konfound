@@ -8,21 +8,20 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+  
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+collapse = TRUE,
+comment = "#>"
 )
 ```
 
-# Abstract
+# Background
 
-*This abstract is adapted from Xu, Frank, and Maroulis' STATA tutorial "What would it take to Change your Inference? Quantifying the Discourse about Causal Inferences in the Social Sciences."*
+In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias.  The goal of `konfound` is to carry out sensitivity analysis to help analysts to *quantify how robust inferences are to potential sources of bias*. This package provides functions based on developments in sensitivity analysis by Frank and colleagues, which previously have been implemented in `Stata` and through an Excel spreadsheet, in `R` through the `konfound` package. In particular, we provide functions for both *values from analyses carried out outside of R as well as from models (`lm()`, `glm()`, and `lme4::lmer()` fit in R)* for:
 
-Statistical methods that quantify the discourse about causal inferences in terms of possible sources of biases, or “sensitivity analysis,” are becoming more important to a variety of social science fields, including research in education, public policy, and political science.  A series of recent works by Frank and colleagues on sensitivity analysis points to limitations in earlier methods and aims to extend beyond them. We implement these developments, which previously have been implemented in `Stata`, in `R` through the `konfound` package. In particular, we provide functions for quantifying the bias necessary to alter an inference, from the framework of Rubin's (1974) causal model, as well as the robustness of causal inference in terms of the impact threshold of a confounding variable.
-
-# Introduction
+* Quantifying the bias necessary to alter an inference from the framework of Rubin's (1974) causal model
+* The robustness of causal inference in terms of the impact threshold of a confounding variable
 
 # Examples
 
@@ -30,7 +29,7 @@ Statistical methods that quantify the discourse about causal inferences in terms
 
 ### Installation
 
-You can install konfound from GitHub (it will be available on CRAN and therefore via `install.packages("konfound")` soon) with:
+Presently, `konfound` is available only on GitHub. You can install `konfound` from GitHub with:
 
 ```{r gh-installation, eval = FALSE}
 install.packages("devtools")
@@ -47,15 +46,17 @@ library(konfound)
 devtools::load_all(".")
 ```
 
-### Use of pkonfound()
+### Use of pkonfound() for values from an already-conducted analysis
 
 `pkonfound()` is used when we have values from an already-conducted analysis, such as one in an already-published study or from an analysis carried out using other software.
 
-For example, in the use below, we simply enter the values for the unstandardardized beta coefficient (`2`), its standard error (`.4`), the sample size (`100`), and the number of covariates (`3`)
+For example, in the use below, we simply enter the values for the estimated effect (an unstandardardized beta coefficient) (`2`), its standard error (`.4`), the sample size (`100`), and the number of covariates (`3`):
 
 ```{r}
-pkonfound(.4, 2, 100, 3)
+pkonfound(2, .4, 100, 3)
 ```
+
+For this set of values, around 60% would need to be false due to a source of bias for the inference to be invalidated (based on statistical significance and a p-value (or alpha) of .05), possible a very robust effect. An omitted, confounding variable (sometimes referred to as a covariate) would need to have an impact (defined as the product of the confounding variable's correlation with both the predictor of interest and the outcome) of 0.323, presenting a different interpretation of how robust this (hypothetical) effect is to a variable which is important but not included in the analysis. 
 
 Here is another example, but one in which the unstandardized beta coefficient is smaller than its standard error:
 
@@ -63,22 +64,23 @@ Here is another example, but one in which the unstandardized beta coefficient is
 pkonfound(.4, 2, 100, 3)
 ```
 
-We can also choose from a number of forms of output to return, such as a plot of the output from the correlation-based approach:
+Note that this use of `pkonfound()` is equivalent to naming the arguments, i.e. for a different set of values:
 
 ```{r}
-pkonfound(2, .4, 100, 3, to_return = "corr_plot")
+pkonfound(est_eff = -2.2,
+          std_err = .65, 
+          n_obs = 200,
+          n_covariates = 3)
 ```
 
-And the threshold plot associated with the replacement of cases approach:
+We notice that the output includes a message that says we can view other forms of output by changing the `to_return` argument. Here are the two plots - for the bias necessary to alter an inference (`thresh_plot`) and for the robustness of an inference in terms of the impact of a confounding variable (`corr_plot`) that can be returned:
 
 ```{r}
 pkonfound(.4, 2, 100, 3, to_return = "thresh_plot")
 ```
 
-Finally, you can return the raw output, for use in other analyses. 
-
 ```{r}
-pkonfound(.4, 2, 100, 3, to_return = "raw_output")
+pkonfound(.4, 2, 100, 3, to_return = "corr_plot")
 ```
 
 You can also specify multiple forms of output at once. 
@@ -96,9 +98,17 @@ model_output$thresh_plot
 model_output$corr_plot
 ```
 
+Finally, you can return the raw output, for use in other analyses. 
+
+```{r}
+pkonfound(.4, 2, 100, 3, to_return = "raw_output")
+```
+
 ### Use of konfound()
 
-##### For linear models fit with lm()
+Where `pkonfound()` can be used with values from already-conducted analyses, `konfound()` can be used with models (`lm()`, `glm()`, and `lme4::lmer()`) fit in R.
+
+**For linear models fit with lm()**
 
 ```{r}
 m1 <- lm(mpg ~ wt + hp + qsec, data = mtcars)
@@ -107,14 +117,15 @@ m1
 konfound(m1, hp)
 ```
 
-We can also output multiple forms of output at once:
+Like with `pkonfound()`, we can also output multiple forms of output at once with `konfound()`:
 
 ```{r}
 konfound_output <- konfound(m1, hp, to_return = c("raw_output", "thresh_plot", "corr_plot"))
 summary(konfound_output)
 ```
 
-We can then type each of those, i.e.:
+Again, we can type each of those, i.e.:
+
 ```{r}
 konfound_output$raw_output
 konfound_output$thresh_plot
@@ -126,17 +137,15 @@ We can also test all of the variables as predictors of interest:
 konfound(m1, wt, test_all = TRUE)
 ```
 
-You can also return a table with some key output from the correlation-based approach.
+Whereas this cannot be carried out with `pkonfound()`, with `konfound()` you can also return a table with some key output from the correlation-based approach.
 
 ```{r}
 konfound(m1, wt, to_return = "table")
 ```
 
-If the impact threshhold is greater than the impacts of the `Z`s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference. 
+If the impact threshhold is greater than the impacts of the `Z`s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference. Note that in fields in which there is a lot known about covariates given the outcome of interest, then the omitted ones are likely less important than those that are known an included (i.e., we have a good sense of the factors that matter in terms of educational achievement).
 
-Note that in fields in which there is a lot known about covariates given the outcome of interest, then the omitted ones are likely less important than those that are known an included (i.e., for educational achievement, we have a good sense of the factors that matter).
-
-##### For generalized linear models fit with glm()
+**For generalized linear models fit with glm()**
 
 Effects for these models are interpreted on the basis of average partial (or marginal) effects (calculated using the `margins` package).
 
@@ -152,19 +161,57 @@ if (requireNamespace("forcats")) {
 }
 ```
 
-As with models fit with `lm()`, multiple forms of output can be specified with the `to_return` argument to `konfound()`, i.e. `konfound(m2, age, to_return = c("raw_output", "corr_plot", "thresh_plot"))`.
+As with models fit with `lm()` (and use of `pkonfound()`), multiple forms of output can be specified with the `to_return` argument to `konfound()`, i.e. `konfound(m2, age, to_return = c("raw_output", "corr_plot", "thresh_plot"))`.
+
+**For mixed effects (or multi-level) models fit with the lmer() function from the lme4 package**
+
+`konfound` also works with models fit with the `lmer()` function from the package `lme4`, for mixed-effects or multi-level models. One challenge with carrying out sensitivity analysis for fixed effects in mixed effects models is calculating the correct denominator degrees of freedom for the t-test associated with the coefficients. This is not unique to sensitivity analysis, as, for example, `lmer()` does not report degrees of freedom (or p-values) for fixed effects predictors (see this information in the `lme4` FAQ [here](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have)). While it may be possible to determine the correct degrees of freedom for some models (i.e., models with relatively simple random effects structures), it is difficult to generalize this approach, and so in this package the Kenward-Roger approximation for the denominator degrees of freedom as implemented in the `pbkrtest` package (described in [Halekoh and Højsgaard, 2014](https://www.jstatsoft.org/htaccess.php?volume=59&type=i&issue=09&paper=true)).
+
+Here is an example of the use of `konfound()` with a model fit with `lmer()`:
+
+```{r}
+if (requireNamespace("lme4")) {
+    library(lme4)
+    m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+    konfound(m3, Days)
+}
+```
 
 ### Use of mkonfound()
 
-Here, `d` represents output from a number (30 in this case) of past studies, read in a CSV file from a website:
+We can also use `konfound` to carry out sensitivity analysis as part of meta-analyses. For example, here, `d` represents output from a number (30 in this case) of past studies, read in a CSV file from a website:
 
 ```{r, warning = F}
 d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
+head(d)
 mkonfound(d, t, df)
+```
+
+We can also return a plot summarizing the percent bias needed to sustan or invalidate an inference across all of the past studies:
+
+```{r}
 mkonfound(d, t, df, return_plot = T)
 ```
 
-# References
+# Other information
+
+### How to learn more about sensitivity analysis
+
+To learn more about sensitivity analysis, please visit:
+
+* The [Introduction to konfound vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
+* The causal inference section of Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm#causal)
+* The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
+
+### Feedback, issues, and feature requests
+
+`konfound` is actively under development as of January, 2018. We welcome feedback and requests for improvement. We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via [email](jrosen@msu.edu).
+
+### Code of Conduct
+
+Please note that this project is released with a Contributor Code of Conduct available at [http://contributor-covenant.org/version/1/0/0/](http://contributor-covenant.org/version/1/0/0/)
+
+### References
 
 * Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?: Using Rubin’s causal model to interpret the robustness of causal inferences. *Education, Evaluation and Policy Analysis*. Vol 35: 437-460. https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx
 

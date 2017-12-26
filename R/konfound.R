@@ -2,17 +2,18 @@
 #' @description For fitted models, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient. Currently works for: models created with lm() (linear models).
 #' @param model_object output from a model (currently works for: lm)
 #' @param tested_variable_string Variable associated with the unstandardized beta coefficient to be tested
-#' @inheritParams konfound
+#' @inheritParams pkonfound
 #' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
-#' @param component_correlations whether to return the component correlations as part of the correlation-based approach
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @importFrom rlang .data
 #' @examples
+#' # using lm() for linear models
 #' m1 <- lm(mpg ~ wt + hp, data = mtcars)
 #' konfound(m1, wt)
 #' konfound(m1, wt, test_all = TRUE)
 #' konfound(m1, wt, to_return = "table")
 #' 
+#' # using glm() for non-linear models
 #' if (requireNamespace("forcats")) {
 #' d <- forcats::gss_cat
 #'
@@ -22,6 +23,7 @@
 #' konfound(m2, age)
 #' }
 #' 
+#' # using lme4 for mixed effects (or multi-level) models
 #' if (requireNamespace("lme4")) {
 #' m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
 #' konfound(m3, Days)
@@ -78,15 +80,14 @@ konfound <- function(model_object,
     
     if (inherits(model_object, "lmerMod")) {
         
-        stop("konfound does not presently work with output from models fit with lmer()")
-        
         output <- konfound_lmer(model_object = model_object,
                                tested_variable_string = tested_variable_string,
                                test_all = test_all,
                                alpha = alpha,
                                tails = tails,
-                               to_return = to_return,
-                               p_kr = FALSE)
+                               to_return = to_return)
+        
+        message("Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest.")
         
         return(output)
         
