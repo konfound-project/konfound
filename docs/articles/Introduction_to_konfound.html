@@ -64,31 +64,24 @@
 <li>Quantifying the bias necessary to alter an inference from the framework of Rubin’s (1974) causal model</li>
 <li>The robustness of causal inference in terms of the impact threshold of a confounding variable</li>
 </ul>
-</div>
-<div id="examples" class="section level1">
-<h1 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h1>
-<p><code>konfound</code> is an <code>R</code> package to easily carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model.</p>
-<div id="installation" class="section level3">
+<div id="installation-konfound" class="section level3">
 <h3 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h3>
+<a href="#installation-konfound" class="anchor"></a>Installation konfound</h3>
 <p>Presently, <code>konfound</code> is available only on GitHub. You can install <code>konfound</code> from GitHub with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"devtools"</span>)
 devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"jrosen48/konfound"</span>)</code></pre></div>
-</div>
-<div id="loading-konfound" class="section level3">
-<h3 class="hasAnchor">
-<a href="#loading-konfound" class="anchor"></a>Loading konfound</h3>
+<p>You can then load konfound with the <code>library()</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)</code></pre></div>
 <pre><code>#&gt; Loading konfound
 #&gt; Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).
 #&gt; For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.</code></pre>
 </div>
-<div id="use-of-pkonfound-for-values-from-an-already-conducted-analysis" class="section level3">
-<h3 class="hasAnchor">
-<a href="#use-of-pkonfound-for-values-from-an-already-conducted-analysis" class="anchor"></a>Use of pkonfound() for values from an already-conducted analysis</h3>
-<p><code><a href="../reference/pkonfound.html">pkonfound()</a></code> is used when we have values from an already-conducted analysis, such as one in an already-published study or from an analysis carried out using other software.</p>
-<p>For example, in the use below, we simply enter the values for the estimated effect (an unstandardardized beta coefficient) (<code>2</code>), its standard error (<code>.4</code>), the sample size (<code>100</code>), and the number of covariates (<code>3</code>):</p>
+</div>
+<div id="use-of-pkonfound-for-values-from-an-already-conducted-analysis" class="section level1">
+<h1 class="hasAnchor">
+<a href="#use-of-pkonfound-for-values-from-an-already-conducted-analysis" class="anchor"></a>Use of pkonfound() for values from an already-conducted analysis</h1>
+<p><code><a href="../reference/pkonfound.html">pkonfound()</a></code> is used when we have values from an already-conducted analysis (like a regression analysis), such as one in an already-published study or from an analysis carried out using other software.</p>
+<p>In the case of a regression analysis, values from the analysis would simply be used as the inputs to the <code><a href="../reference/pkonfound.html">pkonfound()</a></code> function. For example, in the use below, we simply enter the values for the estimated effect (an unstandardardized beta coefficient) (<code>2</code>), its standard error (<code>.4</code>), the sample size (<code>100</code>), and the number of covariates (<code>3</code>):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>)
 <span class="co">#&gt; Replacement of Cases Approach:</span>
 <span class="co">#&gt; To invalidate the inference, 60.3% of the estimate would have to be due to bias based on a threshold of 0.794 and statistical significance.</span>
@@ -167,9 +160,9 @@ model_output<span class="op">$</span>thresh_plot</code></pre></div>
 <span class="co">#&gt; # ... with 5 more variables: replace_null_cases &lt;dbl&gt;, unstd_beta &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   beta_threshhold &lt;dbl&gt;, omitted_variable_corr &lt;dbl&gt;, itcv &lt;dbl&gt;</span></code></pre></div>
 </div>
-<div id="use-of-konfound" class="section level3">
-<h3 class="hasAnchor">
-<a href="#use-of-konfound" class="anchor"></a>Use of konfound()</h3>
+<div id="use-of-konfound-for-models-fit-in-r" class="section level1">
+<h1 class="hasAnchor">
+<a href="#use-of-konfound-for-models-fit-in-r" class="anchor"></a>Use of konfound() for models fit in R</h1>
 <p>Where <code><a href="../reference/pkonfound.html">pkonfound()</a></code> can be used with values from already-conducted analyses, <code><a href="../reference/konfound.html">konfound()</a></code> can be used with models (<code>lm()</code>, <code>glm()</code>, and <code>lme4::lmer()</code>) fit in R.</p>
 <p><strong>For linear models fit with lm()</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m1 &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>hp <span class="op">+</span><span class="st"> </span>qsec, <span class="dt">data =</span> mtcars)
@@ -278,9 +271,9 @@ konfound_output<span class="op">$</span>thresh_plot</code></pre></div>
 <span class="co">#&gt; Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest.</span>
 <span class="co">#&gt; NULL</span></code></pre></div>
 </div>
-<div id="use-of-mkonfound" class="section level3">
-<h3 class="hasAnchor">
-<a href="#use-of-mkonfound" class="anchor"></a>Use of mkonfound()</h3>
+<div id="use-of-mkonfound-for-meta-analyses-that-include-sensitivity-analysis" class="section level1">
+<h1 class="hasAnchor">
+<a href="#use-of-mkonfound-for-meta-analyses-that-include-sensitivity-analysis" class="anchor"></a>Use of mkonfound() for meta-analyses that include sensitivity analysis</h1>
 <p>We can also use <code>konfound</code> to carry out sensitivity analysis as part of meta-analyses. For example, here, <code>d</code> represents output from a number (30 in this case) of past studies, read in a CSV file from a website:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">"https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv"</span>)
 <span class="kw">head</span>(d)
@@ -311,7 +304,6 @@ konfound_output<span class="op">$</span>thresh_plot</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/mkonfound.html">mkonfound</a></span>(d, t, df, <span class="dt">return_plot =</span> T)
 <span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></code></pre></div>
 <p><img src="Introduction_to_konfound_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
-</div>
 </div>
 <div id="other-information" class="section level1">
 <h1 class="hasAnchor">
@@ -357,7 +349,9 @@ konfound_output<span class="op">$</span>thresh_plot</code></pre></div>
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#background">Background</a></li>
-      <li><a href="#examples">Examples</a></li>
+      <li><a href="#use-of-pkonfound-for-values-from-an-already-conducted-analysis">Use of pkonfound() for values from an already-conducted analysis</a></li>
+      <li><a href="#use-of-konfound-for-models-fit-in-r">Use of konfound() for models fit in R</a></li>
+      <li><a href="#use-of-mkonfound-for-meta-analyses-that-include-sensitivity-analysis">Use of mkonfound() for meta-analyses that include sensitivity analysis</a></li>
       <li><a href="#other-information">Other information</a></li>
       </ul>
 </div>

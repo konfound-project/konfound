@@ -80,8 +80,7 @@
     
 
     <pre class="usage"><span class='fu'>konfound</span>(<span class='no'>model_object</span>, <span class='no'>tested_variable</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>tails</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"print"</span>, <span class='kw'>test_all</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>component_correlations</span> <span class='kw'>=</span> <span class='no'>F</span>,
-  <span class='kw'>p_kr</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"print"</span>, <span class='kw'>test_all</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -89,6 +88,10 @@
     <tr>
       <th>model_object</th>
       <td><p>output from a model (currently works for: lm)</p></td>
+    </tr>
+    <tr>
+      <th>tested_variable</th>
+      <td><p>Variable associated with the unstandardized beta coefficient to be tested</p></td>
     </tr>
     <tr>
       <th>alpha</th>
@@ -105,10 +108,6 @@
     <tr>
       <th>test_all</th>
       <td><p>whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)</p></td>
-    </tr>
-    <tr>
-      <th>tested_variable_string</th>
-      <td><p>Variable associated with the unstandardized beta coefficient to be tested</p></td>
     </tr>
     </table>
     
@@ -143,12 +142,19 @@
 
 <span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'>glm</span>(<span class='no'>married</span> ~ <span class='no'>age</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>d</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'>binomial</span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>))
 <span class='fu'>konfound</span>(<span class='no'>m2</span>, <span class='no'>age</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: forcats</span></div><div class='output co'>#&gt; <span class='message'>Note that for a non-linear model, impact threshold should not be interpreted.</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(model[["call"]][["data"]], env): object 'd' not found</span></div><div class='input'>
+}</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: forcats</span></div><div class='output co'>#&gt; <span class='message'>Note that for a non-linear model, impact threshold should not be interpreted.</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(predvars, data, env): object 'age' not found</span></div><div class='input'>
 <span class='co'># using lme4 for mixed effects (or multi-level) models</span>
 <span class='kw'>if</span> (<span class='fu'>requireNamespace</span>(<span class='st'>"lme4"</span>)) {
-<span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='no'>fm1</span> <span class='kw'>&lt;-</span> <span class='fu'>lmer</span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='no'>sleepstudy</span>)
+<span class='fu'>library</span>(<span class='no'>lme4</span>)
+<span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='no'>fm1</span> <span class='kw'>&lt;-</span> <span class='kw'>lme4</span><span class='kw'>::</span><span class='fu'>lmer</span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='no'>sleepstudy</span>)
 <span class='fu'>konfound</span>(<span class='no'>m3</span>, <span class='no'>Days</span>)
-}</div><div class='output co'>#&gt; <span class='error'>Error in lmer(Reaction ~ Days + (1 | Subject), sleepstudy): could not find function "lmer"</span></div><div class='input'>
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; Replacement of Cases Approach:
+#&gt; To invalidate the inference, 84.83% of the estimate would have to be due to bias based on a threshold of 1.588 and statistical significance.
+#&gt; To invalidate the inference, 137 observations would have to be replaced with cases for which the effect is 0.
+#&gt; 
+#&gt; Correlation-based Approach:
+#&gt; An omitted variable would have to be correlated at 0.817 with the outcome and at 0.817 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.155 and statistical significance.
+#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.817 X 0.817 = 0.667 to invalidate an inference.</div><div class='output co'>#&gt; <span class='message'>Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest.</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
