@@ -104,7 +104,7 @@ test_sensitivity <- function(est_eff,
                                           to_return = .))
         konfound_output <- create_konfound_class(konfound_output)
         names(konfound_output) <- to_return
-        output_print(est_eff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, non_linear = FALSE)
+        output_print(est_eff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, alpha)
         
         cat("\n")
         message(paste("Print output created by default. Created", length(konfound_output), "other forms of output. Use list indexing or run summary() on the output to see how to access."))
@@ -116,7 +116,7 @@ test_sensitivity <- function(est_eff,
     else if (to_return == "raw_output") return(output_df(est_eff, beta_threshold, est_eff, bias, sustain, recase, obs_r, critical_r, r_con, itcv))
     else if (to_return == "thresh_plot") return(plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff))
     else if (to_return == "corr_plot") return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
-    else if (to_return == "print") return(output_print(est_eff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv))
+    else if (to_return == "print") return(output_print(est_eff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, alpha))
     else if (to_return == "table") return(output_table(model_object, tested_variable))
     else {
         stop("to_return must be set to 'raw_output', 'print', 'table', 'thresh_plot', or 'corr_plot' or some combination thereof")

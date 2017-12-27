@@ -61,7 +61,7 @@ plot_threshold <- function(beta_threshold, est_eff) {
         ggplot2::theme_bw() +
         ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank()) +
         ggplot2::xlab(NULL) +
-        ggplot2::ylab("Unstandardized Beta Coefficient (abs. value)") +
+        ggplot2::ylab("Effect (abs. value)") +
         ggplot2::theme(legend.position = "top")
     
     return(p)
