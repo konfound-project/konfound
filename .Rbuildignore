@@ -5,3 +5,4 @@
 ^README-.*\.png$
 ^docx$
 ^tutorial for sensitivity analysis in STATA (1)\.docx$
+^\.travis\.yml$
