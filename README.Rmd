@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-[![Travis build status](https://travis-ci.org/jrosen48/rsensitivity.svg?branch=master)](https://travis-ci.org/jrosen48/rsensitivity)
+[![Travis build status](https://travis-ci.org/jrosen48/konfound.svg?branch=master)](https://travis-ci.org/jrosen48/konfound)
 
 # konfound
 
