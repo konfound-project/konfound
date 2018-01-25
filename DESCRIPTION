@@ -27,5 +27,6 @@ Suggests: knitr,
     forcats,
     devtools,
     testthat,
-    lme4
+    lme4,
+    roxygen2
 VignetteBuilder: knitr
