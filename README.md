@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis build status](https://travis-ci.org/jrosen48/rsensitivity.svg?branch=master)](https://travis-ci.org/jrosen48/rsensitivity)
+[![Build Status](https://travis-ci.org/jrosen48/konfound.svg?branch=master)](https://travis-ci.org/jrosen48/konfound)
 
 konfound
 ========
@@ -35,7 +35,7 @@ library(konfound)
 ``` r
 pkonfound(2, .4, 100, 3)
 #> Replacement of Cases Approach:
-#> To invalidate an inference, 60.3% of the estimate would have to be due to bias based on a threshold of 0.794 for statistical significance (alpha = 0.05).
+#> To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
 #> To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.
 #> 
 #> Correlation-based Approach:
@@ -87,7 +87,7 @@ Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as foll
 konfound(m1, wt)
 #> Note that this output is calculated based on the correlation-based approach used in mkonfound()
 #> Replacement of Cases Approach:
-#> To invalidate an inference, 66.664% of the estimate would have to be due to bias based on a threshold of -1.293 for statistical significance (alpha = 0.05).
+#> To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).
 #> To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.
 #> 
 #> Correlation-based Approach:
@@ -112,18 +112,18 @@ head(d)
 #> 6  3.585478  87
 mkonfound(d, t, df)
 #> # A tibble: 30 x 7
-#>         t    df action        inference           pct_bia…     itcv  r_con
+#>         t    df action        inference  pct_bias_to_chan…     itcv  r_con
 #>     <dbl> <int> <chr>         <chr>                  <dbl>    <dbl>  <dbl>
-#>  1  7.08    178 to_invalidate reject_null            68.8   0.378   0.614 
-#>  2  4.13    193 to_invalidate reject_null            50.6   0.168   0.410 
-#>  3  1.89     47 to_sustain    fail_to_reject_null     5.47 -0.0120  0.110 
-#>  4 -4.17    138 to_invalidate reject_null            50.3   0.202   0.449 
-#>  5 -1.19     97 to_sustain    fail_to_reject_null    39.4  -0.0650  0.255 
-#>  6  3.59     87 to_invalidate reject_null            41.9   0.190   0.436 
-#>  7  0.282   117 to_sustain    fail_to_reject_null    85.5  -0.131   0.361 
-#>  8  2.55     75 to_invalidate reject_null            20.6   0.0750  0.274 
-#>  9 -4.44    137 to_invalidate reject_null            53.0   0.225   0.475 
-#> 10 -2.05    195 to_invalidate reject_null             3.51  0.00600 0.0770
+#>  1  7.08    178 to_invalidate reject_nu…             68.8   0.378   0.614 
+#>  2  4.13    193 to_invalidate reject_nu…             50.6   0.168   0.410 
+#>  3  1.89     47 to_sustain    fail_to_r…              5.47 -0.0120  0.110 
+#>  4 -4.17    138 to_invalidate reject_nu…             50.3   0.202   0.449 
+#>  5 -1.19     97 to_sustain    fail_to_r…             39.4  -0.0650  0.255 
+#>  6  3.59     87 to_invalidate reject_nu…             41.9   0.190   0.436 
+#>  7  0.282   117 to_sustain    fail_to_r…             85.5  -0.131   0.361 
+#>  8  2.55     75 to_invalidate reject_nu…             20.6   0.0750  0.274 
+#>  9 -4.44    137 to_invalidate reject_nu…             53.0   0.225   0.475 
+#> 10 -2.05    195 to_invalidate reject_nu…              3.51  0.00600 0.0770
 #> # ... with 20 more rows
 ```
 
