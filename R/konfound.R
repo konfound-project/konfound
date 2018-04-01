@@ -60,8 +60,12 @@ konfound <- function(model_object,
                               tails = tails,
                               to_return = to_return)
         
-        return(output)
-        
+        if (is.null(output)) {
+            
+        } else {
+            return(output)
+            
+        }
     }
 
     if (inherits(model_object, "glm")) {
