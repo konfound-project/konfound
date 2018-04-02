@@ -57,6 +57,9 @@
 <li>
   <a href="../articles/index.html">Articles</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -120,12 +123,12 @@
     <pre class="examples"><div class='input'><span class='co'># using lm() for linear models</span>
 <span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'>lm</span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
 <span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>)</div><div class='output co'>#&gt; <span class='message'>Note that this output is calculated based on the correlation-based approach used in mkonfound()</span></div><div class='output co'>#&gt; Replacement of Cases Approach:
-#&gt; To invalidate the inference, 66.664% of the estimate would have to be due to bias based on a threshold of -1.293 and statistical significance.
-#&gt; To invalidate the inference, 21 observations would have to be replaced with cases for which the effect is 0.
+#&gt; To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).
+#&gt; To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.
 #&gt; 
 #&gt; Correlation-based Approach:
-#&gt; An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of -0.36 and statistical significance.
-#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference.</div><div class='output co'>#&gt; NULL</div><div class='input'><span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>, <span class='kw'>test_all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   var_name         t df        action   inference pct_bias_to_change_inference
+#&gt; An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of -0.36 for statistical significance (alpha = 0.05).
+#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference.</div><div class='output co'>#&gt; <span class='message'>For more detailed output, consider setting `to_return` to table</span></div><div class='output co'>#&gt; <span class='message'>To consider other predictors of interest, consider setting `test_all` to TRUE.</span></div><div class='input'><span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>, <span class='kw'>test_all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   var_name         t df        action   inference pct_bias_to_change_inference
 #&gt; 1       wt -6.126382 30 to_invalidate reject_null                       53.136
 #&gt; 2       hp -3.555556 30 to_invalidate reject_null                       35.835
 #&gt;    itcv r_con
@@ -142,18 +145,18 @@
 
 <span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'>glm</span>(<span class='no'>married</span> ~ <span class='no'>age</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>d</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'>binomial</span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>))
 <span class='fu'>konfound</span>(<span class='no'>m2</span>, <span class='no'>age</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: forcats</span></div><div class='output co'>#&gt; <span class='message'>Note that for a non-linear model, impact threshold should not be interpreted.</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(predvars, data, env): object 'age' not found</span></div><div class='input'>
+}</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: forcats</span></div><div class='output co'>#&gt; <span class='message'>Note that for a non-linear model, impact threshold should not be interpreted.</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(model[["call"]][["data"]], env): object 'd' not found</span></div><div class='input'>
 <span class='co'># using lme4 for mixed effects (or multi-level) models</span>
 <span class='kw'>if</span> (<span class='fu'>requireNamespace</span>(<span class='st'>"lme4"</span>)) {
 <span class='fu'>library</span>(<span class='no'>lme4</span>)
 <span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='no'>fm1</span> <span class='kw'>&lt;-</span> <span class='kw'>lme4</span><span class='kw'>::</span><span class='fu'>lmer</span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='no'>sleepstudy</span>)
 <span class='fu'>konfound</span>(<span class='no'>m3</span>, <span class='no'>Days</span>)
 }</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; Replacement of Cases Approach:
-#&gt; To invalidate the inference, 84.83% of the estimate would have to be due to bias based on a threshold of 1.588 and statistical significance.
-#&gt; To invalidate the inference, 137 observations would have to be replaced with cases for which the effect is 0.
+#&gt; To invalidate an inference, 84.83% of the estimate would have to be due to bias. This is based on a threshold of 1.588 for statistical significance (alpha = 0.05).
+#&gt; To invalidate an inference, 137 observations would have to be replaced with cases for which the effect is 0.
 #&gt; 
 #&gt; Correlation-based Approach:
-#&gt; An omitted variable would have to be correlated at 0.817 with the outcome and at 0.817 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.155 and statistical significance.
+#&gt; An omitted variable would have to be correlated at 0.817 with the outcome and at 0.817 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.155 for statistical significance (alpha = 0.05).
 #&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.817 X 0.817 = 0.667 to invalidate an inference.</div><div class='output co'>#&gt; <span class='message'>Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest.</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
 </div></pre>
   </div>
