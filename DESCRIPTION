@@ -23,7 +23,6 @@ Description: Statistical methods that quantify the conditions necessary to alter
     statements in R. In particular, the functions konfound, pkonfound and mkonfound
     allow users to calculate the robustness of inferences for a user's own model, a
     single published study and multiple studies respectively.
-
 License: MIT + file LICENSE
 Imports: 
     broom,
