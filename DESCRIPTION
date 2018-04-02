@@ -1,5 +1,5 @@
-Package: konfound
 Type: Package
+Package: konfound
 Title: Quantify the Robustness of Causal Inferences
 Version: 0.1.0
 Authors@R: c(
@@ -26,21 +26,22 @@ Description: Statistical methods that quantify the conditions necessary to alter
 License: MIT + file LICENSE
 Imports: 
     broom,
-    rlang,
     dplyr,
     ggplot2,
-    tidyr,
-    purrr,
     margins,
-    pbkrtest
+    pbkrtest,
+    purrr,
+    rlang,
+    tidyr
+Suggests: 
+    devtools,
+    forcats,
+    knitr,
+    lme4,
+    rmarkdown,
+    roxygen2,
+    testthat
+VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-Suggests: knitr,
-    rmarkdown,
-    forcats,
-    devtools,
-    testthat,
-    lme4,
-    roxygen2
-VignetteBuilder: knitr

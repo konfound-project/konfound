@@ -12,17 +12,17 @@
 #' konfound(m1, wt)
 #' konfound(m1, wt, test_all = TRUE)
 #' konfound(m1, wt, to_return = "table")
-#' 
+#'
 #' # using glm() for non-linear models
 #' if (requireNamespace("forcats")) {
 #' d <- forcats::gss_cat
 #'
 #' d$married <- ifelse(d$marital == "Married", 1, 0)
-#' 
+#'
 #' m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
 #' konfound(m2, age)
 #' }
-#' 
+#'
 #' # using lme4 for mixed effects (or multi-level) models
 #' if (requireNamespace("lme4")) {
 #' library(lme4)
@@ -32,78 +32,79 @@
 #'
 #' @export
 
-konfound <- function(model_object, 
+konfound <- function(model_object,
                      tested_variable,
-                     alpha = .05, 
+                     alpha = .05,
                      tails = 2,
                      to_return = "print",
                      test_all = FALSE) {
-    
-    # Stop messages
-    if (!(class(model_object)[1] %in% c("lm", "glm", "lmerMod"))) {
-        stop("konfound() is currently implemented for models estimated with lm(), glm(), and lme4::lmer(); consider using pkonfound() instead")
-    }
-    
-    if ("table" %in% to_return & test_all == TRUE) stop("cannot return a table when test_all is set to TRUE")
-    
-    # Dealing with non-standard evaluation
-    tested_variable_enquo <- rlang::enquo(tested_variable) # dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
-    tested_variable_string <- rlang::quo_name(tested_variable_enquo)
-    
-    # Dispatching based on class
-    if (class(model_object)[1] == "lm") {
-        
-        output <- konfound_lm(model_object = model_object,
-                              tested_variable_string = tested_variable_string,
-                              test_all = test_all,
-                              alpha = alpha,
-                              tails = tails,
-                              to_return = to_return)
-        
-        if (is.null(output)) {
-            
-        } else {
-            return(output)
-            
-        }
-    }
 
-    if (inherits(model_object, "glm")) {
-        message("Note that for a non-linear model, impact threshold should not be interpreted.")
-        
-        output <- konfound_glm(model_object = model_object,
-                               tested_variable_string = tested_variable_string,
-                               test_all = test_all,
-                               alpha = alpha,
-                               tails = tails,
-                               to_return = to_return)
-        
-        return(output)
-    }
-    
-    if (inherits(model_object, "lmerMod")) {
-        
-        output <- konfound_lmer(model_object = model_object,
-                               tested_variable_string = tested_variable_string,
-                               test_all = test_all,
-                               alpha = alpha,
-                               tails = tails,
-                               to_return = to_return)
-        
-        message("Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest.")
-        
-        return(output)
-        
-    }
-    
-    if (!("table" %in% to_return)) {
-        message("For more detailed output, consider setting `to_return` to table")
-    }
-    
-    if (test_all == FALSE) {
-        message("To consider other predictors of interest, consider setting `test_all` to TRUE.")
+  # Stop messages
+  if (!(class(model_object)[1] %in% c("lm", "glm", "lmerMod"))) {
+    stop("konfound() is currently implemented for models estimated with lm(), glm(), and lme4::lmer(); consider using pkonfound() instead")
+  }
+
+  if ("table" %in% to_return & test_all == TRUE) stop("cannot return a table when test_all is set to TRUE")
+
+  # Dealing with non-standard evaluation
+  tested_variable_enquo <- rlang::enquo(tested_variable) # dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
+  tested_variable_string <- rlang::quo_name(tested_variable_enquo)
+
+  # Dispatching based on class
+  if (class(model_object)[1] == "lm") {
+    output <- konfound_lm(
+      model_object = model_object,
+      tested_variable_string = tested_variable_string,
+      test_all = test_all,
+      alpha = alpha,
+      tails = tails,
+      to_return = to_return
+    )
+
+    if (is.null(output)) {
+
     } else {
-        message("Note that presently these predictors of interest are tested independently; future output may use the approach used in mkonfound.")
+      return(output)
     }
+  }
 
+  if (inherits(model_object, "glm")) {
+    message("Note that for a non-linear model, impact threshold should not be interpreted.")
+
+    output <- konfound_glm(
+      model_object = model_object,
+      tested_variable_string = tested_variable_string,
+      test_all = test_all,
+      alpha = alpha,
+      tails = tails,
+      to_return = to_return
+    )
+
+    return(output)
+  }
+
+  if (inherits(model_object, "lmerMod")) {
+    output <- konfound_lmer(
+      model_object = model_object,
+      tested_variable_string = tested_variable_string,
+      test_all = test_all,
+      alpha = alpha,
+      tails = tails,
+      to_return = to_return
+    )
+
+    message("Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest.")
+
+    return(output)
+  }
+
+  if (!("table" %in% to_return)) {
+    message("For more detailed output, consider setting `to_return` to table")
+  }
+
+  if (test_all == FALSE) {
+    message("To consider other predictors of interest, consider setting `test_all` to TRUE.")
+  } else {
+    message("Note that presently these predictors of interest are tested independently; future output may use the approach used in mkonfound.")
+  }
 }
