@@ -1,14 +1,29 @@
 Package: konfound
 Type: Package
-Title: Sensitivity analysis based on Rubin's causal model
+Title: Quantify the Robustness of Causal Inferences
 Version: 0.1.0
 Authors@R: c(
     person(c("Joshua", "M"), "Rosenberg", role = c("aut", "cre"), email = "jmichaelrosenberg@gmail.com"),
     person(c("Ran"), "Xu", role = "ctb", email = "ranxu@msu.edu"),
     person(c("Kenneth", "A"), "Frank", role = "ctb", email = "kenfrank@msu.edu")
     )
-Maintainer: Joshua Rosenberg <jmichaelrosenberg@gmail.com>
-Description: R package to easily carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin's (1974) causal model. Provides output for the replacement of cases and correlation based approaches in text, plot, or data frame form. Includes functionality to carry out sensitivity analysis for published studies as well as common models fit in R, as well as meta-analyses. 
+Description: Statistical methods that quantify the conditions necessary to alter
+    inferences, also known as “sensitivity analysis,” are becoming increasingly
+    important to a variety of quantitative sciences. A series of recent works,
+    including Frank (2000) <doi:10.1177/0049124100029002001> and Frank et al.
+    (2013) <doi:10.3102/0162373713493129> extend previous sensitivity analyses
+    by considering the characteristics of omitted variables or unobserved cases
+    that would change an inference if such variables or cases were observed. These
+    analyses generate statements such as “an omitted variable would have to be
+    correlated at xx with the predictor of interest (e.g., treatment) and outcome
+    to invalidate an inference of a treatment effect.” Or “one would have to replace
+    pp percent of the observed data with null hypothesis cases to invalidate the
+    inference.” We implement these recent developments of sensitivity analysis and
+    provide modules to calculate these two robustness indices and generate such
+    statements in R. In particular, the functions konfound, pkonfound and mkonfound
+    allow users to calculate the robustness of inferences for a user's own model, a
+    single published study and multiple studies respectively.
+
 License: MIT + file LICENSE
 Imports: 
     broom,

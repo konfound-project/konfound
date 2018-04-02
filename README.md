@@ -93,7 +93,8 @@ konfound(m1, wt)
 #> Correlation-based Approach:
 #> An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of -0.36 for statistical significance (alpha = 0.05).
 #> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference.
-#> NULL
+#> For more detailed output, consider setting `to_return` to table
+#> To consider other predictors of interest, consider setting `test_all` to TRUE.
 ```
 
 #### mkonfound for meta-analyses including sensitivity analysis
