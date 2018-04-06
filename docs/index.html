@@ -63,14 +63,10 @@
 <div class="contents">
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<div id="konfound" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#konfound" class="anchor"></a>konfound</h1></div>
 <p>In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias. The goal of <code>konfound</code> is to carry out sensitivity analysis to help analysts to <em>quantify how robust inferences are to potential sources of bias</em>. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.</p>
-</div>
 <div id="installation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h1>
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h1></div>
 <p>You can install konfound with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"konfound"</span>)</code></pre></div>
 <p>You can install the development version from GitHub with:</p>
@@ -88,7 +84,10 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 <a href="#pkonfound-for-published-studies" class="anchor"></a>pkonfound() for published studies</h4>
 <p><code><a href="reference/pkonfound.html">pkonfound()</a></code>, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(konfound)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dv">2</span>, .<span class="dv">4</span>, <span class="dv">100</span>, <span class="dv">3</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dt">est_eff =</span> <span class="dv">2</span>, 
+          <span class="dt">std_err =</span> .<span class="dv">4</span>, 
+          <span class="dt">n_obs =</span> <span class="dv">100</span>, 
+          <span class="dt">n_covariates =</span> <span class="dv">3</span>)
 <span class="co">#&gt; Replacement of Cases Approach:</span>
 <span class="co">#&gt; To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).</span>
 <span class="co">#&gt; To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.</span>
@@ -207,6 +206,8 @@ m1
     <h2 class="hasAnchor">
 <a href="#sidebar" class="anchor"></a>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cran.r-project.org/package=konfound">https://​cran.r-project.org/​package=konfound</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/jrosen48/konfound">https://​github.com/​jrosen48/​konfound</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/jrosen48/konfound/issues">https://​github.com/​jrosen48/​konfound/​issues</a>
@@ -222,6 +223,7 @@ m1
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/jrosen48/konfound"><img src="https://travis-ci.org/jrosen48/konfound.svg?branch=master" alt="Build Status"></a></li>
+<li><a href="https://cran.r-project.org/package=konfound"><img src="https://www.r-pkg.org/badges/version/konfound" alt="CRAN status"></a></li>
 </ul>
 </div>
 

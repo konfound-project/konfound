@@ -1,9 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/jrosen48/konfound.svg?branch=master)](https://travis-ci.org/jrosen48/konfound)
-
-konfound
-========
+[![Build Status](https://travis-ci.org/jrosen48/konfound.svg?branch=master)](https://travis-ci.org/jrosen48/konfound) [![CRAN status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound) \# konfound
 
 In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias. The goal of `konfound` is to carry out sensitivity analysis to help analysts to *quantify how robust inferences are to potential sources of bias*. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.
 
@@ -39,7 +36,10 @@ library(konfound)
 ```
 
 ``` r
-pkonfound(2, .4, 100, 3)
+pkonfound(est_eff = 2, 
+          std_err = .4, 
+          n_obs = 100, 
+          n_covariates = 3)
 #> Replacement of Cases Approach:
 #> To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
 #> To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.
