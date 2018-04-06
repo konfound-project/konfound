@@ -1,6 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/jrosen48/konfound.svg?branch=master)](https://travis-ci.org/jrosen48/konfound)
+[![Build Status](https://travis-ci.org/jrosen48/konfound.svg?branch=master)](https://travis-ci.org/jrosen48/konfound) [![CRAN status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 
 konfound
 ========
@@ -10,7 +10,13 @@ In social science (and educational) research, we often wish to understand how ro
 Installation
 ============
 
-Presently, `konfound` is available only on GitHub. You can install `konfound` from GitHub with:
+You can install konfound with:
+
+``` r
+install.packages("konfound")
+```
+
+You can install the development version from GitHub with:
 
 ``` r
 install.packages("devtools")
