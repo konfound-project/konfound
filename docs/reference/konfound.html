@@ -150,13 +150,13 @@
 
 <span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'>glm</span>(<span class='no'>married</span> ~ <span class='no'>age</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>d</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'>binomial</span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>))
 <span class='fu'>konfound</span>(<span class='no'>m2</span>, <span class='no'>age</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: forcats</span></div><div class='output co'>#&gt; <span class='message'>Note that for a non-linear model, impact threshold should not be interpreted.</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(model[["call"]][["data"]], env): object 'd' not found</span></div><div class='input'>
+}</div><div class='output co'>#&gt; <span class='message'>Note that for a non-linear model, impact threshold should not be interpreted.</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(model[["call"]][["data"]], env): object 'd' not found</span></div><div class='input'>
 <span class='co'># using lme4 for mixed effects (or multi-level) models</span>
 <span class='kw'>if</span> (<span class='fu'>requireNamespace</span>(<span class='st'>"lme4"</span>)) {
 <span class='fu'>library</span>(<span class='no'>lme4</span>)
 <span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='no'>fm1</span> <span class='kw'>&lt;-</span> <span class='kw'>lme4</span><span class='kw'>::</span><span class='fu'>lmer</span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='no'>sleepstudy</span>)
 <span class='fu'>konfound</span>(<span class='no'>m3</span>, <span class='no'>Days</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; Replacement of Cases Approach:
+}</div><div class='output co'>#&gt; Replacement of Cases Approach:
 #&gt; To invalidate an inference, 84.83% of the estimate would have to be due to bias. This is based on a threshold of 1.588 for statistical significance (alpha = 0.05).
 #&gt; To invalidate an inference, 137 observations would have to be replaced with cases for which the effect is 0.
 #&gt; 
