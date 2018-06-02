@@ -19,7 +19,7 @@ plot_correlation <- function(r_con, obs_r, critical_r) {
     ggplot2::geom_segment(ggplot2::aes(x = .15, y = 1), xend = .9, yend = 1, arrow = ggplot2::arrow(), size = 2.5, color = "#A6CEE3") + # straight across
 
     # lagel annotations
-    ggplot2::annotate("text", x = 0, y = 0, label = paste0("Confounding Variable"), fontface = 3) +
+    ggplot2::annotate("text", x = 0, y = 0, label = paste0("Confounding\nVariable"), fontface = 3) +
     ggplot2::annotate("text", x = 0, y = 1, label = paste0("Predictor of Interest"), fontface = 3) +
     ggplot2::annotate("text", x = 1, y = 1, label = paste0("Outcome"), fontface = 3) +
 
