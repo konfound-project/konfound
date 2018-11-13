@@ -16,20 +16,28 @@ comment = "#>"
 )
 ```
 
-# Background
+# Table of contents 
+
+- Introduction (1 page)
+- Background on sensitivity analysis
+    - Impact threshold of a confounding variable (1 page)
+    - Percent bias to invalidate an inference (1 page)
+- Example
+    - pkonfound for already-published studies (1)
+    - konfound for models fitted in R (3 pages)
+    - mkonfound for meta-analyses that involve sensitivity analysis (2 pages)
+
+# Introduction
 
 In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias.  The goal of `konfound` is to carry out sensitivity analysis to help analysts to *quantify how robust inferences are to potential sources of bias*. This package provides functions based on developments in sensitivity analysis by Frank and colleagues, which previously have been implemented in `Stata` and through an Excel spreadsheet, in `R` through the `konfound` package. In particular, we provide functions for both *values from analyses carried out outside of R as well as from models (`lm()`, `glm()`, and `lme4::lmer()` fit in R)* for:
 
 * Quantifying the bias necessary to alter an inference from the framework of Rubin's (1974) causal model
 * The robustness of causal inference in terms of the impact threshold of a confounding variable
 
-### Installation konfound
-
-Presently, `konfound` is available only on GitHub. You can install `konfound` from GitHub with:
+You can install `konfound` with the following:
 
 ```{r gh-installation, eval = FALSE}
-install.packages("devtools")
-devtools::install_github("jrosen48/konfound")
+install.packages("konfound")
 ```
 
 You can then load konfound with the `library()` function:
@@ -42,7 +50,7 @@ library(konfound)
 devtools::load_all(".")
 ```
 
-# Use of pkonfound() for values from an already-conducted analysis
+## Use of pkonfound() for values from an already-conducted analysis
 
 `pkonfound()` is used when we have values from an already-conducted analysis (like a regression analysis), such as one in an already-published study or from an analysis carried out using other software. 
 
@@ -100,7 +108,7 @@ Finally, you can return the raw output, for use in other analyses.
 pkonfound(.4, 2, 100, 3, to_return = "raw_output")
 ```
 
-# Use of konfound() for models fit in R
+## Use of konfound() for models fit in R
 
 Where `pkonfound()` can be used with values from already-conducted analyses, `konfound()` can be used with models (`lm()`, `glm()`, and `lme4::lmer()`) fit in R.
 
@@ -173,7 +181,7 @@ if (requireNamespace("lme4")) {
 }
 ```
 
-# Use of mkonfound() for meta-analyses that include sensitivity analysis
+## Use of mkonfound() for meta-analyses that include sensitivity analysis
 
 We can also use `konfound` to carry out sensitivity analysis as part of meta-analyses. For example, here, `d` represents output from a number (30 in this case) of past studies, read in a CSV file from a website:
 
