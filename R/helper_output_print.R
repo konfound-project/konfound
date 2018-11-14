@@ -1,7 +1,7 @@
 # Function to output printed text
 
 output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL, nu, recase, obs_r, critical_r, r_con, itcv, alpha) {
-  cat("Replacement of Cases Approach:\n")
+  cat("Percent Bias Necessary to Invalidate the Inference:\n")
   if (abs(eff_diff) > abs(beta_threshhold)) {
     cat("To invalidate an inference, ", round(bias, 3), "% of the estimate would have to be due to bias. This is based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = "")
     cat("To invalidate an inference, ", round(recase, 3), " observations would have to be replaced with cases for which the effect is ", nu, ".\n", sep = "")
@@ -15,7 +15,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
   }
 
   cat("\n")
-  cat("Correlation-based Approach:\n")
+  cat("Impact Threshold for a Confounding Variable:\n")
   if (abs(obs_r) > abs(critical_r)) {
     cat("An omitted variable would have to be correlated at ", r_con, " with the outcome and at ", r_con,
       " with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of ", round(critical_r, 3), " for statistical significance (alpha = ", alpha, ").\n",
