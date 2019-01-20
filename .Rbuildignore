@@ -1,3 +1,5 @@
+^CRAN-RELEASE$
+^LICENSE\.md$
 ^author-guide\.pdf$
 ^rjournal-paper$
 ^.*\.Rproj$
