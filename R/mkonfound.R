@@ -26,7 +26,7 @@ mkonfound <- function(d, t, df, alpha = .05, tails = 2, return_plot = FALSE) {
     stop("To carry out sensitivity analysis for a single study, use pkonfound()")
   }
 
-  results_df <- purrr::map2_dfr(.x = t_vec, .y = df_vec, .f = core_sensitivity_mkonfound)
+  results_df <- suppressWarnings(purrr::map2_dfr(.x = t_vec, .y = df_vec, .f = core_sensitivity_mkonfound))
 
   if (return_plot == TRUE) {
     results_df$action <- dplyr::case_when(
