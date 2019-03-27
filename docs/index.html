@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">konfound</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -68,10 +68,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/Introduction_to_konfound.html">Introduction to konfound</a>
-    </li>
-    <li>
-      <a href="articles/Untitled.html">printing test with konfound output</a>
+      <a href="articles/introduction-to-konfound.html">Introduction to konfound</a>
     </li>
   </ul>
 </li>
@@ -173,7 +170,6 @@ m1
 <span class="co">#&gt; F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</span></code></pre></div>
 <p>Sensitivity analysis for the effect for <code>wt</code> on <code>mpg</code> can be carried out as follows, specifying the fitted model object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/konfound.html">konfound</a></span>(m1, wt)
-<span class="co">#&gt; Note that this output is calculated based on the correlation-based approach used in mkonfound()</span>
 <span class="co">#&gt; Percent Bias Necessary to Invalidate the Inference:</span>
 <span class="co">#&gt; To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).</span>
 <span class="co">#&gt; To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.</span>

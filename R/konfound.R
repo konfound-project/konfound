@@ -70,7 +70,8 @@ konfound <- function(model_object,
 
   if (inherits(model_object, "glm")) {
     message("Note that for a non-linear model, impact threshold should not be interpreted.")
-
+    #message("Note that this is only an approximation. For exact results in terms of the number of cases that must be switched from treatment success to treatment failure to invalidate the inference see: https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm")
+      
     output <- konfound_glm(
       model_object = model_object,
       tested_variable_string = tested_variable_string,
