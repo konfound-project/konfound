@@ -1,0 +1,57 @@
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+
+{\centering \includegraphics[width=0.7\linewidth]{paper_files/figure-latex/unnamed-chunk-5-1}
+
+}
+
+\caption{ }\label{fig:unnamed-chunk-5}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+
+{\centering \includegraphics[width=0.7\linewidth]{paper_files/figure-latex/unnamed-chunk-6-1}
+
+}
+
+\caption{ }\label{fig:unnamed-chunk-6}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+
+{\centering \includegraphics[width=0.7\linewidth]{paper_files/figure-latex/unnamed-chunk-8-1}
+
+}
+
+\caption{ }\label{fig:unnamed-chunk-81}
+\end{figure}\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{paper_files/figure-latex/unnamed-chunk-8-2}
+
+}
+
+\caption{ }\label{fig:unnamed-chunk-82}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+
+{\centering \includegraphics[width=0.7\linewidth]{paper_files/figure-latex/unnamed-chunk-12-1}
+
+}
+
+\caption{ }\label{fig:unnamed-chunk-12}
+\end{figure*}
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+
+{\centering \includegraphics[width=0.7\linewidth]{paper_files/figure-latex/unnamed-chunk-18-1}
+
+}
+
+\caption{ }\label{fig:unnamed-chunk-18}
+\end{figure*}

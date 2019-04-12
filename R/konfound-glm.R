@@ -18,7 +18,6 @@ konfound_glm <- function(model_object, tested_variable_string, test_all, alpha, 
   n_covariates <- glance_output$df.null - 2 # (for intercept and coefficient)
 
   if (test_all == FALSE) {
-    message("Note that this output is calculated based on the correlation-based approach used in mkonfound()")
     out <- test_sensitivity(
       est_eff = est_eff,
       std_err = std_err,
@@ -33,6 +32,7 @@ konfound_glm <- function(model_object, tested_variable_string, test_all, alpha, 
     )
     return(out)
   } else {
+    message("Note that this output is calculated based on the correlation-based approach used in mkonfound()")
     stop("Multiple variables cannot presently be tested for models fit using glm(); this will be added in the future.")
     d <- data.frame(t = est_eff / std_err, df = (n_obs - n_covariates - 1))
     o <- mkonfound(d, .data$t, .data$df)

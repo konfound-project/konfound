@@ -41,7 +41,9 @@ konfound_lmer <- function(model_object, tested_variable_string, test_all, alpha,
     ))
   } else {
     d <- data.frame(t = est_eff / std_err, df = df_kr)
-    o <- mkonfound(d, .data$t, .data$df)
+    o <- suppressWarnings(mkonfound(d, .data$t, .data$df))
+    term_names <- coef_df$term
+    suppressWarnings(bind_cols(variable = term_names, o))
     return(o)
   }
 }
