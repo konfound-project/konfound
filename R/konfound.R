@@ -94,7 +94,7 @@ konfound <- function(model_object,
       to_return = to_return
     )
 
-    message("Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest. We are presently working to add other methods for calculating the degrees of freedom for the predictor(s) of interest. If you wish to use other methods now, consider those detailed here: https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. You can then enter degrees of obtained from another method along with the coefficient, number of observations, and number of covariates to the pkonfound() function to carry out the sensitivity analysis.")
+    message("Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest. We are presently working to add other methods for calculating the degrees of freedom for the predictor(s) of interest. If you wish to use other methods now, consider those detailed here: https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. You can then enter degrees of freedom obtained from another method along with the coefficient, number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.")
 
     return(output)
   }
