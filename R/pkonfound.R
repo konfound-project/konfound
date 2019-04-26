@@ -7,6 +7,7 @@
 #' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
 #' @param nu what hypothesis to be tested; defaults to testing whether est_eff is significantly different from 0
+#' @param n_trm the number
 #' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
@@ -32,19 +33,30 @@ pkonfound <- function(est_eff,
                       alpha = .05,
                       tails = 2,
                       nu = 0,
+                      n_trm = NULL,
+                      switch = NULL,
+                      non_linear = FALSE,
                       to_return = "print") {
   if ("table" %in% to_return) stop("a table can only be output when using konfound")
 
-  out <- test_sensitivity(
-    est_eff = est_eff,
-    std_err = std_err,
-    n_obs = n_obs,
-    n_covariates = n_covariates,
-    alpha = alpha,
-    tails = tails,
-    nu = nu,
-    to_return = to_return
-  )
+  if (non_linear == TRUE) {
+      out <- test_sensitivity_ln(
+          est_eff = est_eff,
+          std_err_err,
+          n_trm = n_trm
+      )
+  } else {
+      out <- test_sensitivity(
+          est_eff = est_eff,
+          std_err = std_err,
+          n_obs = n_obs,
+          n_covariates = n_covariates,
+          alpha = alpha,
+          tails = tails,
+          nu = nu,
+          to_return = to_return
+      )   
+  }
 
   if (!is.null(out)) { # dealing with a strange print issue
     return(out)
