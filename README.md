@@ -2,7 +2,8 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 [![Build Status](https://travis-ci.org/jrosen48/konfound.svg?branch=master)](https://travis-ci.org/jrosen48/konfound) [![CRAN status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 
-# konfound
+konfound
+========
 
 In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias. The goal of `konfound` is to carry out sensitivity analysis to help analysts to *quantify how robust inferences are to potential sources of bias*. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.
 
@@ -24,7 +25,7 @@ devtools::install_github("jrosen48/konfound")
 
     #> Loading konfound
     #> Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).
-    #> For more information visit https://jmichaelrosenberg.shinyapps.io/shinykonfound/.
+    #> For more information visit http://konfound-it.com.
 
 Use of konfound
 ===============
@@ -42,11 +43,11 @@ pkonfound(est_eff = 2,
           std_err = .4, 
           n_obs = 100, 
           n_covariates = 3)
-#> Replacement of Cases Approach:
+#> Percent Bias Necessary to Invalidate the Inference:
 #> To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
 #> To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.
 #> 
-#> Correlation-based Approach:
+#> Impact Threshold for a Confounding Variable:
 #> An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.201 for statistical significance (alpha = 0.05).
 #> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference.
 #> For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.
@@ -93,12 +94,11 @@ Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as foll
 
 ``` r
 konfound(m1, wt)
-#> Note that this output is calculated based on the correlation-based approach used in mkonfound()
-#> Replacement of Cases Approach:
+#> Percent Bias Necessary to Invalidate the Inference:
 #> To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).
 #> To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.
 #> 
-#> Correlation-based Approach:
+#> Impact Threshold for a Confounding Variable:
 #> An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of -0.36 for statistical significance (alpha = 0.05).
 #> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference.
 #> For more detailed output, consider setting `to_return` to table
@@ -121,19 +121,19 @@ head(d)
 #> 6  3.585478  87
 mkonfound(d, t, df)
 #> # A tibble: 30 x 7
-#>         t    df action        inference  pct_bias_to_chan…     itcv  r_con
-#>     <dbl> <int> <chr>         <chr>                  <dbl>    <dbl>  <dbl>
-#>  1  7.08    178 to_invalidate reject_nu…             68.8   0.378   0.614 
-#>  2  4.13    193 to_invalidate reject_nu…             50.6   0.168   0.410 
-#>  3  1.89     47 to_sustain    fail_to_r…              5.47 -0.0120  0.110 
-#>  4 -4.17    138 to_invalidate reject_nu…             50.3   0.202   0.449 
-#>  5 -1.19     97 to_sustain    fail_to_r…             39.4  -0.0650  0.255 
-#>  6  3.59     87 to_invalidate reject_nu…             41.9   0.190   0.436 
-#>  7  0.282   117 to_sustain    fail_to_r…             85.5  -0.131   0.361 
-#>  8  2.55     75 to_invalidate reject_nu…             20.6   0.0750  0.274 
-#>  9 -4.44    137 to_invalidate reject_nu…             53.0   0.225   0.475 
-#> 10 -2.05    195 to_invalidate reject_nu…              3.51  0.00600 0.0770
-#> # ... with 20 more rows
+#>         t    df action     inference     pct_bias_to_change_i…   itcv r_con
+#>     <dbl> <int> <chr>      <chr>                         <dbl>  <dbl> <dbl>
+#>  1  7.08    178 to_invali… reject_null                   68.8   0.378 0.614
+#>  2  4.13    193 to_invali… reject_null                   50.6   0.168 0.41 
+#>  3  1.89     47 to_sustain fail_to_reje…                  5.47 -0.012 0.11 
+#>  4 -4.17    138 to_invali… reject_null                   50.3   0.202 0.449
+#>  5 -1.19     97 to_sustain fail_to_reje…                 39.4  -0.065 0.255
+#>  6  3.59     87 to_invali… reject_null                   41.9   0.19  0.436
+#>  7  0.282   117 to_sustain fail_to_reje…                 85.5  -0.131 0.361
+#>  8  2.55     75 to_invali… reject_null                   20.6   0.075 0.274
+#>  9 -4.44    137 to_invali… reject_null                   53.0   0.225 0.475
+#> 10 -2.05    195 to_invali… reject_null                    3.51  0.006 0.077
+#> # … with 20 more rows
 ```
 
 Other information

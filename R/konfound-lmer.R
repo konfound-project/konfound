@@ -19,7 +19,7 @@ konfound_lmer <- function(model_object, tested_variable_string, test_all, alpha,
     df_kr <- df_kr[names(df_kr) == tested_variable_string]
   } else {
     coef_df <- tidy_output[-1, ] # to remove intercept
-    coef_df <- filter(coef_df, !is.na(std.error))
+    coef_df <- filter(coef_df, !is.na(coef_df$std.error))
     est_eff <- coef_df$estimate
     std_err <- coef_df$std.error
     df_kr <- get_kr_df(model_object)

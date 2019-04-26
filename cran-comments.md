@@ -1,9 +1,6 @@
-## Changes in response to feedback from CRAN maintainer
+# CRAN comments
 
-* Changed in the DESCRIPTION:
-    * treatment effect."  with  "treatment effect".
-    * the inference.    by  the inference".
-
+* I'm sorry, I'm submitting this again after noting an error in the submission
 
 ## Test environments
 * local OS X install, R 3.4.4
