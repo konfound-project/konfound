@@ -5,7 +5,8 @@
 \title{Perform sensitivity analysis for published studies}
 \usage{
 pkonfound(est_eff, std_err, n_obs, n_covariates = 1, alpha = 0.05,
-  tails = 2, nu = 0, to_return = "print")
+  tails = 2, nu = 0, n_trm = NULL, switch_trm = FALSE,
+  non_linear = FALSE, to_return = "print")
 }
 \arguments{
 \item{est_eff}{the estimated effect (such as an unstandardized beta coefficient or a group mean difference)}
@@ -22,6 +23,12 @@ pkonfound(est_eff, std_err, n_obs, n_covariates = 1, alpha = 0.05,
 
 \item{nu}{what hypothesis to be tested; defaults to testing whether est_eff is significantly different from 0}
 
+\item{n_trm}{the number of cases associated with the treatment condition; applicable only when non_linear = TRUE}
+
+\item{switch_trm}{whether to switch the treatment and control cases; defaults to FALSE; applicable only when non_linear - TRUE}
+
+\item{non_linear}{whether the model is a non-linear model; defaults to FALSE}
+
 \item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
 }
 \value{
@@ -34,6 +41,7 @@ For published studies, this command calculates (1) how much bias there must be i
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
+pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
 
 pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 pkonfound(2, .4, 100, 3, to_return = "corr_plot")
