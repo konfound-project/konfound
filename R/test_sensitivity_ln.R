@@ -128,7 +128,7 @@ test_sensitivity_ln <- function(est_eff,
     
     conclusion2 <- sprintf("For the Implied Table, we have estimate of %.3f, with standard error of %.3f and t-ratio of %.3f.", 
                            final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start)
-    conclusion3 <- sprintf("For the Transferred Table, we have estimate of %.3f, with standard error of %.3f and t-ratio of %.3f.", 
+    conclusion3 <- sprintf("For the Transfer Table, we have estimate of %.3f, with standard error of %.3f and t-ratio of %.3f.", 
                            final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final)
     
     result <- list(conclusion1, Implied_Table = final_solution$table_start, Transfer_Table = final_solution$table_final, 
