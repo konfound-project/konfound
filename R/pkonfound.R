@@ -37,7 +37,7 @@ pkonfound <- function(est_eff,
                       tails = 2,
                       nu = 0,
                       n_trm = NULL,
-                      switch_trm = FALSE,
+                      switch_trm = TRUE,
                       non_linear = FALSE,
                       to_return = "print") {
   if ("table" %in% to_return) stop("a table can only be output when using konfound")
