@@ -1,3 +1,7 @@
+# konfound 0.2.0
+
+Update to the non-linear functions.
+
 # konfound 0.1.2
 
 * Thanks to J. Murphy for pointing out a bug in how mkonfound works for lme4 output, a bug in the code of `konfound-lm` related to when the message is displayed when all coefficients are tested, and suggesting to add the name of the variable to the data frame returned when all variables are tested
