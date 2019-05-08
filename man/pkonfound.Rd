@@ -5,7 +5,7 @@
 \title{Perform sensitivity analysis for published studies}
 \usage{
 pkonfound(est_eff, std_err, n_obs, n_covariates = 1, alpha = 0.05,
-  tails = 2, nu = 0, n_trm = NULL, switch_trm = FALSE,
+  tails = 2, nu = 0, n_trm = NULL, switch_trm = TRUE,
   non_linear = FALSE, to_return = "print")
 }
 \arguments{

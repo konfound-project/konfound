@@ -21,7 +21,7 @@ In social science (and educational) research, we often wish to understand how ro
 
 # Installation
 
-You can install konfound with:
+You can install the CRAN version of konfound with:
 
 ```{r, eval = F}
 install.packages("konfound")
