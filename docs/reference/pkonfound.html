@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">konfound</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -126,7 +126,8 @@
     </div>
 
     <pre class="usage"><span class='fu'>pkonfound</span>(<span class='no'>est_eff</span>, <span class='no'>std_err</span>, <span class='no'>n_obs</span>, <span class='kw'>n_covariates</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
-  <span class='kw'>tails</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"print"</span>)</pre>
+  <span class='kw'>tails</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>nu</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>n_trm</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>switch_trm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>non_linear</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"print"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -160,6 +161,18 @@
       <td><p>what hypothesis to be tested; defaults to testing whether est_eff is significantly different from 0</p></td>
     </tr>
     <tr>
+      <th>n_trm</th>
+      <td><p>the number of cases associated with the treatment condition; applicable only when non_linear = TRUE</p></td>
+    </tr>
+    <tr>
+      <th>switch_trm</th>
+      <td><p>whether to switch the treatment and control cases; defaults to FALSE; applicable only when non_linear - TRUE</p></td>
+    </tr>
+    <tr>
+      <th>non_linear</th>
+      <td><p>whether the model is a non-linear model; defaults to FALSE</p></td>
+    </tr>
+    <tr>
       <th>to_return</th>
       <td><p>whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return</p></td>
     </tr>
@@ -189,7 +202,49 @@
 #&gt; 
 #&gt; Impact Threshold for a Confounding Variable:
 #&gt; An omitted variable would have to be correlated at 0.335 with the outcome and at 0.335 with the predictor of interest (conditioning on observed covariates) to sustain an inference based on a threshold of 5.916 for statistical significance (alpha = 0.05).
-#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.335 X 0.335 = 0.112 to sustain an inference.</div><div class='output co'>#&gt; <span class='message'>For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'>
+#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.335 X 0.335 = 0.112 to sustain an inference.</div><div class='output co'>#&gt; <span class='message'>For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span>(-<span class='fl'>0.2</span>, <span class='fl'>0.103</span>, <span class='fl'>20888</span>, <span class='fl'>3</span>, <span class='kw'>n_trm</span> <span class='kw'>=</span> <span class='fl'>17888</span>, <span class='kw'>non_linear</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [[1]]
+#&gt; [1] "To sustain the inference, 1 cases need to be transferred from treatment success to treatment failure, as shown from the Implied Table to the Transfer Table."
+#&gt; 
+#&gt; $Implied_Table
+#&gt;            Fail Success
+#&gt; Control    2882     118
+#&gt; Treatment 17308     580
+#&gt; 
+#&gt; $Transfer_Table
+#&gt;            Fail Success
+#&gt; Control    2882     118
+#&gt; Treatment 17309     579
+#&gt; 
+#&gt; [[4]]
+#&gt; [1] "For the Implied Table, we have estimate of -0.200, with standard error of 0.103 and t-ratio of -1.946."
+#&gt; 
+#&gt; [[5]]
+#&gt; [1] "For the Transfer Table, we have estimate of -0.202, with standard error of 0.103 and t-ratio of -1.963."
+#&gt; 
+#&gt; $Implied_Estimate
+#&gt; [1] -0.2003408
+#&gt; 
+#&gt; $Transfer_Estimate
+#&gt; [1] -0.2021242
+#&gt; 
+#&gt; $Implied_SE
+#&gt; [1] 0.1029732
+#&gt; 
+#&gt; $Transfer_SE
+#&gt; [1] 0.1029876
+#&gt; 
+#&gt; $Implied_tratio
+#&gt; [1] -1.945564
+#&gt; 
+#&gt; $Transfer_tratio
+#&gt; [1] -1.962608
+#&gt; 
+#&gt; $Taylor_predict
+#&gt; [1] 0.8592108
+#&gt; 
+#&gt; $Percent_bias_predict
+#&gt; [1] 4.182212
+#&gt; </div><div class='input'>
 <span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"thresh_plot"</span>)</div><div class='img'><img src='pkonfound-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"corr_plot"</span>)</div><div class='img'><img src='pkonfound-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='no'>pkonfound_output</span> <span class='kw'>&lt;-</span> <span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>200</span>, <span class='fl'>3</span>,
                               <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"raw_output"</span>, <span class='st'>"thresh_plot"</span>, <span class='st'>"corr_plot"</span>))</div><div class='output co'>#&gt; Percent Bias Necessary to Invalidate the Inference:
