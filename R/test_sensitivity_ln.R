@@ -54,12 +54,18 @@ test_sensitivity_ln <- function(est_eff,
   ### a1 c1 are small while a2 c2 are large
   ### b1 d1 are large while b2 d2 are small
   ### the goal is to get fewest swithes to invalidate the inference 
-  ### remove the solution if one cell has fewerer than 5 cases or negative cells 
+  ### remove the solution if one cell has fewerer than 5 cases or negative cells or nan cells 
   check1 <- check2 <- TRUE
   if (!(n_cnt>=a1 && a1>5 && n_cnt>=b1 && b1>5 && n_trm>=c1 && c1>5 && n_trm>=d1 && d1>5))
   {check1 <- FALSE}
+  if (is.nan(a1) || is.nan(b1) || is.nan(c1) || is.nan(d1))
+  {check1 <- FALSE}
+  
   if (!(n_cnt>=a2 && a2>5 && n_cnt>=b2 && b2>5 && n_trm>=c2 && c2>5 && n_trm>=d2 && d2>5))
-  {check2<- FALSE}
+  {check2 <- FALSE}
+  if (is.nan(a2) || is.nan(b2) || is.nan(c2) || is.nan(d2))
+  {check2 <- FALSE}
+  
   if (check1) {
     table_bstart1 <- get_abcd_kfnl(a1, b1, c1, d1)
     solution1 <- getswitch(table_bstart1, thr_t, switch_trm, n_obs)
