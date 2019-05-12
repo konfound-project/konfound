@@ -56,11 +56,11 @@ test_sensitivity_ln <- function(est_eff,
   ### the goal is to get fewest swithes to invalidate the inference 
   ### remove the solution if one cell has fewerer than 5 cases or negative cells or nan cells 
   check1 <- check2 <- TRUE
-  if (!(n_cnt>=a1 && a1>5 && n_cnt>=b1 && b1>5 && n_trm>=c1 && c1>5 && n_trm>=d1 && d1>5) 
+  if (!(n_cnt>=a1 && a1>=5 && n_cnt>=b1 && b1>=5 && n_trm>=c1 && c1>=5 && n_trm>=d1 && d1>=5) 
       || is.nan(a1) || is.nan(b1) || is.nan(c1) || is.nan(d1))
   {check1 <- FALSE}
   
-  if (!(n_cnt>=a2 && a2>5 && n_cnt>=b2 && b2>5 && n_trm>=c2 && c2>5 && n_trm>=d2 && d2>5) 
+  if (!(n_cnt>=a2 && a2>=5 && n_cnt>=b2 && b2>=5 && n_trm>=c2 && c2>=5 && n_trm>=d2 && d2>=5) 
       || is.nan(a2) || is.nan(b2) || is.nan(c2) || is.nan(d2))
   {check2 <- FALSE}
   
@@ -73,7 +73,7 @@ test_sensitivity_ln <- function(est_eff,
     solution2 <- getswitch(table_bstart2, thr_t, switch_trm, n_obs)
   }
   if (!check1 && !check2)
-  {stop("Cannot generate a reasonable contingency table!")}
+  {stop("Cannot generate a usable contingency table! Improvements are underway.")}
   
   # get the number of switches for solutions that satisfy the requirements
   if (check1 && check2) {
