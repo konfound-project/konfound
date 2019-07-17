@@ -5,7 +5,7 @@ output_table <- function(model_object, tested_variable) {
   cat("Dependent variable is", p, "\n")
   model_output <- broom::tidy(model_object) # tidying output
   var_row <- model_output$term == tested_variable
-  model_output$itcv[var_row] <- .243
+  model_output$itcv[var_row] <- abs(konfound(model_object, !!tested_variable, to_return = "raw_output")$itcv)
 
   covariate_names <- model_output$term[!(model_output$term %in% c("(Intercept)", tested_variable))]
 
