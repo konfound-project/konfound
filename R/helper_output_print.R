@@ -17,18 +17,18 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
   cat("\n")
   cat(crayon::bold("Impact Threshold for a Confounding Variable:\n"))
   if (abs(obs_r) > abs(critical_r)) {
-    cat("An omitted variable would have to be correlated at ", r_con, " with the outcome and at ", r_con,
-      " with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of ", round(critical_r, 3), " for statistical significance (alpha = ", alpha, ").\n",
+    cat("The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of ", r_con, " with the outcome and at ", r_con,
+      " with the predictor of interest (conditioning on observed covariates) based on a threshold of ", round(critical_r, 3), " for statistical significance (alpha = ", alpha, ").\n",
       sep = ""
     )
-    cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ", r_con, " X ", r_con, " = ", round(r_con^2, 3), " to invalidate an inference.\n", sep = "")
+    cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ", r_con, " X ", r_con, " = ", round(r_con^2, 3), " to invalidate an inference for a null hypothesis of 0 effect.\n", sep = "")
   }
   else if (abs(obs_r) < abs(critical_r)) {
-    cat("An omitted variable would have to be correlated at ", r_con, " with the outcome and at ", r_con,
-      " with the predictor of interest (conditioning on observed covariates) to sustain an inference based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n",
+    cat("The maximum impact to sustain an inference for a null hypothesis of 0 effect is based on a correlation of ", r_con, " with the outcome and at ", r_con,
+      " with the predictor of interest (conditioning on observed covariates) based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n",
       sep = ""
     )
-    cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ", r_con, " X ", r_con, " = ", round(r_con^2, 3), " to sustain an inference.\n", sep = "")
+    cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ", r_con, " X ", r_con, " = ", round(r_con^2, 3), " to sustain an inference for a null hypothesis of 0 effect.\n", sep = "")
   }
   else if (obs_r == critical_r) {
     warning("The correlation is exactly equal to the threshold.\n")
