@@ -14,7 +14,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
     warning("The coefficient is exactly equal to the threshold.\n")
   }
 
-  cat("See Frank et al. (2000) for a description of the method")
+  cat("See Frank et al. (2013) for a description of the method")
   cat("\n")
   cat(crayon::underline("Citation:"), "Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?	Using Rubin’s causal model to interpret the robustness of causal inferences.", crayon::italic("Education, Evaluation and Policy Analysis, 35"), "437-460.")
   cat("\n")
