@@ -52,6 +52,7 @@ mkonfound <- function(d, t, df, alpha = .05, tails = 2, return_plot = FALSE) {
 }
 
 core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
+  
   critical_t <- stats::qt(1 - (alpha / tails), df)
   critical_r <- critical_t / sqrt((critical_t^2) + df)
 
@@ -74,20 +75,18 @@ core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
     pct_bias <- NA
   }
 
-  # For correlation based approach (for calculating ITCV)
-
-  if ((abs(obs_r) > abs(critical_r)) & ((obs_r * critical_r) > 0)) {
-    mp <- -1
-  } else {
-    mp <- 1
-  }
-
-  itcv <- (obs_r - critical_r) / (1 + mp * abs(critical_r))
-  r_con <- round(sqrt(abs(itcv)), 3)
+  # # For correlation based approach (for calculating ITCV)
+  # if ((abs(obs_r) > abs(critical_r)) & ((obs_r * critical_r) > 0)) {
+  #   mp <- -1
+  # } else {
+  #   mp <- 1
+  # }
+  # 
+  # itcv <- (obs_r - critical_r) / (1 + mp * abs(critical_r))
+  # r_con <- round(sqrt(abs(itcv)), 3)
 
   out <- dplyr::data_frame(t, df, action, inference, pct_bias, itcv, r_con)
   names(out) <- c("t", "df", "action", "inference", "pct_bias_to_change_inference", "itcv", "r_con")
-
   out$pct_bias_to_change_inference <- round(out$pct_bias_to_change_inference, 3)
   out$itcv <- round(out$itcv, 3)
   out$action <- as.character(out$action)
