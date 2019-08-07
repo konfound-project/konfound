@@ -276,3 +276,16 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs){
   return(result)
 }
 
+# to calculate the new pi when there is imaginary numbers in the implied table 
+get_pi <- function(odds_ratio, std_err, n_obs, n_trm){
+  a <- odds_ratio * n_obs^2 * std_err^4
+  b <- -a
+  c <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + 4 * n_obs * std_err^2)
+  x1 <- (-b - sqrt(b^2 - 4 * a * c))/(a*2)
+  x2 <- (-b + sqrt(b^2 - 4 * a * c))/(a*2)
+  if (n_trm/n_obs <= 0.5)
+  {x <- x1}
+  else 
+  {x <- x2}
+  return(x)
+}
