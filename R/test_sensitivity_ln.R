@@ -16,8 +16,7 @@ test_sensitivity_ln <- function(est_eff,
   
   if (est_eff < 0) {
     thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) * -1
-  }
-  else {
+  } else {
     thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1)
   }
   
@@ -37,6 +36,27 @@ test_sensitivity_ln <- function(est_eff,
   invalidate_ob <- isinvalidate(thr_t,t_ob)
   # dcroddsratio_ob is true - our goal is to decrease the odds ratio
   dcroddsratio_ob <- isdcroddsratio(thr_t, t_ob)
+  
+  # to record the original treatment cases in case we need to adjust it
+  user_ntrm <- n_trm
+  # check if the implied table solution may contain imaginary numbers
+  haveimaginary <- F
+  changepi <- F
+    # set the default value for whether we need and can adjust pi (ratio of treatment cases) 
+    # to remove the imaginary part
+  keyimagin <- (4 + 4 * odds_ratio^2 + odds_ratio * 
+                    (-8 + 4 * n_obs * std_err^2 - n_obs * n_trm * std_err^4 + n_trm^2 * std_err^4))
+  minimgain <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + n_obs * std_err^2 * (4 - 0.25 * n_obs * std_err^2))
+  keyx1 <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + 4 * n_obs * std_err^2)
+  if (keyimagin > 0) {
+    haveimaginary <- T
+    if (minimgain <= 0 && keyx1 > 0) {
+      changepi <- T
+      n_trm <- n_obs * get_pi(odds_ratio, std_err, n_obs, n_trm)
+      n_cnt <- n_obs - n_trm
+    } else
+    {stop("Cannot generate a usable contingency table! Please consider using Pearson's chi-squared approach (under development).")}
+  }
   
   # a1, b1, c1, d1 are one solution for the 4 cells in the contingency table
   a1 <- get_a1_kfnl(odds_ratio, std_err, n_obs, n_trm)
@@ -73,7 +93,7 @@ test_sensitivity_ln <- function(est_eff,
     solution2 <- getswitch(table_bstart2, thr_t, switch_trm, n_obs)
   }
   if (!check1 && !check2)
-  {stop("Cannot generate a usable contingency table! Improvements are underway.")}
+  {stop("Cannot generate a usable contingency table!")}
   
   # get the number of switches for solutions that satisfy the requirements
   if (check1 && check2) {
@@ -118,7 +138,11 @@ test_sensitivity_ln <- function(est_eff,
   if (invalidate_ob) {
     change <- "To invalidate the inference,"
   } else {
-    change <- "To sustain the inference,"
+    if (est_eff >= 0) {
+      change <- "To sustain an inference for a positive treatment effect,"
+    } else {
+        change <- "To sustain an inference for a negative treatment effect,"
+        }
   }
   
   if (!final_solution$needtworows) {
@@ -130,17 +154,25 @@ test_sensitivity_ln <- function(est_eff,
                          transferway_extra, c("as shown from the Implied Table to the Transfer Table."))
     
   }
-  
+
   conclusion2 <- sprintf("For the Implied Table, we have estimate of %.3f, with standard error of %.3f and t-ratio of %.3f.", 
                          final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start)
   conclusion3 <- sprintf("For the Transfer Table, we have estimate of %.3f, with standard error of %.3f and t-ratio of %.3f.", 
                          final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final)
   
-  result <- list(conclusion1, Implied_Table = final_solution$table_start, Transfer_Table = final_solution$table_final, 
+  notice <- c("(Values have been rounded to the nearest integer. This may cause a little change to the estimated effect for the Implied Table.)")
+  
+  if (haveimaginary && changepi)
+  {conclusion1 <- paste(sprintf("In order to generate a usable implied contingency table, we change the number of treatment cases to %d (originally this number is %d).", 
+                                final_solution$table_start[2,1]+final_solution$table_start[2,2], user_ntrm), conclusion1)}
+  
+  result <- list(conclusion1, Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final, 
                  conclusion2, conclusion3, Implied_Estimate = final_solution$est_eff_start, Transfer_Estimate = final_solution$est_eff_final, 
                  Implied_SE = final_solution$std_err_start, Transfer_SE = final_solution$std_err_final, 
                  Implied_tratio = final_solution$t_start, Transfer_tratio = final_solution$t_final, 
                  Taylor_predict = final_solution$taylor_pred, Percent_bias_predict = final_solution$perc_bias_pred)
+  
+
   
   # output dispatch
   if (to_return == "print") {
