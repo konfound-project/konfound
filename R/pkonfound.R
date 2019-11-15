@@ -41,7 +41,7 @@ pkonfound <- function(est_eff,
                       non_linear = FALSE,
                       to_return = "print") {
   if ("table" %in% to_return) stop("a table can only be output when using konfound")
-  if (nu != 0) warning("Output for the impact of the confounding variable (the ITCV) is not valid for a non-0 null hypothesis about an effect")
+  # if (nu != 0) warning("Output for the impact of the confounding variable (the ITCV) is not valid for a non-0 null hypothesis about an effect")
   if (non_linear == TRUE) {
       out <- test_sensitivity_ln(
           est_eff = est_eff,
