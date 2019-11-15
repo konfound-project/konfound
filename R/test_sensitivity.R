@@ -32,6 +32,8 @@ test_sensitivity <- function(est_eff,
                              model_object,
                              tested_variable) {
 
+  if (nu != 0) warning("Output for the impact of the confounding variable (the ITCV) is not valid for a non-0 null hypothesis about an effect")
+  
   # calculating statistics used in every case
   if (est_eff < 0) {
     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) * -1
