@@ -1,6 +1,10 @@
+# konfound 0.2.1
+
+* Refinements and bug fixes for the non-linear functions
+
 # konfound 0.2.0
 
-Update to the non-linear functions.
+* Update to the non-linear functions.
 
 # konfound 0.1.2
 

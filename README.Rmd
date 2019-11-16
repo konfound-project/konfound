@@ -81,6 +81,16 @@ head(d)
 mkonfound(d, t, df)
 ```
 
+# Features in-development
+
+There is an in-development non-linear option:
+
+```{r}
+nl_output <- pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
+```
+
+Print `nl_output` to see the output.
+
 # Other information
 
 ### How to learn more about sensitivity analysis
