@@ -207,6 +207,7 @@ test_sensitivity_ln <- function(est_eff,
   # output dispatch
   if (to_return == "print") {
     return(result)
+    message("Note that this output is from an approach for non-linear models that is developmental and unpublished")
   } else {
     message("Note that only printed output is presently available for non-linear models")
   }
