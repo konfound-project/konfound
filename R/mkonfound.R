@@ -75,14 +75,13 @@ core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
   }
 
   # # For correlation based approach (for calculating ITCV)
-  # if ((abs(obs_r) > abs(critical_r)) & ((obs_r * critical_r) > 0)) {
-  #   mp <- -1
-  # } else {
-  #   mp <- 1
-  # }
-  #
-  # itcv <- (obs_r - critical_r) / (1 + mp * abs(critical_r))
-  # r_con <- round(sqrt(abs(itcv)), 3)
+  if ((abs(obs_r) > abs(critical_r)) & ((obs_r * critical_r) > 0)) {
+    mp <- -1
+  } else {
+    mp <- 1
+  }
+  itcv <- (obs_r - critical_r) / (1 + mp * abs(critical_r))
+  r_con <- round(sqrt(abs(itcv)), 3)
 
   out <- dplyr::data_frame(t, df, action, inference, pct_bias, itcv, r_con)
   names(out) <- c("t", "df", "action", "inference", "pct_bias_to_change_inference", "itcv", "r_con")
