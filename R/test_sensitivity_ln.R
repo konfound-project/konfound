@@ -203,7 +203,7 @@ test_sensitivity_ln <- function(est_eff,
   if (to_return == "print") {
     return(result)
   } else {
-    message("Only printed output is presently available for non-linear models")
+    message("Note that only printed output is presently available for non-linear models")
   }
   # else if (to_return == "raw_output") {
   #     return(output_df(est_eff, beta_threshold, est_eff, bias, sustain, recase, obs_r, critical_r, r_con, itcv))
