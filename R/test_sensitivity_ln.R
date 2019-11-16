@@ -172,11 +172,11 @@ test_sensitivity_ln <- function(est_eff,
   }
 
   conclusion2 <- sprintf(
-    "For the Implied Table, we have an estimate of %.3f, with a standard error of %.3f and a ", crayon::italic("t"), "-ratio of %.3f.",
+    "For the Implied Table, we have an estimate of %.3f, with a standard error of %.3f and a t-ratio of %.3f.",
     final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start
   )
   conclusion3 <- sprintf(
-    "For the Transfer Table, we have an estimate of %.3f, with a standard error of %.3f and a", crayon::italic("t"), "-ratio of %.3f.",
+    "For the Transfer Table, we have an estimate of %.3f, with a standard error of %.3f and a t-ratio of %.3f.",
     final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final
   )
 
