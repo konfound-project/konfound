@@ -1,16 +1,26 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/jrosen48/konfound.svg?branch=master)](https://travis-ci.org/jrosen48/konfound) [![CRAN status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 
-konfound
-========
+[![Build
+Status](https://travis-ci.org/jrosen48/konfound.svg?branch=master)](https://travis-ci.org/jrosen48/konfound)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 
-In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias. The goal of `konfound` is to carry out sensitivity analysis to help analysts to *quantify how robust inferences are to potential sources of bias*. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.
+# konfound
 
-Installation
-============
+In social science (and educational) research, we often wish to
+understand how robust inferences about effects are to unobserved (or
+controlled for) covariates, possible problems with measurement, and
+other sources of bias. The goal of `konfound` is to carry out
+sensitivity analysis to help analysts to *quantify how robust inferences
+are to potential sources of bias*. This R package provides tools to
+carry out sensitivity analysis as described in Frank, Maroulis, Duong,
+and Kelcey (2013) based on Rubin’s (1974) causal model as well as in
+Frank (2000) based on the impact threshold for a confounding variable.
 
-You can install konfound with:
+# Installation
+
+You can install the CRAN version of konfound with:
 
 ``` r
 install.packages("konfound")
@@ -27,12 +37,14 @@ devtools::install_github("jrosen48/konfound")
     #> Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).
     #> For more information visit http://konfound-it.com.
 
-Use of konfound
-===============
+# Use of konfound
 
 #### pkonfound() for published studies
 
-`pkonfound()`, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:
+`pkonfound()`, for published studies, calculates (1) how much bias there
+must be in an estimate to invalidate/sustain an inference; (2) the
+impact of an omitted variable necessary to invalidate/sustain an
+inference for a regression coefficient:
 
 ``` r
 library(konfound)
@@ -46,17 +58,22 @@ pkonfound(est_eff = 2,
 #> Percent Bias Necessary to Invalidate the Inference:
 #> To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
 #> To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.
-#> 
+#> See Frank et al. (2013) for a description of the method
+#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?  Using Rubin’s causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
 #> Impact Threshold for a Confounding Variable:
-#> An omitted variable would have to be correlated at 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.201 for statistical significance (alpha = 0.05).
-#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference.
+#> The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.201 for statistical significance (alpha = 0.05).
+#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null hypothesis of 0 effect.
+#> See Frank (2000) for a description of the method
+#> Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194
 #> For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.
 #> For models fit in R, consider use of konfound().
 ```
 
 #### konfound() for models fit in R
 
-`konfound()` calculates the same for models fit in R. For example, here are the coefficients for a linear model fit with `lm()` using the built-in dataset `mtcars`:
+`konfound()` calculates the same for models fit in R. For example, here
+are the coefficients for a linear model fit with `lm()` using the
+built-in dataset `mtcars`:
 
 ``` r
 m1 <- lm(mpg ~ wt + hp, data = mtcars)
@@ -90,24 +107,29 @@ summary(m1)
 #> F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
 ```
 
-Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as follows, specifying the fitted model object:
+Sensitivity analysis for the effect for `wt` on `mpg` can be carried out
+as follows, specifying the fitted model object:
 
 ``` r
 konfound(m1, wt)
 #> Percent Bias Necessary to Invalidate the Inference:
 #> To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).
 #> To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.
-#> 
+#> See Frank et al. (2013) for a description of the method
+#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?  Using Rubin’s causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
 #> Impact Threshold for a Confounding Variable:
-#> An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of -0.36 for statistical significance (alpha = 0.05).
-#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference.
+#> The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.36 for statistical significance (alpha = 0.05).
+#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference for a null hypothesis of 0 effect.
+#> See Frank (2000) for a description of the method
+#> Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194
 #> For more detailed output, consider setting `to_return` to table
 #> To consider other predictors of interest, consider setting `test_all` to TRUE.
 ```
 
 #### mkonfound for meta-analyses including sensitivity analysis
 
-We can use an existing dataset, such as the CSV file [here](https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv).
+We can use an existing dataset, such as the CSV file
+[here](https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv).
 
 ``` r
 d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
@@ -136,21 +158,41 @@ mkonfound(d, t, df)
 #> # … with 20 more rows
 ```
 
-Other information
-=================
+# Features in-development
+
+There is an in-development non-linear
+option:
+
+``` r
+nl_output <- pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
+#> Note that this output is from an approach for non-linear models that is developmental and unpublished
+```
+
+Print `nl_output` to see the output.
+
+# Other information
 
 ### How to learn more about sensitivity analysis
 
 To learn more about sensitivity analysis, please visit:
 
--   The [Introduction to konfound vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
--   The causal inference section of Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm#causal)
--   The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
+  - The [Introduction to konfound
+    vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html),
+    with detailed information about each of the functions
+    (`pkonfound()`, `konfound()`, and `mkounfound()`)
+  - The causal inference section of Ken Frank’s website
+    [here](https://msu.edu/~kenfrank/research.htm#causal)
+  - The [konfound interactive web
+    application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/),
+    with links to PowerPoints and key publications
 
 ### Feedback, issues, and feature requests
 
-We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via [email](jrosen@msu.edu).
+We prefer for issues to be filed via GitHub (link to the issues page for
+`konfound` [here](https://github.com/jrosen48/konfound/issues)) though
+we also welcome questions or feedback via [email](jrosen@msu.edu).
 
 ### Code of Conduct
 
-Please note that this project is released with a Contributor Code of Conduct available at <http://contributor-covenant.org/version/1/0/0/>
+Please note that this project is released with a Contributor Code of
+Conduct available at <http://contributor-covenant.org/version/1/0/0/>
