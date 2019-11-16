@@ -3,12 +3,12 @@ context("Checking pkonfound")
 library(mice)
 library(lme4)
 
-testmod1 <- lm(teachpop ~ texp + sex, data=popmis)
+testmod1 <- lm(teachpop ~ texp + sex, data = popmis)
 popmis <- popmis[1:100, ]
-testmod2 <- lmer(teachpop ~ texp + sex + (1| school), data=popmis)
+testmod2 <- lmer(teachpop ~ texp + sex + (1 | school), data = popmis)
 
-output1 <- konfound(testmod1, texp, test_all=TRUE, to_return = "raw_output")
-output2 <- konfound(testmod2, texp, test_all=TRUE, to_return = "raw_output")
+output1 <- konfound(testmod1, texp, test_all = TRUE, to_return = "raw_output")
+output2 <- konfound(testmod2, texp, test_all = TRUE, to_return = "raw_output")
 
 test_that("pkonfound test positive, significant coefficient works", {
   expect_equal(dplyr::pull(pkonfound(2, .4, 100, 3, to_return = "raw_output")[1, 3]), tolerance = .001, .603 * 100) # pct bias
@@ -42,6 +42,6 @@ test_that("pkonfound test positive, significant coefficient, small sample size w
 
 
 test_that("test_all works for lm and lmer outout", {
-    expect_is(output1, "data.frame")
-    expect_is(output2, "data.frame")
+  expect_is(output1, "data.frame")
+  expect_is(output2, "data.frame")
 })

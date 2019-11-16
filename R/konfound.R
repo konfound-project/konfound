@@ -15,21 +15,20 @@
 #'
 #' # using glm() for non-linear models
 #' if (requireNamespace("forcats")) {
-#' d <- forcats::gss_cat
+#'   d <- forcats::gss_cat
 #'
-#' d$married <- ifelse(d$marital == "Married", 1, 0)
+#'   d$married <- ifelse(d$marital == "Married", 1, 0)
 #'
-#' m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
-#' konfound(m2, age)
+#'   m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
+#'   konfound(m2, age)
 #' }
 #'
 #' # using lme4 for mixed effects (or multi-level) models
 #' if (requireNamespace("lme4")) {
-#' library(lme4)
-#' m3 <- fm1 <- lme4::lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
-#' konfound(m3, Days)
+#'   library(lme4)
+#'   m3 <- fm1 <- lme4::lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+#'   konfound(m3, Days)
 #' }
-#'
 #' @export
 
 konfound <- function(model_object,
@@ -71,7 +70,7 @@ konfound <- function(model_object,
   if (inherits(model_object, "glm")) {
     message("Note that for a non-linear model, impact threshold should not be interpreted.")
     message("Note that this is only an approximation. For exact results in terms of the number of cases that must be switched from treatment success to treatment failure to invalidate the inference see: https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm")
-      
+
     output <- konfound_glm(
       model_object = model_object,
       tested_variable_string = tested_variable_string,

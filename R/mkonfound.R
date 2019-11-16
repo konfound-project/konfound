@@ -39,7 +39,7 @@ mkonfound <- function(d, t, df, alpha = .05, tails = 2, return_plot = FALSE) {
       ggplot2::scale_fill_manual("", values = c("#1F78B4", "#A6CEE3")) +
       ggplot2::theme_bw() +
       ggplot2::ggtitle("Histogram of Percent Bias") +
-      ggplot2::facet_grid(~ action) +
+      ggplot2::facet_grid(~action) +
       ggplot2::scale_y_continuous(breaks = 1:nrow(results_df)) +
       ggplot2::theme(legend.position = "none") +
       ggplot2::ylab("Count") +
@@ -52,7 +52,6 @@ mkonfound <- function(d, t, df, alpha = .05, tails = 2, return_plot = FALSE) {
 }
 
 core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
-  
   critical_t <- stats::qt(1 - (alpha / tails), df)
   critical_r <- critical_t / sqrt((critical_t^2) + df)
 
@@ -81,7 +80,7 @@ core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
   # } else {
   #   mp <- 1
   # }
-  # 
+  #
   # itcv <- (obs_r - critical_r) / (1 + mp * abs(critical_r))
   # r_con <- round(sqrt(abs(itcv)), 3)
 

@@ -22,7 +22,8 @@
 #' pkonfound(2, .4, 100, 3, to_return = "corr_plot")
 #'
 #' pkonfound_output <- pkonfound(2, .4, 200, 3,
-#'                               to_return = c("raw_output", "thresh_plot", "corr_plot"))
+#'   to_return = c("raw_output", "thresh_plot", "corr_plot")
+#' )
 #' summary(pkonfound_output)
 #' pkonfound_output$raw_output
 #' pkonfound_output$thresh_plot
@@ -43,29 +44,29 @@ pkonfound <- function(est_eff,
   if ("table" %in% to_return) stop("a table can only be output when using konfound")
   # if (nu != 0) warning("Output for the impact of the confounding variable (the ITCV) is not valid for a non-0 null hypothesis about an effect")
   if (non_linear == TRUE) {
-      out <- test_sensitivity_ln(
-          est_eff = est_eff,
-          std_err = std_err,
-          n_obs = n_obs,
-          n_covariates = n_covariates,
-          alpha = alpha,
-          tails = tails,
-          nu = nu,
-          to_return = to_return,
-          n_trm = n_trm,
-          switch_trm = switch_trm
-      )
+    out <- test_sensitivity_ln(
+      est_eff = est_eff,
+      std_err = std_err,
+      n_obs = n_obs,
+      n_covariates = n_covariates,
+      alpha = alpha,
+      tails = tails,
+      nu = nu,
+      to_return = to_return,
+      n_trm = n_trm,
+      switch_trm = switch_trm
+    )
   } else {
-      out <- test_sensitivity(
-          est_eff = est_eff,
-          std_err = std_err,
-          n_obs = n_obs,
-          n_covariates = n_covariates,
-          alpha = alpha,
-          tails = tails,
-          nu = nu,
-          to_return = to_return
-      )   
+    out <- test_sensitivity(
+      est_eff = est_eff,
+      std_err = std_err,
+      n_obs = n_obs,
+      n_covariates = n_covariates,
+      alpha = alpha,
+      tails = tails,
+      nu = nu,
+      to_return = to_return
+    )
   }
 
   if (!is.null(out)) { # dealing with a strange print issue

@@ -9,7 +9,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
   else if (abs(eff_diff) < abs(beta_threshhold)) {
     cat("To sustain an inference, ", round(sustain, 3), "% of the estimate would have to be due to bias. This is based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = "")
     cat("To sustain an inference, ", round(recase, 3), " of the cases with ", nu, " effect would have to be replaced with cases at the threshold of inference.\n", sep = "")
-  } 
+  }
   else if (eff_diff == beta_threshhold) {
     warning("The coefficient is exactly equal to the threshold.\n")
   }

@@ -31,9 +31,8 @@ test_sensitivity <- function(est_eff,
                              to_return,
                              model_object,
                              tested_variable) {
+  if (nu != 0) warning("You entered a non-zero null hypothesis about an effect; this is being interpreted in terms of a partial correlation. Sampling variability is not accounted for.")
 
-  if (nu != 0) warning( "You entered a non-zero null hypothesis about an effect; this is being interpreted in terms of a partial correlation. Sampling variability is not accounted for.")
-  
   # calculating statistics used in every case
   if (est_eff < 0) {
     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) * -1
