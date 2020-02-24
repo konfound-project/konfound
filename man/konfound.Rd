@@ -4,8 +4,14 @@
 \alias{konfound}
 \title{Perform sensitivity analysis on fitted models}
 \usage{
-konfound(model_object, tested_variable, alpha = 0.05, tails = 2,
-  to_return = "print", test_all = FALSE)
+konfound(
+  model_object,
+  tested_variable,
+  alpha = 0.05,
+  tails = 2,
+  to_return = "print",
+  test_all = FALSE
+)
 }
 \arguments{
 \item{model_object}{output from a model (currently works for: lm)}
@@ -35,19 +41,18 @@ konfound(m1, wt, to_return = "table")
 
 # using glm() for non-linear models
 if (requireNamespace("forcats")) {
-d <- forcats::gss_cat
+  d <- forcats::gss_cat
 
-d$married <- ifelse(d$marital == "Married", 1, 0)
+  d$married <- ifelse(d$marital == "Married", 1, 0)
 
-m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
-konfound(m2, age)
+  m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
+  konfound(m2, age)
 }
 
 # using lme4 for mixed effects (or multi-level) models
 if (requireNamespace("lme4")) {
-library(lme4)
-m3 <- fm1 <- lme4::lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
-konfound(m3, Days)
+  library(lme4)
+  m3 <- fm1 <- lme4::lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+  konfound(m3, Days)
 }
-
 }
