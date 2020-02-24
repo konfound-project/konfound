@@ -42,12 +42,8 @@ install.packages("konfound")
 
 You can then load konfound with the `library()` function:
 
-```{r, eval = F}
+```{r, eval = TRUE}
 library(konfound)
-```
-
-```{r, echo = F}
-devtools::load_all(".")
 ```
 
 ## Use of pkonfound() for values from an already-conducted analysis

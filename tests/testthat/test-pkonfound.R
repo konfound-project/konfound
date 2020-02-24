@@ -1,6 +1,5 @@
 context("Checking pkonfound")
 
-library(mice)
 library(lme4)
 
 testmod1 <- lm(teachpop ~ texp + sex, data = popmis)
