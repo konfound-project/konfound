@@ -27,6 +27,7 @@ For fitted models, this command carries out sensitivity analysis for a number of
 }
 \examples{
 d <- read.csv("https://msu.edu/~kenfrank/example\%20dataset\%20for\%20mkonfound.csv")
+d <- d[1:3, ] # this is only so that the example runs more quickly
 str(d)
 mkonfound(d, t, df)
 }

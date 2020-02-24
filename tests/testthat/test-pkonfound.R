@@ -1,9 +1,10 @@
 context("Checking pkonfound")
 
 library(lme4)
+library(mice)
 
-testmod1 <- lm(teachpop ~ texp + sex, data = popmis)
 popmis <- popmis[1:100, ]
+testmod1 <- lm(teachpop ~ texp + sex, data = popmis)
 testmod2 <- lmer(teachpop ~ texp + sex + (1 | school), data = popmis)
 
 output1 <- konfound(testmod1, texp, test_all = TRUE, to_return = "raw_output")

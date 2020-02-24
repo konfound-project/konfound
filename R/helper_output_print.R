@@ -3,11 +3,11 @@
 output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL, nu, recase, obs_r, critical_r, r_con, itcv, alpha) {
   cat(crayon::bold("Percent Bias Necessary to Invalidate the Inference:\n"))
   if (abs(eff_diff) > abs(beta_threshhold)) {
-    cat("To invalidate an inference, ", round(bias, 3), "% of the estimate would have to be due to bias. This is based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = "")
+    cat("To invalidate an inference, ", round(bias, 3), stringi::stri_escape_unicode('%'), " of the estimate would have to be due to bias. This is based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = "")
     cat("To invalidate an inference, ", round(recase, 3), " observations would have to be replaced with cases for which the effect is ", nu, ".\n", sep = "")
   }
   else if (abs(eff_diff) < abs(beta_threshhold)) {
-    cat("To sustain an inference, ", round(sustain, 3), "% of the estimate would have to be due to bias. This is based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = "")
+    cat("To sustain an inference, ", round(sustain, 3), stringi::stri_escape_unicode('%'), " of the estimate would have to be due to bias. This is based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = "")
     cat("To sustain an inference, ", round(recase, 3), " of the cases with ", nu, " effect would have to be replaced with cases at the threshold of inference.\n", sep = "")
   }
   else if (eff_diff == beta_threshhold) {
@@ -16,7 +16,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
 
   cat("See Frank et al. (2013) for a description of the method")
   cat("\n")
-  cat(crayon::underline("Citation:"), "Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?	Using Rubin’s causal model to interpret the robustness of causal inferences.", crayon::italic("Education, Evaluation and Policy Analysis, 35"), "437-460.")
+  cat(crayon::underline("Citation:"), "Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences.", crayon::italic("Education, Evaluation and Policy Analysis, 35"), "437-460.")
   cat("\n")
   cat(crayon::bold("Impact Threshold for a Confounding Variable:\n"))
   if (abs(obs_r) > abs(critical_r)) {
