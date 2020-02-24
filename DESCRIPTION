@@ -27,12 +27,13 @@ Description: Statistical methods that quantify the conditions necessary to alter
 License: MIT + file LICENSE
 Imports: 
     broom,
+    crayon,
     dplyr,
     ggplot2,
+    mice,
     purrr,
     rlang,
-    tidyr,
-    crayon
+    tidyr
 Suggests: 
     margins,
     pbkrtest,
@@ -42,8 +43,7 @@ Suggests:
     lme4,
     rmarkdown,
     roxygen2,
-    testthat,
-    mice
+    testthat
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
