@@ -8,21 +8,25 @@
 
 <title>Perform sensitivity analysis on fitted models — konfound • konfound</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,10 +34,11 @@
 
 
 
-<meta property="og:title" content="Perform sensitivity analysis on fitted models — konfound" />
 
+<meta property="og:title" content="Perform sensitivity analysis on fitted models — konfound" />
 <meta property="og:description" content="For fitted models, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient. Currently works for: models created with lm() (linear models)." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -45,6 +50,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -63,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">konfound</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -71,7 +77,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -94,11 +100,10 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/jrosen48/konfound">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -109,6 +114,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -120,14 +126,18 @@
     </div>
 
     <div class="ref-description">
-    
     <p>For fitted models, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient. Currently works for: models created with lm() (linear models).</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>konfound</span>(<span class='no'>model_object</span>, <span class='no'>tested_variable</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>tails</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"print"</span>, <span class='kw'>test_all</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>konfound</span>(
+  <span class='no'>model_object</span>,
+  <span class='no'>tested_variable</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
+  <span class='kw'>tails</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"print"</span>,
+  <span class='kw'>test_all</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -156,66 +166,69 @@
       <td><p>whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># using lm() for linear models</span>
-<span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>)</div><div class='output co'>#&gt; Percent Bias Necessary to Invalidate the Inference:
-#&gt; To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).
+<span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>)</div><div class='output co'>#&gt; <span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
+#&gt; </span><span>To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).
 #&gt; To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.
-#&gt; 
-#&gt; Impact Threshold for a Confounding Variable:
-#&gt; An omitted variable would have to be correlated at 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of -0.36 for statistical significance (alpha = 0.05).
-#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference.</div><div class='output co'>#&gt; <span class='message'>For more detailed output, consider setting `to_return` to table</span></div><div class='output co'>#&gt; <span class='message'>To consider other predictors of interest, consider setting `test_all` to TRUE.</span></div><div class='input'><span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>, <span class='kw'>test_all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Note that this output is calculated based on the correlation-based approach used in mkonfound()</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 2 x 8</span><span>
+#&gt; See Frank et al. (2013) for a description of the method
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. </span><span style='font-style: italic;'>Education, Evaluation and Policy Analysis, 35</span><span> 437-460.
+#&gt; </span><span style='font-weight: bold;'>Impact Threshold for a Confounding Variable:
+#&gt; </span><span>The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.36 for statistical significance (alpha = 0.05).
+#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference for a null hypothesis of 0 effect.
+#&gt; See Frank (2000) for a description of the method
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For more detailed output, consider setting `to_return` to table</span></div><div class='output co'>#&gt; <span class='message'>To consider other predictors of interest, consider setting `test_all` to TRUE.</span></div><div class='input'><span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>, <span class='kw'>test_all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Note that this output is calculated based on the correlation-based approach used in mkonfound()</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 2 x 8</span><span>
 #&gt;   var_name     t    df action     inference   pct_bias_to_change_in…  itcv r_con
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                        </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'>1</span><span> wt       -</span><span style='color: #BB0000;'>6.13</span><span>    30 to_invali… reject_null                   53.1 0.609 0.78 
 #&gt; </span><span style='color: #555555;'>2</span><span> hp       -</span><span style='color: #BB0000;'>3.56</span><span>    30 to_invali… reject_null                   35.8 0.3   0.548</div><div class='input'><span class='fu'>konfound</span>(<span class='no'>m1</span>, <span class='no'>wt</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"table"</span>)</div><div class='output co'>#&gt; Dependent variable is mpg </div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown or uninitialised column: 'itcv'.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Unknown or uninitialised column: 'impact'.</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 3 x 7</span><span>
-#&gt;   term        estimate std.error statistic p.value   itcv impact
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> (Intercept)   37.2       1.60      23.3    0     </span><span style='color: #BB0000;'>NA</span><span>     </span><span style='color: #BB0000;'>NA</span><span>    
-#&gt; </span><span style='color: #555555;'>2</span><span> wt            -</span><span style='color: #BB0000;'>3.88</span><span>      0.633     -</span><span style='color: #BB0000;'>6.13</span><span>   0      0.243 </span><span style='color: #BB0000;'>NA</span><span>    
-#&gt; </span><span style='color: #555555;'>3</span><span> hp            -</span><span style='color: #BB0000;'>0.032</span><span>     0.009     -</span><span style='color: #BB0000;'>3.52</span><span>   0.001 </span><span style='color: #BB0000;'>NA</span><span>      0.511</div><div class='input'>
+#&gt;   term        estimate std.error statistic p.value  itcv impact
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> (Intercept)   37.2       1.60      23.3    0     </span><span style='color: #BB0000;'>NA</span><span>    </span><span style='color: #BB0000;'>NA</span><span>    
+#&gt; </span><span style='color: #555555;'>2</span><span> wt            -</span><span style='color: #BB0000;'>3.88</span><span>      0.633     -</span><span style='color: #BB0000;'>6.13</span><span>   0      0.62 </span><span style='color: #BB0000;'>NA</span><span>    
+#&gt; </span><span style='color: #555555;'>3</span><span> hp            -</span><span style='color: #BB0000;'>0.032</span><span>     0.009     -</span><span style='color: #BB0000;'>3.52</span><span>   0.001 </span><span style='color: #BB0000;'>NA</span><span>     0.511</div><div class='input'>
 <span class='co'># using glm() for non-linear models</span>
-<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ns-load'>requireNamespace</a></span>(<span class='st'>"forcats"</span>)) {
-<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>forcats</span><span class='kw ns'>::</span><span class='no'><a href='https://forcats.tidyverse.org/reference/gss_cat.html'>gss_cat</a></span>
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"forcats"</span>)) {
+  <span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>forcats</span><span class='kw ns'>::</span><span class='no'><a href='https://forcats.tidyverse.org/reference/gss_cat.html'>gss_cat</a></span>
 
-<span class='no'>d</span>$<span class='no'>married</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>d</span>$<span class='no'>marital</span> <span class='kw'>==</span> <span class='st'>"Married"</span>, <span class='fl'>1</span>, <span class='fl'>0</span>)
+  <span class='no'>d</span>$<span class='no'>married</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='no'>d</span>$<span class='no'>marital</span> <span class='kw'>==</span> <span class='st'>"Married"</span>, <span class='fl'>1</span>, <span class='fl'>0</span>)
 
-<span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>married</span> ~ <span class='no'>age</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>d</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/family'>binomial</a></span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>))
-<span class='fu'>konfound</span>(<span class='no'>m2</span>, <span class='no'>age</span>)
+  <span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>married</span> ~ <span class='no'>age</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>d</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>(<span class='kw'>link</span> <span class='kw'>=</span> <span class='st'>"logit"</span>))
+  <span class='fu'>konfound</span>(<span class='no'>m2</span>, <span class='no'>age</span>)
 }</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: forcats</span></div><div class='output co'>#&gt; <span class='message'>Note that for a non-linear model, impact threshold should not be interpreted.</span></div><div class='output co'>#&gt; <span class='message'>Note that this is only an approximation. For exact results in terms of the number of cases that must be switched from treatment success to treatment failure to invalidate the inference see: https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(model[["call"]][["data"]], env): object 'd' not found</span></div><div class='input'>
 <span class='co'># using lme4 for mixed effects (or multi-level) models</span>
-<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ns-load'>requireNamespace</a></span>(<span class='st'>"lme4"</span>)) {
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
-<span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='no'>fm1</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lme4</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='no'>sleepstudy</span>)
-<span class='fu'>konfound</span>(<span class='no'>m3</span>, <span class='no'>Days</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding factor and character vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; Percent Bias Necessary to Invalidate the Inference:
-#&gt; To invalidate an inference, 84.83% of the estimate would have to be due to bias. This is based on a threshold of 1.588 for statistical significance (alpha = 0.05).
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"lme4"</span>)) {
+  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lme4</span>)
+  <span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='no'>fm1</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lme4</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='no'>sleepstudy</span>)
+  <span class='fu'>konfound</span>(<span class='no'>m3</span>, <span class='no'>Days</span>)
+}</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: lme4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding factor and character vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
+#&gt; </span><span>To invalidate an inference, 84.83% of the estimate would have to be due to bias. This is based on a threshold of 1.588 for statistical significance (alpha = 0.05).
 #&gt; To invalidate an inference, 137 observations would have to be replaced with cases for which the effect is 0.
-#&gt; 
-#&gt; Impact Threshold for a Confounding Variable:
-#&gt; An omitted variable would have to be correlated at 0.817 with the outcome and at 0.817 with the predictor of interest (conditioning on observed covariates) to invalidate an inference based on a threshold of 0.155 for statistical significance (alpha = 0.05).
-#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.817 X 0.817 = 0.667 to invalidate an inference.</div><div class='output co'>#&gt; <span class='message'>Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest. We are presently working to add other methods for calculating the degrees of freedom for the predictor(s) of interest. If you wish to use other methods now, consider those detailed here: https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. You can then enter degrees of freedom obtained from another method along with the coefficient, number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
-</div></span></pre>
+#&gt; See Frank et al. (2013) for a description of the method
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. </span><span style='font-style: italic;'>Education, Evaluation and Policy Analysis, 35</span><span> 437-460.
+#&gt; </span><span style='font-weight: bold;'>Impact Threshold for a Confounding Variable:
+#&gt; </span><span>The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.817 with the outcome and at 0.817 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.155 for statistical significance (alpha = 0.05).
+#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.817 X 0.817 = 0.667 to invalidate an inference for a null hypothesis of 0 effect.
+#&gt; See Frank (2000) for a description of the method
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest. We are presently working to add other methods for calculating the degrees of freedom for the predictor(s) of interest. If you wish to use other methods now, consider those detailed here: https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. You can then enter degrees of freedom obtained from another method along with the coefficient, number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.</span></div><div class='output co'>#&gt; NULL</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -223,13 +236,16 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
