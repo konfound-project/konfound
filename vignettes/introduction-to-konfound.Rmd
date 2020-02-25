@@ -205,7 +205,7 @@ To learn more about sensitivity analysis, please visit:
 
 ### Feedback, issues, and feature requests
 
-`konfound` is actively under development as of January, 2018. We welcome feedback and requests for improvement. We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via [email](jrosen@msu.edu).
+`konfound` is actively under development as of January, 2018. We welcome feedback and requests for improvement. We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via email (see the DESCRIPTION file).
 
 ### Code of Conduct
 

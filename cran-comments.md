@@ -1,6 +1,7 @@
 # CRAN comments
 
-* I'm sorry, I'm submitting this again after noting an error in the submission
+* This is in response to feedback from a maintainer (Uwe) that we needed to 
+correct invalid URLs/email addresses.
 
 ## Test environments
 * local OS X install, R 3.4.4

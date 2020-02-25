@@ -103,7 +103,7 @@ To learn more about sensitivity analysis, please visit:
 
 ### Feedback, issues, and feature requests
 
-We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via [email](jrosen@msu.edu).
+We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via email (see the DESCRIPTION file).
 
 ### Code of Conduct
 
