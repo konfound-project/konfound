@@ -59,7 +59,7 @@ pkonfound(est_eff = 2,
 #> To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
 #> To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.
 #> See Frank et al. (2013) for a description of the method
-#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?  Using Rubin’s causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
+#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
 #> Impact Threshold for a Confounding Variable:
 #> The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.201 for statistical significance (alpha = 0.05).
 #> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null hypothesis of 0 effect.
@@ -116,7 +116,7 @@ konfound(m1, wt)
 #> To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).
 #> To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.
 #> See Frank et al. (2013) for a description of the method
-#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?  Using Rubin’s causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
+#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
 #> Impact Threshold for a Confounding Variable:
 #> The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.36 for statistical significance (alpha = 0.05).
 #> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference for a null hypothesis of 0 effect.
@@ -143,18 +143,18 @@ head(d)
 #> 6  3.585478  87
 mkonfound(d, t, df)
 #> # A tibble: 30 x 7
-#>         t    df action     inference     pct_bias_to_change_i…   itcv r_con
-#>     <dbl> <int> <chr>      <chr>                         <dbl>  <dbl> <dbl>
-#>  1  7.08    178 to_invali… reject_null                   68.8   0.378 0.614
-#>  2  4.13    193 to_invali… reject_null                   50.6   0.168 0.41 
-#>  3  1.89     47 to_sustain fail_to_reje…                  5.47 -0.012 0.11 
-#>  4 -4.17    138 to_invali… reject_null                   50.3   0.202 0.449
-#>  5 -1.19     97 to_sustain fail_to_reje…                 39.4  -0.065 0.255
-#>  6  3.59     87 to_invali… reject_null                   41.9   0.19  0.436
-#>  7  0.282   117 to_sustain fail_to_reje…                 85.5  -0.131 0.361
-#>  8  2.55     75 to_invali… reject_null                   20.6   0.075 0.274
-#>  9 -4.44    137 to_invali… reject_null                   53.0   0.225 0.475
-#> 10 -2.05    195 to_invali… reject_null                    3.51  0.006 0.077
+#>         t    df action      inference       pct_bias_to_change_inf…   itcv r_con
+#>     <dbl> <int> <chr>       <chr>                             <dbl>  <dbl> <dbl>
+#>  1  7.08    178 to_invalid… reject_null                       68.8   0.378 0.614
+#>  2  4.13    193 to_invalid… reject_null                       50.6   0.168 0.41 
+#>  3  1.89     47 to_sustain  fail_to_reject…                    5.47 -0.012 0.11 
+#>  4 -4.17    138 to_invalid… reject_null                       50.3   0.202 0.449
+#>  5 -1.19     97 to_sustain  fail_to_reject…                   39.4  -0.065 0.255
+#>  6  3.59     87 to_invalid… reject_null                       41.9   0.19  0.436
+#>  7  0.282   117 to_sustain  fail_to_reject…                   85.5  -0.131 0.361
+#>  8  2.55     75 to_invalid… reject_null                       20.6   0.075 0.274
+#>  9 -4.44    137 to_invalid… reject_null                       53.0   0.225 0.475
+#> 10 -2.05    195 to_invalid… reject_null                        3.51  0.006 0.077
 #> # … with 20 more rows
 ```
 
@@ -190,7 +190,8 @@ To learn more about sensitivity analysis, please visit:
 
 We prefer for issues to be filed via GitHub (link to the issues page for
 `konfound` [here](https://github.com/jrosen48/konfound/issues)) though
-we also welcome questions or feedback via [email](jrosen@msu.edu).
+we also welcome questions or feedback via email (see the DESCRIPTION
+file).
 
 ### Code of Conduct
 
