@@ -131,7 +131,7 @@
 <a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).</span></a>
 <a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.</span></a>
 <a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; See Frank et al. (2013) for a description of the method</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?  Using Rubin’s causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span></a>
 <a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; Impact Threshold for a Confounding Variable:</span></a>
 <a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.201 for statistical significance (alpha = 0.05).</span></a>
 <a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null hypothesis of 0 effect.</span></a>
@@ -179,7 +179,7 @@
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).</span></a>
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.</span></a>
 <a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; See Frank et al. (2013) for a description of the method</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?  Using Rubin’s causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span></a>
 <a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; Impact Threshold for a Confounding Variable:</span></a>
 <a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.36 for statistical significance (alpha = 0.05).</span></a>
 <a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference for a null hypothesis of 0 effect.</span></a>
@@ -203,18 +203,18 @@
 <a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; 6  3.585478  87</span></a>
 <a class="sourceLine" id="cb8-10" data-line-number="10"><span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(d, t, df)</a>
 <a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; # A tibble: 30 x 7</span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt;         t    df action     inference     pct_bias_to_change_i…   itcv r_con</span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt;     &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;                         &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt;  1  7.08    178 to_invali… reject_null                   68.8   0.378 0.614</span></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt;  2  4.13    193 to_invali… reject_null                   50.6   0.168 0.41 </span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt;  3  1.89     47 to_sustain fail_to_reje…                  5.47 -0.012 0.11 </span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt;  4 -4.17    138 to_invali… reject_null                   50.3   0.202 0.449</span></a>
-<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt;  5 -1.19     97 to_sustain fail_to_reje…                 39.4  -0.065 0.255</span></a>
-<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt;  6  3.59     87 to_invali… reject_null                   41.9   0.19  0.436</span></a>
-<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt;  7  0.282   117 to_sustain fail_to_reje…                 85.5  -0.131 0.361</span></a>
-<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt;  8  2.55     75 to_invali… reject_null                   20.6   0.075 0.274</span></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt;  9 -4.44    137 to_invali… reject_null                   53.0   0.225 0.475</span></a>
-<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; 10 -2.05    195 to_invali… reject_null                    3.51  0.006 0.077</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt;         t    df action      inference       pct_bias_to_change_inf…   itcv r_con</span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt;     &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;                             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt;  1  7.08    178 to_invalid… reject_null                       68.8   0.378 0.614</span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt;  2  4.13    193 to_invalid… reject_null                       50.6   0.168 0.41 </span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt;  3  1.89     47 to_sustain  fail_to_reject…                    5.47 -0.012 0.11 </span></a>
+<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt;  4 -4.17    138 to_invalid… reject_null                       50.3   0.202 0.449</span></a>
+<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt;  5 -1.19     97 to_sustain  fail_to_reject…                   39.4  -0.065 0.255</span></a>
+<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt;  6  3.59     87 to_invalid… reject_null                       41.9   0.19  0.436</span></a>
+<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt;  7  0.282   117 to_sustain  fail_to_reject…                   85.5  -0.131 0.361</span></a>
+<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt;  8  2.55     75 to_invalid… reject_null                       20.6   0.075 0.274</span></a>
+<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt;  9 -4.44    137 to_invalid… reject_null                       53.0   0.225 0.475</span></a>
+<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; 10 -2.05    195 to_invalid… reject_null                        3.51  0.006 0.077</span></a>
 <a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; # … with 20 more rows</span></a></code></pre></div>
 </div>
 </div>
@@ -243,7 +243,7 @@
 <div id="feedback-issues-and-feature-requests" class="section level3">
 <h3 class="hasAnchor">
 <a href="#feedback-issues-and-feature-requests" class="anchor"></a>Feedback, issues, and feature requests</h3>
-<p>We prefer for issues to be filed via GitHub (link to the issues page for <code>konfound</code> <a href="https://github.com/jrosen48/konfound/issues">here</a>) though we also welcome questions or feedback via <a href="jrosen@msu.edu">email</a>.</p>
+<p>We prefer for issues to be filed via GitHub (link to the issues page for <code>konfound</code> <a href="https://github.com/jrosen48/konfound/issues">here</a>) though we also welcome questions or feedback via email (see the DESCRIPTION file).</p>
 </div>
 <div id="code-of-conduct" class="section level3">
 <h3 class="hasAnchor">
