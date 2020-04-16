@@ -124,7 +124,8 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
     a_tryall <- a + (b - 1) * (1 - as.numeric(switch_trm))
     b_tryall <- b - (b - 1) * (1 - as.numeric(switch_trm))
     tryall_t <- get_t_kfnl(a_tryall, b_tryall, c_tryall, d_tryall)
-    allnotenough <- isTRUE(thr_t - tryall_t > 0)
+    tryall_est <- log(a_tryall*d_tryall/c_tryall/b_tryall)
+    allnotenough <- isTRUE(thr_t - tryall_t > 0 & tryall_est*est > 0)
   }
   if (t_start > thr_t) {
     # transfer cases from A to B or D to C to decrease odds ratio
@@ -133,7 +134,8 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
     a_tryall <- a - (a - 1) * (1 - as.numeric(switch_trm))
     b_tryall <- b + (a - 1) * (1 - as.numeric(switch_trm))
     tryall_t <- get_t_kfnl(a_tryall, b_tryall, c_tryall, d_tryall)
-    allnotenough <- isTRUE(tryall_t - thr_t > 0)
+    tryall_est <- log(a_tryall*d_tryall/c_tryall/b_tryall)
+    allnotenough <- isTRUE(tryall_t - thr_t > 0 & tryall_est*est > 0)
   }
 
   ### run following if transfering one row is enough
