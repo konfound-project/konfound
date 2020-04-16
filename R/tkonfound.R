@@ -3,8 +3,7 @@
 #' @param b cell b
 #' @param c cell c
 #' @param d cell d
-#' @param thr_p s
-#' @param switch_trm
+#' @param thr_p p-value threshhold
 #' @inheritParams pkonfound
 #' @return the output of tkonfound
 #' @examples
