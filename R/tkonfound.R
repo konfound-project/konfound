@@ -280,14 +280,15 @@ if (allnotenough){
 }
 
 conclusion2 <- sprintf(
-  "For the Observed Table, we have a chi square of %.3f, with p value of %.3f.", chisq_ob, p_ob)
+  "For the Observed Table (based on user enter values), we have a Pearson's chi square of %.3f, with p value of %.3f.", chisq_ob, p_ob)
 conclusion3 <- sprintf(
-  "For the Transfer Table, we have a chi square of %.3f, with p value of %.3f.", chisq_final, p_final)
+  "For the Transfer Table, we have a Pearson's chi square of %.3f, with p value of %.3f.", chisq_final, p_final)
 
-result <- list(conclusion1,
-               Observed_Table = table_start, Transfer_Table = table_final,
-               conclusion2, conclusion3, Taylor_predict = taylor_pred, 
-               Percent_bias_predict = perc_bias_pred)
+info <- "The tkonfound function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. This can be applied to treatment vs control with successful vs unsuccessful outcomes."
+
+result <- list(info, conclusion1,
+               User_enter_value = table_start, Transfer_Table = table_final,
+               conclusion2, conclusion3)
 
 return(result)
 }
