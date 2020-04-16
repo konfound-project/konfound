@@ -1,4 +1,23 @@
-tkonfond <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
+#' Perform meta-analyses including sensitivity analysis
+#' @description For fitted models, this command carries out sensitivity analysis for a number of models, when their parameters stored in a data.frame.
+#' @param d data.frame or tibble with the t-statistics and associated degrees of freedom
+#' @param t t-statistic or vector of t-statistics
+#' @param df degrees of freedom or vector of degrees of freedom associated with the t-statistics in the t argument
+#' @param return_plot whether to return a plot of the percent bias; defaults to FALSE
+#' @inheritParams pkonfound
+#' @import rlang
+#' @import dplyr
+#' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference for each of the cases in the data.frame
+#' @examples
+#' d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
+#' d <- d[1:3, ] # this is only so that the example runs more quickly
+#' str(d)
+#' mkonfound(d, t, df)
+#' @export
+#'
+
+
+tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
 # a <- 35
 # b <- 17
 # c <- 17
