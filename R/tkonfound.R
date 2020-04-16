@@ -1,17 +1,15 @@
-#' Perform tkonfound analysis
-#' @param a s
-#' @param b d
-#' @param c d
-#' @param d s
-#' @param thr_p s
-#' @param switch_trm
-#' @inheritParams pkonfound
-#' @return dd
-#' @examples
-#' d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
-#' @export
-#'
-
+# #' Perform tkonfound analysis
+# #' @param a s
+# #' @param b d
+# #' @param c d
+# #' @param d s
+# #' @param thr_p s
+# #' @param switch_trm
+# #' @inheritParams pkonfound
+# #' @return dd
+# #' @examples
+# #' d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
+# #' @export
 
 tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
 # a <- 35
