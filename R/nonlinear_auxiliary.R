@@ -307,3 +307,18 @@ get_pi <- function(odds_ratio, std_err, n_obs, n_trm) {
   }
   return(x)
 }
+
+# get p value for chi-square test 
+chisq_p <- function(a, b, c, d){
+  table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
+  p <- chisq.test(table,correct = FALSE)$p.value
+  return(p)
+}
+
+# get chi-square value for chi-square test 
+chisq_value <- function(a, b, c, d){
+  table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
+  value <- chisq.test(table,correct = FALSE)$statistic
+  return(value)
+}
+
