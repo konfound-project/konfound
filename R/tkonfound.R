@@ -10,6 +10,10 @@
 #' tkonfound(35, 17, 17, 38)
 #' @export
 
+library(konfound)
+nl_output <- pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
+nl_output
+
 tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
 # a <- 35
 # b <- 17

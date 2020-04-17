@@ -34,17 +34,13 @@ install.packages("devtools")
 devtools::install_github("jrosen48/konfound")
 ```
 
-```{r, echo = F}
-devtools::load_all(".")
-```
-
 # Use of konfound
 
 #### pkonfound() for published studies
 
 `pkonfound()`, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:
 
-```{r, eval = F}
+```{r, eval = T}
 library(konfound)
 ```
 
@@ -87,6 +83,12 @@ There is an in-development non-linear option:
 
 ```{r}
 nl_output <- pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
+```
+
+This function can also take a 2 x 2 table of treatment versus control cases and success versus failure for the outcome, i.e.:
+
+```{r}
+tkonfound(35, 17, 17, 38)
 ```
 
 Print `nl_output` to see the output.
