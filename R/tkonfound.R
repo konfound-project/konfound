@@ -1,13 +1,18 @@
-#' Perform tkonfound analysis
-#' @param a cell a
-#' @param b cell b
-#' @param c cell c
-#' @param d cell d
-#' @param thr_p p-value threshhold
+#' Perform sensitivity analysis for a 2x2 table
+#' @description This function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. This can be applied to treatment vs control with successful vs unsuccessful outcomes.
+#' @param a cell is the number of cases in the control group showing unsuccessful results
+#' @param b cell is the number of cases in the control group showing successful results
+#' @param c cell is the number of cases in the treatment group showing unsuccessful results
+#' @param d cell is the number of cases in the treatment group showing successful results
+#' @param thr_p the p-value threshold used to evaluate statistical significance, with the default of 0.05
+#' @param switch_trm whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row 
 #' @inheritParams pkonfound
-#' @return the output of tkonfound
+#' @return prints a 2x2 table after switching cases from one cell to another so that the inference is invalidated about the association between the rows and columns 
 #' @examples
+#' # using tkonfound for a 2x2 table
 #' tkonfound(35, 17, 17, 38)
+#' tkonfound(35, 17, 17, 38, thr_p = 0.01)
+#' tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = F)
 #' @export
 
 library(konfound)
