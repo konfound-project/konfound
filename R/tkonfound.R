@@ -14,7 +14,7 @@
 #' tkonfound(35, 17, 17, 38)
 #' tkonfound(35, 17, 17, 38, thr_p = 0.01)
 #' tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = F)
-#' tkondounf(35, 17, 17, 38, thr_p = 0.01, switch_trm = F, plt = F)
+#' tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = F, plt = F)
 #' @export
 
 tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, plt = F){
