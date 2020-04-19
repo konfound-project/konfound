@@ -324,3 +324,289 @@ chisq_value <- function(a, b, c, d){
   return(value)
 }
 
+
+
+# get switch for tkonfound based on chi-square
+getswitch_chisq <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
+odds_ratio <- a*d/(b*c)
+n_cnt <- a+b
+n_trm <- c+d
+n_obs <- n_cnt + n_trm
+est <- log(odds_ratio)
+
+# this is the 2 by 2 table we start with
+table_ob <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
+p_ob <- chisq_p(a, b, c, d)
+chisq_ob <- chisq_value(a, b, c, d)
+
+# to evaluate whther we are moving cases to invalidate or sustain the inference
+if (p_ob < thr_p){isinvalidate_ob <- TRUE}
+if (p_ob > thr_p){isinvalidate_ob <- FALSE}
+
+# to evaluate what kind of switches we need - increase or decrease the odds ratio
+if (odds_ratio > 1) {dcroddsratio_ob <- isinvalidate_ob}
+if (odds_ratio < 1) {dcroddsratio_ob <- !isinvalidate_ob}
+
+isinvalidate_start <- isinvalidate_ob
+dcroddsratio_start <- dcroddsratio_ob
+p_start <- p_ob
+table_start <- table_ob
+t_ob <- t_start <- get_t_kfnl(a, b, c, d)
+thr_t <- stats::qt(1 - thr_p/2, n_obs - 1) 
+
+if (dcroddsratio_start) {
+  step <- 1 # transfer cases from D to C or A to B
+} else {
+  step <- -1 # transfer cases from B to A or C to D
+}
+
+### check whether it is enough to transfer all cases in one row
+if (!dcroddsratio_start) {
+  # transfer cases from B to A or C to D to increase odds ratio
+  c_tryall <- c - (c - 1) * as.numeric(switch_trm)
+  d_tryall <- d + (c - 1) * as.numeric(switch_trm)
+  a_tryall <- a + (b - 1) * (1 - as.numeric(switch_trm))
+  b_tryall <- b - (b - 1) * (1 - as.numeric(switch_trm))
+  tryall_p <- chisq_p(a_tryall, b_tryall, c_tryall, d_tryall)
+  tryall_est <- log(a_tryall*d_tryall/c_tryall/b_tryall)
+  allnotenough <- isTRUE(thr_p - tryall_p < 0 & tryall_est*est > 0)
+}
+if (dcroddsratio_start) {
+  # transfer cases from A to B or D to C to decrease odds ratio
+  c_tryall <- c + (d - 1) * as.numeric(switch_trm)
+  d_tryall <- d - (d - 1) * as.numeric(switch_trm)
+  a_tryall <- a - (a - 1) * (1 - as.numeric(switch_trm))
+  b_tryall <- b + (a - 1) * (1 - as.numeric(switch_trm))
+  tryall_p <- chisq_p(a_tryall, b_tryall, c_tryall, d_tryall)
+  tryall_est <- log(a_tryall*d_tryall/c_tryall/b_tryall)
+  allnotenough <- isTRUE(tryall_p - thr_p < 0 & tryall_est*est > 0)
+}
+
+### run following if transfering one row is enough
+if (!allnotenough) {
+  ### calculate percent of bias and predicted switches
+  if (isinvalidate_start) {
+    perc_bias <- 1 - thr_t / t_start
+  } else {
+    perc_bias <- abs(thr_t - t_start) / abs(t_start)
+  }
+  if (switch_trm && dcroddsratio_start) {
+    perc_bias_pred <- perc_bias * d * (a + c) / n_obs
+  }
+  if (switch_trm && !dcroddsratio_start) {
+    perc_bias_pred <- perc_bias * c * (b + d) / n_obs
+  }
+  if (!switch_trm && dcroddsratio_start) {
+    perc_bias_pred <- perc_bias * a * (b + d) / n_obs
+  }
+  if (!switch_trm && !dcroddsratio_start) {
+    perc_bias_pred <- perc_bias * b * (a + c) / n_obs
+  }
+  
+  ### calculate predicted switches based on Taylor expansion
+  if (switch_trm) {
+    taylor_pred <- abs(taylorexp(a, b, c, d, step * perc_bias_pred, thr_t))
+    a_taylor <- round(a)
+    b_taylor <- round(b)
+    c_taylor <- round(c + taylor_pred * step)
+    d_taylor <- round(d - taylor_pred * step)
+  } else {
+    taylor_pred <- abs(taylorexp(d, c, b, a, step * perc_bias_pred, thr_t))
+    a_taylor <- round(a - taylor_pred * step)
+    b_taylor <- round(b + taylor_pred * step)
+    c_taylor <- round(c)
+    d_taylor <- round(d)
+  }
+  
+  ### check whether taylor_pred move too many and causes non-positive odds ratio
+  if (a_taylor <= 0) {
+    b_taylor <- a_taylor + b_taylor - 1
+    a_taylor <- 1
+  }
+  if (b_taylor <= 0) {
+    a_taylor <- a_taylor + b_taylor - 1
+    b_taylor <- 1
+  }
+  if (c_taylor <= 0) {
+    d_taylor <- c_taylor + d_taylor - 1
+    c_taylor <- 1
+  }
+  if (d_taylor <= 0) {
+    c_taylor <- c_taylor + d_taylor - 1
+    d_taylor <- 1
+  }
+  
+  ### set brute force starting point from the taylor expansion result
+  p_taylor <- chisq_p(a_taylor, b_taylor, c_taylor, d_taylor)
+  a_loop <- a_taylor
+  b_loop <- b_taylor
+  c_loop <- c_taylor
+  d_loop <- d_taylor
+  p_loop <- p_taylor
+}
+
+### when we need to transfer two rows the previously defined tryall are the starting point for brute force
+if (allnotenough) {
+  ### Later: set tryall as the starting point and call this getswitch function again
+  a_loop <- a_tryall
+  b_loop <- b_tryall
+  c_loop <- c_tryall
+  d_loop <- d_tryall
+  p_loop <- chisq_p(a_loop, b_loop, c_loop, d_loop)
+}
+
+### start brute force
+#### scenario 1 need to reduce odds ratio to invalidate the inference-need to increase p
+if (isinvalidate_start & dcroddsratio_start){
+  if (p_loop < thr_p) {
+    while (p_loop < thr_p) {
+      c_loop <- c_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
+      d_loop <- d_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
+      a_loop <- a_loop - 1 * as.numeric(switch_trm == allnotenough)
+      b_loop <- b_loop + 1 * as.numeric(switch_trm == allnotenough)
+      p_loop <- chisq_p(a_loop, b_loop, c_loop, d_loop)
+    }
+    c_final <- c_loop
+    d_final <- d_loop
+    a_final <- a_loop
+    b_final <- b_loop
+  }
+  if (p_loop > thr_p){ #taylor too much, return some odds ratio
+    while (p_loop > thr_p) {
+      c_loop <- c_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
+      d_loop <- d_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
+      a_loop <- a_loop + 1 * as.numeric(switch_trm == allnotenough)
+      b_loop <- b_loop - 1 * as.numeric(switch_trm == allnotenough)
+      p_loop <- chisq_p(a_loop, b_loop, c_loop, d_loop)
+    }
+    c_final <- c_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
+    d_final <- d_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
+    a_final <- a_loop - 1 * as.numeric(switch_trm == allnotenough)
+    b_final <- b_loop + 1 * as.numeric(switch_trm == allnotenough)
+  }
+}
+
+#### scenario 2 need to reduce odds ratio to sustain the inference-need to reduce p
+if (!isinvalidate_start & dcroddsratio_start) {
+  if (p_loop < thr_p) { # taylor too  much, return some odds ratio
+    while (p_loop < thr_p) {
+      c_loop <- c_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
+      d_loop <- d_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
+      a_loop <- a_loop + 1 * as.numeric(switch_trm == allnotenough)
+      b_loop <- b_loop - 1 * as.numeric(switch_trm == allnotenough)
+      p_loop <- chisq_p(a_loop, b_loop, c_loop, d_loop)
+    }
+    c_final <- c_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
+    d_final <- d_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
+    a_final <- a_loop - 1 * as.numeric(switch_trm == allnotenough)
+    b_final <- b_loop + 1 * as.numeric(switch_trm == allnotenough)
+  }
+  if (p_loop > thr_p){ # taylor not enough, continue to reduce odds ratio
+    while (p_loop > thr_p) {
+      c_loop <- c_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
+      d_loop <- d_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
+      a_loop <- a_loop - 1 * as.numeric(switch_trm == allnotenough)
+      b_loop <- b_loop + 1 * as.numeric(switch_trm == allnotenough)
+      p_loop <- chisq_p(a_loop, b_loop, c_loop, d_loop)
+    }
+    c_final <- c_loop
+    d_final <- d_loop
+    a_final <- a_loop
+    b_final <- b_loop
+  }
+}
+
+#### scenario 3 need to increase odds ratio to invalidate the inference-need to increase p
+if (isinvalidate_start & !dcroddsratio_start){
+  if (p_loop < thr_p){ #taylor not enough, continue to increase odds ratio 
+    while (p_loop < thr_p) {
+      c_loop <- c_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
+      d_loop <- d_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
+      a_loop <- a_loop + 1 * as.numeric(switch_trm == allnotenough)
+      b_loop <- b_loop - 1 * as.numeric(switch_trm == allnotenough)
+      p_loop <- chisq_p(a_loop, b_loop, c_loop, d_loop)
+    }
+    c_final <- c_loop
+    d_final <- d_loop
+    a_final <- a_loop
+    b_final <- b_loop
+  }
+  if (p_loop > thr_p){#taylor too much, returns some odds ratio - decrease
+    while(p_loop > thr_p) {
+      c_loop <- c_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
+      d_loop <- d_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
+      a_loop <- a_loop - 1 * as.numeric(switch_trm == allnotenough)
+      b_loop <- b_loop + 1 * as.numeric(switch_trm == allnotenough)
+      p_loop <- chisq_p(a_loop, b_loop, c_loop, d_loop)
+    }
+    c_final <- c_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
+    d_final <- d_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
+    a_final <- a_loop + 1 * as.numeric(switch_trm == allnotenough)
+    b_final <- b_loop - 1 * as.numeric(switch_trm == allnotenough)
+  }
+}
+
+#### scenario 4 need to increase odds ratio to sustain the inference-need to decrease p
+if (!isinvalidate_start & !dcroddsratio_start){
+  if (p_loop > thr_p){#taylor not enough, continue to increase odds ratio
+    while (p_loop > thr_p){
+      c_loop <- c_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
+      d_loop <- d_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
+      a_loop <- a_loop + 1 * as.numeric(switch_trm == allnotenough)
+      b_loop <- b_loop - 1 * as.numeric(switch_trm == allnotenough)
+      p_loop <- chisq_p(a_loop, b_loop, c_loop, d_loop)  
+    }
+    c_final <- c_loop
+    d_final <- d_loop
+    a_final <- a_loop
+    b_final <- b_loop
+  }
+  if (p_loop < thr_p){#taylor too much, return some odds ratio - decrease
+    while (p_loop < thr_p){
+      c_loop <- c_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
+      d_loop <- d_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
+      a_loop <- a_loop - 1 * as.numeric(switch_trm == allnotenough)
+      b_loop <- b_loop + 1 * as.numeric(switch_trm == allnotenough)
+      p_loop <- chisq_p(a_loop, b_loop, c_loop, d_loop)
+    }
+    c_final <- c_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
+    d_final <- d_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
+    a_final <- a_loop + 1 * as.numeric(switch_trm == allnotenough)
+    b_final <- b_loop - 1 * as.numeric(switch_trm == allnotenough)
+  }
+}
+
+### so the final results (after switching) is as follows:
+table_final <- matrix(c(a_final, b_final, c_final, d_final), byrow = TRUE, 2, 2)
+p_final <- chisq_p(a_final, b_final, c_final, d_final)
+chisq_final <- chisq_value(a_final, b_final, c_final, d_final)
+
+if (switch_trm == allnotenough) {
+  final <- abs(a - a_final) + as.numeric(allnotenough) * abs(c - c_final)
+} else {
+  final <- abs(c - c_final) + as.numeric(allnotenough) * abs(a - a_final)
+}
+
+if (allnotenough) {
+  taylor_pred <- NA
+  perc_bias_pred <- NA
+  if (switch_trm) {
+    final_extra <- abs(a - a_final)
+  }
+  else {
+    final_extra <- abs(c - c_final)
+  }
+} else {
+  final_extra <- 0
+}
+
+total_switch <- final + allnotenough*final_extra
+
+result <- list(final_switch = final, User_enter_value = table_start, Transfer_Table = table_final, 
+               p_final = p_final, chisq_final = chisq_final,
+               needtworows=allnotenough, taylor_pred = taylor_pred,
+               perc_bias_pred = perc_bias_pred, final_extra = final_extra, 
+               dcroddsratio_ob = dcroddsratio_ob, total_switch = total_switch)
+
+return(result)
+}
