@@ -352,7 +352,11 @@ dcroddsratio_start <- dcroddsratio_ob
 p_start <- p_ob
 table_start <- table_ob
 t_ob <- t_start <- get_t_kfnl(a, b, c, d)
-thr_t <- stats::qt(1 - thr_p/2, n_obs - 1) 
+if (est < 0){
+thr_t <- stats::qt(1 - thr_p/2, n_obs - 1)*(-1)
+} else {
+thr_t <- stats::qt(1 - thr_p/2, n_obs - 1)
+}
 
 if (dcroddsratio_start) {
   step <- 1 # transfer cases from D to C or A to B
