@@ -369,9 +369,9 @@ if (!dcroddsratio_start) {
   b_tryall <- b - (b - 1) * (1 - as.numeric(switch_trm))
   tryall_p <- chisq_p(a_tryall, b_tryall, c_tryall, d_tryall)
   tryall_est <- log(a_tryall*d_tryall/c_tryall/b_tryall)
-  allnotenough <- isTRUE(thr_p - tryall_p < 0 & tryall_est*est > 0)
+  allnotenough <- isTRUE((thr_p-tryall_p)*tryall_est< 0 & tryall_est*est > 0)
 }
-if (dcroddsratio_start) {
+if (dcroddsratio_start ) {
   # transfer cases from A to B or D to C to decrease odds ratio
   c_tryall <- c + (d - 1) * as.numeric(switch_trm)
   d_tryall <- d - (d - 1) * as.numeric(switch_trm)
@@ -379,7 +379,7 @@ if (dcroddsratio_start) {
   b_tryall <- b + (a - 1) * (1 - as.numeric(switch_trm))
   tryall_p <- chisq_p(a_tryall, b_tryall, c_tryall, d_tryall)
   tryall_est <- log(a_tryall*d_tryall/c_tryall/b_tryall)
-  allnotenough <- isTRUE(tryall_p - thr_p < 0 & tryall_est*est > 0)
+  allnotenough <- isTRUE((thr_p-tryall_p)*tryall_est> 0  & tryall_est*est > 0)
 }
 
 ### run following if transfering one row is enough
@@ -606,7 +606,7 @@ result <- list(final_switch = final, User_enter_value = table_start, Transfer_Ta
                p_final = p_final, chisq_final = chisq_final,
                needtworows=allnotenough, taylor_pred = taylor_pred,
                perc_bias_pred = perc_bias_pred, final_extra = final_extra, 
-               dcroddsratio_ob = dcroddsratio_ob, total_switch = total_switch)
+               dcroddsratio_ob = dcroddsratio_ob, total_switch = total_switch, isinvalidate_ob = isinvalidate_ob)
 
 return(result)
 }
