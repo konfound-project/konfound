@@ -15,6 +15,7 @@
 #' tkonfound(35, 17, 17, 38, thr_p = 0.01)
 #' tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = F)
 #' @export
+
 tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
 # a <- 35
 # b <- 17
@@ -132,7 +133,5 @@ result <- list(info, conclusion1,
   return(result)
 }
 
-## tkonfound
-## flip the sign of x axis switch
 
 
