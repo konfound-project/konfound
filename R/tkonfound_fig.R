@@ -122,11 +122,13 @@ if (meta[meta$sig==1,]$logodds > 0){
     pos_thr <- (meta[meta$switch==posinsig,]$logodds+meta[meta$switch==(posinsig+1),]$logodds)/2
     pos_thr_pdif <- (meta[meta$switch==posinsig,]$pdif+meta[meta$switch==(posinsig+1),]$pdif)/2
     zoom_lower <- -(posinsig + 5)
+    meta$sigpoint <- ifelse(meta$switch==(posinsig+1),"positive","other")
   } else {#from not sig to sig by increasing positive effect
     possig <- meta[meta$sig==1,]$switch
     pos_thr <- (meta[meta$switch==possig,]$logodds+meta[meta$switch==(possig-1),]$logodds)/2
     pos_thr_pdif <- (meta[meta$switch==possig,]$pdif+meta[meta$switch==(possig-1),]$pdif)/2
     zoom_lower <- -(possig + 4)
+    meta$sigpoint <- ifelse(meta$switch==possig,"positive","other")
     }
   # find out the row that is cloest to logodds of 0 but negative
   temp1 <- meta[meta$logodds<0,]
@@ -138,6 +140,7 @@ if (meta[meta$sig==1,]$logodds > 0){
   neg_thr <- (temp1$logodds[j-1]+temp1$logodds[j])/2 
   neg_thr_pdif <- (temp1$pdif[j-1]+temp1$pdif[j])/2
   zoom_upper <- -(temp1$switch[j]-4)
+  meta$sigpoint <- ifelse(meta$switch==temp1$switch[j],"negative",meta$sigpoint)
 }
 
 if (meta[meta$sig==1,]$logodds < 0){
@@ -146,11 +149,13 @@ if (meta[meta$sig==1,]$logodds < 0){
     neg_thr <- (meta[meta$switch==negsig,]$logodds+meta[meta$switch==(negsig+1),]$logodds)/2
     neg_thr_pdif <- (meta[meta$switch==negsig,]$pdif+meta[meta$switch==(negsig+1),]$pdif)/2
     zoom_upper <- -(negsig - 4)
+    meta$sigpoint <- ifelse(meta$switch==negsig,"negative","other")
     } else { # from sig to not sig by increasing odds ratio that is smaller than 1 
     neginsig <- meta[meta$sig==1,]$switch
     neg_thr <- (meta[meta$switch==neginsig,]$logodds+meta[meta$switch==(neginsig-1),]$logodds)/2
     neg_thr_pdif <- (meta[meta$switch==neginsig,]$pdif+meta[meta$switch==(neginsig-1),]$pdif)/2 
     zoom_upper <- -(neginsig - 5)
+    meta$sigpoint <- ifelse(meta$switch==neginsig-1,"negative","other")
   }
   # find out the row that is cloest to logodds of 0 but positive
   temp1 <- meta[meta$logodds>0,]
@@ -162,15 +167,28 @@ if (meta[meta$sig==1,]$logodds < 0){
   pos_thr <- (temp1$logodds[j-1]+temp1$logodds[j])/2 
   pos_thr_pdif <- (temp1$pdif[j-1]+temp1$pdif[j])/2
   zoom_lower <- -(temp1$switch[j]+4)
+  meta$sigpoint <- ifelse(meta$switch==temp1$switch[j],"positive",meta$sigpoint)
 }
 
-meta$current <- ifelse(meta$switch==0, 1, 0)
+meta$current <- ifelse(meta$switch==0, "current", "other")
+meta$sigpoint <- ifelse(meta$switch==0, "current",meta$sigpoint)
 meta$switch <- meta$switch*(-1)
+meta$label <- ifelse(meta$sigpoint=="positive", 
+                     paste("sig pos:",meta[meta$sigpoint=="positive",]$switch),NA)
+meta$label <- ifelse(meta$sigpoint=="negative", 
+                     paste("sig neg:",meta[meta$sigpoint=="negative",]$switch),meta$label)
+meta$label <- ifelse(meta$sigpoint=="current", 
+                     paste("current"),meta$label)
 
+fillcol <-c("current"="white","positive"="green4","negative"="red","other"="white") 
+pointshape <- c("current"=15,"other"=21)
 
-fig1 <- ggplot2::ggplot(meta, ggplot2::aes(x=switch))+
+fig1 <- ggplot2::ggplot(meta, ggplot2::aes(x=switch, y=pdif))+
   ggplot2::geom_line(ggplot2::aes(y=pdif), size = 1) +
-  ggplot2::geom_point(ggplot2::aes(y=pdif), shape = -meta$current*6+21, fill="white")+
+  ggplot2::geom_point(ggplot2::aes(y=pdif, shape = factor(current),fill = factor(sigpoint)), 
+                      size = 3)+
+  ggplot2::scale_fill_manual(values=fillcol)+
+  ggplot2::scale_shape_manual(values=pointshape)+
   ggplot2::geom_hline(yintercept = pos_thr_pdif, linetype = "dashed", color="green4", size = 1)+
   ggplot2::geom_hline(yintercept = neg_thr_pdif, linetype = "dashed", color="red", size = 1)+
   ggplot2::scale_y_continuous(name="Difference in probability of successful outcome (treatment - control)")+
@@ -180,13 +198,19 @@ fig1 <- ggplot2::ggplot(meta, ggplot2::aes(x=switch))+
         panel.grid.major = ggplot2::element_blank(), 
         panel.grid.minor = ggplot2::element_blank(),
         panel.background = ggplot2::element_blank(), 
-        axis.line = ggplot2::element_line(colour = "black"))
+        axis.line = ggplot2::element_line(colour = "black"),
+        legend.position = "none")
 
 
 zoom <- meta[meta$switch<=zoom_upper & meta$switch>=zoom_lower,]
-fig2 <- ggplot2::ggplot(zoom, ggplot2::aes(x=switch))+
+
+fig2 <- ggplot2::ggplot(zoom, ggplot2::aes(x=switch,y=pdif))+
   ggplot2::geom_line(ggplot2::aes(y=pdif), size = 1) +
-  ggplot2::geom_point(ggplot2::aes(y=pdif), size = 3, shape = -zoom$current*6+21, fill="white")+
+  ggplot2::geom_point(ggplot2::aes(y=pdif, shape = factor(current),fill = factor(sigpoint)), 
+                      size = 3)+
+  ggrepel::geom_label_repel(ggplot2::aes(label=label))+
+  ggplot2::scale_fill_manual(values=fillcol)+
+  ggplot2::scale_shape_manual(values=pointshape)+
   ggplot2::geom_hline(yintercept = pos_thr_pdif, linetype = "dashed", color="green4", size = 1)+
   ggplot2::geom_hline(yintercept = neg_thr_pdif, linetype = "dashed", color="red", size = 1)+
   ggplot2::scale_y_continuous(name="Difference in probability of successful outcome (treatment - control)")+
@@ -196,7 +220,8 @@ fig2 <- ggplot2::ggplot(zoom, ggplot2::aes(x=switch))+
                  panel.grid.major = ggplot2::element_blank(), 
                  panel.grid.minor = ggplot2::element_blank(),
                  panel.background = ggplot2::element_blank(), 
-                 axis.line = ggplot2::element_line(colour = "black"))
+                 axis.line = ggplot2::element_line(colour = "black"),
+                 legend.position = "none")
 
 ###plot figure 3 RIS% as sample size gets larger, using t statistic as the criterion
 # if (plt3 == TRUE) {
