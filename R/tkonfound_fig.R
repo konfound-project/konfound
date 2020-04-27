@@ -7,6 +7,7 @@
 #' @param d cell is the number of cases in the treatment group showing successful results
 #' @param thr_p the p-value threshold used to evaluate statistical significance, with the default of 0.05
 #' @param switch_trm whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row
+#' @importFrom stats chisq.test
 #' @return prints 2 figures for how number of hypothetical cases switched changes the effect size 
 #' @examples
 #' # using tkonfound_fig for a study where 2 by 2 table is (35, 17, 17, 38)
@@ -183,9 +184,9 @@ meta$label <- ifelse(meta$sigpoint=="current",
 fillcol <-c("current"="white","positive"="green4","negative"="red","other"="white") 
 pointshape <- c("current"=15,"other"=21)
 
-fig1 <- ggplot2::ggplot(meta, ggplot2::aes(x=switch, y=pdif))+
-  ggplot2::geom_line(ggplot2::aes(y=pdif), size = 1) +
-  ggplot2::geom_point(ggplot2::aes(y=pdif, shape = factor(current),fill = factor(sigpoint)), 
+fig1 <- ggplot2::ggplot(meta, ggplot2::aes_string(x="switch", y="pdif"))+
+  ggplot2::geom_line(ggplot2::aes_string(y="pdif"), size = 1) +
+  ggplot2::geom_point(ggplot2::aes_string(y="pdif", shape = factor("current"),fill = factor("sigpoint")), 
                       size = 3)+
   ggplot2::scale_fill_manual(values=fillcol)+
   ggplot2::scale_shape_manual(values=pointshape)+
@@ -204,11 +205,11 @@ fig1 <- ggplot2::ggplot(meta, ggplot2::aes(x=switch, y=pdif))+
 
 zoom <- meta[meta$switch<=zoom_upper & meta$switch>=zoom_lower,]
 
-fig2 <- ggplot2::ggplot(zoom, ggplot2::aes(x=switch,y=pdif))+
-  ggplot2::geom_line(ggplot2::aes(y=pdif), size = 1) +
-  ggplot2::geom_point(ggplot2::aes(y=pdif, shape = factor(current),fill = factor(sigpoint)), 
+fig2 <- ggplot2::ggplot(zoom, ggplot2::aes_string(x="switch",y="pdif"))+
+  ggplot2::geom_line(ggplot2::aes_string(y="pdif"), size = 1) +
+  ggplot2::geom_point(ggplot2::aes_string(y="pdif", shape = factor("current"),fill = factor("sigpoint")), 
                       size = 3)+
-  ggrepel::geom_label_repel(ggplot2::aes(label=label))+
+  ggrepel::geom_label_repel(ggplot2::aes_string(label="label"))+
   ggplot2::scale_fill_manual(values=fillcol)+
   ggplot2::scale_shape_manual(values=pointshape)+
   ggplot2::geom_hline(yintercept = pos_thr_pdif, linetype = "dashed", color="green4", size = 1)+

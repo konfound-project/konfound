@@ -6,13 +6,12 @@
 #' @param d cell is the number of cases in the treatment group showing successful results
 #' @param thr_p the p-value threshold used to evaluate statistical significance, with the default of 0.05
 #' @param switch_trm whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row
-#' @param plt whether return a plot shows how RIS% (the percent of number of cases need to change out of total sample size) changes as sample sizes increases with default of True 
 #' @return prints a 2x2 table after switching cases from one cell to another so that the inference is invalidated about the association between the rows and columns 
 #' @examples
 #' # using tkonfound for a 2x2 table
 #' tkonfound(35, 17, 17, 38)
 #' tkonfound(35, 17, 17, 38, thr_p = 0.01)
-#' tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = F)
+#' tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
 #' @export
 
 tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
