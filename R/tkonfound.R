@@ -13,17 +13,15 @@
 #' tkonfound(35, 17, 17, 38)
 #' tkonfound(35, 17, 17, 38, thr_p = 0.01)
 #' tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = F)
-#' tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = F, plt = F)
 #' @export
 
-tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, plt = F){
+tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
 # a <- 35
 # b <- 17
 # c <- 17
 # d <- 38
 # thr_p <- 0.05
 # switch_trm <- T
-# plt <- T
 
 # stop message
 if (a <= 0 || b <= 0 || c <= 0 || d <= 0) {
@@ -125,43 +123,15 @@ conclusion2 <- sprintf(
 conclusion3 <- sprintf(
   "For the Transfer Table, we have a Pearson's chi square of %.3f, with p value of %.3f.", chisq_final, p_final)
 
-info <- "The tkonfound function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. This can be applied to treatment vs control with successful vs unsuccessful outcomes."
+info1 <- "The tkonfound function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. This can be applied to treatment vs control with successful vs unsuccessful outcomes."
+info2 <- "See konfound_fig for full and accessible details in graphic form!"
 
-
-###plot figure as sample size gets larger
-if (plt == TRUE) {
-  meta <- data.frame(matrix(ncol = 7, nrow = 11))
-  colnames(meta) <- c("a", "b", "c", "d", "nobs", "RIS", "RISperc") 
-  for (i in 1:11){
-    meta$nobs[i] <- size <- 2^(i+5)
-    meta$a[i] <- a_i <- round(size/n_obs*a)
-    meta$b[i] <- b_i <- round(size/n_obs*b)
-    meta$c[i] <- c_i <- round(size/n_obs*c)
-    meta$d[i] <- d_i <- round(size/n_obs*d)
-    meta$RIS[i] <- RIS_i <- getswitch_chisq(a_i, b_i, c_i, d_i, thr_p, switch_trm)$total_switch
-    meta$RISperc[i] <- RISperc_i <- RIS_i/size*100
-  } 
-  figure <- ggplot2::ggplot(meta, aes(x=nobs, y=RISperc))+
-    geom_line(size = 1)+
-    geom_point(size = 2.5)+
-    labs(title = "RIS as % of Sample Size")+
-    scale_x_continuous(name="Sample Size", labels=scales::comma)+
-    scale_y_continuous(name="RIS%") +
-    theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 12),
-          axis.text = element_text(size = 12))
-}
-
-if (plt == TRUE){
-  result <- list(info, conclusion1,
-                 User_enter_value = table_start, Transfer_Table = table_final,
-                 conclusion2, conclusion3, figure)
-} else {
-  result <- list(info, conclusion1,
+result <- list(info1, info2,
+               conclusion1,
                  User_enter_value = table_start, Transfer_Table = table_final,
                  conclusion2, conclusion3)
-}
 
-return(result)
+  return(result)
 }
 
 
