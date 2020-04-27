@@ -85,7 +85,7 @@
       <h1>Introduction to konfound</h1>
                         <h4 class="author">Joshua Rosenberg, Ran Xu, and Ken Frank</h4>
             
-            <h4 class="date">2020-02-26</h4>
+            <h4 class="date">2020-04-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jrosen48/konfound/blob/master/vignettes/introduction-to-konfound.Rmd"><code>vignettes/introduction-to-konfound.Rmd</code></a></small>
       <div class="hidden name"><code>introduction-to-konfound.Rmd</code></div>
@@ -179,7 +179,11 @@
 <a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></a>
 <a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; For models fit in R, consider use of konfound().</span></a></code></pre></div>
 <p>We notice that the output includes a message that says we can view other forms of output by changing the <code>to_return</code> argument. Here are the two plots - for the bias necessary to alter an inference (<code>thresh_plot</code>) and for the robustness of an inference in terms of the impact of a confounding variable (<code>corr_plot</code>) that can be returned:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"thresh_plot"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"thresh_plot"</span>)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; Warning: `data_frame()` is deprecated as of tibble 1.1.0.</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; Please use `tibble()` instead.</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; This warning is displayed once every 8 hours.</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span></a></code></pre></div>
 <p><img src="introduction-to-konfound_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/pkonfound.html">pkonfound</a></span>(.<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">100</span>, <span class="dv">3</span>, <span class="dt">to_return =</span> <span class="st">"corr_plot"</span>)</a></code></pre></div>
 <p><img src="introduction-to-konfound_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
@@ -289,8 +293,8 @@
 <p>Whereas this cannot be carried out with <code><a href="../reference/pkonfound.html">pkonfound()</a></code>, with <code><a href="../reference/konfound.html">konfound()</a></code> you can also return a table with some key output from the correlation-based approach.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="../reference/konfound.html">konfound</a></span>(m1, wt, <span class="dt">to_return =</span> <span class="st">"table"</span>)</a>
 <a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#&gt; Dependent variable is mpg</span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co">#&gt; Warning: Unknown or uninitialised column: 'itcv'.</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#&gt; Warning: Unknown or uninitialised column: 'impact'.</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co">#&gt; Warning: Unknown or uninitialised column: `itcv`.</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#&gt; Warning: Unknown or uninitialised column: `impact`.</span></a>
 <a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#&gt; # A tibble: 4 x 7</span></a>
 <a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#&gt;   term        estimate std.error statistic p.value   itcv impact</span></a>
 <a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt;   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span></a>

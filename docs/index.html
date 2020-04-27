@@ -101,7 +101,7 @@
 <div id="konfound" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#konfound" class="anchor"></a>konfound</h1></div>
-<p>In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias. The goal of <code>konfound</code> is to carry out sensitivity analysis to help analysts to <em>quantify how robust inferences are to potential sources of bias</em>. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.</p>
+<p>In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias. The goal of <code>konfound</code> is to carry out sensitivity analysis to help analysts to <em>quantify how robust inferences are to potential sources of bias</em>. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubinâs (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.</p>
 </div>
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">
@@ -111,9 +111,6 @@
 <p>You can install the development version from GitHub with:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"jrosen48/konfound"</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">#&gt; Loading konfound</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; For more information visit http://konfound-it.com.</span></a></code></pre></div>
 </div>
 <div id="use-of-konfound" class="section level1">
 <h1 class="hasAnchor">
@@ -122,109 +119,145 @@
 <h4 class="hasAnchor">
 <a href="#pkonfound-for-published-studies" class="anchor"></a>pkonfound() for published studies</h4>
 <p><code><a href="reference/pkonfound.html">pkonfound()</a></code>, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(konfound)</a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dt">est_eff =</span> <span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">          <span class="dt">std_err =</span> <span class="fl">.4</span>, </a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">          <span class="dt">n_obs =</span> <span class="dv">100</span>, </a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">          <span class="dt">n_covariates =</span> <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; Percent Bias Necessary to Invalidate the Inference:</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; See Frank et al. (2013) for a description of the method</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; Impact Threshold for a Confounding Variable:</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.201 for statistical significance (alpha = 0.05).</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null hypothesis of 0 effect.</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; See Frank (2000) for a description of the method</span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; For models fit in R, consider use of konfound().</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(konfound)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; For more information visit http://konfound-it.com.</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="dt">est_eff =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">          <span class="dt">std_err =</span> <span class="fl">.4</span>, </a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">          <span class="dt">n_obs =</span> <span class="dv">100</span>, </a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">          <span class="dt">n_covariates =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; Percent Bias Necessary to Invalidate the Inference:</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; See Frank et al. (2013) for a description of the method</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; Impact Threshold for a Confounding Variable:</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.201 for statistical significance (alpha = 0.05).</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null hypothesis of 0 effect.</span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; See Frank (2000) for a description of the method</span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; For models fit in R, consider use of konfound().</span></a></code></pre></div>
 </div>
 <div id="konfound-for-models-fit-in-r" class="section level4">
 <h4 class="hasAnchor">
 <a href="#konfound-for-models-fit-in-r" class="anchor"></a>konfound() for models fit in R</h4>
 <p><code><a href="reference/konfound.html">konfound()</a></code> calculates the same for models fit in R. For example, here are the coefficients for a linear model fit with <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> using the built-in dataset <code>mtcars</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>hp, <span class="dt">data =</span> mtcars)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">m1</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; Call:</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; lm(formula = mpg ~ wt + hp, data = mtcars)</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; Coefficients:</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; (Intercept)           wt           hp  </span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;    37.22727     -3.87783     -0.03177</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(m1)</a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; Call:</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; lm(formula = mpg ~ wt + hp, data = mtcars)</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; Residuals:</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt;    Min     1Q Median     3Q    Max </span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; -3.941 -1.600 -0.182  1.050  5.854 </span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; Coefficients:</span></a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt; (Intercept) 37.22727    1.59879  23.285  &lt; 2e-16 ***</span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt; wt          -3.87783    0.63273  -6.129 1.12e-06 ***</span></a>
-<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; hp          -0.03177    0.00903  -3.519  0.00145 ** </span></a>
-<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co">#&gt; ---</span></a>
-<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></a>
-<a class="sourceLine" id="cb6-26" data-line-number="26"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-27" data-line-number="27"><span class="co">#&gt; Residual standard error: 2.593 on 29 degrees of freedom</span></a>
-<a class="sourceLine" id="cb6-28" data-line-number="28"><span class="co">#&gt; Multiple R-squared:  0.8268, Adjusted R-squared:  0.8148 </span></a>
-<a class="sourceLine" id="cb6-29" data-line-number="29"><span class="co">#&gt; F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>hp, <span class="dt">data =</span> mtcars)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">m1</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; Call:</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; lm(formula = mpg ~ wt + hp, data = mtcars)</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; Coefficients:</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; (Intercept)           wt           hp  </span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;    37.22727     -3.87783     -0.03177</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(m1)</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; Call:</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; lm(formula = mpg ~ wt + hp, data = mtcars)</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; Residuals:</span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt;    Min     1Q Median     3Q    Max </span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; -3.941 -1.600 -0.182  1.050  5.854 </span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt; Coefficients:</span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; (Intercept) 37.22727    1.59879  23.285  &lt; 2e-16 ***</span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; wt          -3.87783    0.63273  -6.129 1.12e-06 ***</span></a>
+<a class="sourceLine" id="cb5-23" data-line-number="23"><span class="co">#&gt; hp          -0.03177    0.00903  -3.519  0.00145 ** </span></a>
+<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="co">#&gt; ---</span></a>
+<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></a>
+<a class="sourceLine" id="cb5-26" data-line-number="26"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-27" data-line-number="27"><span class="co">#&gt; Residual standard error: 2.593 on 29 degrees of freedom</span></a>
+<a class="sourceLine" id="cb5-28" data-line-number="28"><span class="co">#&gt; Multiple R-squared:  0.8268, Adjusted R-squared:  0.8148 </span></a>
+<a class="sourceLine" id="cb5-29" data-line-number="29"><span class="co">#&gt; F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</span></a></code></pre></div>
 <p>Sensitivity analysis for the effect for <code>wt</code> on <code>mpg</code> can be carried out as follows, specifying the fitted model object:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="reference/konfound.html">konfound</a></span>(m1, wt)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; Percent Bias Necessary to Invalidate the Inference:</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; See Frank et al. (2013) for a description of the method</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; Impact Threshold for a Confounding Variable:</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.36 for statistical significance (alpha = 0.05).</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference for a null hypothesis of 0 effect.</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt; See Frank (2000) for a description of the method</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; For more detailed output, consider setting `to_return` to table</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; To consider other predictors of interest, consider setting `test_all` to TRUE.</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="reference/konfound.html">konfound</a></span>(m1, wt)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; Percent Bias Necessary to Invalidate the Inference:</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; See Frank et al. (2013) for a description of the method</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; Impact Threshold for a Confounding Variable:</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.36 for statistical significance (alpha = 0.05).</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference for a null hypothesis of 0 effect.</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; See Frank (2000) for a description of the method</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; For more detailed output, consider setting `to_return` to table</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; To consider other predictors of interest, consider setting `test_all` to TRUE.</span></a></code></pre></div>
 </div>
 <div id="mkonfound-for-meta-analyses-including-sensitivity-analysis" class="section level4">
 <h4 class="hasAnchor">
 <a href="#mkonfound-for-meta-analyses-including-sensitivity-analysis" class="anchor"></a>mkonfound for meta-analyses including sensitivity analysis</h4>
 <p>We can use an existing dataset, such as the CSV file <a href="https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv">here</a>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">d &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="st">"https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv"</span>)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(d)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt;           t  df</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; 1  7.076763 178</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; 2  4.127893 193</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; 3  1.893137  47</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; 4 -4.166395 138</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; 5 -1.187599  97</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; 6  3.585478  87</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(d, t, df)</a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; # A tibble: 30 x 7</span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt;         t    df action      inference       pct_bias_to_change_inf…   itcv r_con</span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt;     &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;                             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt;  1  7.08    178 to_invalid… reject_null                       68.8   0.378 0.614</span></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt;  2  4.13    193 to_invalid… reject_null                       50.6   0.168 0.41 </span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt;  3  1.89     47 to_sustain  fail_to_reject…                    5.47 -0.012 0.11 </span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt;  4 -4.17    138 to_invalid… reject_null                       50.3   0.202 0.449</span></a>
-<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt;  5 -1.19     97 to_sustain  fail_to_reject…                   39.4  -0.065 0.255</span></a>
-<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt;  6  3.59     87 to_invalid… reject_null                       41.9   0.19  0.436</span></a>
-<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt;  7  0.282   117 to_sustain  fail_to_reject…                   85.5  -0.131 0.361</span></a>
-<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt;  8  2.55     75 to_invalid… reject_null                       20.6   0.075 0.274</span></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt;  9 -4.44    137 to_invalid… reject_null                       53.0   0.225 0.475</span></a>
-<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; 10 -2.05    195 to_invalid… reject_null                        3.51  0.006 0.077</span></a>
-<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; # … with 20 more rows</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">d &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="st">"https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv"</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(d)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt;           t  df</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; 1  7.076763 178</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; 2  4.127893 193</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; 3  1.893137  47</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; 4 -4.166395 138</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; 5 -1.187599  97</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; 6  3.585478  87</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(d, t, df)</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; # A tibble: 30 x 7</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;         t    df action      inference       pct_bias_to_change_infâ¦   itcv r_con</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;     &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;                             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;  1  7.08    178 to_invalidâ¦ reject_null                       68.8   0.378 0.614</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt;  2  4.13    193 to_invalidâ¦ reject_null                       50.6   0.168 0.41 </span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;  3  1.89     47 to_sustain  fail_to_rejectâ¦                    5.47 -0.012 0.11 </span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt;  4 -4.17    138 to_invalidâ¦ reject_null                       50.3   0.202 0.449</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt;  5 -1.19     97 to_sustain  fail_to_rejectâ¦                   39.4  -0.065 0.255</span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt;  6  3.59     87 to_invalidâ¦ reject_null                       41.9   0.19  0.436</span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt;  7  0.282   117 to_sustain  fail_to_rejectâ¦                   85.5  -0.131 0.361</span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt;  8  2.55     75 to_invalidâ¦ reject_null                       20.6   0.075 0.274</span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt;  9 -4.44    137 to_invalidâ¦ reject_null                       53.0   0.225 0.475</span></a>
+<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt; 10 -2.05    195 to_invalidâ¦ reject_null                        3.51  0.006 0.077</span></a>
+<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt; # â¦ with 20 more rows</span></a></code></pre></div>
 </div>
 </div>
 <div id="features-in-development" class="section level1">
 <h1 class="hasAnchor">
 <a href="#features-in-development" class="anchor"></a>Features in-development</h1>
 <p>There is an in-development non-linear option:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">nl_output &lt;-<span class="st"> </span><span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.103</span>, <span class="dv">20888</span>, <span class="dv">3</span>, <span class="dt">n_trm =</span> <span class="dv">17888</span>, <span class="dt">non_linear =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; Note that this output is from an approach for non-linear models that is developmental and unpublished</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">nl_output &lt;-<span class="st"> </span><span class="kw"><a href="reference/pkonfound.html">pkonfound</a></span>(<span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.103</span>, <span class="dv">20888</span>, <span class="dv">3</span>, <span class="dt">n_trm =</span> <span class="dv">17888</span>, <span class="dt">non_linear =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; Note that this output is from an approach for non-linear models that is developmental and unpublished</span></a></code></pre></div>
+<p>This function can also take a 2 x 2 table of treatment versus control cases and success versus failure for the outcome, i.e.:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="reference/tkonfound.html">tkonfound</a></span>(<span class="dv">35</span>, <span class="dv">17</span>, <span class="dv">17</span>, <span class="dv">38</span>)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; [1] "The tkonfound function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. This can be applied to treatment vs control with successful vs unsuccessful outcomes."</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; [[2]]</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; [1] "See konfound_fig for full and accessible details in graphic form!"</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; [[3]]</span></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt; [1] "To invalidate the inference, 10 cases need to be transferred from treatment success to treatment failure, as shown, from the User-entered Table to the Transfer Table."</span></a>
+<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt; $User_enter_value</span></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt;           Fail Success</span></a>
+<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt; Control     35      17</span></a>
+<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt; Treatment   17      38</span></a>
+<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt; $Transfer_Table</span></a>
+<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt;           Fail Success</span></a>
+<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt; Control     35      17</span></a>
+<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co">#&gt; Treatment   27      28</span></a>
+<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-21" data-line-number="21"><span class="co">#&gt; [[6]]</span></a>
+<a class="sourceLine" id="cb9-22" data-line-number="22"><span class="co">#&gt; [1] "For the User-entered Table, we have a Pearson's chi square of 14.176, with p value of 0.000."</span></a>
+<a class="sourceLine" id="cb9-23" data-line-number="23"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-24" data-line-number="24"><span class="co">#&gt; [[7]]</span></a>
+<a class="sourceLine" id="cb9-25" data-line-number="25"><span class="co">#&gt; [1] "For the Transfer Table, we have a Pearson's chi square of 3.640, with p value of 0.056."</span></a></code></pre></div>
 <p>Print <code>nl_output</code> to see the output.</p>
+<p>You can also draw figures for change in effect size as a function of switching outcomes.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw"><a href="reference/tkonfound_fig.html">tkonfound_fig</a></span>(<span class="dv">35</span>, <span class="dv">17</span>, <span class="dv">17</span>, <span class="dv">38</span>)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; [[1]]</span></a></code></pre></div>
+<p><img src="README-unnamed-chunk-10-1.png"><!-- --></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt; [[2]]</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; Warning: Removed 27 rows containing missing values (geom_label_repel).</span></a></code></pre></div>
+<p><img src="README-unnamed-chunk-10-2.png"><!-- --></p>
 </div>
 <div id="other-information" class="section level1">
 <h1 class="hasAnchor">
@@ -235,7 +268,7 @@
 <p>To learn more about sensitivity analysis, please visit:</p>
 <ul>
 <li>The <a href="https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html">Introduction to konfound vignette</a>, with detailed information about each of the functions (<code><a href="reference/pkonfound.html">pkonfound()</a></code>, <code><a href="reference/konfound.html">konfound()</a></code>, and <code>mkounfound()</code>)</li>
-<li>The causal inference section of Ken Frank’s website <a href="https://msu.edu/~kenfrank/research.htm#causal">here</a>
+<li>The causal inference section of Ken Frankâs website <a href="https://msu.edu/~kenfrank/research.htm#causal">here</a>
 </li>
 <li>The <a href="https://jmichaelrosenberg.shinyapps.io/shinykonfound/">konfound interactive web application</a>, with links to PowerPoints and key publications</li>
 </ul>

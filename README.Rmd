@@ -93,6 +93,12 @@ tkonfound(35, 17, 17, 38)
 
 Print `nl_output` to see the output.
 
+You can also draw figures for change in effect size as a function of switching outcomes.
+
+```{r}
+tkonfound_fig(35, 17, 17, 38)
+```
+
 # Other information
 
 ### How to learn more about sensitivity analysis

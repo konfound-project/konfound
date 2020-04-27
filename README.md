@@ -175,7 +175,10 @@ tkonfound(35, 17, 17, 38)
 #> [1] "The tkonfound function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. This can be applied to treatment vs control with successful vs unsuccessful outcomes."
 #> 
 #> [[2]]
-#> [1] "To invalidate the inference, 10 cases need to be transferred from treatment success to treatment failure, as shown, from the Observed Table to the Transfer Table."
+#> [1] "See konfound_fig for full and accessible details in graphic form!"
+#> 
+#> [[3]]
+#> [1] "To invalidate the inference, 10 cases need to be transferred from treatment success to treatment failure, as shown, from the User-entered Table to the Transfer Table."
 #> 
 #> $User_enter_value
 #>           Fail Success
@@ -187,14 +190,30 @@ tkonfound(35, 17, 17, 38)
 #> Control     35      17
 #> Treatment   27      28
 #> 
-#> [[5]]
-#> [1] "For the Observed Table (based on user enter values), we have a Pearson's chi square of 14.176, with p value of 0.000."
-#> 
 #> [[6]]
+#> [1] "For the User-entered Table, we have a Pearson's chi square of 14.176, with p value of 0.000."
+#> 
+#> [[7]]
 #> [1] "For the Transfer Table, we have a Pearson's chi square of 3.640, with p value of 0.056."
 ```
 
 Print `nl_output` to see the output.
+
+You can also draw figures for change in effect size as a function of
+switching outcomes.
+
+``` r
+tkonfound_fig(35, 17, 17, 38)
+#> [[1]]
+```
+
+![](README-unnamed-chunk-10-1.png)<!-- -->
+
+    #> 
+    #> [[2]]
+    #> Warning: Removed 27 rows containing missing values (geom_label_repel).
+
+![](README-unnamed-chunk-10-2.png)<!-- -->
 
 # Other information
 
