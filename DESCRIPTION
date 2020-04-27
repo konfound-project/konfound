@@ -43,7 +43,8 @@ Suggests:
     lme4,
     rmarkdown,
     roxygen2,
-    testthat
+    testthat,
+    ggrepel
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true

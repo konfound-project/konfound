@@ -1,18 +1,18 @@
 #' Draw figures for change in effect size as a function of switching outcomes 
-#' @description This function returns two plots for change in effect size as a function of switching outcomes (RIS), one for all possibilities, another one zoom in the area around the two thresholds  
+#' @description This function returns two plots for change in effect size as a function of switching outcomes (RIS),
+#' one for all possibilities, another zoomed in the area around the two thresholds  
 #' @param a cell is the number of cases in the control group showing unsuccessful results
 #' @param b cell is the number of cases in the control group showing successful results
 #' @param c cell is the number of cases in the treatment group showing unsuccessful results
 #' @param d cell is the number of cases in the treatment group showing successful results
 #' @param thr_p the p-value threshold used to evaluate statistical significance, with the default of 0.05
 #' @param switch_trm whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row
-#' @inheritParams pkonfound
 #' @return prints 2 figures for how number of hypothetical cases switched changes the effect size 
 #' @examples
 #' # using tkonfound_fig for a study where 2 by 2 table is (35, 17, 17, 38)
 #' tkonfound_fig(35, 17, 17, 38)
 #' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01)
-#' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = F)
+#' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
 #' @export
 
 tkonfound_fig <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){

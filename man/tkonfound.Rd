@@ -4,7 +4,7 @@
 \alias{tkonfound}
 \title{Perform sensitivity analysis for a 2x2 table}
 \usage{
-tkonfound(a, b, c, d, thr_p = 0.05, switch_trm = T, plt = F)
+tkonfound(a, b, c, d, thr_p = 0.05, switch_trm = T)
 }
 \arguments{
 \item{a}{cell is the number of cases in the control group showing unsuccessful results}
@@ -32,5 +32,4 @@ This function calculates the number of cases (RIS) that would have to be switche
 tkonfound(35, 17, 17, 38)
 tkonfound(35, 17, 17, 38, thr_p = 0.01)
 tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = F)
-tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = F, plt = F)
 }
