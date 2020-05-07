@@ -175,9 +175,9 @@ meta$current <- ifelse(meta$switch==0, "current", "other")
 meta$sigpoint <- ifelse(meta$switch==0, "current",meta$sigpoint)
 meta$switch <- meta$switch*(-1)
 meta$label <- ifelse(meta$sigpoint=="positive", 
-                     paste("sig pos:",meta[meta$sigpoint=="positive",]$switch),NA)
+                     paste("sig pos:RIS=",meta[meta$sigpoint=="positive",]$switch),NA)
 meta$label <- ifelse(meta$sigpoint=="negative", 
-                     paste("sig neg:",meta[meta$sigpoint=="negative",]$switch),meta$label)
+                     paste("sig neg:RIS=",meta[meta$sigpoint=="negative",]$switch),meta$label)
 meta$label <- ifelse(meta$sigpoint=="current", 
                      paste("current"),meta$label)
 
@@ -186,8 +186,7 @@ pointshape <- c("current"=15,"other"=21)
 
 fig1 <- ggplot2::ggplot(meta, ggplot2::aes_string(x="switch", y="pdif"))+
   ggplot2::geom_line(ggplot2::aes_string(y="pdif"), size = 1) +
-  ggplot2::geom_point(ggplot2::aes_string(y="pdif", shape = factor("current"),fill = factor("sigpoint")), 
-                      size = 3)+
+  ggplot2::geom_point(ggplot2::aes_string(y="pdif", shape = "current",fill = "sigpoint"))+
   ggplot2::scale_fill_manual(values=fillcol)+
   ggplot2::scale_shape_manual(values=pointshape)+
   ggplot2::geom_hline(yintercept = pos_thr_pdif, linetype = "dashed", color="green4", size = 1)+
@@ -207,7 +206,7 @@ zoom <- meta[meta$switch<=zoom_upper & meta$switch>=zoom_lower,]
 
 fig2 <- ggplot2::ggplot(zoom, ggplot2::aes_string(x="switch",y="pdif"))+
   ggplot2::geom_line(ggplot2::aes_string(y="pdif"), size = 1) +
-  ggplot2::geom_point(ggplot2::aes_string(y="pdif", shape = factor("current"),fill = factor("sigpoint")), 
+  ggplot2::geom_point(ggplot2::aes_string(y="pdif", shape = "current",fill = "sigpoint"), 
                       size = 3)+
   ggrepel::geom_label_repel(ggplot2::aes_string(label="label"))+
   ggplot2::scale_fill_manual(values=fillcol)+
