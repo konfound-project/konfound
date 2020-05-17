@@ -325,8 +325,21 @@ chisq_value <- function(a, b, c, d){
 }
 
 
-
-# get switch for tkonfound based on chi-square
+#' Get switch result for tkonfound based on chi-square tests
+#' @description This function serves for tkonfound
+#' @param a cell is the number of cases in the control group showing unsuccessful results
+#' @param b cell is the number of cases in the control group showing successful results
+#' @param c cell is the number of cases in the treatment group showing unsuccessful results
+#' @param d cell is the number of cases in the treatment group showing successful results
+#' @param thr_p the p-value threshold used to evaluate statistical significance, with the default of 0.05
+#' @param switch_trm whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row
+#' @return prints the results that are needed for tkonfound
+#' @examples
+#' # using getswitch_chisq for a 2x2 table
+#' getswitch_chisq(35, 17, 17, 38)
+#' getswitch_chisq(35, 17, 17, 38, thr_p = 0.01)
+#' getswitch_chisq(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
+#' @export
 getswitch_chisq <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
 odds_ratio <- a*d/(b*c)
 n_cnt <- a+b
