@@ -201,7 +201,6 @@ fig1 <- ggplot2::ggplot(meta, ggplot2::aes_string(x="switch", y="pdif"))+
         axis.line = ggplot2::element_line(colour = "black"),
         legend.position = "none")
 
-
 zoom <- meta[meta$switch<=zoom_upper & meta$switch>=zoom_lower,]
 
 fig2 <- ggplot2::ggplot(zoom, ggplot2::aes_string(x="switch",y="pdif"))+
@@ -247,7 +246,15 @@ fig2 <- ggplot2::ggplot(zoom, ggplot2::aes_string(x="switch",y="pdif"))+
 #    theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 12),
 #          axis.text = element_text(size = 12))
 #} 
-result <- list(fig1, fig2)
+
+if (switch_trm == T){
+  note <- "A bend in line indicates switches from the control row because the treatment row was exhausted."
+  }
+else {
+  note <- "A bend in line indicates switches from the treatment row because the control row was exhausted."
+}
+
+result <- list(fig1, note, fig2)
 
 return(result)
 }
