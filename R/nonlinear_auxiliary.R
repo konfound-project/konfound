@@ -317,6 +317,13 @@ chisq_p <- function(a, b, c, d){
   return(p)
 }
 
+# get p value for exact fisher p test
+fisher_p <- function(a, b, c, d){
+  table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
+  p <- fisher.test(table)$p.value
+  return(p)
+}
+
 # get chi-square value for chi-square test 
 chisq_value <- function(a, b, c, d){
   table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
@@ -324,6 +331,12 @@ chisq_value <- function(a, b, c, d){
   return(value)
 }
 
+# get odds ratio for exact fisher p test 
+fisher_oddsratio <- function(a, b, c, d){
+  table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
+  value <- fisher.test(table)$estimate
+  return(value)
+}
 
 #' Get switch result for tkonfound based on chi-square tests
 #' @description This function serves for tkonfound
