@@ -1,5 +1,5 @@
 #' Perform sensitivity analysis for a 2x2 table
-#' @description This function calculates the number of cases (RIS) that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. This can be applied to treatment vs control with successful vs unsuccessful outcomes.
+#' @description This function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. Or how many cases need to be replaced with null hypothesis cases to change the inference. This can be applied to treatment vs control with successful vs unsuccessful outcomes.
 #' @param a cell is the number of cases in the control group showing unsuccessful results
 #' @param b cell is the number of cases in the control group showing successful results
 #' @param c cell is the number of cases in the treatment group showing unsuccessful results
@@ -79,29 +79,45 @@ colnames(table_start) <- colnames(table_final) <- c("Fail", "Success")
 
 if (switch_trm && dcroddsratio_ob) {
   transferway <- "treatment success to treatment failure,"
+  RIR <- round(final/((a+c)/n_obs))
+  RIRway <- "treatment success"
 }
 if (switch_trm && !dcroddsratio_ob) {
   transferway <- "treatment failure to treatment success,"
+  RIR <- round(final/((b+d)/n_obs))
+  RIRway <- "treatment failure"
 }
 if (!switch_trm && dcroddsratio_ob) {
   transferway <- "control failure to control success,"
+  RIR <- round(final/((b+d)/n_obs))
+  RIRway <- "control failure"
 }
 if (!switch_trm && !dcroddsratio_ob) {
   transferway <- "control success to control failure,"
+  RIR <- round(final/((a+c)/n_obs))
+  RIRway <- "control success"
 }
 
 if (allnotenough) {
   if (switch_trm && dcroddsratio_ob) {
     transferway_extra <- "control failure to control success,"
+    RIR_extra <- round(final_extra/((b+d)/n_obs))
+    RIRway_extra <- "control failure"
   }
   if (switch_trm && !dcroddsratio_ob) {
     transferway_extra <- "control success to control failure,"
+    RIR_extra <- round(final_extra/((a+c)/n_obs))
+    RIRway_extra <- "control success"
   }
   if (!switch_trm && dcroddsratio_ob) {
     transferway_extra <- "treatment success to treatment failure,"
+    RIR_extra <- round(final_extra/((a+c)/n_obs))
+    RIRway_extra <- "treatment success"
   }
   if (!switch_trm && !dcroddsratio_ob) {
     transferway_extra <- "treatment failure to treatment success,"
+    RIR_extra <- round(final_extra/((b+d)/n_obs))
+    RIRway_extra <- "treatment failure"
   }
 }
 
@@ -114,14 +130,18 @@ if (p_ob < thr_p) {
 if (!allnotenough & final > 1) {
   conclusion1 <- paste(
     change, sprintf("%d cases need to be transferred from", final),
-    transferway, c("as shown, from the User-entered Table to the Transfer Table.")
+    transferway, c("as shown, from the User-entered Table to the Transfer Table."),
+    sprintf("This means we need to replace %d", RIR), RIRway, 
+    c("with null hypothesis cases to change the inference.")
   )
 } 
 
 if (!allnotenough & final == 1) {
   conclusion1 <- paste(
     change, sprintf("%d case needs to be transferred from", final),
-    transferway, c("as shown, from the User-entered Table to the Transfer Table.")
+    transferway, c("as shown, from the User-entered Table to the Transfer Table."),
+    sprintf("This means we need to replace %d", RIR), RIRway, 
+    c("with null hypothesis cases to change the inference.")
   )
 }
 
@@ -129,7 +149,10 @@ if (allnotenough){
   conclusion1 <- paste(
     change, c("only transferring cases from"), transferway,
     sprintf("is not enough. We also need to transfer %d cases from", final_extra),
-    transferway_extra, c("as shown, from the User-entered Table to the Transfer Table.")
+    transferway_extra, c("as shown, from the User-entered Table to the Transfer Table."),
+    sprintf("This means we need to replace %d of", RIR), RIRway, 
+    sprintf("with null hypothesis cases; and replace %d", RIR_extra), RIRway_extra, 
+    c("with null hypothesis cases to change the inference.")
   )
 }
 
@@ -149,6 +172,7 @@ if (test == "fisher"){
 
 info1 <- "The tkonfound function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. This can be applied to treatment vs control with successful vs unsuccessful outcomes."
 info2 <- "See konfound_fig for full and accessible details in graphic form!"
+
 
 result <- list(info1, info2,
                conclusion1,
