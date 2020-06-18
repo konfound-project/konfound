@@ -83,6 +83,10 @@ taylorexp <- function(a, b, c, d, q, thr) {
 
 # get t value for a contingency table
 get_t_kfnl <- function(a, b, c, d) {
+  if (a == 0) {a <- a + 0.1}
+  if (b == 0) {b <- b + 0.1}
+  if (c == 0) {c <- c + 0.1}
+  if (d == 0) {d <- d + 0.1}
   est <- log(a * d / b / c)
   se <- sqrt(1 / a + 1 / b + 1 / c + 1 / d)
   t <- est / se
@@ -657,11 +661,15 @@ return(result)
 #' getswitch_fisher(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
 #' @export
 getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
-  odds_ratio <- fisher_oddsratio(a, b, c, d)
+  if (a > 0 & b > 0 & c > 0 & d > 0){
+    odds_ratio <- fisher_oddsratio(a, b, c, d)
+  } else {
+    odds_ratio <- 1 + 0.1*(a*d-b*c)
+  }
+  est <- log(odds_ratio)
   n_cnt <- a+b
   n_trm <- c+d
   n_obs <- n_cnt + n_trm
-  est <- log(odds_ratio)
   
   # this is the 2 by 2 table we start with
   table_ob <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
