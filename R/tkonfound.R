@@ -26,12 +26,17 @@ tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, test = "fisher")
 # test <- "fisher"
 
 # stop message
-if (a <= 0 || b <= 0 || c <= 0 || d <= 0) {
+if (a < 0 || b < 0 || c < 0 || d < 0) {
   stop("Please enter non-negative integers for each cell.")
 }
 
 if (a != as.integer(a) || b != as.integer(b) || c != as.integer(c) || d != as.integer(d)) {
-stop("Please enter positive integers for each cell.")
+stop("Please enter non-negative integers for each cell.")
+}
+
+# use fisher if any of the cell is smaller than 5
+if (a < 5 || b < 5 || c < 5 || d < 5){
+  test <- "fisher"
 }
 
 odds_ratio <- a*d/(b*c)
