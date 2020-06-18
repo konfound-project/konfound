@@ -14,17 +14,18 @@
 #' tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
 #' @export
 
-tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
+tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, test = "fisher"){
 # a <- 35
 # b <- 17
 # c <- 17
 # d <- 38
 # thr_p <- 0.05
 # switch_trm <- T
+# test <- "fisher"
 
 # stop message
 if (a <= 0 || b <= 0 || c <= 0 || d <= 0) {
-  stop("Please enter positive integers for each cell.")
+  stop("Please enter non-negative integers for each cell.")
 }
 
 if (a != as.integer(a) || b != as.integer(b) || c != as.integer(c) || d != as.integer(d)) {
@@ -39,11 +40,25 @@ est <- log(odds_ratio)
 
 # this is the 2 by 2 table we start with
 table_ob <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
-p_ob <- chisq_p(a, b, c, d)
-chisq_ob <- chisq_value(a, b, c, d)
+if (test == "fisher") {
+  p_ob <- fisher_p(a, b, c, d)
+  fisher_ob <- fisher_oddsratio(a, b, c, d)
+  }
+if (test == "chisq") {
+  p_ob <- chisq_p(a, b, c, d)
+  chisq_ob <- chisq_value(a, b, c, d)
+  }
 
 # get solution
-solution <- getswitch_chisq(a, b, c, d, thr_p, switch_trm)
+if (test == "chisq"){
+  solution <- getswitch_chisq(a, b, c, d, thr_p, switch_trm)
+  chisq_final <- solution$chisq_final
+}
+
+if (test == "fisher"){
+  solution <- getswitch_fisher(a, b, c, d, thr_p, switch_trm)
+  fisher_final <- solution$fisher_final
+}
   
 table_final <- solution$Transfer_Table
 table_start <- table_ob
@@ -51,7 +66,6 @@ dcroddsratio_ob <- solution$dcroddsratio_ob
 allnotenough <- solution$needtworows
 final <- solution$final_switch
 p_final <- solution$p_final
-chisq_final <- solution$chisq_final
 taylor_pred <- solution$taylor_pred
 perc_bias_pred <- solution$perc_bias_pred
 final_extra <- solution$final_extra
@@ -117,10 +131,19 @@ if (allnotenough){
   )
 }
 
+if (test == "chisq"){
 conclusion2 <- sprintf(
   "For the User-entered Table, we have a Pearson's chi square of %.3f, with p value of %.3f.", chisq_ob, p_ob)
 conclusion3 <- sprintf(
   "For the Transfer Table, we have a Pearson's chi square of %.3f, with p value of %.3f.", chisq_final, p_final)
+}
+
+if (test == "fisher"){
+  conclusion2 <- sprintf(
+    "For the User-entered Table, we have an estimated odds ratio of %.3f, with p value of %.3f.", fisher_ob, p_ob)
+  conclusion3 <- sprintf(
+    "For the Transfer Table, we have an estimated odds ratio of %.3f, with p value of %.3f.", fisher_final, p_final)
+}
 
 info1 <- "The tkonfound function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. This can be applied to treatment vs control with successful vs unsuccessful outcomes."
 info2 <- "See konfound_fig for full and accessible details in graphic form!"
