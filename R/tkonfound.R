@@ -39,11 +39,11 @@ if (a < 5 || b < 5 || c < 5 || d < 5){
   test <- "fisher"
 }
 
-odds_ratio <- a*d/(b*c)
+# odds_ratio <- a*d/(b*c)
 n_cnt <- a+b
 n_trm <- c+d
 n_obs <- n_cnt + n_trm
-est <- log(odds_ratio)
+# est <- log(odds_ratio)
 
 # this is the 2 by 2 table we start with
 table_ob <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
