@@ -83,10 +83,10 @@ taylorexp <- function(a, b, c, d, q, thr) {
 
 # get t value for a contingency table
 get_t_kfnl <- function(a, b, c, d) {
-  if (a == 0) {a <- a + 0.1}
-  if (b == 0) {b <- b + 0.1}
-  if (c == 0) {c <- c + 0.1}
-  if (d == 0) {d <- d + 0.1}
+  if (a == 0) {a <- a + 0.5}
+  if (b == 0) {b <- b + 0.5}
+  if (c == 0) {c <- c + 0.5}
+  if (d == 0) {d <- d + 0.5}
   est <- log(a * d / b / c)
   se <- sqrt(1 / a + 1 / b + 1 / c + 1 / d)
   t <- est / se
@@ -688,6 +688,7 @@ getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
   p_start <- p_ob
   table_start <- table_ob
   t_ob <- t_start <- get_t_kfnl(a, b, c, d)
+  
   if (est < 0){
     thr_t <- stats::qt(1 - thr_p/2, n_obs - 1)*(-1)
   } else {
@@ -703,20 +704,28 @@ getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
   ### check whether it is enough to transfer all cases in one row
   if (!dcroddsratio_start) {
     # transfer cases from B to A or C to D to increase odds ratio
-    c_tryall <- c - (c - 1) * as.numeric(switch_trm)
-    d_tryall <- d + (c - 1) * as.numeric(switch_trm)
-    a_tryall <- a + (b - 1) * (1 - as.numeric(switch_trm))
-    b_tryall <- b - (b - 1) * (1 - as.numeric(switch_trm))
+    c_tryall <- c - c * as.numeric(switch_trm)
+    d_tryall <- d + c * as.numeric(switch_trm)
+    a_tryall <- a + b * (1 - as.numeric(switch_trm))
+    b_tryall <- b - b * (1 - as.numeric(switch_trm))
+    if (a_tryall == 0) {a_tryall <- a_tryall + 0.5}
+    if (b_tryall == 0) {b_tryall <- b_tryall + 0.5}
+    if (c_tryall == 0) {c_tryall <- c_tryall + 0.5}
+    if (d_tryall == 0) {d_tryall <- d_tryall + 0.5}
     tryall_p <- fisher_p(a_tryall, b_tryall, c_tryall, d_tryall)
     tryall_est <- log(a_tryall*d_tryall/c_tryall/b_tryall)
     allnotenough <- isTRUE((thr_p-tryall_p)*tryall_est< 0 & tryall_est*est > 0)
   }
   if (dcroddsratio_start ) {
     # transfer cases from A to B or D to C to decrease odds ratio
-    c_tryall <- c + (d - 1) * as.numeric(switch_trm)
-    d_tryall <- d - (d - 1) * as.numeric(switch_trm)
-    a_tryall <- a - (a - 1) * (1 - as.numeric(switch_trm))
-    b_tryall <- b + (a - 1) * (1 - as.numeric(switch_trm))
+    c_tryall <- c + d * as.numeric(switch_trm)
+    d_tryall <- d - d * as.numeric(switch_trm)
+    a_tryall <- a - a * (1 - as.numeric(switch_trm))
+    b_tryall <- b + a * (1 - as.numeric(switch_trm))
+    if (a_tryall == 0) {a_tryall <- a_tryall + 0.5}
+    if (b_tryall == 0) {b_tryall <- b_tryall + 0.5}
+    if (c_tryall == 0) {c_tryall <- c_tryall + 0.5}
+    if (d_tryall == 0) {d_tryall <- d_tryall + 0.5}
     tryall_p <- fisher_p(a_tryall, b_tryall, c_tryall, d_tryall)
     tryall_est <- log(a_tryall*d_tryall/c_tryall/b_tryall)
     allnotenough <- isTRUE((thr_p-tryall_p)*tryall_est> 0  & tryall_est*est > 0)
@@ -759,21 +768,21 @@ getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
     }
     
     ### check whether taylor_pred move too many and causes non-positive odds ratio
-    if (a_taylor <= 0) {
-      b_taylor <- a_taylor + b_taylor - 1
-      a_taylor <- 1
+    if (a_taylor < 0) {
+      b_taylor <- a_taylor + b_taylor
+      a_taylor <- 0
     }
-    if (b_taylor <= 0) {
-      a_taylor <- a_taylor + b_taylor - 1
-      b_taylor <- 1
+    if (b_taylor < 0) {
+      a_taylor <- a_taylor + b_taylor
+      b_taylor <- 0
     }
-    if (c_taylor <= 0) {
-      d_taylor <- c_taylor + d_taylor - 1
-      c_taylor <- 1
+    if (c_taylor < 0) {
+      d_taylor <- c_taylor + d_taylor
+      c_taylor <- 0
     }
-    if (d_taylor <= 0) {
-      c_taylor <- c_taylor + d_taylor - 1
-      d_taylor <- 1
+    if (d_taylor < 0) {
+      c_taylor <- c_taylor + d_taylor
+      d_taylor <- 0
     }
     
     ### set brute force starting point from the taylor expansion result
