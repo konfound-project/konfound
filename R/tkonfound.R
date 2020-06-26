@@ -84,44 +84,52 @@ colnames(table_start) <- colnames(table_final) <- c("Fail", "Success")
 
 if (switch_trm && dcroddsratio_ob) {
   transferway <- "treatment success to treatment failure,"
-  RIR <- round(final/((a+c)/n_obs))
+  #RIR <- round(final/((a+c)/n_obs))
+  RIR <- round(final/(a/(a+b)))
   RIRway <- "treatment success"
 }
 if (switch_trm && !dcroddsratio_ob) {
   transferway <- "treatment failure to treatment success,"
-  RIR <- round(final/((b+d)/n_obs))
+  #RIR <- round(final/((b+d)/n_obs))
+  RIR <- round(final/(b/(a+b)))
   RIRway <- "treatment failure"
 }
 if (!switch_trm && dcroddsratio_ob) {
   transferway <- "control failure to control success,"
-  RIR <- round(final/((b+d)/n_obs))
+  #RIR <- round(final/((b+d)/n_obs))
+  RIR <- round(final/(b/(a+b)))
   RIRway <- "control failure"
 }
 if (!switch_trm && !dcroddsratio_ob) {
   transferway <- "control success to control failure,"
-  RIR <- round(final/((a+c)/n_obs))
+  #RIR <- round(final/((a+c)/n_obs))
+  RIR <- round(final/(a/(a+b)))
   RIRway <- "control success"
 }
 
 if (allnotenough) {
   if (switch_trm && dcroddsratio_ob) {
     transferway_extra <- "control failure to control success,"
-    RIR_extra <- round(final_extra/((b+d)/n_obs))
+    #RIR_extra <- round(final_extra/((b+d)/n_obs))
+    RIR_extra <- round(final_extra/(b/(b+d)))
     RIRway_extra <- "control failure"
   }
   if (switch_trm && !dcroddsratio_ob) {
     transferway_extra <- "control success to control failure,"
-    RIR_extra <- round(final_extra/((a+c)/n_obs))
+    #RIR_extra <- round(final_extra/((a+c)/n_obs))
+    RIR_extra <- round(final_extra/(a/(a+b)))
     RIRway_extra <- "control success"
   }
   if (!switch_trm && dcroddsratio_ob) {
     transferway_extra <- "treatment success to treatment failure,"
-    RIR_extra <- round(final_extra/((a+c)/n_obs))
+    #RIR_extra <- round(final_extra/((a+c)/n_obs))
+    RIR_extra <- round(final_extra/(a/(a+b)))
     RIRway_extra <- "treatment success"
   }
   if (!switch_trm && !dcroddsratio_ob) {
     transferway_extra <- "treatment failure to treatment success,"
-    RIR_extra <- round(final_extra/((b+d)/n_obs))
+    #RIR_extra <- round(final_extra/((b+d)/n_obs))
+    RIR_extra <- round(final_extra/(b/(b+d)))
     RIRway_extra <- "treatment failure"
   }
 }
@@ -182,7 +190,7 @@ info2 <- "See konfound_fig for full and accessible details in graphic form!"
 result <- list(info1, info2,
                conclusion1,
                  User_enter_value = table_start, Transfer_Table = table_final,
-                 conclusion2, conclusion3)
+                 conclusion2, conclusion3, RIR = RIR)
 
   return(result)
 }
