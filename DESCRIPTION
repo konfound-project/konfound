@@ -27,6 +27,7 @@ Description: Statistical methods that quantify the conditions necessary to alter
 License: MIT + file LICENSE
 Imports: 
     broom,
+    broom.mixed,
     crayon,
     dplyr,
     ggplot2,
