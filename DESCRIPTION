@@ -4,9 +4,9 @@ Title: Quantify the Robustness of Causal Inferences
 Version: 0.2.1
 Authors@R: c(
     person(c("Joshua", "M"), "Rosenberg", role = c("aut", "cre"), email = "jmichaelrosenberg@gmail.com"),
-    person(c("Ran"), "Xu", role = "ctb", email = "ranxu@msu.edu"),
-    person(c("Qinyun"), "Lin", role = "ctb", email = "linqinyun1001@gmail.com"),
-    person(c("Kenneth", "A"), "Frank", role = "ctb", email = "kenfrank@msu.edu")
+    person(c("Ran"), "Xu", role = "aut", email = "ranxu@msu.edu"),
+    person(c("Qinyun"), "Lin", role = "aut", email = "linqinyun1001@gmail.com"),
+    person(c("Kenneth", "A"), "Frank", role = "aut", email = "kenfrank@msu.edu")
     )
 Description: Statistical methods that quantify the conditions necessary to alter
     inferences, also known as sensitivity analysis, are becoming increasingly

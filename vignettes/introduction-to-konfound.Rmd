@@ -209,7 +209,7 @@ To learn more about sensitivity analysis, please visit:
 
 ### Code of Conduct
 
-Please note that this project is released with a Contributor Code of Conduct available at [http://contributor-covenant.org/version/1/0/0/](http://contributor-covenant.org/version/1/0/0/)
+Please note that this project is released with a Contributor Code of Conduct available at [https://www.contributor-covenant.org/version/1/0/0/](https://www.contributor-covenant.org/version/1/0/0/)
 
 ### References
 
