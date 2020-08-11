@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">konfound</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -207,7 +207,20 @@
   <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lme4</span>)
   <span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='no'>fm1</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lme4</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='no'>sleepstudy</span>)
   <span class='fu'>konfound</span>(<span class='no'>m3</span>, <span class='no'>Days</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: lme4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding factor and character vector, coercing into character vector</span></div><div class='output co'>#&gt; <span class='warning'>Warning: binding character and factor vector, coercing into character vector</span></div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
+}</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: lme4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'broom.mixed':</span>
+#&gt; <span class='message'>  method         from </span>
+#&gt; <span class='message'>  augment.lme    broom</span>
+#&gt; <span class='message'>  augment.merMod broom</span>
+#&gt; <span class='message'>  glance.lme     broom</span>
+#&gt; <span class='message'>  glance.merMod  broom</span>
+#&gt; <span class='message'>  glance.stanreg broom</span>
+#&gt; <span class='message'>  tidy.brmsfit   broom</span>
+#&gt; <span class='message'>  tidy.gamlss    broom</span>
+#&gt; <span class='message'>  tidy.lme       broom</span>
+#&gt; <span class='message'>  tidy.merMod    broom</span>
+#&gt; <span class='message'>  tidy.rjags     broom</span>
+#&gt; <span class='message'>  tidy.stanfit   broom</span>
+#&gt; <span class='message'>  tidy.stanreg   broom</span></div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
 #&gt; </span><span>To invalidate an inference, 84.83% of the estimate would have to be due to bias. This is based on a threshold of 1.588 for statistical significance (alpha = 0.05).
 #&gt; To invalidate an inference, 137 observations would have to be replaced with cases for which the effect is 0.
 #&gt; See Frank et al. (2013) for a description of the method

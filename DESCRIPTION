@@ -1,7 +1,7 @@
 Type: Package
 Package: konfound
 Title: Quantify the Robustness of Causal Inferences
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(
     person(c("Joshua", "M"), "Rosenberg", role = c("aut", "cre"), email = "jmichaelrosenberg@gmail.com"),
     person(c("Ran"), "Xu", role = "aut", email = "ranxu@msu.edu"),
@@ -27,6 +27,7 @@ Description: Statistical methods that quantify the conditions necessary to alter
 License: MIT + file LICENSE
 Imports: 
     broom,
+    broom.mixed,
     crayon,
     dplyr,
     ggplot2,

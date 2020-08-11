@@ -1,3 +1,4 @@
+^example-1\.R$
 ^CRAN-RELEASE$
 ^LICENSE\.md$
 ^author-guide\.pdf$
@@ -12,3 +13,4 @@
 ^\.travis\.yml$
 ^cran-comments\.md$
 ^stata-paper.docx$
+^paper\.Rmd$
