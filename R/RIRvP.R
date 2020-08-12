@@ -50,12 +50,27 @@ stroke12 <- RIRvP(21, 215, 17, 214)
 ggplot(data = stroke12[stroke12$p<0.08,], aes(x = p, y = RIR)) + 
   geom_line(aes(y = RIR), size = 1) + ylim(0,250)
 
-stroke2 <- RIRvP(20, 174, 15, 171)
+### This is the one that is used in the paper now
+stroke2 <- RIRvP(20, 174, 16, 170)
 ggplot(data = stroke2[stroke2$p<0.08,], aes(x = p, y = RIR)) + 
   geom_line(aes(y = RIR), size = 1) + ylim(0,175) + 
+  #geom_point(data = stroke2[stroke2$RIR==39,], aes(x = p, y = RIR), colour="blue", size = 3)+
+  #annotate("text", x= 0.0055, y = 39, label = "VA II", size = 7) + 
   scale_x_continuous(breaks=seq(0,0.05,0.01))+
-  scale_y_continuous(breaks=seq(0,175,25))
-
+  scale_y_continuous(breaks=seq(0,175,25))+
+  geom_vline(xintercept = 0.01, linetype="dotted")+
+  annotate("text", x=0.011, y=25.1, label = "**", size = 11)+
+  geom_vline(xintercept = 0.05, linetype="dotted")+
+  annotate("text", x=0.0505, y=2.7, label = "*", size = 11)+
+  ylab("Robustness of Inference to Replacement") + 
+  xlab("p-value")+
+  theme(axis.title = ggplot2::element_text(size = 20),
+               axis.text= ggplot2::element_text(size = 18),
+               panel.grid.major = ggplot2::element_blank(), 
+               panel.grid.minor = ggplot2::element_blank(),
+               panel.background = ggplot2::element_blank(), 
+               axis.line = ggplot2::element_line(colour = "black"),
+               legend.position = "none")
 
 
 # too many bump
