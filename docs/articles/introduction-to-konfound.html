@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">konfound</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
       <h1>Introduction to konfound</h1>
                         <h4 class="author">Joshua Rosenberg, Ran Xu, and Ken Frank</h4>
             
-            <h4 class="date">2020-08-07</h4>
+            <h4 class="date">2020-04-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jrosen48/konfound/blob/master/vignettes/introduction-to-konfound.Rmd"><code>vignettes/introduction-to-konfound.Rmd</code></a></small>
       <div class="hidden name"><code>introduction-to-konfound.Rmd</code></div>
@@ -336,32 +336,22 @@
 <a class="sourceLine" id="cb18-5" data-line-number="5">}</a>
 <a class="sourceLine" id="cb18-6" data-line-number="6"><span class="co">#&gt; Loading required namespace: lme4</span></a>
 <a class="sourceLine" id="cb18-7" data-line-number="7"><span class="co">#&gt; Loading required package: Matrix</span></a>
-<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="co">#&gt; Registered S3 methods overwritten by 'broom.mixed':</span></a>
-<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">#&gt;   method         from </span></a>
-<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">#&gt;   augment.lme    broom</span></a>
-<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">#&gt;   augment.merMod broom</span></a>
-<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt;   glance.lme     broom</span></a>
-<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt;   glance.merMod  broom</span></a>
-<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt;   glance.stanreg broom</span></a>
-<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt;   tidy.brmsfit   broom</span></a>
-<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co">#&gt;   tidy.gamlss    broom</span></a>
-<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="co">#&gt;   tidy.lme       broom</span></a>
-<a class="sourceLine" id="cb18-18" data-line-number="18"><span class="co">#&gt;   tidy.merMod    broom</span></a>
-<a class="sourceLine" id="cb18-19" data-line-number="19"><span class="co">#&gt;   tidy.rjags     broom</span></a>
-<a class="sourceLine" id="cb18-20" data-line-number="20"><span class="co">#&gt;   tidy.stanfit   broom</span></a>
-<a class="sourceLine" id="cb18-21" data-line-number="21"><span class="co">#&gt;   tidy.stanreg   broom</span></a>
-<a class="sourceLine" id="cb18-22" data-line-number="22"><span class="co">#&gt; Percent Bias Necessary to Invalidate the Inference:</span></a>
-<a class="sourceLine" id="cb18-23" data-line-number="23"><span class="co">#&gt; To invalidate an inference, 84.83% of the estimate would have to be due to bias. This is based on a threshold of 1.588 for statistical significance (alpha = 0.05).</span></a>
-<a class="sourceLine" id="cb18-24" data-line-number="24"><span class="co">#&gt; To invalidate an inference, 137 observations would have to be replaced with cases for which the effect is 0.</span></a>
-<a class="sourceLine" id="cb18-25" data-line-number="25"><span class="co">#&gt; See Frank et al. (2013) for a description of the method</span></a>
-<a class="sourceLine" id="cb18-26" data-line-number="26"><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span></a>
-<a class="sourceLine" id="cb18-27" data-line-number="27"><span class="co">#&gt; Impact Threshold for a Confounding Variable:</span></a>
-<a class="sourceLine" id="cb18-28" data-line-number="28"><span class="co">#&gt; The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.817 with the outcome and at 0.817 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.155 for statistical significance (alpha = 0.05).</span></a>
-<a class="sourceLine" id="cb18-29" data-line-number="29"><span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.817 X 0.817 = 0.667 to invalidate an inference for a null hypothesis of 0 effect.</span></a>
-<a class="sourceLine" id="cb18-30" data-line-number="30"><span class="co">#&gt; See Frank (2000) for a description of the method</span></a>
-<a class="sourceLine" id="cb18-31" data-line-number="31"><span class="co">#&gt; Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194</span></a>
-<a class="sourceLine" id="cb18-32" data-line-number="32"><span class="co">#&gt; Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest. We are presently working to add other methods for calculating the degrees of freedom for the predictor(s) of interest. If you wish to use other methods now, consider those detailed here: https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. You can then enter degrees of freedom obtained from another method along with the coefficient, number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.</span></a>
-<a class="sourceLine" id="cb18-33" data-line-number="33"><span class="co">#&gt; NULL</span></a></code></pre></div>
+<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="co">#&gt; Warning in bind_rows_(x, .id): binding factor and character vector, coercing</span></a>
+<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">#&gt; into character vector</span></a>
+<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">#&gt; Warning in bind_rows_(x, .id): binding character and factor vector, coercing</span></a>
+<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">#&gt; into character vector</span></a>
+<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt; Percent Bias Necessary to Invalidate the Inference:</span></a>
+<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt; To invalidate an inference, 84.83% of the estimate would have to be due to bias. This is based on a threshold of 1.588 for statistical significance (alpha = 0.05).</span></a>
+<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt; To invalidate an inference, 137 observations would have to be replaced with cases for which the effect is 0.</span></a>
+<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt; See Frank et al. (2013) for a description of the method</span></a>
+<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span></a>
+<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="co">#&gt; Impact Threshold for a Confounding Variable:</span></a>
+<a class="sourceLine" id="cb18-18" data-line-number="18"><span class="co">#&gt; The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.817 with the outcome and at 0.817 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.155 for statistical significance (alpha = 0.05).</span></a>
+<a class="sourceLine" id="cb18-19" data-line-number="19"><span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.817 X 0.817 = 0.667 to invalidate an inference for a null hypothesis of 0 effect.</span></a>
+<a class="sourceLine" id="cb18-20" data-line-number="20"><span class="co">#&gt; See Frank (2000) for a description of the method</span></a>
+<a class="sourceLine" id="cb18-21" data-line-number="21"><span class="co">#&gt; Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194</span></a>
+<a class="sourceLine" id="cb18-22" data-line-number="22"><span class="co">#&gt; Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest. We are presently working to add other methods for calculating the degrees of freedom for the predictor(s) of interest. If you wish to use other methods now, consider those detailed here: https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. You can then enter degrees of freedom obtained from another method along with the coefficient, number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.</span></a>
+<a class="sourceLine" id="cb18-23" data-line-number="23"><span class="co">#&gt; NULL</span></a></code></pre></div>
 </div>
 <div id="use-of-mkonfound-for-meta-analyses-that-include-sensitivity-analysis" class="section level2">
 <h2 class="hasAnchor">
