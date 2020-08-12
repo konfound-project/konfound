@@ -70,7 +70,7 @@ one for all possibilities, another zoomed in the area around the two thresholds"
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">konfound</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -169,9 +169,18 @@ one for all possibilities, another zoomed in the area around the two thresholds<
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># using tkonfound_fig for a study where 2 by 2 table is (35, 17, 17, 38)</span>
 <span class='fu'>tkonfound_fig</span>(<span class='fl'>35</span>, <span class='fl'>17</span>, <span class='fl'>17</span>, <span class='fl'>38</span>)</div><div class='output co'>#&gt; [[1]]</div><div class='img'><img src='tkonfound_fig-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
-#&gt; [[2]]</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 27 rows containing missing values (geom_label_repel).</span></div><div class='img'><img src='tkonfound_fig-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'><span class='fu'>tkonfound_fig</span>(<span class='fl'>35</span>, <span class='fl'>17</span>, <span class='fl'>17</span>, <span class='fl'>38</span>, <span class='kw'>thr_p</span> <span class='kw'>=</span> <span class='fl'>0.01</span>)</div><div class='output co'>#&gt; [[1]]</div><div class='img'><img src='tkonfound_fig-3.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
-#&gt; [[2]]</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 33 rows containing missing values (geom_label_repel).</span></div><div class='img'><img src='tkonfound_fig-4.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'><span class='fu'>tkonfound_fig</span>(<span class='fl'>35</span>, <span class='fl'>17</span>, <span class='fl'>17</span>, <span class='fl'>38</span>, <span class='kw'>thr_p</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>switch_trm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [[1]]</div><div class='img'><img src='tkonfound_fig-5.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
-#&gt; [[2]]</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 31 rows containing missing values (geom_label_repel).</span></div><div class='img'><img src='tkonfound_fig-6.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div></pre>
+#&gt; [[2]]
+#&gt; [1] "A bend in line indicates switches from the control row because the treatment row was exhausted."
+#&gt; 
+#&gt; [[3]]</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 27 rows containing missing values (geom_label_repel).</span></div><div class='img'><img src='tkonfound_fig-2.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'><span class='fu'>tkonfound_fig</span>(<span class='fl'>35</span>, <span class='fl'>17</span>, <span class='fl'>17</span>, <span class='fl'>38</span>, <span class='kw'>thr_p</span> <span class='kw'>=</span> <span class='fl'>0.01</span>)</div><div class='output co'>#&gt; [[1]]</div><div class='img'><img src='tkonfound_fig-3.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
+#&gt; [[2]]
+#&gt; [1] "A bend in line indicates switches from the control row because the treatment row was exhausted."
+#&gt; 
+#&gt; [[3]]</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 33 rows containing missing values (geom_label_repel).</span></div><div class='img'><img src='tkonfound_fig-4.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'><span class='fu'>tkonfound_fig</span>(<span class='fl'>35</span>, <span class='fl'>17</span>, <span class='fl'>17</span>, <span class='fl'>38</span>, <span class='kw'>thr_p</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>switch_trm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [[1]]</div><div class='img'><img src='tkonfound_fig-5.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; 
+#&gt; [[2]]
+#&gt; [1] "A bend in line indicates switches from the treatment row because the control row was exhausted."
+#&gt; 
+#&gt; [[3]]</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 31 rows containing missing values (geom_label_repel).</span></div><div class='img'><img src='tkonfound_fig-6.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

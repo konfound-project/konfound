@@ -1,12 +1,12 @@
 Type: Package
 Package: konfound
 Title: Quantify the Robustness of Causal Inferences
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: c(
-    person(c("Joshua", "M"), "Rosenberg", role = c("aut", "cre"), email = "jmichaelrosenberg@gmail.com"),
-    person(c("Ran"), "Xu", role = "ctb", email = "ranxu@msu.edu"),
-    person(c("Qinyun"), "Lin", role = "ctb", email = "linqinyun1001@gmail.com"),
-    person(c("Kenneth", "A"), "Frank", role = "ctb", email = "kenfrank@msu.edu")
+    person(c("Joshua", "M"), "Rosenberg", role = c("aut", "cre"), email = "jmrosenberg@utk.edu"),
+    person(c("Ran"), "Xu", role = "aut", email = "ran.2.xu@uconn.edu"),
+    person(c("Qinyun"), "Lin", role = "aut", email = "linqinyun1001@gmail.com"),
+    person(c("Kenneth", "A"), "Frank", role = "aut", email = "kenfrank@msu.edu")
     )
 Description: Statistical methods that quantify the conditions necessary to alter
     inferences, also known as sensitivity analysis, are becoming increasingly
@@ -27,6 +27,7 @@ Description: Statistical methods that quantify the conditions necessary to alter
 License: MIT + file LICENSE
 Imports: 
     broom,
+    broom.mixed,
     crayon,
     dplyr,
     ggplot2,

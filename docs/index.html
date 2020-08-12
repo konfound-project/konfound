@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">konfound</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.2</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@
 <div id="konfound" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#konfound" class="anchor"></a>konfound</h1></div>
-<p>In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias. The goal of <code>konfound</code> is to carry out sensitivity analysis to help analysts to <em>quantify how robust inferences are to potential sources of bias</em>. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubinâs (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.</p>
+<p>In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias. The goal of <code>konfound</code> is to carry out sensitivity analysis to help analysts to <em>quantify how robust inferences are to potential sources of bias</em>. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.</p>
 </div>
 <div id="installation" class="section level1">
 <h1 class="hasAnchor">
@@ -202,19 +202,19 @@
 <a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; 6  3.585478  87</span></a>
 <a class="sourceLine" id="cb7-10" data-line-number="10"><span class="kw"><a href="reference/mkonfound.html">mkonfound</a></span>(d, t, df)</a>
 <a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; # A tibble: 30 x 7</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;         t    df action      inference       pct_bias_to_change_infâ¦   itcv r_con</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt;         t    df action      inference       pct_bias_to_change_inf…   itcv r_con</span></a>
 <a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt;     &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;                             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;  1  7.08    178 to_invalidâ¦ reject_null                       68.8   0.378 0.614</span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt;  2  4.13    193 to_invalidâ¦ reject_null                       50.6   0.168 0.41 </span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;  3  1.89     47 to_sustain  fail_to_rejectâ¦                    5.47 -0.012 0.11 </span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt;  4 -4.17    138 to_invalidâ¦ reject_null                       50.3   0.202 0.449</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt;  5 -1.19     97 to_sustain  fail_to_rejectâ¦                   39.4  -0.065 0.255</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt;  6  3.59     87 to_invalidâ¦ reject_null                       41.9   0.19  0.436</span></a>
-<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt;  7  0.282   117 to_sustain  fail_to_rejectâ¦                   85.5  -0.131 0.361</span></a>
-<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt;  8  2.55     75 to_invalidâ¦ reject_null                       20.6   0.075 0.274</span></a>
-<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt;  9 -4.44    137 to_invalidâ¦ reject_null                       53.0   0.225 0.475</span></a>
-<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt; 10 -2.05    195 to_invalidâ¦ reject_null                        3.51  0.006 0.077</span></a>
-<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt; # â¦ with 20 more rows</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt;  1  7.08    178 to_invalid… reject_null                       68.8   0.378 0.614</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt;  2  4.13    193 to_invalid… reject_null                       50.6   0.168 0.41 </span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">#&gt;  3  1.89     47 to_sustain  fail_to_reject…                    5.47 -0.012 0.11 </span></a>
+<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">#&gt;  4 -4.17    138 to_invalid… reject_null                       50.3   0.202 0.449</span></a>
+<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">#&gt;  5 -1.19     97 to_sustain  fail_to_reject…                   39.4  -0.065 0.255</span></a>
+<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">#&gt;  6  3.59     87 to_invalid… reject_null                       41.9   0.19  0.436</span></a>
+<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">#&gt;  7  0.282   117 to_sustain  fail_to_reject…                   85.5  -0.131 0.361</span></a>
+<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">#&gt;  8  2.55     75 to_invalid… reject_null                       20.6   0.075 0.274</span></a>
+<a class="sourceLine" id="cb7-22" data-line-number="22"><span class="co">#&gt;  9 -4.44    137 to_invalid… reject_null                       53.0   0.225 0.475</span></a>
+<a class="sourceLine" id="cb7-23" data-line-number="23"><span class="co">#&gt; 10 -2.05    195 to_invalid… reject_null                        3.51  0.006 0.077</span></a>
+<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt; # … with 20 more rows</span></a></code></pre></div>
 </div>
 </div>
 <div id="features-in-development" class="section level1">
@@ -268,7 +268,7 @@
 <p>To learn more about sensitivity analysis, please visit:</p>
 <ul>
 <li>The <a href="https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html">Introduction to konfound vignette</a>, with detailed information about each of the functions (<code><a href="reference/pkonfound.html">pkonfound()</a></code>, <code><a href="reference/konfound.html">konfound()</a></code>, and <code>mkounfound()</code>)</li>
-<li>The causal inference section of Ken Frankâs website <a href="https://msu.edu/~kenfrank/research.htm#causal">here</a>
+<li>The causal inference section of Ken Frank’s website <a href="https://msu.edu/~kenfrank/research.htm#causal">here</a>
 </li>
 <li>The <a href="https://jmichaelrosenberg.shinyapps.io/shinykonfound/">konfound interactive web application</a>, with links to PowerPoints and key publications</li>
 </ul>

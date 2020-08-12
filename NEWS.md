@@ -1,3 +1,7 @@
+# konfound 0.2.2
+
+* Bug fix for broom dependency
+
 # konfound 0.2.1
 
 * Refinements and bug fixes for the non-linear functions

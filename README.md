@@ -158,8 +158,7 @@ mkonfound(d, t, df)
 
 # Features in-development
 
-There is an in-development non-linear
-option:
+There is an in-development non-linear option:
 
 ``` r
 nl_output <- pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
@@ -211,6 +210,9 @@ tkonfound_fig(35, 17, 17, 38)
 
     #> 
     #> [[2]]
+    #> [1] "A bend in line indicates switches from the control row because the treatment row was exhausted."
+    #> 
+    #> [[3]]
     #> Warning: Removed 27 rows containing missing values (geom_label_repel).
 
 ![](README-unnamed-chunk-10-2.png)<!-- -->
@@ -241,4 +243,5 @@ file).
 ### Code of Conduct
 
 Please note that this project is released with a Contributor Code of
-Conduct available at <http://contributor-covenant.org/version/1/0/0/>
+Conduct available at
+<https://www.contributor-covenant.org/version/1/0/0/>
