@@ -16,7 +16,7 @@
 #' tkonfound(35, 17, 17, 38, test = "chisq")
 #' @export
 
-tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, test = "fisher"){
+tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, test = "fisher", replace = "entire"){
 # a <- 35
 # b <- 17
 # c <- 17
@@ -84,52 +84,48 @@ colnames(table_start) <- colnames(table_final) <- c("Fail", "Success")
 
 if (switch_trm && dcroddsratio_ob) {
   transferway <- "treatment success to treatment failure,"
-  #RIR <- round(final/((a+c)/n_obs))
-  RIR <- round(final/(a/(a+b)))
+  RIR <- round(final/((a+c)/n_obs))*(replace=="entire") + round(final/(a/(a+b)))*(1-(replace=="entire"))
   RIRway <- "treatment success"
 }
 if (switch_trm && !dcroddsratio_ob) {
   transferway <- "treatment failure to treatment success,"
-  #RIR <- round(final/((b+d)/n_obs))
-  RIR <- round(final/(b/(a+b)))
+  RIR <- round(final/((b+d)/n_obs))*(replace=="entire") + round(final/(b/(a+b)))*(1-(replace=="entire"))
   RIRway <- "treatment failure"
 }
 if (!switch_trm && dcroddsratio_ob) {
   transferway <- "control failure to control success,"
-  #RIR <- round(final/((b+d)/n_obs))
-  RIR <- round(final/(b/(a+b)))
+  RIR <- round(final/((b+d)/n_obs))*(replace=="entire") + round(final/(b/(a+b)))*(1-(replace=="entire"))
   RIRway <- "control failure"
 }
 if (!switch_trm && !dcroddsratio_ob) {
   transferway <- "control success to control failure,"
-  #RIR <- round(final/((a+c)/n_obs))
-  RIR <- round(final/(a/(a+b)))
+  RIR <- round(final/((a+c)/n_obs))*(replace=="entire") + round(final/(a/(a+b)))*(1-(replace=="entire"))
   RIRway <- "control success"
 }
 
 if (allnotenough) {
   if (switch_trm && dcroddsratio_ob) {
     transferway_extra <- "control failure to control success,"
-    #RIR_extra <- round(final_extra/((b+d)/n_obs))
-    RIR_extra <- round(final_extra/(b/(b+d)))
+    RIR_extra <- round(final_extra/((b+d)/n_obs))*(replace=="entire") + 
+      round(final_extra/(b/(b+d)))*(1-(replace=="entire"))
     RIRway_extra <- "control failure"
   }
   if (switch_trm && !dcroddsratio_ob) {
     transferway_extra <- "control success to control failure,"
-    #RIR_extra <- round(final_extra/((a+c)/n_obs))
-    RIR_extra <- round(final_extra/(a/(a+b)))
+    RIR_extra <- round(final_extra/((a+c)/n_obs))*(replace=="entire") +
+      round(final_extra/(a/(a+b)))*(1-(replace=="entire"))
     RIRway_extra <- "control success"
   }
   if (!switch_trm && dcroddsratio_ob) {
     transferway_extra <- "treatment success to treatment failure,"
-    #RIR_extra <- round(final_extra/((a+c)/n_obs))
-    RIR_extra <- round(final_extra/(a/(a+b)))
+    RIR_extra <- round(final_extra/((a+c)/n_obs))*(replace=="entire") +
+      round(final_extra/(a/(a+b)))*(1-(replace=="entire"))
     RIRway_extra <- "treatment success"
   }
   if (!switch_trm && !dcroddsratio_ob) {
     transferway_extra <- "treatment failure to treatment success,"
-    #RIR_extra <- round(final_extra/((b+d)/n_obs))
-    RIR_extra <- round(final_extra/(b/(b+d)))
+    RIR_extra <- round(final_extra/((b+d)/n_obs))*(replace=="entire") +
+      round(final_extra/(b/(b+d)))*(1-(replace=="entire"))
     RIRway_extra <- "treatment failure"
   }
 }
