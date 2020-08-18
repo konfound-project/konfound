@@ -5,6 +5,7 @@ RIRvP <- function(ao, bo, co, do){
   D <- d <- do
   P <- fisher_p(a, b, c, d)
   RIR <- tkonfound(a, b, c, d)$RIR
+  RIR_control <- tkonfound(a, b, c, d, replace = "control")$RIR
   while (c>0){
     c <- c-1
     d <- d+1
@@ -14,8 +15,9 @@ RIRvP <- function(ao, bo, co, do){
     D <- c(D,d)
     P <- c(P, fisher_p(a, b, c, d))
     RIR <- c(RIR, tkonfound(a, b, c, d)$RIR)
+    RIR_control <- c(RIR_control, tkonfound(a, b, c, d, replace = "control")$RIR)
   }
-  data <- data.frame("a"=A, "b"=B, "c"=C, "d"=D, "p"=P, "RIR" = RIR)
+  data <- data.frame("a"=A, "b"=B, "c"=C, "d"=D, "p"=P, "RIR" = RIR, "RIR_control" = RIR_control)
   return(data)
 }
 
@@ -53,13 +55,13 @@ ggplot(data = stroke12[stroke12$p<0.08,], aes(x = p, y = RIR)) +
 ### This is the one that is used in the paper now
 stroke2 <- RIRvP(20, 174, 16, 170)
 ggplot(data = stroke2[stroke2$p<0.08,], aes(x = p, y = RIR)) + 
-  geom_line(aes(y = RIR), size = 1) + ylim(0,175) + 
+  geom_line(aes(y = RIR), size = 1) + 
   #geom_point(data = stroke2[stroke2$RIR==39,], aes(x = p, y = RIR), colour="blue", size = 3)+
   #annotate("text", x= 0.0055, y = 39, label = "VA II", size = 7) + 
   scale_x_continuous(breaks=seq(0,0.05,0.01))+
   scale_y_continuous(breaks=seq(0,175,25))+
   geom_vline(xintercept = 0.01, linetype="dotted")+
-  annotate("text", x=0.011, y=25.1, label = "**", size = 11)+
+  annotate("text", x=0.011, y=39.1, label = "**", size = 11)+
   geom_vline(xintercept = 0.05, linetype="dotted")+
   annotate("text", x=0.0505, y=2.7, label = "*", size = 11)+
   ylab("Robustness of Inference to Replacement") + 
