@@ -7,6 +7,7 @@
 #' @param thr_p the p-value threshold used to evaluate statistical significance, with the default of 0.05
 #' @param switch_trm whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row
 #' @param test whether using Fisher's Exact Test (default) or chi-square test
+#' @param replace whether using entire sample or the control group to calculate the base rate, with the default of the entire sample  
 #' @return prints a 2x2 table after switching cases from one cell to another so that the inference is invalidated about the association between the rows and columns 
 #' @examples
 #' # using tkonfound for a 2x2 table
