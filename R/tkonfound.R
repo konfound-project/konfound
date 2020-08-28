@@ -84,47 +84,47 @@ rownames(table_start) <- rownames(table_final) <- c("Control", "Treatment")
 colnames(table_start) <- colnames(table_final) <- c("Fail", "Success")
 
 if (switch_trm && dcroddsratio_ob) {
-  transferway <- "treatment success to treatment failure,"
+  transferway <- "treatment success to treatment failure"
   RIR <- round(final/((a+c)/n_obs))*(replace=="entire") + round(final/(a/(a+b)))*(1-(replace=="entire"))
   RIRway <- "treatment success"
 }
 if (switch_trm && !dcroddsratio_ob) {
-  transferway <- "treatment failure to treatment success,"
+  transferway <- "treatment failure to treatment success"
   RIR <- round(final/((b+d)/n_obs))*(replace=="entire") + round(final/(b/(a+b)))*(1-(replace=="entire"))
   RIRway <- "treatment failure"
 }
 if (!switch_trm && dcroddsratio_ob) {
-  transferway <- "control failure to control success,"
+  transferway <- "control failure to control success"
   RIR <- round(final/((b+d)/n_obs))*(replace=="entire") + round(final/(b/(a+b)))*(1-(replace=="entire"))
   RIRway <- "control failure"
 }
 if (!switch_trm && !dcroddsratio_ob) {
-  transferway <- "control success to control failure,"
+  transferway <- "control success to control failure"
   RIR <- round(final/((a+c)/n_obs))*(replace=="entire") + round(final/(a/(a+b)))*(1-(replace=="entire"))
   RIRway <- "control success"
 }
 
 if (allnotenough) {
   if (switch_trm && dcroddsratio_ob) {
-    transferway_extra <- "control failure to control success,"
+    transferway_extra <- "control failure to control success"
     RIR_extra <- round(final_extra/((b+d)/n_obs))*(replace=="entire") + 
       round(final_extra/(b/(b+d)))*(1-(replace=="entire"))
     RIRway_extra <- "control failure"
   }
   if (switch_trm && !dcroddsratio_ob) {
-    transferway_extra <- "control success to control failure,"
+    transferway_extra <- "control success to control failure"
     RIR_extra <- round(final_extra/((a+c)/n_obs))*(replace=="entire") +
       round(final_extra/(a/(a+b)))*(1-(replace=="entire"))
     RIRway_extra <- "control success"
   }
   if (!switch_trm && dcroddsratio_ob) {
-    transferway_extra <- "treatment success to treatment failure,"
+    transferway_extra <- "treatment success to treatment failure"
     RIR_extra <- round(final_extra/((a+c)/n_obs))*(replace=="entire") +
       round(final_extra/(a/(a+b)))*(1-(replace=="entire"))
     RIRway_extra <- "treatment success"
   }
   if (!switch_trm && !dcroddsratio_ob) {
-    transferway_extra <- "treatment failure to treatment success,"
+    transferway_extra <- "treatment failure to treatment success"
     RIR_extra <- round(final_extra/((b+d)/n_obs))*(replace=="entire") +
       round(final_extra/(b/(b+d)))*(1-(replace=="entire"))
     RIRway_extra <- "treatment failure"
@@ -139,19 +139,20 @@ if (p_ob < thr_p) {
 
 if (!allnotenough & final > 1) {
   conclusion1 <- paste(
-    change, sprintf("%d cases need to be transferred from", final),
-    transferway, c("as shown, from the User-entered Table to the Transfer Table."),
-    sprintf("This means we need to replace %d", RIR), RIRway, 
-    c("with null hypothesis cases to change the inference.")
-  )
-} 
+    change, sprintf("you would need to replace %d", RIR), RIRway,
+    sprintf("cases with null hypothesis cases (RIR = %d).", RIR),
+    sprintf("This is equivalent to transferring %d", final), 
+    c("cases from"), transferway, c(".")
+    )
+}
+
 
 if (!allnotenough & final == 1) {
   conclusion1 <- paste(
-    change, sprintf("%d case needs to be transferred from", final),
-    transferway, c("as shown, from the User-entered Table to the Transfer Table."),
-    sprintf("This means we need to replace %d", RIR), RIRway, 
-    c("with null hypothesis cases to change the inference.")
+    change, sprintf("you would need to replace %d", RIR), RIRway, 
+    sprintf("cases with null hypothesis cases (RIR = %d).", RIR),
+    sprintf("This is equivalent to transferring %d", final), 
+    c("case from"), transferway, c(".")
   )
 }
 
@@ -180,7 +181,7 @@ if (test == "fisher"){
     "For the Transfer Table, we have an estimated odds ratio of %.3f, with p value of %.3f.", fisher_final, p_final)
 }
 
-info1 <- "The tkonfound function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. This can be applied to treatment vs control with successful vs unsuccessful outcomes."
+info1 <- "The tkonfound function calculates the number of cases that would have to be replaced with no effect cases (RIR) to invalidate an inference made about the association between the rows and columns in a 2x2 table. One can also interpret this as switches from one cell to another, such as from the treatment success cell to the treatment failure cell."
 info2 <- "See konfound_fig for full and accessible details in graphic form!"
 
 
