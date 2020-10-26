@@ -120,6 +120,7 @@ test_sensitivity_ln <- function(est_eff,
     final_solution <- getswitch(table_bstart2, thr_t, switch_trm, n_obs)
   }
   
+  final <- final_solution$final_switch
   
   if (switch_trm && dcroddsratio_ob) {
     transferway <- "treatment success to treatment failure,"
