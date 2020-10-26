@@ -55,7 +55,7 @@ pkonfound(est_eff = 2,
           n_covariates = 3)
 #> Percent Bias Necessary to Invalidate the Inference:
 #> To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
-#> To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.
+#> To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0 (RIR = 60).
 #> See Frank et al. (2013) for a description of the method
 #> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
 #> Impact Threshold for a Confounding Variable:
@@ -112,7 +112,7 @@ as follows, specifying the fitted model object:
 konfound(m1, wt)
 #> Percent Bias Necessary to Invalidate the Inference:
 #> To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).
-#> To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.
+#> To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0 (RIR = 21).
 #> See Frank et al. (2013) for a description of the method
 #> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
 #> Impact Threshold for a Confounding Variable:
@@ -171,14 +171,16 @@ cases and success versus failure for the outcome, i.e.:
 
 ``` r
 tkonfound(35, 17, 17, 38)
+#> Warning in fisher.test(table): 'x' has been rounded to integer: Mean relative
+#> difference: 1
 #> [[1]]
-#> [1] "The tkonfound function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. This can be applied to treatment vs control with successful vs unsuccessful outcomes."
+#> [1] "The tkonfound function calculates the number of cases that would have to be replaced with no effect cases (RIR) to invalidate an inference made about the association between the rows and columns in a 2x2 table. One can also interpret this as switches from one cell to another, such as from the treatment success cell to the treatment failure cell."
 #> 
 #> [[2]]
 #> [1] "See konfound_fig for full and accessible details in graphic form!"
 #> 
 #> [[3]]
-#> [1] "To invalidate the inference, 10 cases need to be transferred from treatment success to treatment failure, as shown, from the User-entered Table to the Transfer Table."
+#> [1] "To invalidate the inference, you would need to replace 19 treatment success cases with null hypothesis cases (RIR = 19). This is equivalent to transferring 9 cases from treatment success to treatment failure ."
 #> 
 #> $User_enter_value
 #>           Fail Success
@@ -188,13 +190,16 @@ tkonfound(35, 17, 17, 38)
 #> $Transfer_Table
 #>           Fail Success
 #> Control     35      17
-#> Treatment   27      28
+#> Treatment   26      29
 #> 
 #> [[6]]
-#> [1] "For the User-entered Table, we have a Pearson's chi square of 14.176, with p value of 0.000."
+#> [1] "For the User-entered Table, we have an estimated odds ratio of 4.530, with p value of 0.000."
 #> 
 #> [[7]]
-#> [1] "For the Transfer Table, we have a Pearson's chi square of 3.640, with p value of 0.056."
+#> [1] "For the Transfer Table, we have an estimated odds ratio of 2.278, with p value of 0.051."
+#> 
+#> $RIR
+#> [1] 19
 ```
 
 Print `nl_output` to see the output.
@@ -204,6 +209,8 @@ switching outcomes.
 
 ``` r
 tkonfound_fig(35, 17, 17, 38)
+#> Warning in fisher.test(table): 'x' has been rounded to integer: Mean relative
+#> difference: 1
 #> [[1]]
 ```
 
@@ -211,7 +218,10 @@ tkonfound_fig(35, 17, 17, 38)
 
     #> 
     #> [[2]]
-    #> Warning: Removed 27 rows containing missing values (geom_label_repel).
+    #> [1] "A bend in line indicates switches from the control row because the treatment row was exhausted."
+    #> 
+    #> [[3]]
+    #> Warning: Removed 11 rows containing missing values (geom_label_repel).
 
 ![](README-unnamed-chunk-10-2.png)<!-- -->
 
