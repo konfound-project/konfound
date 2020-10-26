@@ -315,7 +315,9 @@ if (switch_trm == T) {
   note <- "A bend in line indicates switches from the treatment row because the control row was exhausted."
   }
 
-result <- list(fig1, note, fig2)
+result <- list(
+  #fig1, note, 
+  fig2)
 
 return(result)
 }
