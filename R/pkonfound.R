@@ -39,6 +39,7 @@ pkonfound <- function(est_eff,
                       nu = 0,
                       n_trm = NULL,
                       switch_trm = TRUE,
+                      replace = "entire",
                       non_linear = FALSE,
                       to_return = "print") {
   if ("table" %in% to_return) stop("a table can only be output when using konfound")
@@ -54,7 +55,8 @@ pkonfound <- function(est_eff,
       nu = nu,
       to_return = to_return,
       n_trm = n_trm,
-      switch_trm = switch_trm
+      switch_trm = switch_trm,
+      replace = replace
     )
   } else {
     out <- test_sensitivity(
