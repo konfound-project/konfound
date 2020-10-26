@@ -82,16 +82,14 @@ mkonfound(d, t, df)
 There is an in-development non-linear option:
 
 ```{r}
-nl_output <- pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
+pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
 ```
 
-This function can also take a 2 x 2 table of treatment versus control cases and success versus failure for the outcome, i.e.:
+A related function `tkonfound()` can take a 2 x 2 table of treatment versus control cases and success versus failure for the outcome, i.e.:
 
 ```{r}
 tkonfound(35, 17, 17, 38)
 ```
-
-Print `nl_output` to see the output.
 
 You can also draw figures for change in effect size as a function of switching outcomes.
 

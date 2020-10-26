@@ -158,16 +158,42 @@ mkonfound(d, t, df)
 
 # Features in-development
 
-There is an in-development non-linear
-option:
+There is an in-development non-linear option:
 
 ``` r
-nl_output <- pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
+pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
 #> Note that this output is from an approach for non-linear models that is developmental and unpublished
+#> [[1]]
+#> [1] "To sustain an inference for a negative treatment effect, you would need to replace 1 treatment success cases with null hypothesis cases (RIR = 1). This is equivalent to transferring 1 case from treatment success to treatment failure, as shown, from the Implied Table to the Transfer Table."
+#> 
+#> $Implied_Table
+#>            Fail Success
+#> Control    2882     118
+#> Treatment 17308     580
+#> 
+#> [[3]]
+#> [1] "(Values have been rounded to the nearest integer. This may cause a little change to the estimated effect for the Implied Table.)"
+#> 
+#> $Transfer_Table
+#>            Fail Success
+#> Control    2882     118
+#> Treatment 17309     579
+#> 
+#> [[5]]
+#> [1] "For the Implied Table, we have an estimate of -0.200, with a standard error of 0.103 and a t-ratio of -1.946."
+#> 
+#> [[6]]
+#> [1] "For the Transfer Table, we have an estimate of -0.202, with a standard error of 0.103 and a t-ratio of -1.963."
+#> 
+#> $total_RIR
+#> [1] 1
+#> 
+#> $total_switch
+#> [1] 1
 ```
 
-This function can also take a 2 x 2 table of treatment versus control
-cases and success versus failure for the outcome, i.e.:
+A related function `tkonfound()` can take a 2 x 2 table of treatment
+versus control cases and success versus failure for the outcome, i.e.:
 
 ``` r
 tkonfound(35, 17, 17, 38)
@@ -202,8 +228,6 @@ tkonfound(35, 17, 17, 38)
 #> [1] 19
 ```
 
-Print `nl_output` to see the output.
-
 You can also draw figures for change in effect size as a function of
 switching outcomes.
 
@@ -212,18 +236,10 @@ tkonfound_fig(35, 17, 17, 38)
 #> Warning in fisher.test(table): 'x' has been rounded to integer: Mean relative
 #> difference: 1
 #> [[1]]
+#> Warning: Removed 11 rows containing missing values (geom_label_repel).
 ```
 
 ![](README-unnamed-chunk-10-1.png)<!-- -->
-
-    #> 
-    #> [[2]]
-    #> [1] "A bend in line indicates switches from the control row because the treatment row was exhausted."
-    #> 
-    #> [[3]]
-    #> Warning: Removed 11 rows containing missing values (geom_label_repel).
-
-![](README-unnamed-chunk-10-2.png)<!-- -->
 
 # Other information
 
