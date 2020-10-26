@@ -239,10 +239,11 @@ test_sensitivity_ln <- function(est_eff,
   
   result <- list(conclusion1,
                  Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
-                 conclusion2, conclusion3, Implied_Estimate = final_solution$est_eff_start, Transfer_Estimate = final_solution$est_eff_final,
-                 Implied_SE = final_solution$std_err_start, Transfer_SE = final_solution$std_err_final,
-                 Implied_tratio = final_solution$t_start, Transfer_tratio = final_solution$t_final,
-                 Taylor_predict = final_solution$taylor_pred, Percent_bias_predict = final_solution$perc_bias_pred,
+                 conclusion2, conclusion3, 
+#                 Implied_Estimate = final_solution$est_eff_start, Transfer_Estimate = final_solution$est_eff_final,
+#                 Implied_SE = final_solution$std_err_start, Transfer_SE = final_solution$std_err_final,
+#                 Implied_tratio = final_solution$t_start, Transfer_tratio = final_solution$t_final,
+#                 Taylor_predict = final_solution$taylor_pred, Percent_bias_predict = final_solution$perc_bias_pred,
                  total_RIR = total_RIR, total_switch = total_switch
   )
   
