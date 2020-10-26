@@ -121,6 +121,10 @@ test_sensitivity_ln <- function(est_eff,
   }
   
   final <- final_solution$final_switch
+  a <- final_solution$table_start[1,1]
+  b <- final_solution$table_start[1,2]
+  c <- final_solution$table_start[2,1]
+  d <- final_solution$table_start[2,2]
   
   if (switch_trm && dcroddsratio_ob) {
     transferway <- "treatment success to treatment failure,"
@@ -144,6 +148,7 @@ test_sensitivity_ln <- function(est_eff,
   }
   
   if (final_solution$needtworows) {
+    final_extra <- final_solution$final_extra
     if (switch_trm && dcroddsratio_ob) {
       transferway_extra <- "control failure to control success,"
       RIR_extra <- round(final_extra/((b+d)/n_obs))*(replace=="entire") + 
