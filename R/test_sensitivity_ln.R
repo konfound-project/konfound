@@ -7,6 +7,7 @@ test_sensitivity_ln <- function(est_eff,
                                 n_covariates,
                                 n_trm,
                                 switch_trm = T,
+                                replace = "entire",
                                 alpha,
                                 tails,
                                 nu,
@@ -122,29 +123,49 @@ test_sensitivity_ln <- function(est_eff,
   
   if (switch_trm && dcroddsratio_ob) {
     transferway <- "treatment success to treatment failure,"
+    RIR <- round(final/((a+c)/n_obs))*(replace=="entire") + round(final/(a/(a+b)))*(1-(replace=="entire"))
+    RIRway <- "treatment success"
   }
   if (switch_trm && !dcroddsratio_ob) {
     transferway <- "treatment failure to treatment success,"
+    RIR <- round(final/((b+d)/n_obs))*(replace=="entire") + round(final/(b/(a+b)))*(1-(replace=="entire"))
+    RIRway <- "treatment failure"
   }
   if (!switch_trm && dcroddsratio_ob) {
     transferway <- "control failure to control success,"
+    RIR <- round(final/((b+d)/n_obs))*(replace=="entire") + round(final/(b/(a+b)))*(1-(replace=="entire"))
+    RIRway <- "control failure"
   }
   if (!switch_trm && !dcroddsratio_ob) {
     transferway <- "control success to control failure,"
+    RIR <- round(final/((a+c)/n_obs))*(replace=="entire") + round(final/(a/(a+b)))*(1-(replace=="entire"))
+    RIRway <- "control success"
   }
   
   if (final_solution$needtworows) {
     if (switch_trm && dcroddsratio_ob) {
       transferway_extra <- "control failure to control success,"
+      RIR_extra <- round(final_extra/((b+d)/n_obs))*(replace=="entire") + 
+        round(final_extra/(b/(b+d)))*(1-(replace=="entire"))
+      RIRway_extra <- "control failure"
     }
     if (switch_trm && !dcroddsratio_ob) {
       transferway_extra <- "control success to control failure,"
+      RIR_extra <- round(final_extra/((a+c)/n_obs))*(replace=="entire") +
+        round(final_extra/(a/(a+b)))*(1-(replace=="entire"))
+      RIRway_extra <- "control success"
     }
     if (!switch_trm && dcroddsratio_ob) {
       transferway_extra <- "treatment success to treatment failure,"
+      RIR_extra <- round(final_extra/((a+c)/n_obs))*(replace=="entire") +
+        round(final_extra/(a/(a+b)))*(1-(replace=="entire"))
+      RIRway_extra <- "treatment success"
     }
     if (!switch_trm && !dcroddsratio_ob) {
       transferway_extra <- "treatment failure to treatment success,"
+      RIR_extra <- round(final_extra/((b+d)/n_obs))*(replace=="entire") +
+        round(final_extra/(b/(b+d)))*(1-(replace=="entire"))
+      RIRway_extra <- "treatment failure"
     }
   }
   
@@ -160,19 +181,26 @@ test_sensitivity_ln <- function(est_eff,
   
   if (!final_solution$needtworows & final_solution$final_switch > 1) {
     conclusion1 <- paste(
-      change, sprintf("%d cases need to be transferred from", final_solution$final_switch),
-      transferway, c("as shown, from the Implied Table to the Transfer Table.")
+      change, sprintf("you would need to replace %d", RIR), RIRway,
+      sprintf("cases with null hypothesis cases (RIR = %d).", RIR),
+      sprintf("This is equivalent to transferring %d", final_solution$final_switch), 
+      c("cases from"), transferway, c("as shown, from the Implied Table to the Transfer Table.")
     )
   } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
     conclusion1 <- paste(
-      change, sprintf("%d case needs to be transferred from", final_solution$final_switch),
-      transferway, c("as shown, from the Implied Table to the Transfer Table.")
+      change, sprintf("you would need to replace %d", RIR), RIRway,
+      sprintf("cases with null hypothesis cases (RIR = %d).", RIR),
+      sprintf("This is equivalent to transferring %d", final_solution$final_switch), 
+      c("case from"), transferway, c("as shown, from the Implied Table to the Transfer Table.")
     )
   } else {
     conclusion1 <- paste(
       change, c("only transferring cases from"), transferway,
       sprintf("is not enough. We also need to transfer %d cases from", final_solution$final_extra),
-      transferway_extra, c("as shown, from the Implied Table to the Transfer Table.")
+      transferway_extra, c("as shown, from the User-entered Table to the Transfer Table."),
+      sprintf("This means we need to replace %d of", RIR), RIRway, 
+      sprintf("with null hypothesis cases; and replace %d", RIR_extra), RIRway_extra, 
+      c("with null hypothesis cases to change the inference.")
     )
   }
   
@@ -196,8 +224,10 @@ test_sensitivity_ln <- function(est_eff,
   
   if (final_solution$needtworows) {
     total_switch <- final_solution$final_switch+final_solution$final_extra
+    total_RIR <- RIR + RIR_extra
   } else {
     total_switch <- final_solution$final_switch
+    total_RIR <- RIR
   }
   
   
@@ -207,9 +237,8 @@ test_sensitivity_ln <- function(est_eff,
                  Implied_SE = final_solution$std_err_start, Transfer_SE = final_solution$std_err_final,
                  Implied_tratio = final_solution$t_start, Transfer_tratio = final_solution$t_final,
                  Taylor_predict = final_solution$taylor_pred, Percent_bias_predict = final_solution$perc_bias_pred,
-                 total_switch = total_switch
+                 total_RIR = total_RIR, total_switch = total_switch
   )
-  
   
   
   # output dispatch
