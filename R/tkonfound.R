@@ -17,7 +17,7 @@
 #' tkonfound(35, 17, 17, 38, test = "chisq")
 #' @export
 
-tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, test = "fisher", replace = "entire"){
+tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, test = "fisher", replace = "control"){
 # a <- 35
 # b <- 17
 # c <- 17
