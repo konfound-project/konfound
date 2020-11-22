@@ -103,8 +103,8 @@ get_abcd_kfnl <- function(a1, b1, c1, d1) {
 getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   ### calculate the est and se after rounding (before any switches)
   a <- table_bstart[1]
-  b <- table_bstart[2]
-  c <- table_bstart[3]
+  c <- table_bstart[2]
+  b <- table_bstart[3]
   d <- table_bstart[4]
   table_start <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
   est_eff_start <- log(a * d / b / c)
@@ -477,6 +477,7 @@ if (!allnotenough) {
   c_loop <- c_taylor
   d_loop <- d_taylor
   p_loop <- p_taylor
+  oddsratio_taylor <- a_taylor*d_taylor/(b_taylor*c_taylor)
 }
 
 ### when we need to transfer two rows the previously defined tryall are the starting point for brute force
@@ -487,6 +488,7 @@ if (allnotenough) {
   c_loop <- c_tryall
   d_loop <- d_tryall
   p_loop <- chisq_p(a_loop, b_loop, c_loop, d_loop)
+  oddsratio_loop <- a_loop*d_loop/(b_loop*c_loop)
 }
 
 ### start brute force
