@@ -103,8 +103,8 @@ get_abcd_kfnl <- function(a1, b1, c1, d1) {
 getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   ### calculate the est and se after rounding (before any switches)
   a <- table_bstart[1]
-  c <- table_bstart[2]
-  b <- table_bstart[3]
+  b <- table_bstart[2]
+  c <- table_bstart[3]
   d <- table_bstart[4]
   table_start <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
   est_eff_start <- log(a * d / b / c)
