@@ -733,7 +733,11 @@ getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
   
   ### use t as evaluation criterion to start first round brute force
   if (t_loop < thr_t) {
-    while (t_loop < thr_t & a_loop>0 & b_loop>0 & c_loop>0 & d_loop>0) {
+    while (t_loop < thr_t & 
+           a_loop + 1 * as.numeric(switch_trm == allnotenough)>0 & 
+           b_loop - 1 * as.numeric(switch_trm == allnotenough)>0 & 
+           c_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))>0 & 
+           d_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))>0) {
       c_loop <- c_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
       d_loop <- d_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
       a_loop <- a_loop + 1 * as.numeric(switch_trm == allnotenough)
@@ -755,7 +759,11 @@ getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
   }
   
   if (t_loop > thr_t) {
-    while (t_loop > thr_t & a_loop>0 & b_loop>0 & c_loop>0 & d_loop>0) {
+    while (t_loop > thr_t &
+           c_loop + 1 * (1 - as.numeric(switch_trm == allnotenough)) > 0 &
+           d_loop - 1 * (1 - as.numeric(switch_trm == allnotenough)) > 0 &
+           a_loop <- a_loop - 1 * as.numeric(switch_trm == allnotenough) > 0 &
+           b_loop <- b_loop + 1 * as.numeric(switch_trm == allnotenough) > 0) {
       c_loop <- c_loop + 1 * (1 - as.numeric(switch_trm == allnotenough))
       d_loop <- d_loop - 1 * (1 - as.numeric(switch_trm == allnotenough))
       a_loop <- a_loop - 1 * as.numeric(switch_trm == allnotenough)
