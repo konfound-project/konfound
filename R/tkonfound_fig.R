@@ -20,7 +20,7 @@
 #' tkonfound_fig(35, 17, 17, 38, thr_p - 0.01, switch_trm = TRUE, test = "chisq", replace = "control")
 #' @export
 
-tkonfound_fig <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, test = "fisher", replace = "entire"){
+tkonfound_fig <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, test = "fisher", replace = "control"){
 
 n_obs <- a + b + c + d
 ###***generate the log odds for each step of switch
