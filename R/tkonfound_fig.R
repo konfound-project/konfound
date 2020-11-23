@@ -106,11 +106,9 @@ if (switch_trm == F) {
     }  
   }
 }
-
 meta$cntrl_p <- meta$b/(meta$a + meta$b)
 meta$tr_p <- meta$d/(meta$c + meta$d)
 meta$pdif <- meta$tr_p - meta$cntrl_p
-
 
 ###***find out significant thresholds 
 if (test == "chisq"){
@@ -200,6 +198,7 @@ if (meta[meta$sig==1,]$logodds < 0){
 }
 
 meta$current <- ifelse(meta$switch==0, "current", "other")
+meta$currentlabel <- ifelse(meta$switch==0, "current", NA)
 meta$sigpoint <- ifelse(meta$switch==0, "current",meta$sigpoint)
 
 if (switch_trm && dcroddsratio_ob) {
@@ -212,19 +211,38 @@ if (!switch_trm && dcroddsratio_ob) {
   meta$switch <- meta$switch*(-1)
 }
 
-
 fillcol <-c("current"="white","positive"="green4","negative"="red","other"="white") 
 pointshape <- c("current"=15,"other"=21)
 
-fig1 <- ggplot2::ggplot(meta, ggplot2::aes_string(x="switch", y="pdif"))+
+if (switch_trm && dcroddsratio_ob) {
+  meta$RIR <- round(meta$switch/((a+c)/n_obs))*(replace=="entire") + round(meta$switch/(a/(a+b)))*(1-(replace=="entire"))
+}
+if (switch_trm && !dcroddsratio_ob) {
+  meta$RIR <- round(meta$switch/((b+d)/n_obs))*(replace=="entire") + round(meta$switch/(b/(a+b)))*(1-(replace=="entire"))
+}
+if (!switch_trm && dcroddsratio_ob) {
+  meta$RIR <- round(meta$switch/((b+d)/n_obs))*(replace=="entire") + round(meta$switch/(b/(a+b)))*(1-(replace=="entire"))
+}
+if (!switch_trm && !dcroddsratio_ob) {
+  meta$RIR <- round(meta$switch/((a+c)/n_obs))*(replace=="entire") + round(meta$switch/(a/(a+b)))*(1-(replace=="entire"))
+}
+
+meta$xaxis <- paste(meta$RIR,"\n","(", meta$switch, ")", sep = "")
+
+fig1 <- ggplot2::ggplot(meta, ggplot2::aes_string(x="RIR", y="pdif"))+
   ggplot2::geom_line(ggplot2::aes_string(y="pdif"), size = 1) +
   ggplot2::geom_point(ggplot2::aes_string(y="pdif", shape = "current",fill = "sigpoint"))+
   ggplot2::scale_fill_manual(values=fillcol)+
   ggplot2::scale_shape_manual(values=pointshape)+
+  ggrepel::geom_label_repel(ggplot2::aes_string(label="currentlabel"))+
   ggplot2::geom_hline(yintercept = pos_thr_pdif, linetype = "dashed", color="green4", size = 1)+
   ggplot2::geom_hline(yintercept = neg_thr_pdif, linetype = "dashed", color="red", size = 1)+
   ggplot2::scale_y_continuous(name="Difference in probability of successful outcome (treatment - control)")+
-  ggplot2::scale_x_continuous(name="Number of Cases Switched - Fragility") +
+  ggplot2::scale_x_continuous(name="RIR (Fragility)", 
+                              breaks= c(meta[meta$switch==0,]$RIR, meta[meta$sigpoint=="negative",]$RIR,
+                                        meta[meta$sigpoint=="positive",]$RIR),
+                              labels= c(meta[meta$switch==0,]$xaxis, meta[meta$sigpoint=="negative",]$xaxis,
+                                        meta[meta$sigpoint=="positive",]$xaxis)) +
   ggplot2::theme(#axis.title = ggplot2::element_text(size = 15),
         #axis.text= ggplot2::element_text(size = 14),
         panel.grid.major = ggplot2::element_blank(), 
@@ -237,23 +255,18 @@ zoom <- meta[meta$switch<=zoom_upper & meta$switch>=zoom_lower,]
 zoom <- zoom[zoom$switch>=0,]
 
 if (switch_trm && dcroddsratio_ob) {
-  zoom$RIR <- round(zoom$switch/((a+c)/n_obs))*(replace=="entire") + round(zoom$switch/(a/(a+b)))*(1-(replace=="entire"))
   zoom <- zoom[zoom$RIR<=d,]
 }
 if (switch_trm && !dcroddsratio_ob) {
-  zoom$RIR <- round(zoom$switch/((b+d)/n_obs))*(replace=="entire") + round(zoom$switch/(b/(a+b)))*(1-(replace=="entire"))
   zoom <- zoom[zoom$RIR<=c,]
 }
 if (!switch_trm && dcroddsratio_ob) {
-  zoom$RIR <- round(zoom$switch/((b+d)/n_obs))*(replace=="entire") + round(zoom$switch/(b/(a+b)))*(1-(replace=="entire"))
   zoom <- zoom[zoom$RIR<=a,]
 }
 if (!switch_trm && !dcroddsratio_ob) {
-  zoom$RIR <- round(zoom$switch/((a+c)/n_obs))*(replace=="entire") + round(zoom$switch/(a/(a+b)))*(1-(replace=="entire"))
   zoom <- zoom[zoom$RIR<=b,]
 }
 
-zoom$xaxis <- paste(zoom$RIR,"(",zoom$switch,")",sep = "")
 zoom$label <- ifelse(zoom$sigpoint=="positive", 
                      paste("sig pos:RIR=", zoom[zoom$sigpoint=="positive",]$RIR),NA)
 zoom$label <- ifelse(zoom$sigpoint=="negative", 
@@ -264,12 +277,16 @@ zoom$label <- ifelse(zoom$sigpoint=="current",
 fig2 <- ggplot2::ggplot(zoom, ggplot2::aes_string(x="RIR",y="pdif"))+
   ggplot2::geom_line(ggplot2::aes_string(y="pdif"), size = 1) +
   ggplot2::geom_point(ggplot2::aes_string(y="pdif", shape = "current",fill = "sigpoint"), 
-                      size = 3)+
+                      size = 1)+
   ggrepel::geom_label_repel(ggplot2::aes_string(label="label"))+
   ggplot2::scale_fill_manual(values=fillcol)+
   ggplot2::scale_shape_manual(values=pointshape)+
   ggplot2::scale_y_continuous(name="Difference in probability of successful outcome (treatment - control)")+
-  ggplot2::scale_x_continuous(name="RIR (Fragility)", breaks= c(zoom$RIR),labels=zoom$xaxis) +
+  ggplot2::scale_x_continuous(name="RIR (Fragility)", 
+                              breaks= c(zoom$RIR[1], zoom$RIR[as.integer(length(zoom$RIR)/2)], 
+                                        zoom$RIR[as.integer(length(zoom$RIR))]),
+                              labels= c(zoom$xaxis[1], zoom$xaxis[as.integer(length(zoom$RIR)/2)],
+                                        zoom$xaxis[as.integer(length(zoom$RIR))])) +
   ggplot2::theme(panel.grid.major = ggplot2::element_blank(), 
                  panel.grid.minor = ggplot2::element_blank(),
                  panel.background = ggplot2::element_blank(), 
@@ -315,9 +332,7 @@ if (switch_trm == T) {
   note <- "A bend in line indicates switches from the treatment row because the control row was exhausted."
   }
 
-result <- list(
-  #fig1, note, 
-  fig2)
+result <- list(fig1, note, fig2)
 
 return(result)
 }
