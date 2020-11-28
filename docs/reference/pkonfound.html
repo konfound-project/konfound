@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,7 +41,6 @@
 
 <meta property="og:title" content="Perform sensitivity analysis for published studies — pkonfound" />
 <meta property="og:description" content="For published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,7 +58,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -102,7 +105,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/jrosen48/konfound">
+  <a href="https://github.com/jrosen48/konfound/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -129,19 +132,19 @@
     <p>For published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>pkonfound</span>(
-  <span class='no'>est_eff</span>,
-  <span class='no'>std_err</span>,
-  <span class='no'>n_obs</span>,
-  <span class='kw'>n_covariates</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
-  <span class='kw'>tails</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>nu</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>n_trm</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>switch_trm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>non_linear</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"print"</span>
-)</pre>
+    <pre class="usage"><span class='fu'>pkonfound</span><span class='op'>(</span>
+  <span class='va'>est_eff</span>,
+  <span class='va'>std_err</span>,
+  <span class='va'>n_obs</span>,
+  n_covariates <span class='op'>=</span> <span class='fl'>1</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.05</span>,
+  tails <span class='op'>=</span> <span class='fl'>2</span>,
+  nu <span class='op'>=</span> <span class='fl'>0</span>,
+  n_trm <span class='op'>=</span> <span class='cn'>NULL</span>,
+  switch_trm <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  non_linear <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  to_return <span class='op'>=</span> <span class='st'>"print"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -197,35 +200,39 @@
     <p>prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
+    <pre class="examples"><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
 #&gt; </span><span>To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
-#&gt; To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.
+#&gt; To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0 (RIR = 60).
 #&gt; See Frank et al. (2013) for a description of the method
 #&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. </span><span style='font-style: italic;'>Education, Evaluation and Policy Analysis, 35</span><span> 437-460.
 #&gt; </span><span style='font-weight: bold;'>Impact Threshold for a Confounding Variable:
 #&gt; </span><span>The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.201 for statistical significance (alpha = 0.05).
 #&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null hypothesis of 0 effect.
 #&gt; See Frank (2000) for a description of the method
-#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span>(-<span class='fl'>2.2</span>, <span class='fl'>.65</span>, <span class='fl'>200</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='op'>-</span><span class='fl'>2.2</span>, <span class='fl'>.65</span>, <span class='fl'>200</span>, <span class='fl'>3</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
 #&gt; </span><span>To invalidate an inference, 41.732% of the estimate would have to be due to bias. This is based on a threshold of -1.282 for statistical significance (alpha = 0.05).
-#&gt; To invalidate an inference, 83 observations would have to be replaced with cases for which the effect is 0.
+#&gt; To invalidate an inference, 83 observations would have to be replaced with cases for which the effect is 0 (RIR = 83).
 #&gt; See Frank et al. (2013) for a description of the method
 #&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. </span><span style='font-style: italic;'>Education, Evaluation and Policy Analysis, 35</span><span> 437-460.
 #&gt; </span><span style='font-weight: bold;'>Impact Threshold for a Confounding Variable:
 #&gt; </span><span>The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.334 with the outcome and at 0.334 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.14 for statistical significance (alpha = 0.05).
 #&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.334 X 0.334 = 0.112 to invalidate an inference for a null hypothesis of 0 effect.
 #&gt; See Frank (2000) for a description of the method
-#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>.5</span>, <span class='fl'>3</span>, <span class='fl'>200</span>, <span class='fl'>3</span>)</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>3</span>, <span class='fl'>200</span>, <span class='fl'>3</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
 #&gt; </span><span>To sustain an inference, 91.549% of the estimate would have to be due to bias. This is based on a threshold of 5.916 for statistical significance (alpha = 0.05).
-#&gt; To sustain an inference, 183 of the cases with 0 effect would have to be replaced with cases at the threshold of inference.
+#&gt; To sustain an inference, 183 of the cases with 0 effect would have to be replaced with cases at the threshold of inference (RIR = 183).
 #&gt; See Frank et al. (2013) for a description of the method
 #&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. </span><span style='font-style: italic;'>Education, Evaluation and Policy Analysis, 35</span><span> 437-460.
 #&gt; </span><span style='font-weight: bold;'>Impact Threshold for a Confounding Variable:
 #&gt; </span><span>The maximum impact to sustain an inference for a null hypothesis of 0 effect is based on a correlation of 0.335 with the outcome and at 0.335 with the predictor of interest (conditioning on observed covariates) based on a threshold of 5.916 for statistical significance (alpha = 0.05).
 #&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.335 X 0.335 = 0.112 to sustain an inference for a null hypothesis of 0 effect.
 #&gt; See Frank (2000) for a description of the method
-#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span>(-<span class='fl'>0.2</span>, <span class='fl'>0.103</span>, <span class='fl'>20888</span>, <span class='fl'>3</span>, <span class='kw'>n_trm</span> <span class='kw'>=</span> <span class='fl'>17888</span>, <span class='kw'>non_linear</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Note that this output is from an approach for non-linear models that is developmental and unpublished</span></div><div class='output co'>#&gt; [[1]]
-#&gt; [1] "To sustain an inference for a negative treatment effect, 1 case needs to be transferred from treatment success to treatment failure, as shown, from the Implied Table to the Transfer Table."
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='op'>-</span><span class='fl'>0.2</span>, <span class='fl'>0.103</span>, <span class='fl'>20888</span>, <span class='fl'>3</span>, n_trm <span class='op'>=</span> <span class='fl'>17888</span>, non_linear <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Note that this output is from an approach for non-linear models that is developmental and unpublished</span></div><div class='output co'>#&gt; [[1]]
+#&gt; [1] "To sustain an inference for a negative treatment effect, you would need to replace 1 treatment success cases with null hypothesis cases (RIR = 1). This is equivalent to transferring 1 case from treatment success to treatment failure, as shown, from the Implied Table to the Transfer Table."
 #&gt; 
 #&gt; $Implied_Table
 #&gt;            Fail Success
@@ -246,36 +253,21 @@
 #&gt; [[6]]
 #&gt; [1] "For the Transfer Table, we have an estimate of -0.202, with a standard error of 0.103 and a t-ratio of -1.963."
 #&gt; 
-#&gt; $Implied_Estimate
-#&gt; [1] -0.2003408
+#&gt; $total_RIR
+#&gt; [1] 1
 #&gt; 
-#&gt; $Transfer_Estimate
-#&gt; [1] -0.2021242
-#&gt; 
-#&gt; $Implied_SE
-#&gt; [1] 0.1029732
-#&gt; 
-#&gt; $Transfer_SE
-#&gt; [1] 0.1029876
-#&gt; 
-#&gt; $Implied_tratio
-#&gt; [1] -1.945564
-#&gt; 
-#&gt; $Transfer_tratio
-#&gt; [1] -1.962608
-#&gt; 
-#&gt; $Taylor_predict
-#&gt; [1] 0.8592108
-#&gt; 
-#&gt; $Percent_bias_predict
-#&gt; [1] 4.182212
+#&gt; $total_switch
+#&gt; [1] 1
 #&gt; </div><div class='input'>
-<span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"thresh_plot"</span>)</div><div class='img'><img src='pkonfound-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span>, <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='st'>"corr_plot"</span>)</div><div class='img'><img src='pkonfound-2.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='no'>pkonfound_output</span> <span class='kw'>&lt;-</span> <span class='fu'>pkonfound</span>(<span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>200</span>, <span class='fl'>3</span>,
-  <span class='kw'>to_return</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"raw_output"</span>, <span class='st'>"thresh_plot"</span>, <span class='st'>"corr_plot"</span>)
-)</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
+<span class='fu'>pkonfound</span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span>, to_return <span class='op'>=</span> <span class='st'>"thresh_plot"</span><span class='op'>)</span>
+</div><div class='img'><img src='pkonfound-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span>, to_return <span class='op'>=</span> <span class='st'>"corr_plot"</span><span class='op'>)</span>
+</div><div class='img'><img src='pkonfound-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='va'>pkonfound_output</span> <span class='op'>&lt;-</span> <span class='fu'>pkonfound</span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>200</span>, <span class='fl'>3</span>,
+  to_return <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"raw_output"</span>, <span class='st'>"thresh_plot"</span>, <span class='st'>"corr_plot"</span><span class='op'>)</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
 #&gt; </span><span>To invalidate an inference, 60.557% of the estimate would have to be due to bias. This is based on a threshold of 0.789 for statistical significance (alpha = 0.05).
-#&gt; To invalidate an inference, 121 observations would have to be replaced with cases for which the effect is 0.
+#&gt; To invalidate an inference, 121 observations would have to be replaced with cases for which the effect is 0 (RIR = 121).
 #&gt; See Frank et al. (2013) for a description of the method
 #&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. </span><span style='font-style: italic;'>Education, Evaluation and Policy Analysis, 35</span><span> 437-460.
 #&gt; </span><span style='font-weight: bold;'>Impact Threshold for a Confounding Variable:
@@ -283,24 +275,24 @@
 #&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.479 X 0.479 = 0.229 to invalidate an inference for a null hypothesis of 0 effect.
 #&gt; See Frank (2000) for a description of the method
 #&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194
-#&gt; </div><div class='output co'>#&gt; <span class='message'>Print output created by default. Created 3 other forms of output. Use list indexing or run summary() on the output to see how to access.</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>pkonfound_output</span>)</div><div class='output co'>#&gt; Created 3 forms of output. To access type: 
+#&gt; </div><div class='output co'>#&gt; <span class='message'>Print output created by default. Created 3 other forms of output. Use list indexing or run summary() on the output to see how to access.</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>pkonfound_output</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Created 3 forms of output. To access type: 
 #&gt; 
 #&gt; pkonfound_output$raw_output
 #&gt; pkonfound_output$thresh_plot
-#&gt; pkonfound_output$corr_plot</div><div class='input'><span class='no'>pkonfound_output</span>$<span class='no'>raw_output</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 1 x 8</span><span>
+#&gt; pkonfound_output$corr_plot</div><div class='input'><span class='va'>pkonfound_output</span><span class='op'>$</span><span class='va'>raw_output</span>
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 1 x 8</span><span>
 #&gt;   action inference percent_bias_to… replace_null_ca… unstd_beta beta_threshhold
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'>1</span><span> to_in… reject_n…             60.6              121          2           0.789
-#&gt; </span><span style='color: #555555;'># … with 2 more variables: omitted_variable_corr </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, itcv </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'><span class='no'>pkonfound_output</span>$<span class='no'>thresh_plot</span></div><div class='img'><img src='pkonfound-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>pkonfound_output</span>$<span class='no'>corr_plot</span></div><div class='img'><img src='pkonfound-4.png' alt='' width='700' height='433' /></div></span></pre>
+#&gt; </span><span style='color: #555555;'># … with 2 more variables: omitted_variable_corr </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, itcv </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'><span class='va'>pkonfound_output</span><span class='op'>$</span><span class='va'>thresh_plot</span>
+</div><div class='img'><img src='pkonfound-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>pkonfound_output</span><span class='op'>$</span><span class='va'>corr_plot</span>
+</div><div class='img'><img src='pkonfound-4.png' alt='' width='700' height='433' /></div></span></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -311,7 +303,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

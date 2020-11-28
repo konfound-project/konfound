@@ -1,6 +1,6 @@
 ---
 title: "Introduction to konfound"
-author: "Joshua Rosenberg, Ran Xu, and Ken Frank"
+author: "Joshua Rosenberg, Ran Xu, Qinyun Lin, and Ken Frank"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -15,17 +15,6 @@ collapse = TRUE,
 comment = "#>"
 )
 ```
-
-# Table of contents 
-
-- Introduction (1 page)
-- Background on sensitivity analysis
-    - Impact threshold of a confounding variable (1 page)
-    - Percent bias to invalidate an inference (1 page)
-- Example
-    - pkonfound for already-published studies (1)
-    - konfound for models fitted in R (3 pages)
-    - mkonfound for meta-analyses that involve sensitivity analysis (2 pages)
 
 # Introduction
 
@@ -198,8 +187,8 @@ mkonfound(d, t, df, return_plot = T)
 ### How to learn more about sensitivity analysis
 
 To learn more about sensitivity analysis, please visit:
-
-* The [Introduction to konfound vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
+'/
+?˘* The [Introduction to konfound vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
 * The causal inference section of Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm#causal)
 * The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
 
@@ -209,7 +198,7 @@ To learn more about sensitivity analysis, please visit:
 
 ### Code of Conduct
 
-Please note that this project is released with a Contributor Code of Conduct available at [http://contributor-covenant.org/version/1/0/0/](http://contributor-covenant.org/version/1/0/0/)
+Please note that this project is released with a Contributor Code of Conduct available at [http://contributor-covenant.org/ve.…<Lk hxvrsion/1/0/0/](http://contributor-covenant.org/version/1/0/0/)
 
 ### References
 

@@ -77,26 +77,6 @@ head(d)
 mkonfound(d, t, df)
 ```
 
-# Features in-development
-
-There is an in-development non-linear option:
-
-```{r}
-pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
-```
-
-A related function `tkonfound()` can take a 2 x 2 table of treatment versus control cases and success versus failure for the outcome, i.e.:
-
-```{r}
-tkonfound(35, 17, 17, 38)
-```
-
-You can also draw figures for change in effect size as a function of switching outcomes.
-
-```{r}
-tkonfound_fig(35, 17, 17, 38)
-```
-
 # Other information
 
 ### How to learn more about sensitivity analysis
