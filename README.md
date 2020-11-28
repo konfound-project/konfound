@@ -3,12 +3,11 @@
 
 <!-- badges: start -->
 
-[![Build
-Status](https://travis-ci.org/jrosen48/konfound.svg?branch=master)](https://travis-ci.org/jrosen48/konfound)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 [![R build
 status](https://github.com/jrosen48/konfound/workflows/R-CMD-check/badge.svg)](https://github.com/jrosen48/konfound/actions)
+
 <!-- badges: end -->
 
 # konfound

@@ -98,6 +98,7 @@
   <div class="contents col-md-9">
 
 
+<!-- badges: end -->
 <div id="konfound" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#konfound" class="anchor"></a>konfound</h1></div>
@@ -132,7 +133,7 @@
           n_covariates <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 <span class="co">#&gt; Percent Bias Necessary to Invalidate the Inference:</span>
 <span class="co">#&gt; To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).</span>
-<span class="co">#&gt; To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0 (RIR = 60).</span>
+<span class="co">#&gt; To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.</span>
 <span class="co">#&gt; See Frank et al. (2013) for a description of the method</span>
 <span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span>
 <span class="co">#&gt; Impact Threshold for a Confounding Variable:</span>
@@ -182,7 +183,7 @@
 <code class="sourceCode R"><span class="fu"><a href="reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">wt</span><span class="op">)</span>
 <span class="co">#&gt; Percent Bias Necessary to Invalidate the Inference:</span>
 <span class="co">#&gt; To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).</span>
-<span class="co">#&gt; To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0 (RIR = 21).</span>
+<span class="co">#&gt; To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.</span>
 <span class="co">#&gt; See Frank et al. (2013) for a description of the method</span>
 <span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span>
 <span class="co">#&gt; Impact Threshold for a Confounding Variable:</span>
@@ -223,81 +224,6 @@
 <span class="co">#&gt; 10 -2.05    195 to_invalid… reject_null                        3.51  0.006 0.077</span>
 <span class="co">#&gt; # … with 20 more rows</span></code></pre></div>
 </div>
-</div>
-<div id="features-in-development" class="section level1">
-<h1 class="hasAnchor">
-<a href="#features-in-development" class="anchor"></a>Features in-development</h1>
-<p>There is an in-development non-linear option:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/pkonfound.html">pkonfound</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.103</span>, <span class="fl">20888</span>, <span class="fl">3</span>, n_trm <span class="op">=</span> <span class="fl">17888</span>, non_linear <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Note that this output is from an approach for non-linear models that is developmental and unpublished</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] "To sustain an inference for a negative treatment effect, you would need to replace 1 treatment success cases with null hypothesis cases (RIR = 1). This is equivalent to transferring 1 case from treatment success to treatment failure, as shown, from the Implied Table to the Transfer Table."</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $Implied_Table</span>
-<span class="co">#&gt;            Fail Success</span>
-<span class="co">#&gt; Control    2882     118</span>
-<span class="co">#&gt; Treatment 17308     580</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] "(Values have been rounded to the nearest integer. This may cause a little change to the estimated effect for the Implied Table.)"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $Transfer_Table</span>
-<span class="co">#&gt;            Fail Success</span>
-<span class="co">#&gt; Control    2882     118</span>
-<span class="co">#&gt; Treatment 17309     579</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[5]]</span>
-<span class="co">#&gt; [1] "For the Implied Table, we have an estimate of -0.200, with a standard error of 0.103 and a t-ratio of -1.946."</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[6]]</span>
-<span class="co">#&gt; [1] "For the Transfer Table, we have an estimate of -0.202, with a standard error of 0.103 and a t-ratio of -1.963."</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $total_RIR</span>
-<span class="co">#&gt; [1] 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $total_switch</span>
-<span class="co">#&gt; [1] 1</span></code></pre></div>
-<p>A related function <code><a href="reference/tkonfound.html">tkonfound()</a></code> can take a 2 x 2 table of treatment versus control cases and success versus failure for the outcome, i.e.:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/tkonfound.html">tkonfound</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">38</span><span class="op">)</span>
-<span class="co">#&gt; Warning in fisher.test(table): 'x' has been rounded to integer: Mean relative</span>
-<span class="co">#&gt; difference: 1</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; [1] "The tkonfound function calculates the number of cases that would have to be replaced with no effect cases (RIR) to invalidate an inference made about the association between the rows and columns in a 2x2 table. One can also interpret this as switches from one cell to another, such as from the treatment success cell to the treatment failure cell."</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[2]]</span>
-<span class="co">#&gt; [1] "See konfound_fig for full and accessible details in graphic form!"</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[3]]</span>
-<span class="co">#&gt; [1] "To invalidate the inference, you would need to replace 19 treatment success cases with null hypothesis cases (RIR = 19). This is equivalent to transferring 9 cases from treatment success to treatment failure ."</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $User_enter_value</span>
-<span class="co">#&gt;           Fail Success</span>
-<span class="co">#&gt; Control     35      17</span>
-<span class="co">#&gt; Treatment   17      38</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $Transfer_Table</span>
-<span class="co">#&gt;           Fail Success</span>
-<span class="co">#&gt; Control     35      17</span>
-<span class="co">#&gt; Treatment   26      29</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[6]]</span>
-<span class="co">#&gt; [1] "For the User-entered Table, we have an estimated odds ratio of 4.530, with p value of 0.000."</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [[7]]</span>
-<span class="co">#&gt; [1] "For the Transfer Table, we have an estimated odds ratio of 2.278, with p value of 0.051."</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $RIR</span>
-<span class="co">#&gt; [1] 19</span></code></pre></div>
-<p>You can also draw figures for change in effect size as a function of switching outcomes.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/tkonfound_fig.html">tkonfound_fig</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">38</span><span class="op">)</span>
-<span class="co">#&gt; Warning in fisher.test(table): 'x' has been rounded to integer: Mean relative</span>
-<span class="co">#&gt; difference: 1</span>
-<span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt; Warning: Removed 11 rows containing missing values (geom_label_repel).</span></code></pre></div>
-<p><img src="README-unnamed-chunk-10-1.png"><!-- --></p>
 </div>
 <div id="other-information" class="section level1">
 <h1 class="hasAnchor">
@@ -357,8 +283,8 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/jrosen48/konfound"><img src="https://travis-ci.org/jrosen48/konfound.svg?branch=master" alt="Build Status"></a></li>
 <li><a href="https://cran.r-project.org/package=konfound"><img src="https://www.r-pkg.org/badges/version/konfound" alt="CRAN status"></a></li>
+<li><a href="https://github.com/jrosen48/konfound/actions"><img src="https://github.com/jrosen48/konfound/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 </ul>
 </div>
 </div>
