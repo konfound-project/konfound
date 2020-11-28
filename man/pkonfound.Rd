@@ -14,6 +14,7 @@ pkonfound(
   nu = 0,
   n_trm = NULL,
   switch_trm = TRUE,
+  replace = "entire",
   non_linear = FALSE,
   to_return = "print"
 )

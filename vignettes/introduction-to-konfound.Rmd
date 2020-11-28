@@ -4,7 +4,7 @@ author: "Joshua Rosenberg, Ran Xu, Qinyun Lin, and Ken Frank"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction-to-Konfound}
+  %\VignetteIndexEntry{Introduction to Konfound}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

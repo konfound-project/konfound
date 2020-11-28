@@ -2,9 +2,18 @@
 % Please edit documentation in R/tkonfound_fig.R
 \name{tkonfound_fig}
 \alias{tkonfound_fig}
-\title{Draw figures for change in effect size as a function of switching outcomes}
+\title{Draw figures for change in effect size as a function of switching or replacing outcomes}
 \usage{
-tkonfound_fig(a, b, c, d, thr_p = 0.05, switch_trm = T)
+tkonfound_fig(
+  a,
+  b,
+  c,
+  d,
+  thr_p = 0.05,
+  switch_trm = T,
+  test = "fisher",
+  replace = "control"
+)
 }
 \arguments{
 \item{a}{cell is the number of cases in the control group showing unsuccessful results}
@@ -18,17 +27,23 @@ tkonfound_fig(a, b, c, d, thr_p = 0.05, switch_trm = T)
 \item{thr_p}{the p-value threshold used to evaluate statistical significance, with the default of 0.05}
 
 \item{switch_trm}{whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row}
+
+\item{test}{whether using Fisher's Exact Test (default) or chi-square test}
+
+\item{replace}{whether using entire sample or the control group to calculate the base rate, with the default of the entire sample}
 }
 \value{
 prints 2 figures for how number of hypothetical cases switched changes the effect size
 }
 \description{
-This function returns two plots for change in effect size as a function of switching outcomes (RIS),
-one for all possibilities, another zoomed in the area around the two thresholds
+This function returns two plots for change in effect size as a function of switching or replacing outcomes,
+one for all possibilities (switching), another zoomed in the area for positive RIR
 }
 \examples{
 # using tkonfound_fig for a study where 2 by 2 table is (35, 17, 17, 38)
 tkonfound_fig(35, 17, 17, 38)
 tkonfound_fig(35, 17, 17, 38, thr_p = 0.01)
 tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
+tkonfound_fig(35, 17, 17, 38, thr_p - 0.01, switch_trm = TRUE, test = "chisq")
+tkonfound_fig(35, 17, 17, 38, thr_p - 0.01, switch_trm = TRUE, test = "chisq", replace = "control")
 }

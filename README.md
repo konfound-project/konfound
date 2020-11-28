@@ -1,10 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<!-- badges: start -->
+
 [![Build
 Status](https://travis-ci.org/jrosen48/konfound.svg?branch=master)](https://travis-ci.org/jrosen48/konfound)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
+[![R build
+status](https://github.com/jrosen48/konfound/workflows/R-CMD-check/badge.svg)](https://github.com/jrosen48/konfound/actions)
+<!-- badges: end -->
 
 # konfound
 
@@ -55,7 +60,7 @@ pkonfound(est_eff = 2,
           n_covariates = 3)
 #> Percent Bias Necessary to Invalidate the Inference:
 #> To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
-#> To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0 (RIR = 60).
+#> To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.
 #> See Frank et al. (2013) for a description of the method
 #> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
 #> Impact Threshold for a Confounding Variable:
@@ -112,7 +117,7 @@ as follows, specifying the fitted model object:
 konfound(m1, wt)
 #> Percent Bias Necessary to Invalidate the Inference:
 #> To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).
-#> To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0 (RIR = 21).
+#> To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.
 #> See Frank et al. (2013) for a description of the method
 #> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
 #> Impact Threshold for a Confounding Variable:
@@ -155,91 +160,6 @@ mkonfound(d, t, df)
 #> 10 -2.05    195 to_invalid… reject_null                        3.51  0.006 0.077
 #> # … with 20 more rows
 ```
-
-# Features in-development
-
-There is an in-development non-linear option:
-
-``` r
-pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
-#> Note that this output is from an approach for non-linear models that is developmental and unpublished
-#> [[1]]
-#> [1] "To sustain an inference for a negative treatment effect, you would need to replace 1 treatment success cases with null hypothesis cases (RIR = 1). This is equivalent to transferring 1 case from treatment success to treatment failure, as shown, from the Implied Table to the Transfer Table."
-#> 
-#> $Implied_Table
-#>            Fail Success
-#> Control    2882     118
-#> Treatment 17308     580
-#> 
-#> [[3]]
-#> [1] "(Values have been rounded to the nearest integer. This may cause a little change to the estimated effect for the Implied Table.)"
-#> 
-#> $Transfer_Table
-#>            Fail Success
-#> Control    2882     118
-#> Treatment 17309     579
-#> 
-#> [[5]]
-#> [1] "For the Implied Table, we have an estimate of -0.200, with a standard error of 0.103 and a t-ratio of -1.946."
-#> 
-#> [[6]]
-#> [1] "For the Transfer Table, we have an estimate of -0.202, with a standard error of 0.103 and a t-ratio of -1.963."
-#> 
-#> $total_RIR
-#> [1] 1
-#> 
-#> $total_switch
-#> [1] 1
-```
-
-A related function `tkonfound()` can take a 2 x 2 table of treatment
-versus control cases and success versus failure for the outcome, i.e.:
-
-``` r
-tkonfound(35, 17, 17, 38)
-#> Warning in fisher.test(table): 'x' has been rounded to integer: Mean relative
-#> difference: 1
-#> [[1]]
-#> [1] "The tkonfound function calculates the number of cases that would have to be replaced with no effect cases (RIR) to invalidate an inference made about the association between the rows and columns in a 2x2 table. One can also interpret this as switches from one cell to another, such as from the treatment success cell to the treatment failure cell."
-#> 
-#> [[2]]
-#> [1] "See konfound_fig for full and accessible details in graphic form!"
-#> 
-#> [[3]]
-#> [1] "To invalidate the inference, you would need to replace 19 treatment success cases with null hypothesis cases (RIR = 19). This is equivalent to transferring 9 cases from treatment success to treatment failure ."
-#> 
-#> $User_enter_value
-#>           Fail Success
-#> Control     35      17
-#> Treatment   17      38
-#> 
-#> $Transfer_Table
-#>           Fail Success
-#> Control     35      17
-#> Treatment   26      29
-#> 
-#> [[6]]
-#> [1] "For the User-entered Table, we have an estimated odds ratio of 4.530, with p value of 0.000."
-#> 
-#> [[7]]
-#> [1] "For the Transfer Table, we have an estimated odds ratio of 2.278, with p value of 0.051."
-#> 
-#> $RIR
-#> [1] 19
-```
-
-You can also draw figures for change in effect size as a function of
-switching outcomes.
-
-``` r
-tkonfound_fig(35, 17, 17, 38)
-#> Warning in fisher.test(table): 'x' has been rounded to integer: Mean relative
-#> difference: 1
-#> [[1]]
-#> Warning: Removed 11 rows containing missing values (geom_label_repel).
-```
-
-![](README-unnamed-chunk-10-1.png)<!-- -->
 
 # Other information
 

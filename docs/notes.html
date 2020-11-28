@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • konfound</title>
+<title>Infrastructure of konfound package • konfound</title>
 
 
 <!-- jquery -->
@@ -18,8 +18,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
-<link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script>
+<link rel="stylesheet" href="bootstrap-toc.css">
+<script src="bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
@@ -33,13 +33,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script>
+<link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Infrastructure of konfound package" />
 
 
 
@@ -58,7 +58,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -70,7 +70,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">konfound</a>
+        <a class="navbar-link" href="index.html">konfound</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
@@ -78,13 +78,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
+  <a href="index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -94,12 +94,12 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/introduction-to-konfound.html">Introduction to konfound</a>
+      <a href="articles/introduction-to-konfound.html">Introduction to konfound</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -120,52 +120,50 @@
       </header>
 
 <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/jrosen48/konfound/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      <h1>Infrastructure of konfound package</h1>
     </div>
 
-    <div id="konfound-021" class="section level1">
-<h1 class="page-header" data-toc-text="0.2.1">
-<a href="#konfound-021" class="anchor"></a>konfound 0.2.1<small> 2020-02-26 </small>
-</h1>
+
+<div id="infrastructure-of-konfound-package" class="section level1">
+
+<div id="konfound--for-users-own-data-depending-on-the-object-you-use" class="section level2">
+<h2 class="hasAnchor">
+<a href="#konfound--for-users-own-data-depending-on-the-object-you-use" class="anchor"></a>konfound – for users’ own data, depending on the object you use,</h2>
 <ul>
-<li>Refinements and bug fixes for the non-linear functions</li>
+<li>linear regression (lm object)</li>
+<li>logistic regression (glm object, with logistic as a specification)</li>
+<li>table object</li>
+<li>other objects (give a message that not applicable for now)</li>
 </ul>
 </div>
-    <div id="konfound-020" class="section level1">
-<h1 class="page-header" data-toc-text="0.2.0">
-<a href="#konfound-020" class="anchor"></a>konfound 0.2.0<small> Unreleased </small>
-</h1>
+<div id="pkonfound--for-published-study--rely-on-the-published-study-may-not-know-all-detail" class="section level2">
+<h2 class="hasAnchor">
+<a href="#pkonfound--for-published-study--rely-on-the-published-study-may-not-know-all-detail" class="anchor"></a>pkonfound – for published study – rely on the published study, may not know all detail</h2>
 <ul>
-<li>Update to the non-linear functions.</li>
+<li>linear regression</li>
+<li>logistic regression</li>
+<li>a table – should allow users to choose whatever methods (chi-square or fisher)</li>
 </ul>
 </div>
-    <div id="konfound-012" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.2">
-<a href="#konfound-012" class="anchor"></a>konfound 0.1.2<small> 2019-04-12 </small>
-</h1>
-<ul>
-<li>Thanks to J. Murphy for pointing out a bug in how mkonfound works for lme4 output, a bug in the code of <code>konfound-lm</code> related to when the message is displayed when all coefficients are tested, and suggesting to add the name of the variable to the data frame returned when all variables are tested</li>
-</ul>
+<div id="mkonfound--meta-analysis-edited" class="section level2">
+<h2 class="hasAnchor">
+<a href="#mkonfound--meta-analysis-edited" class="anchor"></a>mkonfound – meta analysis (edited)</h2>
 </div>
-    <div id="konfound-011" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.1">
-<a href="#konfound-011" class="anchor"></a>konfound 0.1.1<small> 2019-01-21 </small>
-</h1>
-<ul>
-<li>Update license to include our names</li>
-</ul>
 </div>
-    <div id="konfound-010" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.0">
-<a href="#konfound-010" class="anchor"></a>konfound 0.1.0<small> 2018-04-06 </small>
-</h1>
-<ul>
-<li>Added a <code>NEWS.md</code> file to track changes to the package.</li>
-</ul>
+<div id="features-in-development" class="section level1">
+<h1 class="hasAnchor">
+<a href="#features-in-development" class="anchor"></a>Features in-development</h1>
+<p>There is an in-development non-linear option:</p>
+<pre class="{r}"><code><a href="reference/pkonfound.html">pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)</a></code></pre>
+<p>A related function <code><a href="reference/tkonfound.html">tkonfound()</a></code> can take a 2 x 2 table of treatment versus control cases and success versus failure for the outcome, i.e.:</p>
+<pre class="{r}"><code><a href="reference/tkonfound.html">tkonfound(35, 17, 17, 38)</a></code></pre>
+<p>You can also draw figures for change in effect size as a function of switching outcomes.</p>
+<pre class="{r}"><code><a href="reference/tkonfound_fig.html">tkonfound_fig(35, 17, 17, 38)</a></code></pre>
 </div>
+
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -175,6 +173,7 @@
   </div>
 
 </div>
+
 
 
       <footer>

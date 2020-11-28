@@ -2,6 +2,7 @@
 
 S3method(summary,konfound)
 export(getswitch_chisq)
+export(getswitch_fisher)
 export(konfound)
 export(launch_shiny)
 export(mkonfound)

@@ -4,7 +4,16 @@
 \alias{tkonfound}
 \title{Perform sensitivity analysis for a 2x2 table}
 \usage{
-tkonfound(a, b, c, d, thr_p = 0.05, switch_trm = T)
+tkonfound(
+  a,
+  b,
+  c,
+  d,
+  thr_p = 0.05,
+  switch_trm = T,
+  test = "fisher",
+  replace = "control"
+)
 }
 \arguments{
 \item{a}{cell is the number of cases in the control group showing unsuccessful results}
@@ -18,16 +27,21 @@ tkonfound(a, b, c, d, thr_p = 0.05, switch_trm = T)
 \item{thr_p}{the p-value threshold used to evaluate statistical significance, with the default of 0.05}
 
 \item{switch_trm}{whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row}
+
+\item{test}{whether using Fisher's Exact Test (default) or chi-square test}
+
+\item{replace}{whether using entire sample or the control group to calculate the base rate, with the default of the entire sample}
 }
 \value{
 prints a 2x2 table after switching cases from one cell to another so that the inference is invalidated about the association between the rows and columns
 }
 \description{
-This function calculates the number of cases (RIS) that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. This can be applied to treatment vs control with successful vs unsuccessful outcomes.
+This function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. Or how many cases need to be replaced with null hypothesis cases to change the inference. This can be applied to treatment vs control with successful vs unsuccessful outcomes.
 }
 \examples{
 # using tkonfound for a 2x2 table
 tkonfound(35, 17, 17, 38)
 tkonfound(35, 17, 17, 38, thr_p = 0.01)
 tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
+tkonfound(35, 17, 17, 38, test = "chisq")
 }

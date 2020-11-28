@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Draw figures for change in effect size as a function of switching outcomes — tkonfound_fig • konfound</title>
+<title>Draw figures for change in effect size as a function of switching or replacing outcomes — tkonfound_fig • konfound</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Draw figures for change in effect size as a function of switching outcomes — tkonfound_fig" />
-<meta property="og:description" content="This function returns two plots for change in effect size as a function of switching outcomes (RIS),
-one for all possibilities, another zoomed in the area around the two thresholds" />
+<meta property="og:title" content="Draw figures for change in effect size as a function of switching or replacing outcomes — tkonfound_fig" />
+<meta property="og:description" content="This function returns two plots for change in effect size as a function of switching or replacing outcomes,
+one for all possibilities (switching), another zoomed in the area for positive RIR" />
 
 
 
@@ -124,17 +124,26 @@ one for all possibilities, another zoomed in the area around the two thresholds"
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Draw figures for change in effect size as a function of switching outcomes</h1>
+    <h1>Draw figures for change in effect size as a function of switching or replacing outcomes</h1>
     <small class="dont-index">Source: <a href='https://github.com/jrosen48/konfound/blob/master/R/tkonfound_fig.R'><code>R/tkonfound_fig.R</code></a></small>
     <div class="hidden name"><code>tkonfound_fig.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function returns two plots for change in effect size as a function of switching outcomes (RIS),
-one for all possibilities, another zoomed in the area around the two thresholds</p>
+    <p>This function returns two plots for change in effect size as a function of switching or replacing outcomes,
+one for all possibilities (switching), another zoomed in the area for positive RIR</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tkonfound_fig</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span>, <span class='va'>d</span>, thr_p <span class='op'>=</span> <span class='fl'>0.05</span>, switch_trm <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>tkonfound_fig</span><span class='op'>(</span>
+  <span class='va'>a</span>,
+  <span class='va'>b</span>,
+  <span class='va'>c</span>,
+  <span class='va'>d</span>,
+  thr_p <span class='op'>=</span> <span class='fl'>0.05</span>,
+  switch_trm <span class='op'>=</span> <span class='cn'>T</span>,
+  test <span class='op'>=</span> <span class='st'>"fisher"</span>,
+  replace <span class='op'>=</span> <span class='st'>"control"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,6 +172,14 @@ one for all possibilities, another zoomed in the area around the two thresholds<
       <th>switch_trm</th>
       <td><p>whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row</p></td>
     </tr>
+    <tr>
+      <th>test</th>
+      <td><p>whether using Fisher's Exact Test (default) or chi-square test</p></td>
+    </tr>
+    <tr>
+      <th>replace</th>
+      <td><p>whether using entire sample or the control group to calculate the base rate, with the default of the entire sample</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -186,7 +203,9 @@ one for all possibilities, another zoomed in the area around the two thresholds<
 #&gt; [[2]]
 #&gt; [1] "A bend in line indicates switches from the treatment row because the control row was exhausted."
 #&gt; 
-#&gt; [[3]]</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 7 rows containing missing values (geom_label_repel).</span></div><div class='img'><img src='tkonfound_fig-6.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div></pre>
+#&gt; [[3]]</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 7 rows containing missing values (geom_label_repel).</span></div><div class='img'><img src='tkonfound_fig-6.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt; </div><div class='input'><span class='fu'>tkonfound_fig</span><span class='op'>(</span><span class='fl'>35</span>, <span class='fl'>17</span>, <span class='fl'>17</span>, <span class='fl'>38</span>, <span class='va'>thr_p</span> <span class='op'>-</span> <span class='fl'>0.01</span>, switch_trm <span class='op'>=</span> <span class='cn'>TRUE</span>, test <span class='op'>=</span> <span class='st'>"chisq"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in getswitch_chisq(a, b, c, d, thr_p, switch_trm): object 'thr_p' not found</span></div><div class='input'><span class='fu'>tkonfound_fig</span><span class='op'>(</span><span class='fl'>35</span>, <span class='fl'>17</span>, <span class='fl'>17</span>, <span class='fl'>38</span>, <span class='va'>thr_p</span> <span class='op'>-</span> <span class='fl'>0.01</span>, switch_trm <span class='op'>=</span> <span class='cn'>TRUE</span>, test <span class='op'>=</span> <span class='st'>"chisq"</span>, replace <span class='op'>=</span> <span class='st'>"control"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in getswitch_chisq(a, b, c, d, thr_p, switch_trm): object 'thr_p' not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
