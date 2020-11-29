@@ -183,7 +183,6 @@ if (test == "fisher"){
 info1 <- "The tkonfound function calculates the number of cases that would have to be replaced with no effect cases (RIR) to invalidate an inference made about the association between the rows and columns in a 2x2 table. One can also interpret this as switches from one cell to another, such as from the treatment success cell to the treatment failure cell."
 info2 <- "See konfound_fig for full and accessible details in graphic form!"
 
-
 result <- list(info1, info2,
                conclusion1,
                  User_enter_value = table_start, Transfer_Table = table_final,

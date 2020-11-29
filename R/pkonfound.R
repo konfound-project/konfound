@@ -14,6 +14,7 @@
 #' @param b cell is the number of cases in the control group showing successful results
 #' @param c cell is the number of cases in the treatment group showing unsuccessful results
 #' @param d cell is the number of cases in the treatment group showing successful results
+#' @param two_by_two_table table that is a matrix or can be coerced to one (data.frame, tibble, tribble) from which the a, b, c, and d agruments can be extracted
 #' @param test whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test
 #' @param replace whether using entire sample or the control group to calculate the base rate; default is the entire sample
 #' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return
@@ -37,14 +38,22 @@
 #' pkonfound_output$corr_plot
 #' 
 #' # using pkonfound for a logistic regression
-#' tkonfound(35, 17, 17, 38)
-#' tkonfound(35, 17, 17, 38, thr_p = 0.01)
-#' 
-#' # using pkonfound for a 2x2 table
 #' pkonfound(35, 17, 17, 38)
 #' pkonfound(35, 17, 17, 38, thr_p = 0.01)
-#' pkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
-#' pkonfound(35, 17, 17, 38, test = "chisq")
+#' 
+#' # using pkonfound for a 2x2 table
+#' pkonfound(a = 35, b = 17, c = 17, d = 38)
+#' pkonfound(a = 35, b = 17, c = 17, d = 38, thr_p = 0.01)
+#' pkonfound(a = 35, b = 17, c = 17, d = 38, thr_p = 0.01, switch_trm = FALSE)
+#' pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
+#' 
+#' my_table <- tribble(
+#' ~unsuccess, ~success,
+#' 1,         2,
+#' 3,         4,
+#' )
+#' 
+#' pkonfound(two_by_two_table = my_table)
 #'
 #' @export
 
@@ -62,6 +71,7 @@ pkonfound <- function(est_eff = NULL,
                       b = NULL,
                       c = NULL,
                       d = NULL,
+                      two_by_two_table,
                       test = "fisher",
                       replace = "control",
                       to_return = "print") {
@@ -96,26 +106,42 @@ pkonfound <- function(est_eff = NULL,
                      test = test, 
                      replace = replace)
     
-  }  else {
-    out <- test_sensitivity(
-      est_eff = est_eff,
-      std_err = std_err,
-      n_obs = n_obs,
-      n_covariates = n_covariates,
-      alpha = alpha,
-      tails = tails,
-      nu = nu,
-      to_return = to_return
-    )
-  }
+  } else if(!is.null(two_by_two_table)) {
+    
+    a <- dplyr::pull(two_by_two_table[1, 1])
+    b <- dplyr::pull(two_by_two_table[1, 2])
+    c <- dplyr::pull(two_by_two_table[2, 1])
+    d <- dplyr::pull(two_by_two_table[2, 2])
+    
+    out <- tkonfound(a = a, 
+                     b = b, 
+                     c = c, 
+                     d = d, 
+                     alpha = alpha, 
+                     switch_trm = switch_trm,
+                     test = test, 
+                     replace = replace)
   
-  if (!is.null(out)) { # dealing with a strange print issue
-    return(out)
-  }
-  
-  if (to_return == "print") {
-    message("For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.")
-  }
-  
-  message("For models fit in R, consider use of konfound().")
+  } else {
+  out <- test_sensitivity(
+    est_eff = est_eff,
+    std_err = std_err,
+    n_obs = n_obs,
+    n_covariates = n_covariates,
+    alpha = alpha,
+    tails = tails,
+    nu = nu,
+    to_return = to_return
+  )
+}
+
+if (!is.null(out)) { # dealing with a strange print issue
+  return(out)
+}
+
+if (to_return == "print") {
+  message("For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.")
+}
+
+message("For models fit in R, consider use of konfound().")
 }

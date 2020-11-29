@@ -19,6 +19,7 @@ pkonfound(
   b = NULL,
   c = NULL,
   d = NULL,
+  two_by_two_table,
   test = "fisher",
   replace = "control",
   to_return = "print"
@@ -53,6 +54,8 @@ pkonfound(
 
 \item{d}{cell is the number of cases in the treatment group showing successful results}
 
+\item{two_by_two_table}{table that is a matrix or can be coerced to one (data.frame, tibble, tribble) from which the a, b, c, and d agruments can be extracted}
+
 \item{test}{whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test}
 
 \item{replace}{whether using entire sample or the control group to calculate the base rate; default is the entire sample}
@@ -84,13 +87,21 @@ pkonfound_output$thresh_plot
 pkonfound_output$corr_plot
 
 # using pkonfound for a logistic regression
-tkonfound(35, 17, 17, 38)
-tkonfound(35, 17, 17, 38, thr_p = 0.01)
-
-# using pkonfound for a 2x2 table
 pkonfound(35, 17, 17, 38)
 pkonfound(35, 17, 17, 38, thr_p = 0.01)
-pkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
-pkonfound(35, 17, 17, 38, test = "chisq")
+
+# using pkonfound for a 2x2 table
+pkonfound(a = 35, b = 17, c = 17, d = 38)
+pkonfound(a = 35, b = 17, c = 17, d = 38, thr_p = 0.01)
+pkonfound(a = 35, b = 17, c = 17, d = 38, thr_p = 0.01, switch_trm = FALSE)
+pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
+
+my_table <- tribble(
+~unsuccess, ~success,
+1,         2,
+3,         4,
+)
+
+pkonfound(two_by_two_table = my_table)
 
 }
