@@ -7,12 +7,22 @@
 #' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
 #' @param nu what hypothesis to be tested; defaults to testing whether est_eff is significantly different from 0
+
+#' @param non_linear whether the model is a non-linear model; defaults to FALSE
 #' @param n_trm the number of cases associated with the treatment condition; applicable only when non_linear = TRUE
 #' @param switch_trm whether to switch the treatment and control cases; defaults to FALSE; applicable only when non_linear - TRUE
-#' @param non_linear whether the model is a non-linear model; defaults to FALSE
+
+#' @param a cell is the number of cases in the control group showing unsuccessful results
+#' @param b cell is the number of cases in the control group showing successful results
+#' @param c cell is the number of cases in the treatment group showing unsuccessful results
+#' @param d cell is the number of cases in the treatment group showing successful results
+#' @param test whether using Fisher's Exact Test (default) or chi-square test
+#' @param replace whether using entire sample or the control group to calculate the base rate, with the default of the entire sample  
+
 #' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
+#' # using pkonfound for linear models
 #' pkonfound(2, .4, 100, 3)
 #' pkonfound(-2.2, .65, 200, 3)
 #' pkonfound(.5, 3, 200, 3)
@@ -20,7 +30,7 @@
 #'
 #' pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 #' pkonfound(2, .4, 100, 3, to_return = "corr_plot")
-#'
+#' 
 #' pkonfound_output <- pkonfound(2, .4, 200, 3,
 #'   to_return = c("raw_output", "thresh_plot", "corr_plot")
 #' )
@@ -28,6 +38,18 @@
 #' pkonfound_output$raw_output
 #' pkonfound_output$thresh_plot
 #' pkonfound_output$corr_plot
+#' 
+#' # using pkonfound for a logistic regression
+#' tkonfound(35, 17, 17, 38)
+#' tkonfound(35, 17, 17, 38, thr_p = 0.01)
+#' 
+#' # using pkonfound for a 2x2 table
+#' tkonfound(35, 17, 17, 38)
+#' tkonfound(35, 17, 17, 38, thr_p = 0.01)
+#' tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
+#' tkonfound(35, 17, 17, 38, test = "chisq")
+#'
+
 #' @export
 
 pkonfound <- function(est_eff,

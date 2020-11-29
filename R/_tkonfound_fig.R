@@ -18,7 +18,6 @@
 #' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
 #' tkonfound_fig(35, 17, 17, 38, thr_p - 0.01, switch_trm = TRUE, test = "chisq")
 #' tkonfound_fig(35, 17, 17, 38, thr_p - 0.01, switch_trm = TRUE, test = "chisq", replace = "control")
-#' @export
 
 tkonfound_fig <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, test = "fisher", replace = "control"){
 
