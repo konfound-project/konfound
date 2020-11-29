@@ -5,17 +5,22 @@
 \title{Perform sensitivity analysis for published studies}
 \usage{
 pkonfound(
-  est_eff,
-  std_err,
-  n_obs,
+  est_eff = NULL,
+  std_err = NULL,
+  n_obs = NULL,
   n_covariates = 1,
   alpha = 0.05,
   tails = 2,
   nu = 0,
   n_trm = NULL,
   switch_trm = TRUE,
-  replace = "entire",
-  non_linear = FALSE,
+  dichotomous = FALSE,
+  a = NULL,
+  b = NULL,
+  c = NULL,
+  d = NULL,
+  test = "fisher",
+  replace = "control",
   to_return = "print"
 )
 }
@@ -34,11 +39,23 @@ pkonfound(
 
 \item{nu}{what hypothesis to be tested; defaults to testing whether est_eff is significantly different from 0}
 
-\item{n_trm}{the number of cases associated with the treatment condition; applicable only when non_linear = TRUE}
+\item{n_trm}{the number of cases associated with the treatment condition; applicable only when dichotomous = TRUE}
 
-\item{switch_trm}{whether to switch the treatment and control cases; defaults to FALSE; applicable only when non_linear - TRUE}
+\item{switch_trm}{whether to switch the treatment and control cases; defaults to FALSE; applicable only when dichotomous - TRUE}
 
-\item{non_linear}{whether the model is a non-linear model; defaults to FALSE}
+\item{dichotomous}{whether the model is a non-linear model; defaults to FALSE}
+
+\item{a}{cell is the number of cases in the control group showing unsuccessful results}
+
+\item{b}{cell is the number of cases in the control group showing successful results}
+
+\item{c}{cell is the number of cases in the treatment group showing unsuccessful results}
+
+\item{d}{cell is the number of cases in the treatment group showing successful results}
+
+\item{test}{whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test}
+
+\item{replace}{whether using entire sample or the control group to calculate the base rate; default is the entire sample}
 
 \item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
 }
@@ -49,10 +66,11 @@ prints the bias and the number of cases that would have to be replaced with case
 For published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient.
 }
 \examples{
+# using pkonfound for linear models
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
-pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, non_linear = TRUE)
+pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, dichotomous = TRUE)
 
 pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 pkonfound(2, .4, 100, 3, to_return = "corr_plot")
@@ -64,4 +82,15 @@ summary(pkonfound_output)
 pkonfound_output$raw_output
 pkonfound_output$thresh_plot
 pkonfound_output$corr_plot
+
+# using pkonfound for a logistic regression
+tkonfound(35, 17, 17, 38)
+tkonfound(35, 17, 17, 38, thr_p = 0.01)
+
+# using pkonfound for a 2x2 table
+pkonfound(35, 17, 17, 38)
+pkonfound(35, 17, 17, 38, thr_p = 0.01)
+pkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
+pkonfound(35, 17, 17, 38, test = "chisq")
+
 }
