@@ -324,7 +324,7 @@ chisq_p <- function(a, b, c, d){
 # get p value for exact fisher p test
 fisher_p <- function(a, b, c, d){
   table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
-  p <- fisher.test(table)$p.value
+  p <- suppressWarnings(fisher.test(table)$p.value)
   return(p)
 }
 
@@ -338,7 +338,7 @@ chisq_value <- function(a, b, c, d){
 # get odds ratio for exact fisher p test 
 fisher_oddsratio <- function(a, b, c, d){
   table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
-  value <- fisher.test(table)$estimate
+  value <- suppressWarnings(fisher.test(table)$estimate)
   return(value)
 }
 

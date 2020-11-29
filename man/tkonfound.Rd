@@ -9,8 +9,8 @@ tkonfound(
   b,
   c,
   d,
-  thr_p = 0.05,
-  switch_trm = T,
+  alpha = 0.05,
+  switch_trm = TRUE,
   test = "fisher",
   replace = "control"
 )
@@ -24,13 +24,13 @@ tkonfound(
 
 \item{d}{cell is the number of cases in the treatment group showing successful results}
 
-\item{thr_p}{the p-value threshold used to evaluate statistical significance, with the default of 0.05}
+\item{alpha}{the p-value threshold used to evaluate statistical significance, with the default of 0.05}
 
 \item{switch_trm}{whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row}
 
 \item{test}{whether using Fisher's Exact Test (default) or chi-square test}
 
-\item{replace}{whether using entire sample or the control group to calculate the base rate, with the default of the entire sample}
+\item{replace}{whether using entire sample or the control group to calculate the base rate; defaults to the control group}
 }
 \value{
 prints a 2x2 table after switching cases from one cell to another so that the inference is invalidated about the association between the rows and columns
@@ -41,7 +41,7 @@ This function calculates the number of cases that would have to be switched from
 \examples{
 # using tkonfound for a 2x2 table
 tkonfound(35, 17, 17, 38)
-tkonfound(35, 17, 17, 38, thr_p = 0.01)
-tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
+tkonfound(35, 17, 17, 38, alpha = 0.01)
+tkonfound(35, 17, 17, 38, alpha = 0.01, switch_trm = FALSE)
 tkonfound(35, 17, 17, 38, test = "chisq")
 }
