@@ -51,7 +51,6 @@
 #' 
 #' pkonfound(two_by_two_table = my_table)
 #'
-
 #' @export
 
  pkonfound <- function(est_eff,

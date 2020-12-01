@@ -27,6 +27,7 @@ Description: Statistical methods that quantify the conditions necessary to alter
     own model, a single published study and multiple studies respectively.
 License: MIT + file LICENSE
 Imports: 
+    broom,
     broom.mixed,
     crayon,
     dplyr,
