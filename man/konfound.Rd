@@ -10,7 +10,11 @@ konfound(
   alpha = 0.05,
   tails = 2,
   to_return = "print",
-  test_all = FALSE
+  test_all = FALSE,
+  dichotomous_iv = FALSE,
+  n_trm = NULL,
+  switch_trm = TRUE,
+  replace = "entire"
 )
 }
 \arguments{
@@ -25,6 +29,14 @@ konfound(
 \item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
 
 \item{test_all}{whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)}
+
+\item{dichotomous_iv}{whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used; only works for single variables at present}
+
+\item{n_trm}{the number of cases associated with the treatment condition; applicable only when logistic = TRUE}
+
+\item{switch_trm}{whether to switch the treatment and control cases; defaults to FALSE; applicable only when logistic - TRUE}
+
+\item{replace}{whether using entire sample or the control group to calculate the base rate; default is the entire sample}
 }
 \value{
 prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference

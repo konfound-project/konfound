@@ -356,7 +356,6 @@ fisher_oddsratio <- function(a, b, c, d){
 #' getswitch_chisq(35, 17, 17, 38)
 #' getswitch_chisq(35, 17, 17, 38, thr_p = 0.01)
 #' getswitch_chisq(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
-#' @export
 getswitch_chisq <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
 odds_ratio <- a*d/(b*c)
 n_cnt <- a+b
@@ -707,7 +706,6 @@ return(result)
 #' getswitch_fisher(35, 17, 17, 38)
 #' getswitch_fisher(35, 17, 17, 38, thr_p = 0.01)
 #' getswitch_fisher(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
-#' @export
 getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
   if (a > 0 & b > 0 & c > 0 & d > 0){
     odds_ratio <- fisher_oddsratio(a, b, c, d)

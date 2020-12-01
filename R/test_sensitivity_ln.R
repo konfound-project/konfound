@@ -1,4 +1,3 @@
-
 # Main function to test sensitivity for non-linear models to be wrapped with pkonfound(), konfound(), and mkonfound()
 
 test_sensitivity_ln <- function(est_eff,
@@ -236,7 +235,6 @@ test_sensitivity_ln <- function(est_eff,
     total_RIR <- RIR
   }
   
-  
   result <- list(conclusion1,
                  Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
                  conclusion2, conclusion3, 
@@ -246,7 +244,6 @@ test_sensitivity_ln <- function(est_eff,
 #                 Taylor_predict = final_solution$taylor_pred, Percent_bias_predict = final_solution$perc_bias_pred,
                  total_RIR = total_RIR, total_switch = total_switch
   )
-  
   
   # output dispatch
   if (to_return == "print") {

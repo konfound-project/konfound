@@ -1,15 +1,15 @@
 # konfound-glm
 
-konfound_glm <- function(model_object, tested_variable_string, test_all, alpha, tails, to_return, dichotomous_iv) {
+konfound_glm_dichotomous <- function(model_object, tested_variable_string, test_all, alpha, tails, to_return, dichotomous_iv) {
   tidy_output <- broom::tidy(model_object) # tidying output
   glance_output <- broom::glance(model_object)
 
-  if (test_all == FALSE) {
-    coef_df <- tidy_output[tidy_output$term == tested_variable_string, ]
-  } else {
-    coef_df <- tidy_output[-1, ]
-    coef_df$est_eff <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
-  } # to remove intercept
+  # if (test_all == FALSE) {
+  coef_df <- tidy_output[tidy_output$term == tested_variable_string, ]
+  # } else {
+  #   coef_df <- tidy_output[-1, ]
+  #   coef_df$est_eff <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
+  # } # to remove intercept
 
   est_eff <- round(coef_df$estimate, 3)
   est_eff <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
@@ -18,11 +18,14 @@ konfound_glm <- function(model_object, tested_variable_string, test_all, alpha, 
   n_covariates <- glance_output$df.null - 2 # (for intercept and coefficient)
 
   if (test_all == FALSE) {
-    out <- test_sensitivity(
+    out <- test_sensitivity_ln(
       est_eff = est_eff,
       std_err = std_err,
       n_obs = n_obs,
       n_covariates = n_covariates,
+      n_trm = n_trm,
+      switch_trm = switch_trm,
+      replace = replace,
       alpha = alpha,
       tails = tails,
       nu = 0,

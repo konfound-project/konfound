@@ -3,6 +3,7 @@
 #' @param model_object output from a model (currently works for: lm)
 #' @param tested_variable Variable associated with the unstandardized beta coefficient to be tested
 #' @inheritParams pkonfound
+#' @param dichotomous_iv whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used; only works for single variables at present
 #' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @importFrom rlang .data
@@ -36,7 +37,11 @@ konfound <- function(model_object,
                      alpha = .05,
                      tails = 2,
                      to_return = "print",
-                     test_all = FALSE) {
+                     test_all = FALSE,
+                     dichotomous_iv = FALSE,
+                     n_trm = NULL,
+                     switch_trm = TRUE,
+                     replace = "entire") {
 
   # Stop messages
   if (!(class(model_object)[1] %in% c("lm", "glm", "lmerMod"))) {
@@ -67,20 +72,37 @@ konfound <- function(model_object,
     }
   }
 
-  if (inherits(model_object, "glm")) {
+  if (inherits(model_object, "glm") & dichotomous_iv == FALSE) {
     message("Note that for a non-linear model, impact threshold should not be interpreted.")
     message("Note that this is only an approximation. For exact results in terms of the number of cases that must be switched from treatment success to treatment failure to invalidate the inference see: https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm")
-
+    message("If a dichotomous independent variable is used, consider using the 2X2 table approach enabled with the argument dichotomous_iv = TRUE")
     output <- konfound_glm(
       model_object = model_object,
       tested_variable_string = tested_variable_string,
       test_all = test_all,
       alpha = alpha,
       tails = tails,
-      to_return = to_return
+      to_return = to_return,
+      dichotomous_iv = dichotomous_iv,
     )
 
     return(output)
+  } 
+  
+  if (inherits(model_object, "glm") & dichotomous_iv == TRUE) {
+    
+    output <- konfound_glm_dichotomous(
+      model_object = model_object,
+      tested_variable_string = tested_variable_string,
+      test_all = test_all,
+      alpha = alpha,
+      tails = tails,
+      to_return = to_return,
+      dichotomous_iv = dichotomous_iv,
+    )
+    
+    return(output)
+    
   }
 
   if (inherits(model_object, "lmerMod")) {
