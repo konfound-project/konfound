@@ -5,9 +5,9 @@
 \title{Perform sensitivity analysis for published studies}
 \usage{
 pkonfound(
-  est_eff = NULL,
-  std_err = NULL,
-  n_obs = NULL,
+  est_eff,
+  std_err,
+  n_obs,
   n_covariates = 1,
   alpha = 0.05,
   tails = 2,
@@ -69,7 +69,6 @@ prints the bias and the number of cases that would have to be replaced with case
 For published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient.
 }
 \examples{
-# using pkonfound for linear models
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)

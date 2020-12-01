@@ -55,11 +55,12 @@
 #' 
 #' pkonfound(two_by_two_table = my_table)
 #'
+
 #' @export
 
-pkonfound <- function(est_eff = NULL,
-                      std_err = NULL,
-                      n_obs = NULL,
+pkonfound <- function(est_eff,
+                      std_err,
+                      n_obs,
                       n_covariates = 1,
                       alpha = .05,
                       tails = 2,
