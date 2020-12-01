@@ -41,7 +41,7 @@ konfound <- function(model_object,
                      dichotomous_iv = FALSE,
                      n_trm = NULL,
                      switch_trm = TRUE,
-                     replace = "entire") {
+                     replace = "control") {
 
   # Stop messages
   if (!(class(model_object)[1] %in% c("lm", "glm", "lmerMod"))) {
