@@ -96,8 +96,7 @@ konfound <- function(model_object,
       test_all = test_all,
       alpha = alpha,
       tails = tails,
-      to_return = to_return,
-      dichotomous_iv = dichotomous_iv,
+      to_return = to_return
     )
     
     return(output)

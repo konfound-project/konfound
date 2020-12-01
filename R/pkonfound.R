@@ -18,6 +18,7 @@
 #' @param test whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test
 #' @param replace whether using entire sample or the control group to calculate the base rate; default is the entire sample
 #' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return
+#' @importFrom stats fisher.test
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
 #' # using pkonfound for linear models
