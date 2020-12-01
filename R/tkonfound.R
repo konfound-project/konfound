@@ -4,7 +4,7 @@
 #' @param b cell is the number of cases in the control group showing successful results
 #' @param c cell is the number of cases in the treatment group showing unsuccessful results
 #' @param d cell is the number of cases in the treatment group showing successful results
-#' @param thr_p the p-value threshold used to evaluate statistical significance, with the default of 0.05
+#' @param alpha the p-value threshold used to evaluate statistical significance, with the default of 0.05
 #' @param switch_trm whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row
 #' @param test whether using Fisher's Exact Test (default) or chi-square test
 #' @param replace whether using entire sample or the control group to calculate the base rate, with the default of the entire sample  
@@ -12,17 +12,17 @@
 #' @examples
 #' # using tkonfound for a 2x2 table
 #' tkonfound(35, 17, 17, 38)
-#' tkonfound(35, 17, 17, 38, thr_p = 0.01)
-#' tkonfound(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
+#' tkonfound(35, 17, 17, 38, alpha = 0.01)
+#' tkonfound(35, 17, 17, 38, alpha = 0.01, switch_trm = FALSE)
 #' tkonfound(35, 17, 17, 38, test = "chisq")
 #' @export
 
-tkonfound <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, test = "fisher", replace = "control"){
+tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher", replace = "control"){
 # a <- 35
 # b <- 17
 # c <- 17
 # d <- 38
-# thr_p <- 0.05
+# alpha <- 0.05
 # switch_trm <- T
 # test <- "fisher"
 
@@ -59,12 +59,12 @@ if (test == "chisq") {
 
 # get solution
 if (test == "chisq"){
-  solution <- getswitch_chisq(a, b, c, d, thr_p, switch_trm)
+  solution <- getswitch_chisq(a, b, c, d, alpha, switch_trm)
   chisq_final <- solution$chisq_final
 }
 
 if (test == "fisher"){
-  solution <- getswitch_fisher(a, b, c, d, thr_p, switch_trm)
+  solution <- getswitch_fisher(a, b, c, d, alpha, switch_trm)
   fisher_final <- solution$fisher_final
 }
   
@@ -131,7 +131,7 @@ if (allnotenough) {
   }
 }
 
-if (p_ob < thr_p) {
+if (p_ob < alpha) {
   change <- "To invalidate the inference,"
 } else {
     change <- "To sustain an inference,"

@@ -37,20 +37,16 @@
 #' pkonfound_output$thresh_plot
 #' pkonfound_output$corr_plot
 #' 
-#' # using pkonfound for a logistic regression
-#' pkonfound(35, 17, 17, 38)
-#' pkonfound(35, 17, 17, 38, thr_p = 0.01)
-#' 
 #' # using pkonfound for a 2x2 table
 #' pkonfound(a = 35, b = 17, c = 17, d = 38)
-#' pkonfound(a = 35, b = 17, c = 17, d = 38, thr_p = 0.01)
-#' pkonfound(a = 35, b = 17, c = 17, d = 38, thr_p = 0.01, switch_trm = FALSE)
+#' pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01)
+#' pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01, switch_trm = FALSE)
 #' pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
 #' 
-#' my_table <- tribble(
+#' my_table <- tibble::tribble(
 #' ~unsuccess, ~success,
-#' 1,         2,
-#' 3,         4,
+#' 35,         17,
+#' 17,         38,
 #' )
 #' 
 #' pkonfound(two_by_two_table = my_table)
@@ -58,7 +54,7 @@
 
 #' @export
 
-pkonfound <- function(est_eff,
+ pkonfound <- function(est_eff,
                       std_err,
                       n_obs,
                       n_covariates = 1,
@@ -72,7 +68,7 @@ pkonfound <- function(est_eff,
                       b = NULL,
                       c = NULL,
                       d = NULL,
-                      two_by_two_table,
+                      two_by_two_table = NULL,
                       test = "fisher",
                       replace = "control",
                       to_return = "print") {

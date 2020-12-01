@@ -19,7 +19,7 @@ pkonfound(
   b = NULL,
   c = NULL,
   d = NULL,
-  two_by_two_table,
+  two_by_two_table = NULL,
   test = "fisher",
   replace = "control",
   to_return = "print"
@@ -69,6 +69,7 @@ prints the bias and the number of cases that would have to be replaced with case
 For published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient.
 }
 \examples{
+# using pkonfound for linear models
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
@@ -85,20 +86,16 @@ pkonfound_output$raw_output
 pkonfound_output$thresh_plot
 pkonfound_output$corr_plot
 
-# using pkonfound for a logistic regression
-pkonfound(35, 17, 17, 38)
-pkonfound(35, 17, 17, 38, thr_p = 0.01)
-
 # using pkonfound for a 2x2 table
 pkonfound(a = 35, b = 17, c = 17, d = 38)
-pkonfound(a = 35, b = 17, c = 17, d = 38, thr_p = 0.01)
-pkonfound(a = 35, b = 17, c = 17, d = 38, thr_p = 0.01, switch_trm = FALSE)
+pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01)
+pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01, switch_trm = FALSE)
 pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
 
-my_table <- tribble(
+my_table <- tibble::tribble(
 ~unsuccess, ~success,
-1,         2,
-3,         4,
+35,         17,
+17,         38,
 )
 
 pkonfound(two_by_two_table = my_table)

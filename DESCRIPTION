@@ -34,7 +34,8 @@ Imports:
     mice,
     purrr,
     rlang,
-    tidyr
+    tidyr,
+    tibble
 Suggests: 
     margins,
     pbkrtest,
