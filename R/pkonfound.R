@@ -101,7 +101,8 @@
                      alpha = alpha, 
                      switch_trm = switch_trm,
                      test = test, 
-                     replace = replace)
+                     replace = replace,
+                     to_return = to_return)
     
   } else if(!is.null(two_by_two_table)) {
     
@@ -117,7 +118,8 @@
                      alpha = alpha, 
                      switch_trm = switch_trm,
                      test = test, 
-                     replace = replace)
+                     replace = replace,
+                     to_return = to_return)
   
   } else {
   out <- test_sensitivity(
@@ -137,7 +139,7 @@ if (!is.null(out)) { # dealing with a strange print issue
 }
 
 if (to_return == "print") {
-  message("For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.")
+  message("For other forms of output, run ?pkonfound and inspect the to_return argument")
 }
 
 message("For models fit in R, consider use of konfound().")
