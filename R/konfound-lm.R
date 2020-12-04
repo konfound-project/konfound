@@ -12,7 +12,7 @@ konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, t
 
   est_eff <- round(coef_df$estimate, 3)
   std_err <- round(coef_df$std.error, 3)
-  n_obs <- glance_output$df + glance_output$df.residual
+  n_obs <- glance_output$nobs
   n_covariates <- glance_output$df - 2 # (for intercept and coefficient)
 
   if (test_all == FALSE) {

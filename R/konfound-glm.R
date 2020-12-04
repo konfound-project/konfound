@@ -14,7 +14,7 @@ konfound_glm <- function(model_object, tested_variable_string, test_all, alpha, 
   est_eff <- round(coef_df$estimate, 3)
   est_eff <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
   std_err <- round(coef_df$std.error, 3)
-  n_obs <- glance_output$df.null
+  n_obs <- glance_output$nobs
   n_covariates <- glance_output$df.null - 2 # (for intercept and coefficient)
 
   if (test_all == FALSE) {
