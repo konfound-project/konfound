@@ -93,6 +93,29 @@ Finally, you can return the raw output, for use in other analyses.
 pkonfound(.4, 2, 100, 3, to_return = "raw_output")
 ```
 
+This function can be used with the values from a two-by-two table associated with an intervention (represented as a dichotomous predictor variable) that is related with a binary outcome, such as one that could be modeled using a logistic regression. Below:
+
+- `a` represents an unsuccessful control group outcome
+- `b` represents a successful control group outcome
+- `c` represents an unsuccessful treatment group outcome
+- `d` represents a successful treatment group outcome
+
+```{r}
+pkonfound(a = 35, b = 17, c = 17, d = 38)
+```
+
+A table can also be passed to this function: 
+
+```{r}
+my_table <- tibble::tribble(
+~unsuccess, ~success,
+35,         17,
+17,         38,
+)
+
+pkonfound(two_by_two_table = my_table)
+```
+
 ## Use of konfound() for models fit in R
 
 Where `pkonfound()` can be used with values from already-conducted analyses, `konfound()` can be used with models (`lm()`, `glm()`, and `lme4::lmer()`) fit in R.
@@ -134,7 +157,7 @@ konfound(m1, wt, to_return = "table")
 
 If the impact threshhold is greater than the impacts of the `Z`s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference. Note that in fields in which there is a lot known about covariates given the outcome of interest, then the omitted ones are likely less important than those that are known an included (i.e., we have a good sense of the factors that matter in terms of educational achievement).
 
-**For generalized linear models fit with glm()**
+**For logistic regression models fit with glm()**
 
 Effects for these models are interpreted on the basis of average partial (or marginal) effects (calculated using the `margins` package).
 
@@ -148,6 +171,13 @@ if (requireNamespace("forcats")) {
     m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
     konfound(m2, age)
 }
+```
+
+**For logistic regression models fit with glm() with a dichotomous predictor of interest**
+
+```{r, eval = FALSE}
+m4 <- glm(outcome ~ condition, data = binary_dummy_data)
+konfound(m4, condition, dichotomous_iv = TRUE)
 ```
 
 As with models fit with `lm()` (and use of `pkonfound()`), multiple forms of output can be specified with the `to_return` argument to `konfound()`, i.e. `konfound(m2, age, to_return = c("raw_output", "corr_plot", "thresh_plot"))`.

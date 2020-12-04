@@ -7,7 +7,6 @@
 status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 [![R build
 status](https://github.com/jrosen48/konfound/workflows/R-CMD-check/badge.svg)](https://github.com/jrosen48/konfound/actions)
-
 <!-- badges: end -->
 
 # konfound
@@ -39,7 +38,7 @@ devtools::install_github("jrosen48/konfound")
 
 # Use of konfound
 
-#### pkonfound() for published studies
+## pkonfound() for published studies
 
 `pkonfound()`, for published studies, calculates (1) how much bias there
 must be in an estimate to invalidate/sustain an inference; (2) the
@@ -59,7 +58,7 @@ pkonfound(est_eff = 2,
           n_covariates = 3)
 #> Percent Bias Necessary to Invalidate the Inference:
 #> To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
-#> To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0.
+#> To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0 (RIR = 60).
 #> See Frank et al. (2013) for a description of the method
 #> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
 #> Impact Threshold for a Confounding Variable:
@@ -67,11 +66,11 @@ pkonfound(est_eff = 2,
 #> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null hypothesis of 0 effect.
 #> See Frank (2000) for a description of the method
 #> Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194
-#> For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.
+#> For other forms of output, run ?pkonfound and inspect the to_return argument
 #> For models fit in R, consider use of konfound().
 ```
 
-#### konfound() for models fit in R
+## konfound() for models fit in R
 
 `konfound()` calculates the same for models fit in R. For example, here
 are the coefficients for a linear model fit with `lm()` using the
@@ -116,7 +115,7 @@ as follows, specifying the fitted model object:
 konfound(m1, wt)
 #> Percent Bias Necessary to Invalidate the Inference:
 #> To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).
-#> To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0.
+#> To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0 (RIR = 21).
 #> See Frank et al. (2013) for a description of the method
 #> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
 #> Impact Threshold for a Confounding Variable:
@@ -128,7 +127,7 @@ konfound(m1, wt)
 #> To consider other predictors of interest, consider setting `test_all` to TRUE.
 ```
 
-#### mkonfound for meta-analyses including sensitivity analysis
+## mkonfound for meta-analyses including sensitivity analysis
 
 We can use an existing dataset, such as the CSV file
 [here](https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv).
@@ -159,6 +158,24 @@ mkonfound(d, t, df)
 #> 10 -2.05    195 to_invalid… reject_null                        3.51  0.006 0.077
 #> # … with 20 more rows
 ```
+
+# Overview of available functionality
+
+The above functions have a number of extensions; the below tables
+represent how `pkonfound()` and `konfound()` can be used:
+
+| Outcome    | Predictor: Continuous                              | Predictor: Binary                                                                                     |
+| :--------- | :------------------------------------------------- | :---------------------------------------------------------------------------------------------------- |
+| Continuous | `pkonfound(est_eff, std_err, n_obs, n_covariates)` | `pkonfound(est_eff, std_err, n_obs, n_covariates)`                                                    |
+| Logistic   | `pkonfound(est_eff, std_err, n_obs, n_covariates)` | `pkonfound(est_eff, std_err, n_obs, n_covariates, n_trm, logistic = TRUE)` or `pkonfound(a, b, c, d)` |
+
+| Outcome    | Predictor: Continuous | Predictor: Binary                        |
+| :--------- | :-------------------- | :--------------------------------------- |
+| Continuous | `konfound(m, var)`    | `konfound(m, var)`                       |
+| Logistic   | `konfound(m, var)`    | `konfound(m, var, dichotomous_iv = TRUE` |
+
+Note that there are additional arguments for each of thes functions; see
+`?pkonfound()` or `?konfound()` for more details.
 
 # Other information
 

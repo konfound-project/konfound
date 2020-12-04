@@ -54,7 +54,7 @@ pkonfound(
 
 \item{d}{cell is the number of cases in the treatment group showing successful results}
 
-\item{two_by_two_table}{table that is a matrix or can be coerced to one (data.frame, tibble, tribble) from which the a, b, c, and d agruments can be extracted}
+\item{two_by_two_table}{table that is a matrix or can be coerced to one (data.frame, tibble, tribble) from which the a, b, c, and d arguments can be extracted}
 
 \item{test}{whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test}
 
@@ -92,12 +92,5 @@ pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01)
 pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01, switch_trm = FALSE)
 pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
 
-my_table <- tibble::tribble(
-~unsuccess, ~success,
-35,         17,
-17,         38,
-)
-
-pkonfound(two_by_two_table = my_table)
 
 }

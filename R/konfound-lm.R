@@ -10,10 +10,10 @@ konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, t
     coef_df <- tidy_output[-1, ]
   } # to remove intercept
 
-  est_eff <- round(coef_df$estimate, 3)
-  std_err <- round(coef_df$std.error, 3)
+  est_eff <- coef_df$estimate
+  std_err <- coef_df$std.error
   n_obs <- glance_output$nobs
-  n_covariates <- glance_output$df - 2 # (for intercept and coefficient)
+  n_covariates <- glance_output$df
 
   if (test_all == FALSE) {
     out <- test_sensitivity(

@@ -1,23 +1,4 @@
-#' Perform sensitivity analysis for a 2x2 table
-#' @description This function calculates the number of cases that would have to be switched from one cell to another of a 2x2 table to invalidate an inference made about the association between the rows and columns. Or how many cases need to be replaced with null hypothesis cases to change the inference. This can be applied to treatment vs control with successful vs unsuccessful outcomes.
-#' @param a cell is the number of cases in the control group showing unsuccessful results
-#' @param b cell is the number of cases in the control group showing successful results
-#' @param c cell is the number of cases in the treatment group showing unsuccessful results
-#' @param d cell is the number of cases in the treatment group showing successful results
-#' @param alpha the p-value threshold used to evaluate statistical significance, with the default of 0.05
-#' @param switch_trm whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row
-#' @param test whether using Fisher's Exact Test (default) or chi-square test
-#' @param replace whether using entire sample or the control group to calculate the base rate, with the default of the entire sample  
-#' @return prints a 2x2 table after switching cases from one cell to another so that the inference is invalidated about the association between the rows and columns 
-#' @examples
-#' # using tkonfound for a 2x2 table
-#' tkonfound(35, 17, 17, 38)
-#' tkonfound(35, 17, 17, 38, alpha = 0.01)
-#' tkonfound(35, 17, 17, 38, alpha = 0.01, switch_trm = FALSE)
-#' tkonfound(35, 17, 17, 38, test = "chisq")
-#' @export
-
-tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher", replace = "control", to_return){
+tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher", replace = "control", to_return = to_return){
   # a <- 35
   # b <- 17
   # c <- 17
@@ -157,7 +138,7 @@ tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher",
   }
   
   if (allnotenough){
-    conclusion1 <- paste9(
+    conclusion1 <- paste(
       change, c("only transferring cases from" ), transferway,
       sprintf(" is not enough. We also need to transfer %d cases from ", final_extra),
       transferway_extra, c(" as shown, from the User-entered Table to the Transfer Table."),

@@ -5,18 +5,17 @@ konfound_glm_dichotomous <- function(model_object, tested_variable_string, test_
   tidy_output <- broom::tidy(model_object) # tidying output
   glance_output <- broom::glance(model_object)
 
-  # if (test_all == FALSE) {
   coef_df <- tidy_output[tidy_output$term == tested_variable_string, ]
-  # } else {
-  #   coef_df <- tidy_output[-1, ]
-  #   coef_df$est_eff <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
-  # } # to remove intercept
 
   est_eff <- round(coef_df$estimate, 3)
   est_eff <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
   std_err <- round(coef_df$std.error, 3)
   n_obs <- glance_output$nobs
-  n_covariates <- glance_output$df.null - 2 # (for intercept and coefficient)
+  n_covariates <- glance_output$df.null - glance_output$df.residual
+  
+  n_trm <- as.vector(table(pull(model_object$data[, tested_variable_string]))[2]) # access number of values equal to 1
+  
+  #tidy_output[tidy_output$term == "(Intercept)", ]$estimate
 
     out <- test_sensitivity_ln(
       est_eff = est_eff,
@@ -33,6 +32,7 @@ konfound_glm_dichotomous <- function(model_object, tested_variable_string, test_
       model_object = model_object,
       tested_variable = tested_variable_string
     )
+    
     return(out)
 
 }
