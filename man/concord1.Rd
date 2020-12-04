@@ -7,9 +7,6 @@
 \format{
 A data.frame with 496 rows and 10 variables.
 }
-\usage{
-data(concord1)
-}
 \description{
 This data is from Hamilton (1983)
 }
