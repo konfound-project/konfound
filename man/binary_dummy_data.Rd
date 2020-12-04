@@ -3,7 +3,7 @@
 \docType{data}
 \name{binary_dummy_data}
 \alias{binary_dummy_data}
-\title{Concord1 data}
+\title{Binary dummy data}
 \format{
 A data.frame with 107 rows and 2 variables.
 }

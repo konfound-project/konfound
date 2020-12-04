@@ -1,4 +1,4 @@
-#'  Concord1 data
+#'  Binary dummy data
 #'
 #' This data is made-up data for use in examples.
 #'
