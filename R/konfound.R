@@ -31,8 +31,8 @@
 #'   konfound(m3, Days)
 #' }
 #' 
-#' # m4 <- glm(outcome ~ condition, data = binary_dummy_data)
-#' # konfound(m4, condition, dichotomous_iv = TRUE)
+#' m4 <- glm(outcome ~ condition, data = binary_dummy_data, family = binomial(link = "logit"))
+#' konfound(m4, condition, dichotomous_iv = TRUE)
 #' 
 
 #' @export
@@ -95,6 +95,7 @@ konfound <- function(model_object,
   
   if (inherits(model_object, "glm") & dichotomous_iv == TRUE) {
     
+    if(is.null(n_trm)) stop("Please provide a value for n_trm to use this functionality with a dichotomous predictor")
     if (test_all == TRUE) stop("test_all = TRUE is not supported when dichotomous_iv is specified")
     
     output <- konfound_glm_dichotomous(

@@ -29,6 +29,7 @@ tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher",
   
   # this is the 2 by 2 table we start with
   table_ob <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
+
   if (test == "fisher") {
     p_ob <- fisher_p(a, b, c, d)
     fisher_ob <- fisher_oddsratio(a, b, c, d)

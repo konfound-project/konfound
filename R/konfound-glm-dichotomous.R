@@ -13,10 +13,6 @@ konfound_glm_dichotomous <- function(model_object, tested_variable_string, test_
   n_obs <- glance_output$nobs
   n_covariates <- glance_output$df.null - glance_output$df.residual
   
-  n_trm <- as.vector(table(pull(model_object$data[, tested_variable_string]))[2]) # access number of values equal to 1
-  
-  #tidy_output[tidy_output$term == "(Intercept)", ]$estimate
-
     out <- test_sensitivity_ln(
       est_eff = est_eff,
       std_err = std_err,
