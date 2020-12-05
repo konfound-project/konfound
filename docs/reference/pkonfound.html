@@ -142,8 +142,14 @@
   nu <span class='op'>=</span> <span class='fl'>0</span>,
   n_trm <span class='op'>=</span> <span class='cn'>NULL</span>,
   switch_trm <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  replace <span class='op'>=</span> <span class='st'>"entire"</span>,
-  non_linear <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  logistic <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  a <span class='op'>=</span> <span class='cn'>NULL</span>,
+  b <span class='op'>=</span> <span class='cn'>NULL</span>,
+  c <span class='op'>=</span> <span class='cn'>NULL</span>,
+  d <span class='op'>=</span> <span class='cn'>NULL</span>,
+  two_by_two_table <span class='op'>=</span> <span class='cn'>NULL</span>,
+  test <span class='op'>=</span> <span class='st'>"fisher"</span>,
+  replace <span class='op'>=</span> <span class='st'>"control"</span>,
   to_return <span class='op'>=</span> <span class='st'>"print"</span>
 <span class='op'>)</span></pre>
 
@@ -180,15 +186,43 @@
     </tr>
     <tr>
       <th>n_trm</th>
-      <td><p>the number of cases associated with the treatment condition; applicable only when non_linear = TRUE</p></td>
+      <td><p>the number of cases associated with the treatment condition; applicable only when logistic = TRUE</p></td>
     </tr>
     <tr>
       <th>switch_trm</th>
-      <td><p>whether to switch the treatment and control cases; defaults to FALSE; applicable only when non_linear - TRUE</p></td>
+      <td><p>whether to switch the treatment and control cases; defaults to FALSE; applicable only when logistic - TRUE</p></td>
     </tr>
     <tr>
-      <th>non_linear</th>
-      <td><p>whether the model is a non-linear model; defaults to FALSE</p></td>
+      <th>logistic</th>
+      <td><p>whether the model is a logistic regression with a binomial outcome distribution; defaults to FALSE</p></td>
+    </tr>
+    <tr>
+      <th>a</th>
+      <td><p>cell is the number of cases in the control group showing unsuccessful results</p></td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td><p>cell is the number of cases in the control group showing successful results</p></td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td><p>cell is the number of cases in the treatment group showing unsuccessful results</p></td>
+    </tr>
+    <tr>
+      <th>d</th>
+      <td><p>cell is the number of cases in the treatment group showing successful results</p></td>
+    </tr>
+    <tr>
+      <th>two_by_two_table</th>
+      <td><p>table that is a matrix or can be coerced to one (data.frame, tibble, tribble) from which the a, b, c, and d arguments can be extracted</p></td>
+    </tr>
+    <tr>
+      <th>test</th>
+      <td><p>whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test</p></td>
+    </tr>
+    <tr>
+      <th>replace</th>
+      <td><p>whether using entire sample or the control group to calculate the base rate; default is the entire sample</p></td>
     </tr>
     <tr>
       <th>to_return</th>
@@ -201,7 +235,8 @@
     <p>prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='co'># using pkonfound for linear models</span>
+<span class='fu'>pkonfound</span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>.4</span>, <span class='fl'>100</span>, <span class='fl'>3</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
 #&gt; </span><span>To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
 #&gt; To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0 (RIR = 60).
@@ -211,7 +246,7 @@
 #&gt; </span><span>The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.201 for statistical significance (alpha = 0.05).
 #&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null hypothesis of 0 effect.
 #&gt; See Frank (2000) for a description of the method
-#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='op'>-</span><span class='fl'>2.2</span>, <span class='fl'>.65</span>, <span class='fl'>200</span>, <span class='fl'>3</span><span class='op'>)</span>
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, run ?pkonfound and inspect the to_return argument</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='op'>-</span><span class='fl'>2.2</span>, <span class='fl'>.65</span>, <span class='fl'>200</span>, <span class='fl'>3</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
 #&gt; </span><span>To invalidate an inference, 41.732% of the estimate would have to be due to bias. This is based on a threshold of -1.282 for statistical significance (alpha = 0.05).
 #&gt; To invalidate an inference, 83 observations would have to be replaced with cases for which the effect is 0 (RIR = 83).
@@ -221,7 +256,7 @@
 #&gt; </span><span>The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.334 with the outcome and at 0.334 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.14 for statistical significance (alpha = 0.05).
 #&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.334 X 0.334 = 0.112 to invalidate an inference for a null hypothesis of 0 effect.
 #&gt; See Frank (2000) for a description of the method
-#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>3</span>, <span class='fl'>200</span>, <span class='fl'>3</span><span class='op'>)</span>
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, run ?pkonfound and inspect the to_return argument</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='fl'>.5</span>, <span class='fl'>3</span>, <span class='fl'>200</span>, <span class='fl'>3</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
 #&gt; </span><span>To sustain an inference, 91.549% of the estimate would have to be due to bias. This is based on a threshold of 5.916 for statistical significance (alpha = 0.05).
 #&gt; To sustain an inference, 183 of the cases with 0 effect would have to be replaced with cases at the threshold of inference (RIR = 183).
@@ -231,7 +266,7 @@
 #&gt; </span><span>The maximum impact to sustain an inference for a null hypothesis of 0 effect is based on a correlation of 0.335 with the outcome and at 0.335 with the predictor of interest (conditioning on observed covariates) based on a threshold of 5.916 for statistical significance (alpha = 0.05).
 #&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.335 X 0.335 = 0.112 to sustain an inference for a null hypothesis of 0 effect.
 #&gt; See Frank (2000) for a description of the method
-#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, change `to_return` to table, raw_output, thres_plot, or corr_plot.</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='op'>-</span><span class='fl'>0.2</span>, <span class='fl'>0.103</span>, <span class='fl'>20888</span>, <span class='fl'>3</span>, n_trm <span class='op'>=</span> <span class='fl'>17888</span>, non_linear <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, run ?pkonfound and inspect the to_return argument</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='op'>-</span><span class='fl'>0.2</span>, <span class='fl'>0.103</span>, <span class='fl'>20888</span>, <span class='fl'>3</span>, n_trm <span class='op'>=</span> <span class='fl'>17888</span>, logistic <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Note that this output is from an approach for non-linear models that is developmental and unpublished</span></div><div class='output co'>#&gt; [[1]]
 #&gt; [1] "To sustain an inference for a negative treatment effect, you would need to replace 1 treatment success cases with null hypothesis cases (RIR = 1). This is equivalent to transferring 1 case from treatment success to treatment failure, as shown, from the Implied Table to the Transfer Table."
 #&gt; 
@@ -288,7 +323,95 @@
 #&gt; </span><span style='color: #555555;'>1</span><span> to_in… reject_n…             60.6              121          2           0.789
 #&gt; </span><span style='color: #555555;'># … with 2 more variables: omitted_variable_corr </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, itcv </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'><span class='va'>pkonfound_output</span><span class='op'>$</span><span class='va'>thresh_plot</span>
 </div><div class='img'><img src='pkonfound-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>pkonfound_output</span><span class='op'>$</span><span class='va'>corr_plot</span>
-</div><div class='img'><img src='pkonfound-4.png' alt='' width='700' height='433' /></div></span></pre>
+</div><div class='img'><img src='pkonfound-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># using pkonfound for a 2x2 table</span>
+<span class='fu'>pkonfound</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>35</span>, b <span class='op'>=</span> <span class='fl'>17</span>, c <span class='op'>=</span> <span class='fl'>17</span>, d <span class='op'>=</span> <span class='fl'>38</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Background Information:</span><span>
+#&gt; This function calculates the number of cases that would have to be replaced with no effect cases (RIR) to invalidate an inference made about the association between the rows and columns in a 2x2 table. One can also interpret this as switches from one cell to another, such as from the treatment success cell to the treatment failure cell.
+#&gt; 
+#&gt; </span><span style='font-weight: bold;'>Conclusion:</span><span>
+#&gt; To invalidate the inference,you would need to replace 13 treatment success cases with null hypothesis cases (RIR = 13). This is equivalent to transferring 9 cases from treatment success to treatment failure.
+#&gt; 
+#&gt; For the User-entered Table, we have an estimated odds ratio of 4.530, with p-value of 0.000:
+#&gt; </span><span style='text-decoration: underline;'>User-entered Table:</span><span>
+#&gt;           Fail Success
+#&gt; Control     35      17
+#&gt; Treatment   17      38
+#&gt; 
+#&gt; 
+#&gt; For the Transfer Table, we have an estimated odds ratio of 2.278, with p-value of 0.051:
+#&gt; </span><span style='text-decoration: underline;'>Transfer Table:</span><span>
+#&gt;           Fail Success
+#&gt; Control     35      17
+#&gt; Treatment   26      29
+#&gt; 
+#&gt; </span><span style='font-weight: bold;'>RIR:</span><span>
+#&gt; RIR = 13</div><div class='output co'>#&gt; <span class='message'>For other forms of output, run ?pkonfound and inspect the to_return argument</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>35</span>, b <span class='op'>=</span> <span class='fl'>17</span>, c <span class='op'>=</span> <span class='fl'>17</span>, d <span class='op'>=</span> <span class='fl'>38</span>, alpha <span class='op'>=</span> <span class='fl'>0.01</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Background Information:</span><span>
+#&gt; This function calculates the number of cases that would have to be replaced with no effect cases (RIR) to invalidate an inference made about the association between the rows and columns in a 2x2 table. One can also interpret this as switches from one cell to another, such as from the treatment success cell to the treatment failure cell.
+#&gt; 
+#&gt; </span><span style='font-weight: bold;'>Conclusion:</span><span>
+#&gt; To invalidate the inference,you would need to replace 9 treatment success cases with null hypothesis cases (RIR = 9). This is equivalent to transferring 6 cases from treatment success to treatment failure.
+#&gt; 
+#&gt; For the User-entered Table, we have an estimated odds ratio of 4.530, with p-value of 0.000:
+#&gt; </span><span style='text-decoration: underline;'>User-entered Table:</span><span>
+#&gt;           Fail Success
+#&gt; Control     35      17
+#&gt; Treatment   17      38
+#&gt; 
+#&gt; 
+#&gt; For the Transfer Table, we have an estimated odds ratio of 2.835, with p-value of 0.011:
+#&gt; </span><span style='text-decoration: underline;'>Transfer Table:</span><span>
+#&gt;           Fail Success
+#&gt; Control     35      17
+#&gt; Treatment   23      32
+#&gt; 
+#&gt; </span><span style='font-weight: bold;'>RIR:</span><span>
+#&gt; RIR = 9</div><div class='output co'>#&gt; <span class='message'>For other forms of output, run ?pkonfound and inspect the to_return argument</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>35</span>, b <span class='op'>=</span> <span class='fl'>17</span>, c <span class='op'>=</span> <span class='fl'>17</span>, d <span class='op'>=</span> <span class='fl'>38</span>, alpha <span class='op'>=</span> <span class='fl'>0.01</span>, switch_trm <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Background Information:</span><span>
+#&gt; This function calculates the number of cases that would have to be replaced with no effect cases (RIR) to invalidate an inference made about the association between the rows and columns in a 2x2 table. One can also interpret this as switches from one cell to another, such as from the treatment success cell to the treatment failure cell.
+#&gt; 
+#&gt; </span><span style='font-weight: bold;'>Conclusion:</span><span>
+#&gt; To invalidate the inference,you would need to replace 18 control failure cases with null hypothesis cases (RIR = 18). This is equivalent to transferring 6 cases from control failure to control success.
+#&gt; 
+#&gt; For the User-entered Table, we have an estimated odds ratio of 4.530, with p-value of 0.000:
+#&gt; </span><span style='text-decoration: underline;'>User-entered Table:</span><span>
+#&gt;           Fail Success
+#&gt; Control     35      17
+#&gt; Treatment   17      38
+#&gt; 
+#&gt; 
+#&gt; For the Transfer Table, we have an estimated odds ratio of 2.790, with p-value of 0.012:
+#&gt; </span><span style='text-decoration: underline;'>Transfer Table:</span><span>
+#&gt;           Fail Success
+#&gt; Control     29      23
+#&gt; Treatment   17      38
+#&gt; 
+#&gt; </span><span style='font-weight: bold;'>RIR:</span><span>
+#&gt; RIR = 18</div><div class='output co'>#&gt; <span class='message'>For other forms of output, run ?pkonfound and inspect the to_return argument</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>35</span>, b <span class='op'>=</span> <span class='fl'>17</span>, c <span class='op'>=</span> <span class='fl'>17</span>, d <span class='op'>=</span> <span class='fl'>38</span>, test <span class='op'>=</span> <span class='st'>"chisq"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Background Information:</span><span>
+#&gt; This function calculates the number of cases that would have to be replaced with no effect cases (RIR) to invalidate an inference made about the association between the rows and columns in a 2x2 table. One can also interpret this as switches from one cell to another, such as from the treatment success cell to the treatment failure cell.
+#&gt; 
+#&gt; </span><span style='font-weight: bold;'>Conclusion:</span><span>
+#&gt; To invalidate the inference,you would need to replace 15 treatment success cases with null hypothesis cases (RIR = 15). This is equivalent to transferring 10 cases from treatment success to treatment failure.
+#&gt; 
+#&gt; For the User-entered Table, we have a Pearson's chi square of 14.176, with p-value of 0.000:
+#&gt; </span><span style='text-decoration: underline;'>User-entered Table:</span><span>
+#&gt;           Fail Success
+#&gt; Control     35      17
+#&gt; Treatment   17      38
+#&gt; 
+#&gt; 
+#&gt; For the Transfer Table, we have a Pearson's chi square of 3.640, with p-value of 0.056:
+#&gt; </span><span style='text-decoration: underline;'>Transfer Table:</span><span>
+#&gt;           Fail Success
+#&gt; Control     35      17
+#&gt; Treatment   27      28
+#&gt; 
+#&gt; </span><span style='font-weight: bold;'>RIR:</span><span>
+#&gt; RIR = 15</div><div class='output co'>#&gt; <span class='message'>For other forms of output, run ?pkonfound and inspect the to_return argument</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'>
+
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
