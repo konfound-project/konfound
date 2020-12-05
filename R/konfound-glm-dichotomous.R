@@ -7,9 +7,8 @@ konfound_glm_dichotomous <- function(model_object, tested_variable_string, test_
 
   coef_df <- tidy_output[tidy_output$term == tested_variable_string, ]
 
-  est_eff <- round(coef_df$estimate, 3)
-  est_eff <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
-  std_err <- round(coef_df$std.error, 3)
+  est_eff <- coef_df$estimate
+  std_err <- coef_df$std.error
   n_obs <- glance_output$nobs
   n_covariates <- glance_output$df.null - glance_output$df.residual
   

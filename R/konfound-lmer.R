@@ -13,8 +13,8 @@ konfound_lmer <- function(model_object, tested_variable_string, test_all, alpha,
 
   if (test_all == FALSE) {
     coef_df <- tidy_output[tidy_output$term == tested_variable_string, ]
-    est_eff <- round(coef_df$estimate, 3)
-    std_err <- round(coef_df$std.error, 3)
+    est_eff <- coef_df$estimate
+    std_err <- coef_df$std.error
     df_kr <- get_kr_df(model_object)
     df_kr <- df_kr[names(df_kr) == tested_variable_string]
   } else {
