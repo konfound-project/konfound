@@ -1,3 +1,7 @@
+# konfound 0.3.0
+
+* integrate non-linear functions in `tkonfound()` into `pkonfound()` and `konfound()`
+
 # konfound 0.2.1
 
 * Refinements and bug fixes for the non-linear functions

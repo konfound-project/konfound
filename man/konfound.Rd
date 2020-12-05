@@ -68,7 +68,7 @@ if (requireNamespace("lme4")) {
   konfound(m3, Days)
 }
 
-# m4 <- glm(outcome ~ condition, data = binary_dummy_data)
-# konfound(m4, condition, dichotomous_iv = TRUE)
+m4 <- glm(outcome ~ condition, data = binary_dummy_data, family = binomial(link = "logit"))
+konfound(m4, condition, dichotomous_iv = TRUE)
 
 }
