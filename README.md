@@ -204,5 +204,5 @@ file).
 
 ### Code of Conduct
 
-Please note that this project is released with a Contributor Code of
+gPlease note that this project is released with a Contributor Code of
 Conduct available at <http://contributor-covenant.org/version/1/0/0/>

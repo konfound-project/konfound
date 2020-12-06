@@ -114,4 +114,4 @@ We prefer for issues to be filed via GitHub (link to the issues page for `konfou
 
 ### Code of Conduct
 
-Please note that this project is released with a Contributor Code of Conduct available at [http://contributor-covenant.org/version/1/0/0/](http://contributor-covenant.org/version/1/0/0/)
+gPlease note that this project is released with a Contributor Code of Conduct available at [http://contributor-covenant.org/version/1/0/0/](http://contributor-covenant.org/version/1/0/0/)
