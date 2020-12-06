@@ -165,7 +165,7 @@ tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher",
   
   info1 <- "This function calculates the number of cases that would have to be replaced with no effect cases (RIR) to invalidate an inference made about the association between the rows and columns in a 2x2 table. One can also interpret this as switches from one cell to another, such as from the treatment success cell to the treatment failure cell."
   
-  if (to_return == "raw") {
+  if (to_return == "raw_output") {
     
     result <- list(info1, 
                    conclusion1,

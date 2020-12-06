@@ -1,7 +1,7 @@
 # konfound-glm
 
 konfound_glm_dichotomous <- function(model_object, tested_variable_string, test_all, alpha, tails,
-                                     to_return, n_trm, switch_trm, replace) {
+                                     to_return, n_treat, switch_trm, replace) {
   tidy_output <- broom::tidy(model_object) # tidying output
   glance_output <- broom::glance(model_object)
 
@@ -17,7 +17,7 @@ konfound_glm_dichotomous <- function(model_object, tested_variable_string, test_
       std_err = std_err,
       n_obs = n_obs,
       n_covariates = n_covariates,
-      n_trm = n_trm,
+      n_treat = n_treat,
       switch_trm = switch_trm,
       replace = replace,
       alpha = alpha,

@@ -7,6 +7,8 @@
 status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 [![R build
 status](https://github.com/jrosen48/konfound/workflows/R-CMD-check/badge.svg)](https://github.com/jrosen48/konfound/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/jrosen48/konfound/branch/master/graph/badge.svg)](https://codecov.io/gh/jrosen48/konfound?branch=master)
 <!-- badges: end -->
 
 # konfound
@@ -114,13 +116,13 @@ as follows, specifying the fitted model object:
 ``` r
 konfound(m1, wt)
 #> Percent Bias Necessary to Invalidate the Inference:
-#> To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).
+#> To invalidate an inference, 66.629% of the estimate would have to be due to bias. This is based on a threshold of -1.294 for statistical significance (alpha = 0.05).
 #> To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0 (RIR = 21).
 #> See Frank et al. (2013) for a description of the method
 #> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
 #> Impact Threshold for a Confounding Variable:
-#> The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.36 for statistical significance (alpha = 0.05).
-#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference for a null hypothesis of 0 effect.
+#> The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.791 with the outcome and at 0.791 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.366 for statistical significance (alpha = 0.05).
+#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.791 X 0.791 = 0.626 to invalidate an inference for a null hypothesis of 0 effect.
 #> See Frank (2000) for a description of the method
 #> Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194
 #> For more detailed output, consider setting `to_return` to table
@@ -134,7 +136,7 @@ We can use an existing dataset, such as the CSV file
 
 ``` r
 d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
-head(d)
+head(d) 
 #>           t  df
 #> 1  7.076763 178
 #> 2  4.127893 193
@@ -164,15 +166,15 @@ mkonfound(d, t, df)
 The above functions have a number of extensions; the below tables
 represent how `pkonfound()` and `konfound()` can be used:
 
-| Outcome    | Predictor: Continuous                              | Predictor: Binary                                                                                     |
-| :--------- | :------------------------------------------------- | :---------------------------------------------------------------------------------------------------- |
-| Continuous | `pkonfound(est_eff, std_err, n_obs, n_covariates)` | `pkonfound(est_eff, std_err, n_obs, n_covariates)`                                                    |
-| Logistic   | `pkonfound(est_eff, std_err, n_obs, n_covariates)` | `pkonfound(est_eff, std_err, n_obs, n_covariates, n_trm, logistic = TRUE)` or `pkonfound(a, b, c, d)` |
+| Outcome    | Predictor: Continuous                              | Predictor: Binary                                                                                       |
+| :--------- | :------------------------------------------------- | :------------------------------------------------------------------------------------------------------ |
+| Continuous | `pkonfound(est_eff, std_err, n_obs, n_covariates)` | `pkonfound(est_eff, std_err, n_obs, n_covariates)`                                                      |
+| Logistic   | `pkonfound(est_eff, std_err, n_obs, n_covariates)` | `pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, logistic = TRUE)` or `pkonfound(a, b, c, d)` |
 
-| Outcome    | Predictor: Continuous | Predictor: Binary                        |
-| :--------- | :-------------------- | :--------------------------------------- |
-| Continuous | `konfound(m, var)`    | `konfound(m, var)`                       |
-| Logistic   | `konfound(m, var)`    | `konfound(m, var, dichotomous_iv = TRUE` |
+| Outcome    | Predictor: Continuous | Predictor: Binary                    |
+| :--------- | :-------------------- | :----------------------------------- |
+| Continuous | `konfound(m, var)`    | `konfound(m, var)`                   |
+| Logistic   | `konfound(m, var)`    | `konfound(m, var, two_by_two = TRUE` |
 
 Note that there are additional arguments for each of thes functions; see
 `?pkonfound()` or `?konfound()` for more details.

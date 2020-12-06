@@ -177,7 +177,7 @@ if (requireNamespace("forcats")) {
 
 ```{r, eval = FALSE}
 m4 <- glm(outcome ~ condition, data = binary_dummy_data)
-konfound(m4, condition, dichotomous_iv = TRUE)
+konfound(m4, condition, two_by_two = TRUE)
 ```
 
 As with models fit with `lm()` (and use of `pkonfound()`), multiple forms of output can be specified with the `to_return` argument to `konfound()`, i.e. `konfound(m2, age, to_return = c("raw_output", "corr_plot", "thresh_plot"))`.

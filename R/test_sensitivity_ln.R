@@ -4,7 +4,7 @@ test_sensitivity_ln <- function(est_eff,
                                 std_err,
                                 n_obs,
                                 n_covariates,
-                                n_trm,
+                                n_treat,
                                 switch_trm = T,
                                 replace = "entire",
                                 alpha,
@@ -20,17 +20,17 @@ test_sensitivity_ln <- function(est_eff,
   }
   
   # stop message
-  if (n_obs <= 0 || n_trm <= 0) {
+  if (n_obs <= 0 || n_treat <= 0) {
     stop("Please enter positive integers for sample size and number of treatment group cases.")
   }
-  if (n_obs <= n_trm) {
+  if (n_obs <= n_treat) {
     stop("The total sample size should be larger than the number of treatment group cases.")
   }
   
   odds_ratio <- exp(est_eff)
-  # n_trm is the number of observations in the treatment group (c+d)
+  # n_treat is the number of observations in the treatment group (c+d)
   # n_cnt is the number of observations in the control group (a+b)
-  n_cnt <- n_obs - n_trm
+  n_cnt <- n_obs - n_treat
   # t_ob is the t value calculated based on observed estimate and standard error
   t_ob <- est_eff / std_err
   # invalidate_ob is true - the observed result is significant - we are invalidating the observed result
@@ -39,38 +39,38 @@ test_sensitivity_ln <- function(est_eff,
   dcroddsratio_ob <- isdcroddsratio(thr_t, t_ob)
   
   # to record the original treatment cases in case we need to adjust it
-  user_ntrm <- n_trm
+  user_ntrm <- n_treat
   # check if the implied table solution may contain imaginary numbers
   haveimaginary <- F
   changepi <- F
   # set the default value for whether we need and can adjust pi (ratio of treatment cases)
   # to remove the imaginary part
   keyimagin <- (4 + 4 * odds_ratio^2 + odds_ratio *
-                  (-8 + 4 * n_obs * std_err^2 - n_obs * n_trm * std_err^4 + n_trm^2 * std_err^4))
+                  (-8 + 4 * n_obs * std_err^2 - n_obs * n_treat * std_err^4 + n_treat^2 * std_err^4))
   minimgain <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + n_obs * std_err^2 * (4 - 0.25 * n_obs * std_err^2))
   keyx1 <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + 4 * n_obs * std_err^2)
   if (keyimagin > 0) {
     haveimaginary <- T
     if (minimgain <= 0 && keyx1 > 0) {
       changepi <- T
-      n_trm <- n_obs * get_pi(odds_ratio, std_err, n_obs, n_trm)
-      n_cnt <- n_obs - n_trm
+      n_treat <- n_obs * get_pi(odds_ratio, std_err, n_obs, n_treat)
+      n_cnt <- n_obs - n_treat
     } else {
       stop("Cannot generate a usable contingency table; Please consider using the Pearson's chi-squared approach (under development).")
     }
   }
   
   # a1, b1, c1, d1 are one solution for the 4 cells in the contingency table
-  a1 <- get_a1_kfnl(odds_ratio, std_err, n_obs, n_trm)
+  a1 <- get_a1_kfnl(odds_ratio, std_err, n_obs, n_treat)
   b1 <- n_cnt - a1
-  c1 <- get_c1_kfnl(odds_ratio, std_err, n_obs, n_trm)
-  d1 <- n_trm - c1
+  c1 <- get_c1_kfnl(odds_ratio, std_err, n_obs, n_treat)
+  d1 <- n_treat - c1
   
   # a2, b2, c2, d2 are the second solution for the 4 cells in the contingency table
-  a2 <- get_a2_kfnl(odds_ratio, std_err, n_obs, n_trm)
+  a2 <- get_a2_kfnl(odds_ratio, std_err, n_obs, n_treat)
   b2 <- n_cnt - a2
-  c2 <- get_c2_kfnl(odds_ratio, std_err, n_obs, n_trm)
-  d2 <- n_trm - c2
+  c2 <- get_c2_kfnl(odds_ratio, std_err, n_obs, n_treat)
+  d2 <- n_treat - c2
   
   # Differences between these two sets of solutions:
   ### a1 c1 are small while a2 c2 are large
@@ -78,12 +78,12 @@ test_sensitivity_ln <- function(est_eff,
   ### the goal is to get fewest swithes to invalidate the inference
   ### remove the solution if one cell has fewerer than 5 cases or negative cells or nan cells
   check1 <- check2 <- TRUE
-  if (!(n_cnt >= a1 && a1 >= 5 && n_cnt >= b1 && b1 >= 5 && n_trm >= c1 && c1 >= 5 && n_trm >= d1 && d1 >= 5)
+  if (!(n_cnt >= a1 && a1 >= 5 && n_cnt >= b1 && b1 >= 5 && n_treat >= c1 && c1 >= 5 && n_treat >= d1 && d1 >= 5)
       || is.nan(a1) || is.nan(b1) || is.nan(c1) || is.nan(d1)) {
     check1 <- FALSE
   }
   
-  if (!(n_cnt >= a2 && a2 >= 5 && n_cnt >= b2 && b2 >= 5 && n_trm >= c2 && c2 >= 5 && n_trm >= d2 && d2 >= 5)
+  if (!(n_cnt >= a2 && a2 >= 5 && n_cnt >= b2 && b2 >= 5 && n_treat >= c2 && c2 >= 5 && n_treat >= d2 && d2 >= 5)
       || is.nan(a2) || is.nan(b2) || is.nan(c2) || is.nan(d2)) {
     check2 <- FALSE
   }
@@ -246,12 +246,11 @@ test_sensitivity_ln <- function(est_eff,
   )
   
   # output dispatch
-  if (to_return == "print") {
+  if (to_return == "print" | to_return == "raw_output") {
     message("Note that this output is from an approach for non-linear models that is developmental and unpublished")
     return(result)
-  } else {
-    message("Note that only printed output is presently available for non-linear models")
   }
+  
   # else if (to_return == "raw_output") {
   #     return(output_df(est_eff, beta_threshold, est_eff, bias, sustain, recase, obs_r, critical_r, r_con, itcv))
   # } else if (to_return == "thresh_plot") { # this still makes sense for NLMs (just not quite as accurate)

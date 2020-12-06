@@ -3,7 +3,7 @@
 #' @param model_object output from a model (currently works for: lm)
 #' @param tested_variable Variable associated with the unstandardized beta coefficient to be tested
 #' @inheritParams pkonfound
-#' @param dichotomous_iv whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used; only works for single variables at present (so test_all = TRUE will return an error)
+#' @param two_by_two whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used; only works for single variables at present (so test_all = TRUE will return an error)
 #' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @importFrom rlang .data
@@ -32,7 +32,7 @@
 #' }
 #' 
 #' m4 <- glm(outcome ~ condition, data = binary_dummy_data, family = binomial(link = "logit"))
-#' konfound(m4, condition, dichotomous_iv = TRUE)
+#' konfound(m4, condition, two_by_two = TRUE, n_treat = 55)
 #' 
 
 #' @export
@@ -43,8 +43,8 @@ konfound <- function(model_object,
                      tails = 2,
                      to_return = "print",
                      test_all = FALSE,
-                     dichotomous_iv = FALSE,
-                     n_trm = NULL,
+                     two_by_two = FALSE,
+                     n_treat = NULL,
                      switch_trm = TRUE,
                      replace = "control") {
   
@@ -77,10 +77,10 @@ konfound <- function(model_object,
     }
   }
   
-  if (inherits(model_object, "glm") & dichotomous_iv == FALSE) {
+  if (inherits(model_object, "glm") & two_by_two == FALSE) {
     message("Note that for a non-linear model, impact threshold should not be interpreted.")
     message("Note that this is only an approximation. For exact results in terms of the number of cases that must be switched from treatment success to treatment failure to invalidate the inference see: https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm")
-    message("If a dichotomous independent variable is used, consider using the 2X2 table approach enabled with the argument dichotomous_iv = TRUE")
+    message("If a dichotomous independent variable is used, consider using the 2X2 table approach enabled with the argument two_by_two = TRUE")
     output <- konfound_glm(
       model_object = model_object,
       tested_variable_string = tested_variable_string,
@@ -93,10 +93,10 @@ konfound <- function(model_object,
     return(output)
   } 
   
-  if (inherits(model_object, "glm") & dichotomous_iv == TRUE) {
+  if (inherits(model_object, "glm") & two_by_two == TRUE) {
     
-    if(is.null(n_trm)) stop("Please provide a value for n_trm to use this functionality with a dichotomous predictor")
-    if (test_all == TRUE) stop("test_all = TRUE is not supported when dichotomous_iv is specified")
+    if(is.null(n_treat)) stop("Please provide a value for n_treat to use this functionality with a dichotomous predictor")
+    if (test_all == TRUE) stop("test_all = TRUE is not supported when two_by_two is specified")
     
     output <- konfound_glm_dichotomous(
       model_object = model_object,
@@ -105,7 +105,7 @@ konfound <- function(model_object,
       alpha = alpha,
       tails = tails,
       to_return = to_return,
-      n_trm = n_trm,
+      n_treat = n_treat,
       switch_trm = switch_trm,
       replace = replace
     )

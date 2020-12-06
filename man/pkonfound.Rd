@@ -12,9 +12,9 @@ pkonfound(
   alpha = 0.05,
   tails = 2,
   nu = 0,
-  n_trm = NULL,
+  n_treat = NULL,
   switch_trm = TRUE,
-  logistic = FALSE,
+  model_type = "ols",
   a = NULL,
   b = NULL,
   c = NULL,
@@ -40,11 +40,11 @@ pkonfound(
 
 \item{nu}{what hypothesis to be tested; defaults to testing whether est_eff is significantly different from 0}
 
-\item{n_trm}{the number of cases associated with the treatment condition; applicable only when logistic = TRUE}
+\item{n_treat}{the number of cases associated with the treatment condition; applicable only when model_type = "logistic"}
 
-\item{switch_trm}{whether to switch the treatment and control cases; defaults to FALSE; applicable only when logistic - TRUE}
+\item{switch_trm}{whether to switch the treatment and control cases; defaults to FALSE; applicable only when model_type = "logistic"}
 
-\item{logistic}{whether the model is a logistic regression with a binomial outcome distribution; defaults to FALSE}
+\item{model_type}{the type of model being estimated; defaults to "ols" for a linear regression model; the other option is "logistic"}
 
 \item{a}{cell is the number of cases in the control group showing unsuccessful results}
 
@@ -73,7 +73,7 @@ For published studies, this command calculates (1) how much bias there must be i
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
-pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, logistic = TRUE)
+pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 
 pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 pkonfound(2, .4, 100, 3, to_return = "corr_plot")

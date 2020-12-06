@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 [![R build status](https://github.com/jrosen48/konfound/workflows/R-CMD-check/badge.svg)](https://github.com/jrosen48/konfound/actions)
+[![Codecov test coverage](https://codecov.io/gh/jrosen48/konfound/branch/master/graph/badge.svg)](https://codecov.io/gh/jrosen48/konfound?branch=master)
 <!-- badges: end -->
 
 # konfound
@@ -75,7 +76,7 @@ We can use an existing dataset, such as the CSV file [here](https://msu.edu/~ken
 
 ```{r}
 d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
-head(d)
+head(d) 
 mkonfound(d, t, df)
 ```
 
@@ -87,11 +88,11 @@ The above functions have a number of extensions; the below tables represent how 
 library(dplyr)
 structure(list("Outcome" = c("Continuous", "Logistic"
 ), `Predictor: Continuous` = c("`pkonfound(est_eff, std_err, n_obs, n_covariates)`", 
-                               "`pkonfound(est_eff, std_err, n_obs, n_covariates)`"), `Predictor: Binary` = c("`pkonfound(est_eff, std_err, n_obs, n_covariates)`", "`pkonfound(est_eff, std_err, n_obs, n_covariates, n_trm, logistic = TRUE)`  or `pkonfound(a, b, c, d)`")), row.names = c(NA, -2L), class = c("tbl_df", "tbl", "data.frame"
+                               "`pkonfound(est_eff, std_err, n_obs, n_covariates)`"), `Predictor: Binary` = c("`pkonfound(est_eff, std_err, n_obs, n_covariates)`", "`pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, logistic = TRUE)`  or `pkonfound(a, b, c, d)`")), row.names = c(NA, -2L), class = c("tbl_df", "tbl", "data.frame"
                                )) %>% 
     knitr::kable()
 
-structure(list("Outcome" = c("Continuous", "Logistic"), `Predictor: Continuous` = c("`konfound(m, var)`", "`konfound(m, var)`"), `Predictor: Binary` = c("`konfound(m, var)`", "`konfound(m, var, dichotomous_iv = TRUE`")), row.names = c(NA, -2L), class = c("tbl_df", "tbl", "data.frame"
+structure(list("Outcome" = c("Continuous", "Logistic"), `Predictor: Continuous` = c("`konfound(m, var)`", "`konfound(m, var)`"), `Predictor: Binary` = c("`konfound(m, var)`", "`konfound(m, var, two_by_two = TRUE`")), row.names = c(NA, -2L), class = c("tbl_df", "tbl", "data.frame"
 )) %>% 
     knitr::kable()
 ```

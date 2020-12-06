@@ -10,6 +10,8 @@ testmod2 <- lmer(teachpop ~ texp + sex + (1 | school), data = popmis)
 output1 <- konfound(testmod1, texp, test_all = TRUE, to_return = "raw_output")
 output2 <- konfound(testmod2, texp, test_all = TRUE, to_return = "raw_output")
 
+output3 <- pkonfound(a = 35, b = 17, c = 17, d = 38, to_return = "raw_output")
+
 test_that("pkonfound test positive, significant coefficient works", {
   expect_equal(dplyr::pull(pkonfound(2, .4, 100, 3, to_return = "raw_output")[1, 3]), tolerance = .001, .603 * 100) # pct bias
   expect_equal(dplyr::pull(pkonfound(2, .4, 100, 3, to_return = "raw_output")[1, 7]), tolerance = .001, 0.568) # r-corr
@@ -40,6 +42,9 @@ test_that("pkonfound test positive, significant coefficient, small sample size w
   expect_equal(dplyr::pull(pkonfound(2, .3, 20, 3, to_return = "raw_output")[1, 8]), tolerance = .001, 0.748)
 })
 
+test_that("tkonfound for two_by_two works", {
+  expect_equal(output3$RIR, tolerance = .001, 13)
+})
 
 test_that("test_all works for lm and lmer outout", {
   expect_is(output1, "data.frame")

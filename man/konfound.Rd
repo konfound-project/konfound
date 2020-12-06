@@ -11,8 +11,8 @@ konfound(
   tails = 2,
   to_return = "print",
   test_all = FALSE,
-  dichotomous_iv = FALSE,
-  n_trm = NULL,
+  two_by_two = FALSE,
+  n_treat = NULL,
   switch_trm = TRUE,
   replace = "control"
 )
@@ -30,11 +30,11 @@ konfound(
 
 \item{test_all}{whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)}
 
-\item{dichotomous_iv}{whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used; only works for single variables at present (so test_all = TRUE will return an error)}
+\item{two_by_two}{whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used; only works for single variables at present (so test_all = TRUE will return an error)}
 
-\item{n_trm}{the number of cases associated with the treatment condition; applicable only when logistic = TRUE}
+\item{n_treat}{the number of cases associated with the treatment condition; applicable only when model_type = "logistic"}
 
-\item{switch_trm}{whether to switch the treatment and control cases; defaults to FALSE; applicable only when logistic - TRUE}
+\item{switch_trm}{whether to switch the treatment and control cases; defaults to FALSE; applicable only when model_type = "logistic"}
 
 \item{replace}{whether using entire sample or the control group to calculate the base rate; default is the entire sample}
 }
@@ -69,6 +69,6 @@ if (requireNamespace("lme4")) {
 }
 
 m4 <- glm(outcome ~ condition, data = binary_dummy_data, family = binomial(link = "logit"))
-konfound(m4, condition, dichotomous_iv = TRUE)
+konfound(m4, condition, two_by_two = TRUE, n_treat = 55)
 
 }

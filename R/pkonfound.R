@@ -7,9 +7,9 @@
 #' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
 #' @param nu what hypothesis to be tested; defaults to testing whether est_eff is significantly different from 0
-#' @param logistic whether the model is a logistic regression with a binomial outcome distribution; defaults to FALSE
-#' @param n_trm the number of cases associated with the treatment condition; applicable only when logistic = TRUE
-#' @param switch_trm whether to switch the treatment and control cases; defaults to FALSE; applicable only when logistic - TRUE
+#' @param model_type the type of model being estimated; defaults to "ols" for a linear regression model; the other option is "logistic"
+#' @param n_treat the number of cases associated with the treatment condition; applicable only when model_type = "logistic"
+#' @param switch_trm whether to switch the treatment and control cases; defaults to FALSE; applicable only when model_type = "logistic"
 #' @param a cell is the number of cases in the control group showing unsuccessful results
 #' @param b cell is the number of cases in the control group showing successful results
 #' @param c cell is the number of cases in the treatment group showing unsuccessful results
@@ -25,7 +25,7 @@
 #' pkonfound(2, .4, 100, 3)
 #' pkonfound(-2.2, .65, 200, 3)
 #' pkonfound(.5, 3, 200, 3)
-#' pkonfound(-0.2, 0.103, 20888, 3, n_trm = 17888, logistic = TRUE)
+#' pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 #'
 #' pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 #' pkonfound(2, .4, 100, 3, to_return = "corr_plot")
@@ -61,9 +61,9 @@
                       alpha = .05,
                       tails = 2,
                       nu = 0,
-                      n_trm = NULL,
+                      n_treat = NULL,
                       switch_trm = TRUE,
-                      logistic = FALSE,
+                      model_type = "ols",
                       a = NULL,
                       b = NULL,
                       c = NULL,
@@ -74,7 +74,7 @@
                       to_return = "print") {
   if ("table" %in% to_return) stop("a table can only be output when using konfound")
   # if (nu != 0) warning("Output for the impact of the confounding variable (the ITCV) is not valid for a non-0 null hypothesis about an effect")
-  if (logistic == TRUE) {
+  if (model_type == "logistic") {
     out <- test_sensitivity_ln(
       est_eff = est_eff,
       std_err = std_err,
@@ -84,7 +84,7 @@
       tails = tails,
       nu = nu,
       to_return = to_return,
-      n_trm = n_trm,
+      n_treat = n_treat,
       switch_trm = switch_trm,
       replace = replace
     )
@@ -121,7 +121,7 @@
                      replace = replace,
                      to_return = to_return)
   
-  } else {
+  } else if (model_type == "ols") {
   out <- test_sensitivity(
     est_eff = est_eff,
     std_err = std_err,

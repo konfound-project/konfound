@@ -5,7 +5,7 @@ plot_threshold <- function(beta_threshold, est_eff) {
   est_eff <- abs(est_eff)
 
   if (est_eff > beta_threshold) { # beta is above threshold
-    dd <- dplyr::data_frame(
+    dd <- dplyr::tibble(
       est_eff = est_eff,
       beta_threshold = beta_threshold
     )
@@ -26,7 +26,7 @@ plot_threshold <- function(beta_threshold, est_eff) {
     cols <- c("#A6CEE3", "#1F78B4") # dark blue and light blue
   } else if (est_eff < beta_threshold) { # beta is below threshold
 
-    dd <- dplyr::data_frame(est_eff = est_eff, beta_threshold = beta_threshold)
+    dd <- dplyr::tibble(est_eff = est_eff, beta_threshold = beta_threshold)
     dd <- dplyr::mutate(dd, `Above Estimated Effect, Below Threshold` = abs(est_eff - beta_threshold))
     dd <- dplyr::mutate(dd, `Below Threshold` = est_eff)
     dd <- dplyr::select(dd, -beta_threshold)
