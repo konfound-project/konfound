@@ -181,13 +181,13 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">wt</span><span class="op">)</span>
 <span class="co">#&gt; Percent Bias Necessary to Invalidate the Inference:</span>
-<span class="co">#&gt; To invalidate an inference, 66.664% of the estimate would have to be due to bias. This is based on a threshold of -1.293 for statistical significance (alpha = 0.05).</span>
+<span class="co">#&gt; To invalidate an inference, 66.629% of the estimate would have to be due to bias. This is based on a threshold of -1.294 for statistical significance (alpha = 0.05).</span>
 <span class="co">#&gt; To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0 (RIR = 21).</span>
 <span class="co">#&gt; See Frank et al. (2013) for a description of the method</span>
 <span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span>
 <span class="co">#&gt; Impact Threshold for a Confounding Variable:</span>
-<span class="co">#&gt; The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.787 with the outcome and at 0.787 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.36 for statistical significance (alpha = 0.05).</span>
-<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.787 X 0.787 = 0.619 to invalidate an inference for a null hypothesis of 0 effect.</span>
+<span class="co">#&gt; The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.791 with the outcome and at 0.791 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.366 for statistical significance (alpha = 0.05).</span>
+<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.791 X 0.791 = 0.626 to invalidate an inference for a null hypothesis of 0 effect.</span>
 <span class="co">#&gt; See Frank (2000) for a description of the method</span>
 <span class="co">#&gt; Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194</span>
 <span class="co">#&gt; For more detailed output, consider setting `to_return` to table</span>
@@ -199,7 +199,7 @@
 <p>We can use an existing dataset, such as the CSV file <a href="https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv">here</a>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> 
 <span class="co">#&gt;           t  df</span>
 <span class="co">#&gt; 1  7.076763 178</span>
 <span class="co">#&gt; 2  4.127893 193</span>
@@ -231,8 +231,8 @@
 <table class="table">
 <colgroup>
 <col width="6%">
-<col width="31%">
-<col width="62%">
+<col width="30%">
+<col width="63%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Outcome</th>
@@ -249,7 +249,7 @@
 <td align="left">Logistic</td>
 <td align="left"><code><a href="reference/pkonfound.html">pkonfound(est_eff, std_err, n_obs, n_covariates)</a></code></td>
 <td align="left">
-<code><a href="reference/pkonfound.html">pkonfound(est_eff, std_err, n_obs, n_covariates, n_trm, logistic = TRUE)</a></code> or <code><a href="reference/pkonfound.html">pkonfound(a, b, c, d)</a></code>
+<code><a href="reference/pkonfound.html">pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, logistic = TRUE)</a></code> or <code><a href="reference/pkonfound.html">pkonfound(a, b, c, d)</a></code>
 </td>
 </tr>
 </tbody>
@@ -269,7 +269,7 @@
 <tr class="even">
 <td align="left">Logistic</td>
 <td align="left"><code><a href="reference/konfound.html">konfound(m, var)</a></code></td>
-<td align="left"><code>konfound(m, var, dichotomous_iv = TRUE</code></td>
+<td align="left"><code>konfound(m, var, two_by_two = TRUE</code></td>
 </tr>
 </tbody>
 </table>
@@ -335,6 +335,7 @@
 <ul class="list-unstyled">
 <li><a href="https://cran.r-project.org/package=konfound"><img src="https://www.r-pkg.org/badges/version/konfound" alt="CRAN status"></a></li>
 <li><a href="https://github.com/jrosen48/konfound/actions"><img src="https://github.com/jrosen48/konfound/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/gh/jrosen48/konfound?branch=master"><img src="https://codecov.io/gh/jrosen48/konfound/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 </div>

@@ -86,7 +86,7 @@
       <h1 data-toc-skip>Introduction to konfound</h1>
                         <h4 class="author">Joshua Rosenberg, Ran Xu, Qinyun Lin, and Ken Frank</h4>
             
-            <h4 class="date">2020-12-05</h4>
+            <h4 class="date">2020-12-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jrosen48/konfound/blob/master/vignettes/introduction-to-konfound.Rmd"><code>vignettes/introduction-to-konfound.Rmd</code></a></small>
       <div class="hidden name"><code>introduction-to-konfound.Rmd</code></div>
@@ -166,11 +166,7 @@
 <span class="co">#&gt; For models fit in R, consider use of konfound().</span></code></pre></div>
 <p>We notice that the output includes a message that says we can view other forms of output by changing the <code>to_return</code> argument. Here are the two plots - for the bias necessary to alter an inference (<code>thresh_plot</code>) and for the robustness of an inference in terms of the impact of a confounding variable (<code>corr_plot</code>) that can be returned:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">2</span>, <span class="fl">100</span>, <span class="fl">3</span>, to_return <span class="op">=</span> <span class="st">"thresh_plot"</span><span class="op">)</span>
-<span class="co">#&gt; Warning: `data_frame()` is deprecated as of tibble 1.1.0.</span>
-<span class="co">#&gt; Please use `tibble()` instead.</span>
-<span class="co">#&gt; This warning is displayed once every 8 hours.</span>
-<span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">2</span>, <span class="fl">100</span>, <span class="fl">3</span>, to_return <span class="op">=</span> <span class="st">"thresh_plot"</span><span class="op">)</span></code></pre></div>
 <p><img src="introduction-to-konfound_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">2</span>, <span class="fl">100</span>, <span class="fl">3</span>, to_return <span class="op">=</span> <span class="st">"corr_plot"</span><span class="op">)</span></code></pre></div>
@@ -396,7 +392,7 @@
 <p><strong>For logistic regression models fit with glm() with a dichotomous predictor of interest</strong></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">condition</span>, data <span class="op">=</span> <span class="va">binary_dummy_data</span><span class="op">)</span>
-<span class="fu"><a href="../reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m4</span>, <span class="va">condition</span>, dichotomous_iv <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m4</span>, <span class="va">condition</span>, two_by_two <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>As with models fit with <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> (and use of <code><a href="../reference/pkonfound.html">pkonfound()</a></code>), multiple forms of output can be specified with the <code>to_return</code> argument to <code><a href="../reference/konfound.html">konfound()</a></code>, i.e. <code><a href="../reference/konfound.html">konfound(m2, age, to_return = c("raw_output", "corr_plot", "thresh_plot"))</a></code>.</p>
 <p><strong>For mixed effects (or multi-level) models fit with the lmer() function from the lme4 package</strong></p>
 <p><code>konfound</code> also works with models fit with the <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer()</a></code> function from the package <code>lme4</code>, for mixed-effects or multi-level models. One challenge with carrying out sensitivity analysis for fixed effects in mixed effects models is calculating the correct denominator degrees of freedom for the t-test associated with the coefficients. This is not unique to sensitivity analysis, as, for example, <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer()</a></code> does not report degrees of freedom (or p-values) for fixed effects predictors (see this information in the <code>lme4</code> FAQ <a href="http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have">here</a>). While it may be possible to determine the correct degrees of freedom for some models (i.e., models with relatively simple random effects structures), it is difficult to generalize this approach, and so in this package the Kenward-Roger approximation for the denominator degrees of freedom as implemented in the <code>pbkrtest</code> package (described in <a href="https://www.jstatsoft.org/htaccess.php?volume=59&amp;type=i&amp;issue=09&amp;paper=true">Halekoh and Højsgaard, 2014</a>).</p>

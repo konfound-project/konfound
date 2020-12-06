@@ -139,8 +139,8 @@
   tails <span class='op'>=</span> <span class='fl'>2</span>,
   to_return <span class='op'>=</span> <span class='st'>"print"</span>,
   test_all <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  dichotomous_iv <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  n_trm <span class='op'>=</span> <span class='cn'>NULL</span>,
+  two_by_two <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  n_treat <span class='op'>=</span> <span class='cn'>NULL</span>,
   switch_trm <span class='op'>=</span> <span class='cn'>TRUE</span>,
   replace <span class='op'>=</span> <span class='st'>"control"</span>
 <span class='op'>)</span></pre>
@@ -173,16 +173,16 @@
       <td><p>whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)</p></td>
     </tr>
     <tr>
-      <th>dichotomous_iv</th>
+      <th>two_by_two</th>
       <td><p>whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used; only works for single variables at present (so test_all = TRUE will return an error)</p></td>
     </tr>
     <tr>
-      <th>n_trm</th>
-      <td><p>the number of cases associated with the treatment condition; applicable only when logistic = TRUE</p></td>
+      <th>n_treat</th>
+      <td><p>the number of cases associated with the treatment condition; applicable only when model_type = "logistic"</p></td>
     </tr>
     <tr>
       <th>switch_trm</th>
-      <td><p>whether to switch the treatment and control cases; defaults to FALSE; applicable only when logistic - TRUE</p></td>
+      <td><p>whether to switch the treatment and control cases; defaults to FALSE; applicable only when model_type = "logistic"</p></td>
     </tr>
     <tr>
       <th>replace</th>
@@ -228,7 +228,7 @@
   <span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>married</span> <span class='op'>~</span> <span class='va'>age</span>, data <span class='op'>=</span> <span class='va'>d</span>, family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link <span class='op'>=</span> <span class='st'>"logit"</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'>konfound</span><span class='op'>(</span><span class='va'>m2</span>, <span class='va'>age</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: forcats</span></div><div class='output co'>#&gt; <span class='message'>Note that for a non-linear model, impact threshold should not be interpreted.</span></div><div class='output co'>#&gt; <span class='message'>Note that this is only an approximation. For exact results in terms of the number of cases that must be switched from treatment success to treatment failure to invalidate the inference see: https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm</span></div><div class='output co'>#&gt; <span class='message'>If a dichotomous independent variable is used, consider using the 2X2 table approach enabled with the argument dichotomous_iv = TRUE</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(model[["call"]][["data"]], env): object 'd' not found</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: forcats</span></div><div class='output co'>#&gt; <span class='message'>Note that for a non-linear model, impact threshold should not be interpreted.</span></div><div class='output co'>#&gt; <span class='message'>Note that this is only an approximation. For exact results in terms of the number of cases that must be switched from treatment success to treatment failure to invalidate the inference see: https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm</span></div><div class='output co'>#&gt; <span class='message'>If a dichotomous independent variable is used, consider using the 2X2 table approach enabled with the argument two_by_two = TRUE</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(model[["call"]][["data"]], env): object 'd' not found</span></div><div class='input'>
 <span class='co'># using lme4 for mixed effects (or multi-level) models</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"lme4"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/lme4/lme4/'>lme4</a></span><span class='op'>)</span>
@@ -248,8 +248,35 @@
 #&gt; See Frank (2000) for a description of the method
 #&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest. We are presently working to add other methods for calculating the degrees of freedom for the predictor(s) of interest. If you wish to use other methods now, consider those detailed here: https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. You can then enter degrees of freedom obtained from another method along with the coefficient, number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
 <span class='va'>m4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>outcome</span> <span class='op'>~</span> <span class='va'>condition</span>, data <span class='op'>=</span> <span class='va'>binary_dummy_data</span>, family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link <span class='op'>=</span> <span class='st'>"logit"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>konfound</span><span class='op'>(</span><span class='va'>m4</span>, <span class='va'>condition</span>, dichotomous_iv <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in konfound(m4, condition, dichotomous_iv = TRUE): Please provide a value for n_trm to use this functionality with a dichotomous predictor</span></div><div class='input'>
+<span class='fu'>konfound</span><span class='op'>(</span><span class='va'>m4</span>, <span class='va'>condition</span>, two_by_two <span class='op'>=</span> <span class='cn'>TRUE</span>, n_treat <span class='op'>=</span> <span class='fl'>55</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Note that this output is from an approach for non-linear models that is developmental and unpublished</span></div><div class='output co'>#&gt; [[1]]
+#&gt; [1] "To invalidate the inference, you would need to replace 14 treatment success cases with null hypothesis cases (RIR = 14). This is equivalent to transferring 10 cases from treatment success to treatment failure, as shown, from the Implied Table to the Transfer Table."
+#&gt; 
+#&gt; $Implied_Table
+#&gt;           Fail Success
+#&gt; Control     36      16
+#&gt; Treatment   18      37
+#&gt; 
+#&gt; [[3]]
+#&gt; [1] "(Values have been rounded to the nearest integer. This may cause a little change to the estimated effect for the Implied Table.)"
+#&gt; 
+#&gt; $Transfer_Table
+#&gt;           Fail Success
+#&gt; Control     36      16
+#&gt; Treatment   28      27
+#&gt; 
+#&gt; [[5]]
+#&gt; [1] "For the Implied Table, we have an estimate of 1.531, with a standard error of 0.416 and a t-ratio of 3.684."
+#&gt; 
+#&gt; [[6]]
+#&gt; [1] "For the Transfer Table, we have an estimate of 0.775, with a standard error of 0.404 and a t-ratio of 1.918."
+#&gt; 
+#&gt; $total_RIR
+#&gt; [1] 14
+#&gt; 
+#&gt; $total_switch
+#&gt; [1] 10
+#&gt; </div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

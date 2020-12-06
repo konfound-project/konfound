@@ -140,9 +140,9 @@
   alpha <span class='op'>=</span> <span class='fl'>0.05</span>,
   tails <span class='op'>=</span> <span class='fl'>2</span>,
   nu <span class='op'>=</span> <span class='fl'>0</span>,
-  n_trm <span class='op'>=</span> <span class='cn'>NULL</span>,
+  n_treat <span class='op'>=</span> <span class='cn'>NULL</span>,
   switch_trm <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  logistic <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  model_type <span class='op'>=</span> <span class='st'>"ols"</span>,
   a <span class='op'>=</span> <span class='cn'>NULL</span>,
   b <span class='op'>=</span> <span class='cn'>NULL</span>,
   c <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -185,16 +185,16 @@
       <td><p>what hypothesis to be tested; defaults to testing whether est_eff is significantly different from 0</p></td>
     </tr>
     <tr>
-      <th>n_trm</th>
-      <td><p>the number of cases associated with the treatment condition; applicable only when logistic = TRUE</p></td>
+      <th>n_treat</th>
+      <td><p>the number of cases associated with the treatment condition; applicable only when model_type = "logistic"</p></td>
     </tr>
     <tr>
       <th>switch_trm</th>
-      <td><p>whether to switch the treatment and control cases; defaults to FALSE; applicable only when logistic - TRUE</p></td>
+      <td><p>whether to switch the treatment and control cases; defaults to FALSE; applicable only when model_type = "logistic"</p></td>
     </tr>
     <tr>
-      <th>logistic</th>
-      <td><p>whether the model is a logistic regression with a binomial outcome distribution; defaults to FALSE</p></td>
+      <th>model_type</th>
+      <td><p>the type of model being estimated; defaults to "ols" for a linear regression model; the other option is "logistic"</p></td>
     </tr>
     <tr>
       <th>a</th>
@@ -266,7 +266,7 @@
 #&gt; </span><span>The maximum impact to sustain an inference for a null hypothesis of 0 effect is based on a correlation of 0.335 with the outcome and at 0.335 with the predictor of interest (conditioning on observed covariates) based on a threshold of 5.916 for statistical significance (alpha = 0.05).
 #&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.335 X 0.335 = 0.112 to sustain an inference for a null hypothesis of 0 effect.
 #&gt; See Frank (2000) for a description of the method
-#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, run ?pkonfound and inspect the to_return argument</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='op'>-</span><span class='fl'>0.2</span>, <span class='fl'>0.103</span>, <span class='fl'>20888</span>, <span class='fl'>3</span>, n_trm <span class='op'>=</span> <span class='fl'>17888</span>, logistic <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For other forms of output, run ?pkonfound and inspect the to_return argument</span></div><div class='output co'>#&gt; <span class='message'>For models fit in R, consider use of konfound().</span></div><div class='input'><span class='fu'>pkonfound</span><span class='op'>(</span><span class='op'>-</span><span class='fl'>0.2</span>, <span class='fl'>0.103</span>, <span class='fl'>20888</span>, <span class='fl'>3</span>, n_treat <span class='op'>=</span> <span class='fl'>17888</span>, model_type <span class='op'>=</span> <span class='st'>"logistic"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Note that this output is from an approach for non-linear models that is developmental and unpublished</span></div><div class='output co'>#&gt; [[1]]
 #&gt; [1] "To sustain an inference for a negative treatment effect, you would need to replace 1 treatment success cases with null hypothesis cases (RIR = 1). This is equivalent to transferring 1 case from treatment success to treatment failure, as shown, from the Implied Table to the Transfer Table."
 #&gt; 
