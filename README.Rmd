@@ -92,7 +92,7 @@ structure(list("Outcome" = c("Continuous", "Logistic"
                                )) %>% 
     knitr::kable()
 
-structure(list("Outcome" = c("Continuous", "Logistic"), `Predictor: Continuous` = c("`konfound(m, var)`", "`konfound(m, var)`"), `Predictor: Binary` = c("`konfound(m, var)`", "`konfound(m, var, two_by_two = TRUE`")), row.names = c(NA, -2L), class = c("tbl_df", "tbl", "data.frame"
+structure(list("Outcome" = c("Continuous", "Logistic"), `Predictor: Continuous` = c("`konfound(m, var)`", "`konfound(m, var)`"), `Predictor: Binary` = c("`konfound(m, var)`", "`konfound(m, var, two_by_two = TRUE)`")), row.names = c(NA, -2L), class = c("tbl_df", "tbl", "data.frame"
 )) %>% 
     knitr::kable()
 ```
