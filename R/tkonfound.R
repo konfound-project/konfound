@@ -171,10 +171,11 @@ tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher",
       "For the Transfer Table, we have an estimated odds ratio of %.3f, with p-value of %.3f:", fisher_final, p_final)
   }
   
-  info1 <- "This function calculates the number of cases that would have to be replaced with no effect cases (RIR)"
-  info2 <- "to invalidate an inference made about the association between the rows and columns in a 2x2 table."
-  info3 <- "One can also interpret this as switches from one cell to another, such as from the treatment success"
-  info4 <- "cell to the treatment failure cell."
+  info1 <- "This function calculates the number of cases that would have to be replaced"
+  info2 <- "with no effect cases (RIR)to invalidate an inference made about the association"
+  info3 <- "between the rows and columns in a 2x2 table."
+  info4 <- "One can also interpret this as switches from one cell to another, such as from"
+  info5 <- "the treatment success cell to the treatment failure cell."
   
   if (to_return == "raw_output") {
     
@@ -203,6 +204,8 @@ tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher",
     cat("\n")
     cat(info4)
     cat("\n")
+    cat(info5)
+    cat("\n")
     cat("\n")
     cat(crayon::bold("Conclusion:"))
     cat("\n")
@@ -213,6 +216,7 @@ tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher",
     cat(conclusion1c)
     cat("\n")
     cat(conclusion2)
+    cat("\n")
     cat("\n")
     cat(crayon::underline("User-entered Table:"))
     cat("\n")
