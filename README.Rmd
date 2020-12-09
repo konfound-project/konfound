@@ -96,6 +96,7 @@ structure(list("Outcome" = c("Continuous", "Logistic"), `Predictor: Continuous` 
 )) %>% 
     knitr::kable()
 ```
+
 Note that there are additional arguments for each of thes functions; see `?pkonfound()` or `?konfound()` for more details.
 
 # Other information
