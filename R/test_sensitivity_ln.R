@@ -186,21 +186,27 @@ test_sensitivity_ln <- function(est_eff,
   
   if (!final_solution$needtworows & final_solution$final_switch > 1) {
     conclusion1 <- paste(
-      change, sprintf("you would need to replace %d", RIR), RIRway,
-      sprintf("cases with null hypothesis cases (RIR = %d).", RIR),
-      sprintf("This is equivalent to transferring %d", final_solution$final_switch), 
-      c("cases from"), transferway, c("as shown, from the Implied Table to the Transfer Table.")
-    )
-  } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
-    conclusion1 <- paste(
-      change, sprintf("you would need to replace %d", RIR), RIRway,
-      sprintf("cases with null hypothesis cases (RIR = %d).", RIR))
+      change, sprintf("you would need to replace %d", RIR), RIRway, "cases")
+      
+    conclusion1a <- sprintf("with null hypothesis cases (RIR = %d).", RIR)
     
     conclusion1b <- paste(
       sprintf("This is equivalent to transferring %d", final_solution$final_switch), 
-      c("case from"), transferway, c("as shown, from the Implied Table to the Transfer Table."))
+      c("cases from"), transferway)
     
-    conclsion1c <- ""
+    conclusion1c <- "as shown, from the Implied Table to the Transfer Table."
+    
+  } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+    conclusion1 <- paste(
+      change, sprintf("you would need to replace %d", RIR), RIRway, "cases")
+    
+    conclusion1a <- sprintf("with null hypothesis cases (RIR = %d).", RIR)
+    
+    conclusion1b <- paste(
+      sprintf("This is equivalent to transferring %d", final_solution$final_switch), 
+      c("case from"), transferway)
+    
+    conclsion1c <- "as shown, from the Implied Table to the Transfer Table."
     
   } else {
     conclusion1 <- paste(
@@ -216,11 +222,16 @@ test_sensitivity_ln <- function(est_eff,
   }
   
   conclusion2 <- sprintf(
-    "For the Implied Table, we have an estimate of %.3f, with a standard error of %.3f and a t-ratio of %.3f.",
+    "For the Implied Table, we have an estimate of %.3f, with a SE of %.3f and a t-ratio of %.3f.",
     final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start
   )
+  
+  conclusion2b <- sprintf("and a t-ratio of %.3f.",
+    final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start
+  )
+  
   conclusion3 <- sprintf(
-    "For the Transfer Table, we have an estimate of %.3f, with a standard error of %.3f and a t-ratio of %.3f.",
+    "For the Transfer Table, we have an estimate of %.3f, with a SE of %.3f and a t-ratio of %.3f.",
     final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final
   )
   
@@ -280,11 +291,21 @@ test_sensitivity_ln <- function(est_eff,
     cat(noticeb)
     cat("\n")
     cat("\n")
+    cat(conclusion1)
+    cat("\n")
+    cat(conclusion1a)
+    cat("\n")
+    cat(conclusion1b)
+    cat("\n")
+    cat(conclusion1c)
+    cat("\n")
     cat(crayon::underline("Transfer Table:"))
     cat("\n")
     print(final_solution$table_start)
     cat("\n")
     cat(conclusion2)
+    cat("\n")
+    cat(conclusion2b)
     cat("\n")
     cat(crayon::bold("RIR:"))
     cat("\n")

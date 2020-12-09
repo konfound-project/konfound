@@ -75,7 +75,7 @@
                       replace = "control",
                       to_return = "print") {
   if ("table" %in% to_return) stop("a table can only be output when using konfound")
-  # if (nu != 0) warning("Output for the impact of the confounding variable (the ITCV) is not valid for a non-0 null hypothesis about an effect")
+   
   if (model_type == "logistic" & !is.null(n_treat)) {
     out <- test_sensitivity_ln(
       est_eff = est_eff,
@@ -92,7 +92,7 @@
     )
   } else  if (model_type == "logistic" & is.null(n_treat)) {
     
-    warning("For a logistic regression, the log-odds coefficients are used for pkonfound's calculations. However, these coefficients are not as meaningful to use or interpret as average marginal effects. To carry out an analysis using average marginal effects, you can use the konfound() function with the results of a model estimated in R.")
+    warning("For a logistic regression, the log-odds coefficients are used for the pkonfound() calculations. To carry out an analysis using average marginal effects, you can use the konfound() function with the results of a model estimated in R.")
     
     out <- test_sensitivity_ln(
       est_eff = est_eff,
