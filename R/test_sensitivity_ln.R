@@ -206,7 +206,7 @@ test_sensitivity_ln <- function(est_eff,
       sprintf("This is equivalent to transferring %d", final_solution$final_switch), 
       c("case from"), transferway)
     
-    conclsion1c <- "as shown, from the Implied Table to the Transfer Table."
+    conclusion1c <- "as shown, from the Implied Table to the Transfer Table."
     
   } else {
     conclusion1 <- paste(
@@ -263,6 +263,8 @@ test_sensitivity_ln <- function(est_eff,
   if (to_return == "raw_output") {
     
     result <- list(conclusion1,
+                   conclusion1b,
+                   conclusion1c,
                    Implied_Table = final_solution$table_start, 
                    notice,
                    Transfer_Table = final_solution$table_final,
