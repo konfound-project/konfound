@@ -178,8 +178,11 @@ tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher",
   
   if (to_return == "raw_output") {
     
-    result <- list(info1, 
+    result <- list(info1,
+                   info2,
                    conclusion1,
+                   conclusion1b,
+                   conclusion1c,
                    User_enter_value = table_start, 
                    Transfer_Table = table_final,
                    conclusion2, 
