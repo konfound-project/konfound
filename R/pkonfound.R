@@ -6,6 +6,7 @@
 #' @param n_covariates the number of covariates in the regression model
 #' @param alpha probability of rejecting the null hypothesis (defaults to 0.05)
 #' @param tails integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)
+#' @param index whether output is RIR or IT (impact threshold); defaults to "RIR"
 #' @param nu what hypothesis to be tested; defaults to testing whether est_eff is significantly different from 0
 #' @param model_type the type of model being estimated; defaults to "ols" for a linear regression model; the other option is "logistic"
 #' @param n_treat the number of cases associated with the treatment condition; applicable only when model_type = "logistic"
@@ -60,6 +61,7 @@
                       n_covariates = 1,
                       alpha = .05,
                       tails = 2,
+                      index = "RIR",
                       nu = 0,
                       n_treat = NULL,
                       switch_trm = TRUE,
@@ -145,6 +147,7 @@
     n_covariates = n_covariates,
     alpha = alpha,
     tails = tails,
+    index = index,
     nu = nu,
     to_return = to_return
   )

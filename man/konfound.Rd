@@ -9,6 +9,7 @@ konfound(
   tested_variable,
   alpha = 0.05,
   tails = 2,
+  index = "RIR",
   to_return = "print",
   test_all = FALSE,
   two_by_two = FALSE,
@@ -25,6 +26,8 @@ konfound(
 \item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
 \item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
+
+\item{index}{whether output is RIR or IT (impact threshold); defaults to "RIR"}
 
 \item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
 

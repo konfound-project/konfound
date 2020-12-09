@@ -11,6 +11,7 @@ pkonfound(
   n_covariates = 1,
   alpha = 0.05,
   tails = 2,
+  index = "RIR",
   nu = 0,
   n_treat = NULL,
   switch_trm = TRUE,
@@ -37,6 +38,8 @@ pkonfound(
 \item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
 \item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
+
+\item{index}{whether output is RIR or IT (impact threshold); defaults to "RIR"}
 
 \item{nu}{what hypothesis to be tested; defaults to testing whether est_eff is significantly different from 0}
 

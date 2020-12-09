@@ -1,6 +1,6 @@
 # konfound-lm
 
-konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, tails, to_return) {
+konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, tails, index, to_return) {
   tidy_output <- broom::tidy(model_object) # tidying output
   glance_output <- broom::glance(model_object)
 
@@ -23,6 +23,7 @@ konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, t
       n_covariates = n_covariates,
       alpha = alpha,
       tails = tails,
+      index = index,
       nu = 0,
       to_return = to_return,
       model_object = model_object,

@@ -8,7 +8,7 @@ get_kr_df <- function(model_object) {
   out
 }
 
-konfound_lmer <- function(model_object, tested_variable_string, test_all, alpha, tails, to_return) {
+konfound_lmer <- function(model_object, tested_variable_string, test_all, alpha, tails, index, to_return) {
   tidy_output <- broom.mixed::tidy(model_object) # tidying output
 
   if (test_all == FALSE) {
@@ -34,6 +34,7 @@ konfound_lmer <- function(model_object, tested_variable_string, test_all, alpha,
       n_covariates = 0,
       alpha = alpha,
       tails = tails,
+      index = index,
       nu = 0,
       to_return = to_return,
       model_object = model_object,
