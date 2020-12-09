@@ -91,7 +91,8 @@
       replace = replace
     )
   } else  if (model_type == "logistic" & is.null(n_treat)) {
-    warning("For a logistic regression, the log-odds coefficients are used for pkonfound’s calculations; however, these coefficients are not as meaningful to use or interpret as average marginal effects. To carry out an analysis using average marginal effects, you can use the konfound() function with the results of a model estimated in R.")
+    
+    warning("For a logistic regression, the log-odds coefficients are used for pkonfound's calculations. However, these coefficients are not as meaningful to use or interpret as average marginal effects. To carry out an analysis using average marginal effects, you can use the konfound() function with the results of a model estimated in R.")
     
     out <- test_sensitivity_ln(
       est_eff = est_eff,
