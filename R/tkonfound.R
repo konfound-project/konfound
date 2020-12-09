@@ -29,7 +29,7 @@ tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher",
   
   # this is the 2 by 2 table we start with
   table_ob <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
-
+  
   if (test == "fisher") {
     p_ob <- fisher_p(a, b, c, d)
     fisher_ob <- fisher_oddsratio(a, b, c, d)
@@ -114,39 +114,47 @@ tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher",
   }
   
   if (p_ob < alpha) {
-    change <- "To invalidate the inference,"
+    change <- "To invalidate the inference, "
   } else {
-    change <- "To sustain an inference,"
+    change <- "To sustain an inference, "
   } 
   
   if (!allnotenough & final > 1) {
     conclusion1 <- paste0(
-      change, sprintf("you would need to replace %d ", RIR), RIRway,
-      sprintf(" cases with null hypothesis cases (RIR = %d). ", RIR),
+      change, sprintf("you would need to replace %d ", RIR), RIRway)
+    
+    conclusion1b <- paste0(
+      sprintf("cases with null hypothesis cases (RIR = %d). ", RIR))
+    
+    conclusion1c <- paste0(
       sprintf("This is equivalent to transferring %d", final), 
       " cases from ", transferway, "."
     )
   }
   
-  
   if (!allnotenough & final == 1) {
     conclusion1 <- paste0(
-      change, sprintf("you would need to replace %d ", RIR), RIRway, 
-      sprintf(" cases with null hypothesis cases (RIR = %d). ", RIR),
+      change, sprintf("you would need to replace %d ", RIR), RIRway)
+    
+    conclusion1b <- paste0(
+      sprintf("cases with null hypothesis cases (RIR = %d). ", RIR))
+    
+    conclusion1c <- paste0(
       sprintf("This is equivalent to transferring %d", final), 
-      " case from ", transferway, "."
-    )
+      " case from ", transferway, ".")
   }
   
   if (allnotenough){
     conclusion1 <- paste(
       change, c("only transferring cases from" ), transferway,
-      sprintf(" is not enough. We also need to transfer %d cases from ", final_extra),
-      transferway_extra, c(" as shown, from the User-entered Table to the Transfer Table."),
-      sprintf(" This means we need to replace %d of ", RIR), RIRway, 
-      sprintf( "with null hypothesis cases; and replace %d ", RIR_extra), RIRway_extra, 
-      c(" with null hypothesis cases to change the inference.")
-    )
+      sprintf(" is not enough. We also need to transfer %d cases from ", final_extra))
+    
+    conclusion1b <- paste0(
+      transferway_extra, c("as shown, from the User-entered Table to the Transfer Table."))
+    
+    conclusion1c <- paste0(sprintf(" This means we need to replace %d of ", RIR), RIRway, 
+    sprintf( "with null hypothesis cases; and replace %d ", RIR_extra), RIRway_extra, 
+    c(" with null hypothesis cases to change the inference."))
   }
   
   if (test == "chisq"){
@@ -163,7 +171,10 @@ tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher",
       "For the Transfer Table, we have an estimated odds ratio of %.3f, with p-value of %.3f:", fisher_final, p_final)
   }
   
-  info1 <- "This function calculates the number of cases that would have to be replaced with no effect cases (RIR) to invalidate an inference made about the association between the rows and columns in a 2x2 table. One can also interpret this as switches from one cell to another, such as from the treatment success cell to the treatment failure cell."
+  info1 <- "This function calculates the number of cases that would have to be replaced with no effect cases (RIR)"
+  info2 <- "to invalidate an inference made about the association between the rows and columns in a 2x2 table."
+  info3 <- "One can also interpret this as switches from one cell to another, such as from the treatment success"
+  info4 <- "cell to the treatment failure cell."
   
   if (to_return == "raw_output") {
     
@@ -183,11 +194,20 @@ tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher",
     cat("\n")
     cat(info1)
     cat("\n")
+    cat(info2)
+    cat("\n")
+    cat(info3)
+    cat("\n")
+    cat(info4)
+    cat("\n")
     cat("\n")
     cat(crayon::bold("Conclusion:"))
     cat("\n")
     cat(conclusion1)
     cat("\n")
+    cat(conclusion1b)
+    cat("\n")
+    cat(conclusion1c)
     cat("\n")
     cat(conclusion2)
     cat("\n")
@@ -208,7 +228,7 @@ tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher",
     cat("\n")
     
   }
-
+  
 }
 
 

@@ -194,16 +194,22 @@ test_sensitivity_ln <- function(est_eff,
   } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
     conclusion1 <- paste(
       change, sprintf("you would need to replace %d", RIR), RIRway,
-      sprintf("cases with null hypothesis cases (RIR = %d).", RIR),
+      sprintf("cases with null hypothesis cases (RIR = %d).", RIR))
+    
+    conclusion1b <- paste(
       sprintf("This is equivalent to transferring %d", final_solution$final_switch), 
-      c("case from"), transferway, c("as shown, from the Implied Table to the Transfer Table.")
-    )
+      c("case from"), transferway, c("as shown, from the Implied Table to the Transfer Table."))
+    
+    conclsion1c <- ""
+    
   } else {
     conclusion1 <- paste(
-      change, c("only transferring cases from"), transferway,
-      sprintf("is not enough. We also need to transfer %d cases from", final_solution$final_extra),
-      transferway_extra, c("as shown, from the User-entered Table to the Transfer Table."),
-      sprintf("This means we need to replace %d of", RIR), RIRway, 
+      change, c("only transferring cases from"), transferway, "is not enough.")
+      
+    conclusion1b <- paste(sprintf("We also need to transfer %d cases from", final_solution$final_extra),
+      transferway_extra, c("as shown, from the User-entered Table to the Transfer Table."))
+    
+    conclusion1c <- paste(sprintf("This means we need to replace %d of", RIR), RIRway, 
       sprintf("with null hypothesis cases; and replace %d", RIR_extra), RIRway_extra, 
       c("with null hypothesis cases to change the inference.")
     )
@@ -218,7 +224,8 @@ test_sensitivity_ln <- function(est_eff,
     final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final
   )
   
-  notice <- c("Note: Values have been rounded to the nearest integer. This may cause a little change to the estimated effect for the Implied Table.")
+  notice <- "Note: Values have been rounded to the nearest integer."
+  noticeb <- "This may cause a little change to the estimated effect for the Implied Table."
   
   if (haveimaginary && changepi) {
     conclusion1 <- paste(sprintf(
@@ -270,15 +277,14 @@ test_sensitivity_ln <- function(est_eff,
     cat("\n")
     cat(notice)
     cat("\n")
+    cat(noticeb)
+    cat("\n")
     cat("\n")
     cat(crayon::underline("Transfer Table:"))
     cat("\n")
     print(final_solution$table_start)
     cat("\n")
     cat(conclusion2)
-    cat("\n")
-    cat(conclusion3)
-    cat("\n")
     cat("\n")
     cat(crayon::bold("RIR:"))
     cat("\n")
