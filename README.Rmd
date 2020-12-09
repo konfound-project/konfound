@@ -88,7 +88,7 @@ The above functions have a number of extensions; the below tables represent how 
 library(dplyr)
 structure(list("Outcome" = c("Continuous", "Logistic"
 ), `Predictor: Continuous` = c("`pkonfound(est_eff, std_err, n_obs, n_covariates)`", 
-                               "`pkonfound(est_eff, std_err, n_obs, n_covariates)`"), `Predictor: Binary` = c("`pkonfound(est_eff, std_err, n_obs, n_covariates)`", "`pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, logistic = TRUE)`  or `pkonfound(a, b, c, d)`")), row.names = c(NA, -2L), class = c("tbl_df", "tbl", "data.frame"
+                               "`pkonfound(est_eff, std_err, n_obs, n_covariates, model_type = 'logistic')`"), `Predictor: Binary` = c("`pkonfound(est_eff, std_err, n_obs, n_covariates)`", "`pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, model_type = 'logistic')`  or `pkonfound(a, b, c, d)`")), row.names = c(NA, -2L), class = c("tbl_df", "tbl", "data.frame"
                                )) %>% 
     knitr::kable()
 

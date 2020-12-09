@@ -166,15 +166,15 @@ mkonfound(d, t, df)
 The above functions have a number of extensions; the below tables
 represent how `pkonfound()` and `konfound()` can be used:
 
-| Outcome    | Predictor: Continuous                              | Predictor: Binary                                                                                       |
-| :--------- | :------------------------------------------------- | :------------------------------------------------------------------------------------------------------ |
-| Continuous | `pkonfound(est_eff, std_err, n_obs, n_covariates)` | `pkonfound(est_eff, std_err, n_obs, n_covariates)`                                                      |
-| Logistic   | `pkonfound(est_eff, std_err, n_obs, n_covariates)` | `pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, logistic = TRUE)` or `pkonfound(a, b, c, d)` |
+| Outcome    | Predictor: Continuous                                                       | Predictor: Binary                                                                                               |
+| :--------- | :-------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------- |
+| Continuous | `pkonfound(est_eff, std_err, n_obs, n_covariates)`                          | `pkonfound(est_eff, std_err, n_obs, n_covariates)`                                                              |
+| Logistic   | `pkonfound(est_eff, std_err, n_obs, n_covariates, model_type = 'logistic')` | `pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, model_type = 'logistic')` or `pkonfound(a, b, c, d)` |
 
-| Outcome    | Predictor: Continuous | Predictor: Binary                    |
-| :--------- | :-------------------- | :----------------------------------- |
-| Continuous | `konfound(m, var)`    | `konfound(m, var)`                   |
-| Logistic   | `konfound(m, var)`    | `konfound(m, var, two_by_two = TRUE` |
+| Outcome    | Predictor: Continuous | Predictor: Binary                     |
+| :--------- | :-------------------- | :------------------------------------ |
+| Continuous | `konfound(m, var)`    | `konfound(m, var)`                    |
+| Logistic   | `konfound(m, var)`    | `konfound(m, var, two_by_two = TRUE)` |
 
 Note that there are additional arguments for each of thes functions; see
 `?pkonfound()` or `?konfound()` for more details.
