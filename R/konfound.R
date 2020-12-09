@@ -3,6 +3,7 @@
 #' @param model_object output from a model (currently works for: lm)
 #' @param tested_variable Variable associated with the unstandardized beta coefficient to be tested
 #' @inheritParams pkonfound
+#' @param index whether output is RIR or IT (impact threshold); defaults to "RIR"
 #' @param two_by_two whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used; only works for single variables at present (so test_all = TRUE will return an error)
 #' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
@@ -41,6 +42,7 @@ konfound <- function(model_object,
                      tested_variable,
                      alpha = .05,
                      tails = 2,
+                     index = "RIR",
                      to_return = "print",
                      test_all = FALSE,
                      two_by_two = FALSE,
@@ -67,6 +69,7 @@ konfound <- function(model_object,
       test_all = test_all,
       alpha = alpha,
       tails = tails,
+      index = index,
       to_return = to_return
     )
     
@@ -121,6 +124,7 @@ konfound <- function(model_object,
       test_all = test_all,
       alpha = alpha,
       tails = tails,
+      index = index,
       to_return = to_return
     )
     
