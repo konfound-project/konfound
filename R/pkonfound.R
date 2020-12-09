@@ -141,6 +141,7 @@
                      to_return = to_return)
   
   } else if (model_type == "ols") {
+    
   out <- test_sensitivity(
     est_eff = est_eff,
     std_err = std_err,
@@ -151,6 +152,7 @@
     index = index,
     nu = nu,
     to_return = to_return
+    
   )
 }
 

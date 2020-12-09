@@ -218,7 +218,7 @@ test_sensitivity_ln <- function(est_eff,
     final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final
   )
   
-  notice <- c("(Values have been rounded to the nearest integer. This may cause a little change to the estimated effect for the Implied Table.)")
+  notice <- c("Note: Values have been rounded to the nearest integer. This may cause a little change to the estimated effect for the Implied Table.")
   
   if (haveimaginary && changepi) {
     conclusion1 <- paste(sprintf(
@@ -235,31 +235,55 @@ test_sensitivity_ln <- function(est_eff,
     total_RIR <- RIR
   }
   
-  result <- list(conclusion1,
-                 Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
-                 conclusion2, conclusion3, 
-#                 Implied_Estimate = final_solution$est_eff_start, Transfer_Estimate = final_solution$est_eff_final,
-#                 Implied_SE = final_solution$std_err_start, Transfer_SE = final_solution$std_err_final,
-#                 Implied_tratio = final_solution$t_start, Transfer_tratio = final_solution$t_final,
-#                 Taylor_predict = final_solution$taylor_pred, Percent_bias_predict = final_solution$perc_bias_pred,
-                 total_RIR = total_RIR, total_switch = total_switch
-  )
+  # result <- list(conclusion1,
+  #                Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
+  #                conclusion2, conclusion3, 
+  #                total_RIR = total_RIR, total_switch = total_switch
+  # )
   
   # output dispatch
-  if (to_return == "print" | to_return == "raw_output") {
-    message("Note that this output is from an approach for non-linear models that is developmental and unpublished")
+  if (to_return == "raw_output") {
+    
+    result <- list(conclusion1,
+                   Implied_Table = final_solution$table_start, 
+                   notice,
+                   Transfer_Table = final_solution$table_final,
+                   conclusion2, 
+                   conclusion3,
+                   RIR = RIR)
+    
     return(result)
+    
+  } else  if (to_return == "print") {
+    
+    # cat(crayon::bold("Background Information:"))
+    # cat("\n")
+    # cat(info1)
+    # cat("\n")
+    # cat("\n")
+    cat(crayon::bold("Conclusion:"))
+    cat("\n")
+    cat(crayon::underline("User-entered Table:"))
+    cat("\n")
+    print(final_solution$table_start)
+    cat("\n")
+    cat("\n")
+    cat(notice)
+    cat("\n")
+    cat("\n")
+    cat(crayon::underline("Transfer Table:"))
+    cat("\n")
+    print(final_solution$table_start)
+    cat("\n")
+    cat(conclusion2)
+    cat("\n")
+    cat(conclusion3)
+    cat("\n")
+    cat("\n")
+    cat(crayon::bold("RIR:"))
+    cat("\n")
+    cat("RIR =", RIR)
+    cat("\n")
+    
   }
-  
-  # else if (to_return == "raw_output") {
-  #     return(output_df(est_eff, beta_threshold, est_eff, bias, sustain, recase, obs_r, critical_r, r_con, itcv))
-  # } else if (to_return == "thresh_plot") { # this still makes sense for NLMs (just not quite as accurate)
-  #     return(plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff))
-  # } else if (to_return == "table") {
-  #     return(output_table(model_object, tested_variable))
-  # } else if (to_return == "nl_table") {
-  #     return(output_table(model_object, tested_variable))
-  # } else {
-  #     stop("to_return must be set to 'raw_output', 'print', 'table', 'thresh_plot', or 'corr_plot' or some combination thereof")
-  # }
 }
