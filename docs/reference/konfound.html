@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">konfound</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -106,7 +106,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/jrosen48/konfound/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -137,6 +137,7 @@
   <span class='va'>tested_variable</span>,
   alpha <span class='op'>=</span> <span class='fl'>0.05</span>,
   tails <span class='op'>=</span> <span class='fl'>2</span>,
+  index <span class='op'>=</span> <span class='st'>"RIR"</span>,
   to_return <span class='op'>=</span> <span class='st'>"print"</span>,
   test_all <span class='op'>=</span> <span class='cn'>FALSE</span>,
   two_by_two <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -163,6 +164,10 @@
     <tr>
       <th>tails</th>
       <td><p>integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)</p></td>
+    </tr>
+    <tr>
+      <th>index</th>
+      <td><p>whether output is RIR or IT (impact threshold); defaults to "RIR"</p></td>
     </tr>
     <tr>
       <th>to_return</th>
@@ -198,16 +203,19 @@
     <pre class="examples"><div class='input'><span class='co'># using lm() for linear models</span>
 <span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
 <span class='fu'>konfound</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>wt</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
-#&gt; </span><span>To invalidate an inference, 66.629% of the estimate would have to be due to bias. This is based on a threshold of -1.294 for statistical significance (alpha = 0.05).
-#&gt; To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0 (RIR = 21).
-#&gt; See Frank et al. (2013) for a description of the method
-#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. </span><span style='font-style: italic;'>Education, Evaluation and Policy Analysis, 35</span><span> 437-460.
-#&gt; </span><span style='font-weight: bold;'>Impact Threshold for a Confounding Variable:
-#&gt; </span><span>The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.791 with the outcome and at 0.791 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.366 for statistical significance (alpha = 0.05).
-#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.791 X 0.791 = 0.626 to invalidate an inference for a null hypothesis of 0 effect.
-#&gt; See Frank (2000) for a description of the method
-#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>For more detailed output, consider setting `to_return` to table</span></div><div class='output co'>#&gt; <span class='message'>To consider other predictors of interest, consider setting `test_all` to TRUE.</span></div><div class='input'><span class='fu'>konfound</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>wt</span>, test_all <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='font-weight: bold;'>Robustness of Inference to Replacement (RIR):
+#&gt; </span><span>To invalidate an inference,  66.629 % of the estimate would have to be due to bias. 
+#&gt; This is based on a threshold of -1.294 for statistical significance (alpha = 0.05).
+#&gt; 
+#&gt; To invalidate an inference,  21  observations would have to be replaced with cases
+#&gt; for which the effect is 0 (RIR = 21).
+#&gt; 
+#&gt; See Frank et al. (2013) for a description of the method.
+#&gt; 
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+#&gt; What would it take to change an inference?
+#&gt; Using Rubin's causal model to interpret the robustness of causal inferences.
+#&gt; </span><span style='font-style: italic;'>Education, Evaluation and Policy Analysis, 35</span><span> 437-460.</div><div class='output co'>#&gt; <span class='message'>For more detailed output, consider setting `to_return` to table</span></div><div class='output co'>#&gt; <span class='message'>To consider other predictors of interest, consider setting `test_all` to TRUE.</span></div><div class='input'><span class='fu'>konfound</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>wt</span>, test_all <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Note that this output is calculated based on the correlation-based approach used in mkonfound()</span></div><div class='output co'>#&gt; <span class='warning'>Warning: row names were found from a short variable and have been discarded</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 2 x 8</span><span>
 #&gt;   var_name     t    df action     inference   pct_bias_to_change_in…  itcv r_con
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                        </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
@@ -237,46 +245,44 @@
 <span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required namespace: lme4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'broom.mixed':</span>
 #&gt; <span class='message'>  method      from </span>
-#&gt; <span class='message'>  tidy.gamlss broom</span></div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Percent Bias Necessary to Invalidate the Inference:
-#&gt; </span><span>To invalidate an inference, 84.826% of the estimate would have to be due to bias. This is based on a threshold of 1.588 for statistical significance (alpha = 0.05).
-#&gt; To invalidate an inference, 137 observations would have to be replaced with cases for which the effect is 0 (RIR = 137).
-#&gt; See Frank et al. (2013) for a description of the method
-#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. </span><span style='font-style: italic;'>Education, Evaluation and Policy Analysis, 35</span><span> 437-460.
-#&gt; </span><span style='font-weight: bold;'>Impact Threshold for a Confounding Variable:
-#&gt; </span><span>The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.817 with the outcome and at 0.817 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.155 for statistical significance (alpha = 0.05).
-#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.817 X 0.817 = 0.667 to invalidate an inference for a null hypothesis of 0 effect.
-#&gt; See Frank (2000) for a description of the method
-#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. </span><span style='font-style: italic;'>Sociological Methods and Research, 29</span><span> (2), 147-194</div><div class='output co'>#&gt; <span class='message'>Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest. We are presently working to add other methods for calculating the degrees of freedom for the predictor(s) of interest. If you wish to use other methods now, consider those detailed here: https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. You can then enter degrees of freedom obtained from another method along with the coefficient, number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
+#&gt; <span class='message'>  tidy.gamlss broom</span></div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Robustness of Inference to Replacement (RIR):
+#&gt; </span><span>To invalidate an inference,  84.826 % of the estimate would have to be due to bias. 
+#&gt; This is based on a threshold of 1.588 for statistical significance (alpha = 0.05).
+#&gt; 
+#&gt; To invalidate an inference,  137  observations would have to be replaced with cases
+#&gt; for which the effect is 0 (RIR = 137).
+#&gt; 
+#&gt; See Frank et al. (2013) for a description of the method.
+#&gt; 
+#&gt; </span><span style='text-decoration: underline;'>Citation:</span><span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+#&gt; What would it take to change an inference?
+#&gt; Using Rubin's causal model to interpret the robustness of causal inferences.
+#&gt; </span><span style='font-style: italic;'>Education, Evaluation and Policy Analysis, 35</span><span> 437-460.</div><div class='output co'>#&gt; <span class='message'>Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest. We are presently working to add other methods for calculating the degrees of freedom for the predictor(s) of interest. If you wish to use other methods now, consider those detailed here: https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. You can then enter degrees of freedom obtained from another method along with the coefficient, number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
 <span class='va'>m4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>outcome</span> <span class='op'>~</span> <span class='va'>condition</span>, data <span class='op'>=</span> <span class='va'>binary_dummy_data</span>, family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link <span class='op'>=</span> <span class='st'>"logit"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>konfound</span><span class='op'>(</span><span class='va'>m4</span>, <span class='va'>condition</span>, two_by_two <span class='op'>=</span> <span class='cn'>TRUE</span>, n_treat <span class='op'>=</span> <span class='fl'>55</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Note that this output is from an approach for non-linear models that is developmental and unpublished</span></div><div class='output co'>#&gt; [[1]]
-#&gt; [1] "To invalidate the inference, you would need to replace 14 treatment success cases with null hypothesis cases (RIR = 14). This is equivalent to transferring 10 cases from treatment success to treatment failure, as shown, from the Implied Table to the Transfer Table."
-#&gt; 
-#&gt; $Implied_Table
+</div><div class='output co'>#&gt; </span><span style='font-weight: bold;'>Conclusion:</span><span>
+#&gt; </span><span style='text-decoration: underline;'>User-entered Table:</span><span>
 #&gt;           Fail Success
 #&gt; Control     36      16
 #&gt; Treatment   18      37
 #&gt; 
-#&gt; [[3]]
-#&gt; [1] "(Values have been rounded to the nearest integer. This may cause a little change to the estimated effect for the Implied Table.)"
 #&gt; 
-#&gt; $Transfer_Table
+#&gt; Note: Values have been rounded to the nearest integer.
+#&gt; This may cause a little change to the estimated effect for the Implied Table.
+#&gt; 
+#&gt; To invalidate the inference, you would need to replace 14 treatment success cases
+#&gt; with null hypothesis cases (RIR = 14).
+#&gt; This is equivalent to transferring 10 cases from treatment success to treatment failure,
+#&gt; as shown, from the Implied Table to the Transfer Table.
+#&gt; </span><span style='text-decoration: underline;'>Transfer Table:</span><span>
 #&gt;           Fail Success
 #&gt; Control     36      16
 #&gt; Treatment   28      27
 #&gt; 
-#&gt; [[5]]
-#&gt; [1] "For the Implied Table, we have an estimate of 1.531, with a standard error of 0.416 and a t-ratio of 3.684."
-#&gt; 
-#&gt; [[6]]
-#&gt; [1] "For the Transfer Table, we have an estimate of 0.775, with a standard error of 0.404 and a t-ratio of 1.918."
-#&gt; 
-#&gt; $total_RIR
-#&gt; [1] 14
-#&gt; 
-#&gt; $total_switch
-#&gt; [1] 10
-#&gt; </div><div class='input'>
+#&gt; For the Implied Table, we have an estimate of 1.531, with a SE of 0.416 and a t-ratio of 3.684.
+#&gt; and a t-ratio of 1.531.
+#&gt; </span><span style='font-weight: bold;'>RIR:</span><span>
+#&gt; RIR = 14</div><div class='output co'>#&gt; NULL</div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
