@@ -303,7 +303,7 @@ test_sensitivity_ln <- function(est_eff,
     cat("\n")
     cat(crayon::underline("Transfer Table:"))
     cat("\n")
-    print(final_solution$table_start)
+    print(final_solution$table_final)
     cat("\n")
     cat(conclusion2)
     cat("\n")
