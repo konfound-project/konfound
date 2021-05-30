@@ -200,7 +200,7 @@ if (requireNamespace("lme4")) {
 
 We can also use `konfound` to carry out sensitivity analysis as part of meta-analyses. For example, here, `d` represents output from a number (30 in this case) of past studies, read in a CSV file from a website:
 
-```{r}
+```{r, eval = FALSE}
 d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
 head(d)
 mkonfound(d, t, df)
@@ -208,7 +208,7 @@ mkonfound(d, t, df)
 
 We can also return a plot summarizing the percent bias needed to sustan or invalidate an inference across all of the past studies:
 
-```{r}
+```{r, eval = FALSE}
 mkonfound(d, t, df, return_plot = T)
 ```
 

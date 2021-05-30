@@ -1,3 +1,7 @@
+# konfound 0.4.0
+
+* major updates in advance of initial submission to the R Journal
+
 # konfound 0.3.1
 
 * address minor bug introduced in the `index` argument
