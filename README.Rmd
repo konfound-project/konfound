@@ -72,12 +72,11 @@ konfound(m1, wt)
 
 ## mkonfound for meta-analyses including sensitivity analysis
 
-We can use an existing dataset, such as the CSV file [here](https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv).
+We can use an existing (and built-in) dataset, such as `mkonfound_ex`.
 
 ```{r}
-d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
-head(d) 
-mkonfound(d, t, df)
+mkonfound_ex
+mkonfound(mkonfound_ex, t, df)
 ```
 
 # Overview of available functionality 
@@ -115,4 +114,4 @@ We prefer for issues to be filed via GitHub (link to the issues page for `konfou
 
 ### Code of Conduct
 
-gPlease note that this project is released with a Contributor Code of Conduct available at [http://contributor-covenant.org/version/1/0/0/](http://contributor-covenant.org/version/1/0/0/)
+Please note that this project is released with a Contributor Code of Conduct available at [https://www.contributor-covenant.org/version/1/0/0/](https://www.contributor-covenant.org/version/1/0/0/)

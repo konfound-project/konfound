@@ -1,6 +1,5 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 <!-- badges: start -->
 
 [![CRAN
@@ -58,16 +57,19 @@ pkonfound(est_eff = 2,
           std_err = .4, 
           n_obs = 100, 
           n_covariates = 3)
-#> Percent Bias Necessary to Invalidate the Inference:
-#> To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
-#> To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0 (RIR = 60).
-#> See Frank et al. (2013) for a description of the method
-#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
-#> Impact Threshold for a Confounding Variable:
-#> The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.201 for statistical significance (alpha = 0.05).
-#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null hypothesis of 0 effect.
-#> See Frank (2000) for a description of the method
-#> Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194
+#> Robustness of Inference to Replacement (RIR):
+#> To invalidate an inference,  60.3 % of the estimate would have to be due to bias. 
+#> This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
+#> 
+#> To invalidate an inference,  60  observations would have to be replaced with cases
+#> for which the effect is 0 (RIR = 60).
+#> 
+#> See Frank et al. (2013) for a description of the method.
+#> 
+#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+#> What would it take to change an inference?
+#> Using Rubin's causal model to interpret the robustness of causal inferences.
+#> Education, Evaluation and Policy Analysis, 35 437-460.
 #> For other forms of output, run ?pkonfound and inspect the to_return argument
 #> For models fit in R, consider use of konfound().
 ```
@@ -115,39 +117,47 @@ as follows, specifying the fitted model object:
 
 ``` r
 konfound(m1, wt)
-#> Percent Bias Necessary to Invalidate the Inference:
-#> To invalidate an inference, 66.629% of the estimate would have to be due to bias. This is based on a threshold of -1.294 for statistical significance (alpha = 0.05).
-#> To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0 (RIR = 21).
-#> See Frank et al. (2013) for a description of the method
-#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.
-#> Impact Threshold for a Confounding Variable:
-#> The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.791 with the outcome and at 0.791 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.366 for statistical significance (alpha = 0.05).
-#> Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.791 X 0.791 = 0.626 to invalidate an inference for a null hypothesis of 0 effect.
-#> See Frank (2000) for a description of the method
-#> Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194
+#> Robustness of Inference to Replacement (RIR):
+#> To invalidate an inference,  66.629 % of the estimate would have to be due to bias. 
+#> This is based on a threshold of -1.294 for statistical significance (alpha = 0.05).
+#> 
+#> To invalidate an inference,  21  observations would have to be replaced with cases
+#> for which the effect is 0 (RIR = 21).
+#> 
+#> See Frank et al. (2013) for a description of the method.
+#> 
+#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+#> What would it take to change an inference?
+#> Using Rubin's causal model to interpret the robustness of causal inferences.
+#> Education, Evaluation and Policy Analysis, 35 437-460.
 #> For more detailed output, consider setting `to_return` to table
 #> To consider other predictors of interest, consider setting `test_all` to TRUE.
 ```
 
 ## mkonfound for meta-analyses including sensitivity analysis
 
-We can use an existing dataset, such as the CSV file
-[here](https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv).
+We can use an existing (and built-in) dataset, such as `mkonfound_ex`.
 
 ``` r
-d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
-head(d) 
-#>           t  df
-#> 1  7.076763 178
-#> 2  4.127893 193
-#> 3  1.893137  47
-#> 4 -4.166395 138
-#> 5 -1.187599  97
-#> 6  3.585478  87
-mkonfound(d, t, df)
+mkonfound_ex
+#> # A tibble: 30 x 2
+#>         t    df
+#>     <dbl> <dbl>
+#>  1  7.08    178
+#>  2  4.13    193
+#>  3  1.89     47
+#>  4 -4.17    138
+#>  5 -1.19     97
+#>  6  3.59     87
+#>  7  0.282   117
+#>  8  2.55     75
+#>  9 -4.44    137
+#> 10 -2.05    195
+#> # … with 20 more rows
+mkonfound(mkonfound_ex, t, df)
 #> # A tibble: 30 x 7
 #>         t    df action      inference       pct_bias_to_change_inf…   itcv r_con
-#>     <dbl> <int> <chr>       <chr>                             <dbl>  <dbl> <dbl>
+#>     <dbl> <dbl> <chr>       <chr>                             <dbl>  <dbl> <dbl>
 #>  1  7.08    178 to_invalid… reject_null                       68.8   0.378 0.614
 #>  2  4.13    193 to_invalid… reject_null                       50.6   0.168 0.41 
 #>  3  1.89     47 to_sustain  fail_to_reject…                    5.47 -0.012 0.11 
@@ -167,12 +177,12 @@ The above functions have a number of extensions; the below tables
 represent how `pkonfound()` and `konfound()` can be used:
 
 | Outcome    | Predictor: Continuous                                                       | Predictor: Binary                                                                                               |
-| :--------- | :-------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------- |
+|:-----------|:----------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------|
 | Continuous | `pkonfound(est_eff, std_err, n_obs, n_covariates)`                          | `pkonfound(est_eff, std_err, n_obs, n_covariates)`                                                              |
 | Logistic   | `pkonfound(est_eff, std_err, n_obs, n_covariates, model_type = 'logistic')` | `pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, model_type = 'logistic')` or `pkonfound(a, b, c, d)` |
 
 | Outcome    | Predictor: Continuous | Predictor: Binary                     |
-| :--------- | :-------------------- | :------------------------------------ |
+|:-----------|:----------------------|:--------------------------------------|
 | Continuous | `konfound(m, var)`    | `konfound(m, var)`                    |
 | Logistic   | `konfound(m, var)`    | `konfound(m, var, two_by_two = TRUE)` |
 
@@ -185,13 +195,13 @@ Note that there are additional arguments for each of thes functions; see
 
 To learn more about sensitivity analysis, please visit:
 
-  - The [Introduction to konfound
+-   The [Introduction to konfound
     vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html),
     with detailed information about each of the functions
     (`pkonfound()`, `konfound()`, and `mkounfound()`)
-  - The causal inference section of Ken Frank’s website
+-   The causal inference section of Ken Frank’s website
     [here](https://msu.edu/~kenfrank/research.htm#causal)
-  - The [konfound interactive web
+-   The [konfound interactive web
     application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/),
     with links to PowerPoints and key publications
 
@@ -204,5 +214,6 @@ file).
 
 ### Code of Conduct
 
-gPlease note that this project is released with a Contributor Code of
-Conduct available at <http://contributor-covenant.org/version/1/0/0/>
+Please note that this project is released with a Contributor Code of
+Conduct available at
+<https://www.contributor-covenant.org/version/1/0/0/>
