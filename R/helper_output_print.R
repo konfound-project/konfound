@@ -41,7 +41,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
     cat("The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of ", r_con)
     cat("\n")
     cat(" with the outcome and at ", r_con,
-        " with the predictor of interest (conditioning on observed covariates) based on a threshold of ")
+        " with the predictor of interest (conditioning on observed covariates and taking opposites signs) based on a threshold of ")
     cat("\n")
     cat(round(critical_r, 3), " for statistical significance (alpha = ", alpha, ").\n",
         sep = "")
@@ -54,7 +54,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
     cat("The maximum impact to sustain an inference for a null hypothesis of 0 effect is based on a correlation of ", r_con)
     cat("\n")
     cat(" with the outcome and at ", r_con,
-        " with the predictor of interest (conditioning on observed covariates) based on a threshold of ", round(beta_threshhold, 3))
+        " with the predictor of interest (conditioning on observed covariates and taking opposites signs) based on a threshold of ", round(beta_threshhold, 3))
     cat("\n")
     cat(" for statistical significance (alpha = ", alpha, ").\n",
         sep = "")
