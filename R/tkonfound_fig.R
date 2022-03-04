@@ -1,6 +1,5 @@
 #' Draw figures for change in effect size as a function of switching or replacing outcomes 
-#' @description This function returns two plots for change in effect size as a function of switching or replacing outcomes,
-#' one for all possibilities (switching), another zoomed in the area for positive RIR  
+#' @description This function returns two plots for change in effect size as a function of switching or replacing outcomes, one for all possibilities (switching), another zoomed in the area for positive RIR  
 #' @param a cell is the number of cases in the control group showing unsuccessful results
 #' @param b cell is the number of cases in the control group showing successful results
 #' @param c cell is the number of cases in the treatment group showing unsuccessful results
@@ -18,6 +17,8 @@
 #' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
 #' tkonfound_fig(35, 17, 17, 38, thr_p - 0.01, switch_trm = TRUE, test = "chisq")
 #' tkonfound_fig(35, 17, 17, 38, thr_p - 0.01, switch_trm = TRUE, test = "chisq", replace = "control")
+#' @export
+#' 
 
 tkonfound_fig <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, test = "fisher", replace = "control"){
 
@@ -335,4 +336,3 @@ result <- list(fig1, note, fig2)
 
 return(result)
 }
-

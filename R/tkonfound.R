@@ -1,4 +1,9 @@
-tkonfound <- function(a, b, c, d, alpha = 0.05, switch_trm = T, test = "fisher", replace = "control", to_return = to_return){
+tkonfound <- function(a, b, c, d, 
+                      alpha = 0.05, 
+                      switch_trm = T, 
+                      test = "fisher", 
+                      replace = "control", 
+                      to_return = to_return){
   # a <- 35
   # b <- 17
   # c <- 17
