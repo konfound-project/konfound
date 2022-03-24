@@ -30,5 +30,5 @@ test_that("konfound works for lme4 model", {
 })
 
 test_that("konfound works for glm, 2x2 model", {
-    expect_equal(output4$RIR, 14)
+    expect_equal(output4$RIR, 15)
 })

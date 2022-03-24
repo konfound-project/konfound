@@ -43,6 +43,7 @@ This function returns two plots for change in effect size as a function of switc
 tkonfound_fig(35, 17, 17, 38)
 tkonfound_fig(35, 17, 17, 38, thr_p = 0.01)
 tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
-tkonfound_fig(35, 17, 17, 38, thr_p - 0.01, switch_trm = TRUE, test = "chisq")
-tkonfound_fig(35, 17, 17, 38, thr_p - 0.01, switch_trm = TRUE, test = "chisq", replace = "control")
+tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq")
+tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq", replace = "control")
+
 }

@@ -127,22 +127,22 @@ test_sensitivity_ln <- function(est_eff,
   
   if (switch_trm && dcroddsratio_ob) {
     transferway <- "treatment success to treatment failure,"
-    RIR <- round(final/((a+c)/n_obs))*(replace=="entire") + round(final/(a/(a+b)))*(1-(replace=="entire"))
+    RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment success"
   }
   if (switch_trm && !dcroddsratio_ob) {
     transferway <- "treatment failure to treatment success,"
-    RIR <- round(final/((b+d)/n_obs))*(replace=="entire") + round(final/(b/(a+b)))*(1-(replace=="entire"))
+    RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment failure"
   }
   if (!switch_trm && dcroddsratio_ob) {
     transferway <- "control failure to control success,"
-    RIR <- round(final/((b+d)/n_obs))*(replace=="entire") + round(final/(b/(a+b)))*(1-(replace=="entire"))
+    RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control failure"
   }
   if (!switch_trm && !dcroddsratio_ob) {
     transferway <- "control success to control failure,"
-    RIR <- round(final/((a+c)/n_obs))*(replace=="entire") + round(final/(a/(a+b)))*(1-(replace=="entire"))
+    RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control success"
   }
   
@@ -150,26 +150,26 @@ test_sensitivity_ln <- function(est_eff,
     final_extra <- final_solution$final_extra
     if (switch_trm && dcroddsratio_ob) {
       transferway_extra <- "control failure to control success,"
-      RIR_extra <- round(final_extra/((b+d)/n_obs))*(replace=="entire") + 
-        round(final_extra/(b/(b+d)))*(1-(replace=="entire"))
+      RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") + 
+        ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
       RIRway_extra <- "control failure"
     }
     if (switch_trm && !dcroddsratio_ob) {
       transferway_extra <- "control success to control failure,"
-      RIR_extra <- round(final_extra/((a+c)/n_obs))*(replace=="entire") +
-        round(final_extra/(a/(a+b)))*(1-(replace=="entire"))
+      RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
+        ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
       RIRway_extra <- "control success"
     }
     if (!switch_trm && dcroddsratio_ob) {
       transferway_extra <- "treatment success to treatment failure,"
-      RIR_extra <- round(final_extra/((a+c)/n_obs))*(replace=="entire") +
-        round(final_extra/(a/(a+b)))*(1-(replace=="entire"))
+      RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
+        ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
       RIRway_extra <- "treatment success"
     }
     if (!switch_trm && !dcroddsratio_ob) {
       transferway_extra <- "treatment failure to treatment success,"
-      RIR_extra <- round(final_extra/((b+d)/n_obs))*(replace=="entire") +
-        round(final_extra/(b/(b+d)))*(1-(replace=="entire"))
+      RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
+        ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
       RIRway_extra <- "treatment failure"
     }
   }

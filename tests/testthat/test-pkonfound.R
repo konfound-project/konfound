@@ -43,7 +43,7 @@ test_that("pkonfound test positive, significant coefficient, small sample size w
 })
 
 test_that("tkonfound for two_by_two works", {
-  expect_equal(output3$RIR, tolerance = .001, 13)
+  expect_equal(output3$RIR, tolerance = .001, 14)
 })
 
 test_that("test_all works for lm and lmer outout", {

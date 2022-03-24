@@ -15,8 +15,9 @@
 #' tkonfound_fig(35, 17, 17, 38)
 #' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01)
 #' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
-#' tkonfound_fig(35, 17, 17, 38, thr_p - 0.01, switch_trm = TRUE, test = "chisq")
-#' tkonfound_fig(35, 17, 17, 38, thr_p - 0.01, switch_trm = TRUE, test = "chisq", replace = "control")
+#' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq")
+#' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq", replace = "control")
+#' 
 #' @export
 #' 
 
@@ -215,16 +216,16 @@ fillcol <-c("current"="white","positive"="green4","negative"="red","other"="whit
 pointshape <- c("current"=15,"other"=21)
 
 if (switch_trm && dcroddsratio_ob) {
-  meta$RIR <- round(meta$switch/((a+c)/n_obs))*(replace=="entire") + round(meta$switch/(a/(a+b)))*(1-(replace=="entire"))
+  meta$RIR <- ceiling(meta$switch/((a+c)/n_obs))*(replace=="entire") + ceiling(meta$switch/(a/(a+b)))*(1-(replace=="entire"))
 }
 if (switch_trm && !dcroddsratio_ob) {
-  meta$RIR <- round(meta$switch/((b+d)/n_obs))*(replace=="entire") + round(meta$switch/(b/(a+b)))*(1-(replace=="entire"))
+  meta$RIR <- ceiling(meta$switch/((b+d)/n_obs))*(replace=="entire") + ceiling(meta$switch/(b/(a+b)))*(1-(replace=="entire"))
 }
 if (!switch_trm && dcroddsratio_ob) {
-  meta$RIR <- round(meta$switch/((b+d)/n_obs))*(replace=="entire") + round(meta$switch/(b/(a+b)))*(1-(replace=="entire"))
+  meta$RIR <- ceiling(meta$switch/((b+d)/n_obs))*(replace=="entire") + ceiling(meta$switch/(b/(a+b)))*(1-(replace=="entire"))
 }
 if (!switch_trm && !dcroddsratio_ob) {
-  meta$RIR <- round(meta$switch/((a+c)/n_obs))*(replace=="entire") + round(meta$switch/(a/(a+b)))*(1-(replace=="entire"))
+  meta$RIR <- ceiling(meta$switch/((a+c)/n_obs))*(replace=="entire") + ceiling(meta$switch/(a/(a+b)))*(1-(replace=="entire"))
 }
 
 meta$xaxis <- paste(meta$RIR,"\n","(", meta$switch, ")", sep = "")
