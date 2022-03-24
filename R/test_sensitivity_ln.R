@@ -188,8 +188,12 @@ test_sensitivity_ln <- function(est_eff,
     conclusion1 <- paste(
       change, sprintf("you would need to replace %d", RIR), RIRway, "cases")
       
-    conclusion1a <- sprintf("with null hypothesis cases (RIR = %d).", RIR)
-    
+    if (replace == "control") {
+      conclusion1a <- sprintf("with cases for which the probability of failure in the control group applies (RIR = %d).", RIR)
+    } else {
+      conclusion1a <- sprintf("with cases for which the probability of failure in the entire sample applies (RIR = %d).", RIR)
+    }
+
     conclusion1b <- paste(
       sprintf("This is equivalent to transferring %d", final_solution$final_switch), 
       c("cases from"), transferway)
@@ -200,7 +204,11 @@ test_sensitivity_ln <- function(est_eff,
     conclusion1 <- paste(
       change, sprintf("you would need to replace %d", RIR), RIRway, "cases")
     
-    conclusion1a <- sprintf("with null hypothesis cases (RIR = %d).", RIR)
+    if (replace == "control") {
+      conclusion1a <- sprintf("with cases for which the probability of failure in the control group applies (RIR = %d).", RIR)
+    } else {
+      conclusion1a <- sprintf("with cases for which the probability of failure in the entire sample applies (RIR = %d).", RIR)
+    }
     
     conclusion1b <- paste(
       sprintf("This is equivalent to transferring %d", final_solution$final_switch), 

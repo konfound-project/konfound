@@ -128,8 +128,13 @@ tkonfound <- function(a, b, c, d,
     conclusion1 <- paste0(
       change, sprintf("you would need to replace %d ", RIR), RIRway)
     
-    conclusion1b <- paste0(
-      sprintf("cases with null hypothesis cases (RIR = %d). ", RIR))
+    if (replace == "control") {
+      conclusion1b <- paste0(
+        sprintf("cases for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+    } else {
+      conclusion1b <- paste0(
+        sprintf("cases for which the probability of failure in the entire group applies (RIR = %d). ", RIR))    
+    }
     
     conclusion1c <- paste0(
       sprintf("This is equivalent to transferring %d", final), 
@@ -141,8 +146,13 @@ tkonfound <- function(a, b, c, d,
     conclusion1 <- paste0(
       change, sprintf("you would need to replace %d ", RIR), RIRway)
     
-    conclusion1b <- paste0(
-      sprintf("cases with null hypothesis cases (RIR = %d). ", RIR))
+    if (replace == "control") {
+      conclusion1b <- paste0(
+        sprintf("cases for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+    } else {
+      conclusion1b <- paste0(
+        sprintf("cases for which the probability of failure in the entire group applies (RIR = %d). ", RIR))    
+      }
     
     conclusion1c <- paste0(
       sprintf("This is equivalent to transferring %d", final), 
@@ -177,7 +187,7 @@ tkonfound <- function(a, b, c, d,
   }
   
   info1 <- "This function calculates the number of cases that would have to be replaced"
-  info2 <- "with no effect cases (RIR)to invalidate an inference made about the association"
+  info2 <- "with no effect cases (RIR) to invalidate an inference made about the association"
   info3 <- "between the rows and columns in a 2x2 table."
   info4 <- "One can also interpret this as switches from one cell to another, such as from"
   info5 <- "the treatment success cell to the treatment failure cell."
