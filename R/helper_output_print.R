@@ -38,7 +38,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
   if (index == "IT") { 
     cat(crayon::bold("Impact Threshold for a Confounding Variable:\n"))
     if (abs(obs_r) > abs(critical_r) & obs_r > 0) {
-      cat("The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of ", r_con)
+      cat("The minimum impact of an omitted variable to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of ", r_con)
       cat("\n")
       cat(" with the outcome and at ", r_con,
           " with the predictor of interest (conditioning on observed covariates) based on a threshold of ")
@@ -50,7 +50,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
       cat("\n")
       cat(r_con, " X ", r_con, " = ", round(r_con^2, 3), " to invalidate an inference for a null hypothesis of 0 effect.\n", sep = "")
     } else if (abs(obs_r) > abs(critical_r) & obs_r < 0) {
-      cat("The minimum (in absolute value) impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of ", -r_con)
+      cat("The minimum (in absolute value) impact of an omitted variable to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of ", -r_con)
       cat("\n")
       cat(" with the outcome and at ", r_con,
           " with the predictor of interest (conditioning on observed covariates; signs are interchangable) based on a threshold of ")
@@ -62,7 +62,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
       cat("\n")
       cat(-r_con, " X ", r_con, " = ", -round(r_con^2, 3), " to invalidate an inference for a null hypothesis of 0 effect.\n", sep = "")
     } else if (abs(obs_r) < abs(critical_r) & obs_r > 0) {
-      cat("The maximum impact (in absolute value) to sustain an inference for a null hypothesis of 0 effect is based on a correlation of ", -r_con)
+      cat("The maximum impact (in absolute value) of an omitted variable to sustain an inference for a null hypothesis of 0 effect is based on a correlation of ", -r_con)
       cat("\n")
       cat(" with the outcome and at ", r_con,
           " with the predictor of interest (conditioning on observed covariates; signs are interchangable) based on a threshold of ", round(beta_threshhold, 3))
@@ -73,7 +73,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
       cat("\n")
       cat(-r_con, " X ", r_con, " = ", -round(r_con^2, 3), " to sustain an inference for a null hypothesis of 0 effect.\n", sep = "")
     } else if (abs(obs_r) < abs(critical_r) & obs_r < 0) {
-      cat("The maximum impact to sustain an inference for a null hypothesis of 0 effect is based on a correlation of ", r_con)
+      cat("The maximum impact of an omitted variable to sustain an inference for a null hypothesis of 0 effect is based on a correlation of ", r_con)
       cat("\n")
       cat(" with the outcome and at ", r_con,
           " with the predictor of interest (conditioning on observed covariates) based on a threshold of ", round(beta_threshhold, 3))
