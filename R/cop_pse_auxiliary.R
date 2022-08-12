@@ -88,6 +88,8 @@ cal_delta_exact <- function(ryx, ryz, rxz, beta_thr, FR2max, R2, sdx, sdz){
 verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv, 
                            rxy, rxz, rzy, rcvy, rcvx, rcvz){
     
+    model <- 'Y ~ beta1 * X + beta2 * Z + beta3 * CV'
+    
     ccvy = rcvy * sdcv * sdy # cov(cv, y)
     ccvx = rcvx * sdcv * sdx # cov(cv, x)
     ccvz = rcvz * sdcv * sdz
@@ -95,20 +97,18 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
     czy = rzy * sdz * sdy
     cxz = rxz * sdx * sdz
     
-    model.Y3 <- 'Y ~ beta1 * X + beta2 * Z + beta3 * CV'
-    
     # set up the covariance matrix
-    cov.matrix.Y3 <- matrix(c(sdy^2, cxy, czy, ccvy,
-                              cxy, sdx^2, cxz, ccvx,
-                              czy, cxz, sdz^2, ccvz,
-                              ccvy, ccvx, ccvz, sdcv^2),4,4)
-    rownames(cov.matrix.Y3) <- colnames(cov.matrix.Y3) <- c("Y", "X", "Z", "CV")
+    cov.matrix <- matrix(c(sdy^2, cxy, czy, ccvy,
+                           cxy, sdx^2, cxz, ccvx,
+                           czy, cxz, sdz^2, ccvz,
+                           ccvy, ccvx, ccvz, sdcv^2), 4, 4)
+    rownames(cov.matrix) <- colnames(cov.matrix) <- c("Y", "X", "Z", "CV")
     
     # Check if model can be run
     flag_cov <- tryCatch(
         expr = {
-            sem(model.Y3, 
-                sample.cov = cov.matrix.Y3, 
+            sem(model, 
+                sample.cov = cov.matrix, 
                 sample.nobs = n_obs)
         },
         error = function(e){
@@ -122,27 +122,27 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
     )
     #if model can be run to verify true delta, then run it can save results
     if (class(flag_cov) == "lavaan") {
-        fit.Y3 <- sem(model.Y3,
-                      sample.cov = cov.matrix.Y3,
+        fit <- sem(model,
+                      sample.cov = cov.matrix,
                       sample.nobs = n_obs)
         ## the R2 extracted from summary is NOT right, do the calculation below
-        R2check <- (sdy^2 - parameterEstimates(fit.Y3)[4,]$est)/sdy^2
-        betacheck <- parameterEstimates(fit.Y3)[parameterEstimates(fit.Y3)$label=='beta1',]$est
-        secheck <- parameterEstimates(fit.Y3)[parameterEstimates(fit.Y3)$label=='beta1',]$se
+        R2check <- (sdy^2 - parameterEstimates(fit)[4,]$est) / sdy^2
+        betacheck <- parameterEstimates(fit)[parameterEstimates(fit)$label=='beta1',]$est
+        secheck <- parameterEstimates(fit)[parameterEstimates(fit)$label=='beta1',]$se
     }
 
     #get regression based on true delta in terms of standardized coefficent
-    cor.matrix.Y3 <- matrix(c(1,rxy, rzy, rcvy,
-                              rxy, 1, rxz, rcvx,
-                              rzy, rxz, 1, rcvz,
-                              rcvy, rcvx, rcvz, 1),4,4)
-    rownames(cor.matrix.Y3) <- colnames(cor.matrix.Y3) <- c("Y","X","Z", "CV")
+    cor.matrix <- matrix(c(1,rxy, rzy, rcvy,
+                           rxy, 1, rxz, rcvx,
+                           rzy, rxz, 1, rcvz,
+                           rcvy, rcvx, rcvz, 1), 4, 4)
+    rownames(cor.matrix) <- colnames(cor.matrix) <- c("Y", "X", "Z", "CV")
     
     # check to see if model can be run
     flag_cor <- tryCatch(
         expr = {
-            sem(model.Y3, 
-                sample.cov = cor.matrix.Y3, 
+            sem(model, 
+                sample.cov = cor.matrix, 
                 sample.nobs = n_obs)
         },
         error = function(e){
@@ -157,18 +157,18 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
     
     # if model can be run, then run it
     if (class(flag_cor) == "lavaan") {
-        fit.Y3 <- sem(model.Y3,
-                      sample.cov = cor.matrix.Y3,
-                      sample.nobs = n_obs)
-        zR2check <- 1 - parameterEstimates(fit.Y3)[4,]$est
-        zbetacheck <- parameterEstimates(fit.Y3)[parameterEstimates(fit.Y3)$label == 'beta1',]$est
-        zsecheck <- parameterEstimates(fit.Y3)[parameterEstimates(fit.Y3)$label == 'beta1',]$se
+        fit <- sem(model,
+                   sample.cov = cor.matrix,
+                   sample.nobs = n_obs)
+        zR2check <- 1 - parameterEstimates(fit)[4,]$est
+        zbetacheck <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta1',]$est
+        zsecheck <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta1',]$se
     }
     
     if (class(flag_cor) == "lavaan" && class(flag_cov) == "lavaan") {
         result = list(R2check, betacheck, secheck,
                       zR2check, zbetacheck, zsecheck,
-                      cov.matrix.Y3)
+                      cov.matrix)
         return(result)
     } else {
         stop("Error!")
@@ -202,5 +202,12 @@ cal_pse <- function(thr, kryx){
     rycvGz_sepreserve <- (kryx - thr * (1 - rxcvGz_sepreserve^2))/rxcvGz_sepreserve
     
     return(list(rxcvGz_sepreserve, rycvGz_sepreserve))
+}
+
+verify_manual <- function(rxy, rxz, rxcv, ryz, rycv, rzcv, sdy, sdx){
+    beta <- (rxy + rycv * rxz * rzcv + ryz * rxcv * rzcv - rxy * rzcv^2 - rycv * rxcv - ryz * rxz) /
+        (1 + 2 * rxcv * rzcv * rxz - rxcv^2 - rzcv^2 - rxz^2)
+    eff <- beta * sdy / sdx
+    return(beta)
 }
 
