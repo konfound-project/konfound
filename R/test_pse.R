@@ -19,6 +19,8 @@ test_pse <- function(est_eff,
     # eff_thr = 0.1
     # test_pse(est_eff = .5, std_err = .050, n_obs = 6174, n_covariates = 7, 
     #         eff_thr = .1, sdx = .217, sdy = .991, R2 = .251,to_return = "short")
+    # test_pse(est_eff = .5, std_err = .050, n_obs = 6174, n_covariates = 7, 
+    #         eff_thr = .1, sdx = .217, sdy = .991, R2 = .251,to_return = "full")
     
     ## prepare input
     df = n_obs - n_covariates - 3
