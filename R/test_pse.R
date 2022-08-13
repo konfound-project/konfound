@@ -17,6 +17,8 @@ test_pse <- function(est_eff,
     # sdy = .991 
     # R2 = .251
     # eff_thr = 0.1
+    # test_pse(est_eff = .5, std_err = .050, n_obs = 6174, n_covariates = 7, 
+    #         eff_thr = .1, sdx = .217, sdy = .991, R2 = .251,to_return = "short")
     
     ## prepare input
     df = n_obs - n_covariates - 3
@@ -31,7 +33,7 @@ test_pse <- function(est_eff,
     
     ## observed regression, reg y on x Given z
     tyxGz = beta / SE  ### this should be equal to est_eff / std_err
-    ryxGz = tyxGz / sqrt(df + tyxGz^2)
+    ryxGz = tyxGz / sqrt(df + tyxGz^2) 
     
     ## make sure R2 due to x alone is not larger than overall or observed R2
     if (ryxGz^2 > R2) {stop("Error! ryxGz^2 > R2")}
@@ -53,34 +55,70 @@ test_pse <- function(est_eff,
     rxcv = rxcvGz * sqrt((1 - rcvz^2) * (1 - rxz^2)) + rxz * rcvz
     rycv = rycvGz * sqrt((1 - rcvz^2) * (1 - rzy^2)) + rzy * rcvz
     
-    verify_pse_reg = verify_reg_Gzcv(n_obs, sdx, sdy, sdz, sdcv, rxy, rxz, rzy, rycv, rxcv, rcvz)
+    verify_pse_reg_M3 = verify_reg_Gzcv(n_obs, sdx, sdy, sdz, sdcv, rxy, rxz, rzy, rycv, rxcv, rcvz)
     verfiy_pse_manual_thr = verify_manual(rxy, rxz, rxcv, ryz, rycv, rzcv, sdy, sdx)
-    cov_pse = verify_pse_reg[[7]]
+    cov_pse = verify_pse_reg_M3[[11]]
     
-    # fTable <- matrix(c(rxy^2, R2, FR2max, # R2 for three reg models
-    #                       rxy*sdy/sdx, est_eff, eff_thr,  # unstd reg coef for X in three reg  models 
-    #                       se_XX, std_err, , # unstd reg se for X in three reg models
-    #                       rxy, rxyGz, thr, # std reg coef for X in three reg models
-    #                       rxy*sdy/sdx/se_XX, tyxGz, tyxGzcv_XX, # t values for X in three reg models
-    #                       NA, , , # std reg coef for Z in three reg models
-    #                       NA, , , # se for Z in three reg models
-    #                       NA, , , # t for Z in three reg models,
-    #                       NA, NA, , # std reg coef for CV in three reg models
-    #                       NA, NA, , # se for CV in three reg models
-    #                       NA, NA, , # t for CV in three reg models), 11, 3)
-    # rownames(fTable) <- c("R2", "coef_X", "SE_X", "beta_X", "t_X",
-    #                       "beta_Z", "SE_Z", "t_Z",
-    #                       "beta_CV", "SE_CV", "t_CV")
-    # colnames(fTable) <- c("reg Y on X", "reg Y on X, Z", "reg Y on X, Z, and CV")
+    # prepare some other values in the final Table (long output)
+    R2_M3 = as.numeric(verify_pse_reg_M3[1])
+    eff_x_M3 = as.numeric(verify_pse_reg_M3[2]) # should be equivalent or very close to eff_thr
+    se_x_M3 = as.numeric(verify_pse_reg_M3[3])
+    beta_x_M3 = as.numeric(verify_pse_reg_M3[9]) # should be equivalent or very close to thr
+    t_x_M3 = eff_x_M3 / se_x_M3 
+    eff_z_M3 = as.numeric(verify_pse_reg_M3[4])
+    se_z_M3 = as.numeric(verify_pse_reg_M3[5])
+    eff_cv_M3 = as.numeric(verify_pse_reg_M3[6])
+    se_cv_M3 = as.numeric(verify_pse_reg_M3[7])
+    
+    verify_pse_reg_M2 = verify_reg_Gz(n_obs, sdx, sdy, sdz, rxy, rxz, rzy)
+    R2_M2 = as.numeric(verify_pse_reg_M2[1])
+    eff_x_M2 = as.numeric(verify_pse_reg_M2[2]) # should be equivalent or very close to est_eff
+    se_x_M2 = as.numeric(verify_pse_reg_M2[3]) # should be equivalent or very close to std_err
+    eff_z_M2 = as.numeric(verify_pse_reg_M2[4]) 
+    se_z_M2 = as.numeric(verify_pse_reg_M2[5]) 
+    t_x_M2 = eff_x_M2 / se_x_M2 
+    
+    verify_pse_reg_M1 = verify_reg_uncond(n_obs, sdx, sdy, rxy)
+    R2_M1 = as.numeric(verify_pse_reg_M1[1]) # should be equivalent or very close to rxy^2
+    eff_x_M1 = as.numeric(verify_pse_reg_M1[2]) # should be equivalent or very close to rxy*sdy/sdx
+    se_x_M1 = as.numeric(verify_pse_reg_M1[3]) 
+    t_x_M1 = eff_x_M1 / se_x_M1 
+    
+    fTable <- matrix(c(R2_M1, R2_M2, R2_M3, # R2 for three reg models
+                       eff_x_M1, eff_x_M2, eff_x_M3, # unstd reg coef for X in three reg  models
+                       se_x_M1, se_x_M2, se_x_M3, # unstd reg se for X in three reg models
+                       rxy, ryxGz, beta_x_M3, # std reg coef for X in three reg models
+                       t_x_M1, t_x_M2, t_x_M3, # t values for X in three reg models
+                       NA, eff_z_M2, eff_z_M3, # reg coef for Z in three reg models
+                       NA, se_z_M2, se_z_M3, # se for Z in three reg models
+                       NA, eff_z_M2 / se_z_M2, eff_z_M3 / se_z_M3, # t for Z in three reg models,
+                       NA, NA, eff_cv_M3, # reg coef for CV in three reg models
+                       NA, NA, se_cv_M3, # se for CV in three reg models
+                       NA, NA, eff_cv_M3 / se_cv_M3), # t for CV in three reg models
+                       nrow = 11, ncol = 3, byrow = T) 
+    
+    rownames(fTable) <- c("R2", "coef_X", "SE_X", "std_coef_X", "t_X",
+                          "coef_Z", "SE_Z", "t_Z",
+                          "coef_CV", "SE_CV", "t_CV")
+    
+    colnames(fTable) <- c("M1, X", "M2, X & Z", "M3, X, Z, & CV")
 
     if (to_return == "short") {
-        output <- list(rxcvGz, rycvGz, rxcv, rycv)
+        output <- list("rxcvGz" = rxcvGz, 
+                       "rycvGz" = rycvGz, 
+                       "rxcv" = rxcv, 
+                       "rycv" = rycv)
         return(output)
     } 
     
     if (to_return == "full") {
-        output <- list(rxcvGz, rycvGz, rxcv, rycv,
-                       cov_pse, fTable)
+        output <- list("rxcvGz" = rxcvGz, 
+                       "rycvGz" = rycvGz, 
+                       "rxcv" = rxcv, 
+                       "rycv" = rycv,
+                       "cov" = cov_pse, 
+                       "Table" = fTable)
+        return(output)
     }
     
 }
