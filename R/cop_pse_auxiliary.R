@@ -1,16 +1,17 @@
 cal_ryz <- function(ryxGz, R2){
     R2yz = (ryxGz^2 - R2)/(ryxGz^2 - 1)
-    if (R2yz > 0) {
+    if (R2yz >= 0) {
         ryz = sqrt(R2yz)
     } else {
-        ryz = 0
+        stop("Error! R2yz < 0!")
     }
     return(ryz)
 }
 
 cal_rxz <- function(var_x, var_y, R2, df, std_err){
     R2xz = 1 - ((var_y * (1 - R2))/(var_x * df * std_err^2))
-    if (R2xz <= 0) {R2xz=.01^2}
+    if (R2xz <= 0) {stop("Error! R2xz < 0!")} 
+    ## Note output the number of R2xz
     rxz = sqrt(R2xz)
     return(rxz)
 }
@@ -72,7 +73,7 @@ cal_delta_exact <- function(ryx, ryz, rxz, beta_thr, FR2max, R2, sdx, sdz){
         yescalc = 1
         rcvy = rycv = 
         D * sqrt(1 - (rcvx^2 / v)) +
-        (ryx * rcvx) / (v * sdx) -
+        (ryx * rcvx) / (v) -
         (ryz * rcvx * rxz) / (v * sdz)
         delta_exact = rcvx / rxz
         result = list(rxcv, rycv, delta_exact)
