@@ -92,7 +92,7 @@ test_pse <- function(est_eff,
     
     colnames(fTable) <- c("M1:X", "M2:X,Z", "M3:X,Z,CV")
     
-    if (to_return == "full") {
+    if (to_return == "raw_output") {
         output <- list("rxcvGz" = rxcvGz, 
                        "rycvGz" = rycvGz, 
                        "rxcv" = rxcv, 

@@ -62,8 +62,9 @@
 # pkonfound(two_by_two_table = my_table)
 #
 #' # use pkonfound to calculate delta* and delta_exact 
-# pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7, eff_thr = 0, FR2max = .8, index = "COP")
-#'
+#' pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7, eff_thr = 0, FR2max = .8, index = "COP", to_return = "raw_output")
+#' # use pkonfound to calculate rxcv and rycv when preserving standard error
+#' pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1, sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
 #' @export
 
  pkonfound <- function(est_eff,
@@ -106,6 +107,19 @@
        FR2max_multiplier = FR2max_multiplier,
        FR2max = FR2max, # NOT the adjusted R2, should be the original R2
        to_return = to_return)
+     
+   } else if (index == "PSE") {
+     
+     out <- test_pse(
+       est_eff = est_eff,
+       std_err = std_err,
+       n_obs = n_obs,
+       sdx = sdx,
+       sdy = sdy,
+       R2 = R2,
+       eff_thr = eff_thr,
+       to_return = to_return
+     )
      
    } else if (model_type == "logistic" & !is.null(n_treat)) {
     out <- test_sensitivity_ln(
