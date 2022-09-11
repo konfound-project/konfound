@@ -108,7 +108,7 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
     # Check if model can be run
     flag_cov <- tryCatch(
         expr = {
-            sem(model, 
+            lavaan::sem(model, 
                 sample.cov = cov.matrix, 
                 sample.nobs = n_obs)
         },
@@ -123,17 +123,17 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
     )
     #if model can be run to verify true delta, then run it can save results
     if (class(flag_cov) == "lavaan") {
-        fit <- sem(model,
+        fit <- lavaan::sem(model,
                       sample.cov = cov.matrix,
                       sample.nobs = n_obs)
         ## the R2 extracted from summary is NOT right, do the calculation below
-        R2 <- (sdy^2 - parameterEstimates(fit)[4,]$est) / sdy^2
-        betaX <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta1',]$est
-        seX <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta1',]$se
-        betaZ <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta2',]$est
-        seZ <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta2',]$se
-        betaCV <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta3',]$est
-        seCV <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta3',]$se
+        R2 <- (sdy^2 - lavaan::parameterEstimates(fit)[4,]$est) / sdy^2
+        betaX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$est
+        seX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$se
+        betaZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$est
+        seZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$se
+        betaCV <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta3',]$est
+        seCV <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta3',]$se
     }
 
     #get regression based on true delta in terms of standardized coefficent
@@ -146,7 +146,7 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
     # check to see if model can be run
     flag_cor <- tryCatch(
         expr = {
-            sem(model, 
+            lavaan::sem(model, 
                 sample.cov = cor.matrix, 
                 sample.nobs = n_obs)
         },
@@ -162,16 +162,16 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
     
     # if model can be run, then run it
     if (class(flag_cor) == "lavaan") {
-        fit <- sem(model,
+        fit <- lavaan::sem(model,
                    sample.cov = cor.matrix,
                    sample.nobs = n_obs)
-        std_R2 <- 1 - parameterEstimates(fit)[4,]$est
-        std_betaX <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta1',]$est
-        std_seX <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta1',]$se
-        std_betaZ <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta2',]$est
-        std_seZ <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta2',]$se
-        std_betaCV <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta3',]$est
-        std_seCV <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta3',]$se
+        std_R2 <- 1 - lavaan::parameterEstimates(fit)[4,]$est
+        std_betaX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$est
+        std_seX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$se
+        std_betaZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$est
+        std_seZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$se
+        std_betaCV <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta3',]$est
+        std_seCV <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta3',]$se
     }
     
     if (class(flag_cor) == "lavaan" && class(flag_cov) == "lavaan") {
@@ -237,7 +237,7 @@ verify_reg_Gz = function(n_obs, sdx, sdy, sdz, rxy, rxz, rzy){
     # Check if model can be run
     flag_cov <- tryCatch(
         expr = {
-            sem(model, 
+            lavaan::sem(model, 
                 sample.cov = cov.matrix, 
                 sample.nobs = n_obs)
         },
@@ -252,15 +252,15 @@ verify_reg_Gz = function(n_obs, sdx, sdy, sdz, rxy, rxz, rzy){
     )
     #if model can be run to verify true delta, then run it can save results
     if (class(flag_cov) == "lavaan") {
-        fit <- sem(model,
+        fit <- lavaan::sem(model,
                    sample.cov = cov.matrix,
                    sample.nobs = n_obs)
         ## the R2 extracted from summary is NOT right, do the calculation below
-        R2 <- (sdy^2 - parameterEstimates(fit)[3,]$est) / sdy^2
-        betaX <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta1',]$est
-        seX <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta1',]$se
-        betaZ <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta2',]$est
-        seZ <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta2',]$se
+        R2 <- (sdy^2 - lavaan::parameterEstimates(fit)[3,]$est) / sdy^2
+        betaX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$est
+        seX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$se
+        betaZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$est
+        seZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$se
    }
 
     if (class(flag_cov) == "lavaan") {
@@ -284,7 +284,7 @@ verify_reg_uncond = function(n_obs, sdx, sdy, rxy){
     # Check if model can be run
     flag_cov <- tryCatch(
         expr = {
-            sem(model, 
+            lavaan::sem(model, 
                 sample.cov = cov.matrix, 
                 sample.nobs = n_obs)
         },
@@ -299,13 +299,13 @@ verify_reg_uncond = function(n_obs, sdx, sdy, rxy){
     )
     #if model can be run to verify true delta, then run it can save results
     if (class(flag_cov) == "lavaan") {
-        fit <- sem(model,
+        fit <- lavaan::sem(model,
                    sample.cov = cov.matrix,
                    sample.nobs = n_obs)
         ## the R2 extracted from summary is NOT right, do the calculation below
-        R2 <- (sdy^2 - parameterEstimates(fit)[2,]$est) / sdy^2
-        betaX <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta1',]$est
-        seX <- parameterEstimates(fit)[parameterEstimates(fit)$label == 'beta1',]$se
+        R2 <- (sdy^2 - lavaan::parameterEstimates(fit)[2,]$est) / sdy^2
+        betaX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$est
+        seX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$se
     }
     
     if (class(flag_cov) == "lavaan") {

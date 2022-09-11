@@ -11,7 +11,7 @@ test_cop <- function(est_eff, # unstandardized
                      eff_thr = 0, # this is the unstandardized version
                      FR2max_multiplier = 1.3,
                      FR2max = 0, # NOT the adjusted R2, should be the original R2
-                     to_return = "short"){
+                     to_return = to_return){
   
   ## test example
   # est_eff = .125
@@ -182,31 +182,31 @@ test_cop <- function(est_eff, # unstandardized
   figTable$coef_X <- as.numeric(figTable$coef_X)
   figTable$R2 <- as.numeric(figTable$R2)
   fig <- 
-    ggplot(figTable, aes(x = ModelLabel)) +
-    geom_point(aes(y = coef_X, group = cat, shape = cat), color = "blue", size = 3) + 
-    scale_shape_manual(values = c(16, 1)) +
-    geom_point(aes(y = R2), color = "#7CAE00", shape = 18, size = 4) + 
+    ggplot2::ggplot(figTable, ggplot2::aes(x = ModelLabel)) +
+    ggplot2::geom_point(ggplot2::aes(y = coef_X, group = cat, shape = cat), color = "blue", size = 3) + 
+    ggplot2::scale_shape_manual(values = c(16, 1)) +
+    ggplot2::geom_point(ggplot2::aes(y = R2), color = "#7CAE00", shape = 18, size = 4) + 
     # scale_linetype_manual(values=c("solid", "dotted")) +
-    geom_line(aes(y = R2, group = cat), linetype = "solid", color = "#7CAE00") + 
-    geom_line(aes(y = coef_X, group = cat, linetype = cat), color = "blue") + 
-    scale_y_continuous(
+    ggplot2::geom_line(ggplot2::aes(y = R2, group = cat), linetype = "solid", color = "#7CAE00") + 
+    ggplot2::geom_line(ggplot2::aes(y = coef_X, group = cat, linetype = cat), color = "blue") + 
+    ggplot2::scale_y_continuous(
       # Features of the first axis
       name = "Coeffcient (X)",
       # Add a second axis and specify its features
-      sec.axis = sec_axis(~.*1/(round(max(figTable$coef_X)*10)/10), 
+      sec.axis = ggplot2::sec_axis(~.*1/(round(max(figTable$coef_X)*10)/10), 
                           name="R2")) +
-    theme(axis.title.x = element_blank(),
+    ggplot2::theme(axis.title.x = ggplot2::element_blank(),
           legend.position = "none",
-          axis.line.y.right = element_line(color = "#7CAE00"),
-          axis.title.y.right = element_text(color = "#7CAE00"),
-          axis.text.y.right = element_text(color = "#7CAE00"),
-          axis.line.y.left = element_line(color = "blue"),
-          axis.title.y.left = element_text(color = "blue"),
-          axis.text.y.left = element_text(color = "blue"),
-          axis.line.x.bottom = element_line(color = "black"),
-          axis.text.x.bottom = element_text(color = "black"))
+          axis.line.y.right = ggplot2::element_line(color = "#7CAE00"),
+          axis.title.y.right = ggplot2::element_text(color = "#7CAE00"),
+          axis.text.y.right = ggplot2::element_text(color = "#7CAE00"),
+          axis.line.y.left = ggplot2::element_line(color = "blue"),
+          axis.title.y.left = ggplot2::element_text(color = "blue"),
+          axis.text.y.left = ggplot2::element_text(color = "blue"),
+          axis.line.x.bottom = ggplot2::element_line(color = "black"),
+          axis.text.x.bottom = ggplot2::element_text(color = "black"))
     
-  if (to_return == "full") {
+  if (to_return == "raw_output") {
     output <- list("delta*" = delta_star, 
                    "delta_exact" = delta_exact, 
                    "delta_pctbias" = delta_pctbias,
