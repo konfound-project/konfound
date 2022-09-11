@@ -1,29 +1,16 @@
 test_pse <- function(est_eff,
                      std_err,
                      n_obs,
-                     n_covariates,
                      eff_thr,
                      sdx,
                      sdy,
                      R2,
-                     to_return = "short"){
+                     to_return){
     
-    ## test exampple
-    # est_eff = .5
-    # std_err = .050
-    # n_obs = 6174
-    # n_covariates = 7
-    # sdx = .217
-    # sdy = .991 
-    # R2 = .251
-    # eff_thr = 0.1
-    # test_pse(est_eff = .5, std_err = .050, n_obs = 6174, n_covariates = 7, 
-    #         eff_thr = .1, sdx = .217, sdy = .991, R2 = .251,to_return = "short")
-    # test_pse(est_eff = .5, std_err = .050, n_obs = 6174, n_covariates = 7, 
-    #         eff_thr = .1, sdx = .217, sdy = .991, R2 = .251,to_return = "full")
-    
+    ## test_pse(est_eff = .5, std_err = .056, n_obs = 6174, 
+    ##         eff_thr = .1, sdx = 0.22, sdy = 1, R2 = .3,to_return = "full")
     ## prepare input
-    df = n_obs - n_covariates - 3
+    ## df = n_obs - n_covariates - 2
     var_x = sdx^2
     var_y = sdy^2
     var_z = sdz = 1
@@ -35,14 +22,14 @@ test_pse <- function(est_eff,
     
     ## observed regression, reg y on x Given z
     tyxGz = beta / SE  ### this should be equal to est_eff / std_err
-    ryxGz = tyxGz / sqrt(df + tyxGz^2) 
+    ryxGz = tyxGz / sqrt(n_obs + tyxGz^2) 
     
     ## make sure R2 due to x alone is not larger than overall or observed R2
     if (ryxGz^2 > R2) {stop("Error! ryxGz^2 > R2")}
     
     ## calculate ryz, rxz, rxy
     ryz = rzy = cal_ryz(ryxGz, R2)
-    rxz = rzx = cal_rxz(var_x, var_y, R2, df, std_err)
+    rxz = rzx = cal_rxz(var_x, var_y, R2, n_obs, std_err)
     rxy = ryx = cal_rxy(ryxGz, rxz, ryz)
     
     thr = eff_thr * sdx / sdy
@@ -103,15 +90,7 @@ test_pse <- function(est_eff,
                           "coef_Z", "SE_Z", "t_Z",
                           "coef_CV", "SE_CV", "t_CV")
     
-    colnames(fTable) <- c("M1, X", "M2, X & Z", "M3, X, Z, & CV")
-
-    if (to_return == "short") {
-        output <- list("rxcvGz" = rxcvGz, 
-                       "rycvGz" = rycvGz, 
-                       "rxcv" = rxcv, 
-                       "rycv" = rycv)
-        return(output)
-    } 
+    colnames(fTable) <- c("M1:X", "M2:X,Z", "M3:X,Z,CV")
     
     if (to_return == "full") {
         output <- list("rxcvGz" = rxcvGz, 
