@@ -23,11 +23,8 @@ test_cop <- function(est_eff, # unstandardized
   # R2 = .251
   # eff_thr = 0
   # FR2max = .61
-  # test_cop(est_eff = .125, std_err = .050, n_obs = 6174, n_covariates = 7,
-  #          sdx = .217, sdy = .991, R2 = .251, eff_thr = 0, FR2max = .61, to_return = "short")
-  # test_cop(est_eff = .125, std_err = .050, n_obs = 6174, n_covariates = 7,
-  #          sdx = .217, sdy = .991, R2 = .251, eff_thr = 0, FR2max = .61, to_return = "full")
-  
+  # test_cop(est_eff = .4, std_err = .1, n_obs = 290, 
+  #          sdx = 2, sdy = 6, R2 = .7, eff_thr = 0, FR2max = .8, to_return = "short")
   
   ## prepare input
   # n_covariates = 1
@@ -186,9 +183,9 @@ test_cop <- function(est_eff, # unstandardized
   figTable$R2 <- as.numeric(figTable$R2)
   fig <- 
     ggplot(figTable, aes(x = ModelLabel)) +
-    geom_point(aes(y = coef_X, group = cat, shape = cat), color = "blue", size = 2) + 
+    geom_point(aes(y = coef_X, group = cat, shape = cat), color = "blue", size = 3) + 
     scale_shape_manual(values = c(16, 1)) +
-    geom_point(aes(y = R2), color = "#7CAE00", shape = 17, size = 2) + 
+    geom_point(aes(y = R2), color = "#7CAE00", shape = 18, size = 4) + 
     # scale_linetype_manual(values=c("solid", "dotted")) +
     geom_line(aes(y = R2, group = cat), linetype = "solid", color = "#7CAE00") + 
     geom_line(aes(y = coef_X, group = cat, linetype = cat), color = "blue") + 
@@ -197,10 +194,17 @@ test_cop <- function(est_eff, # unstandardized
       name = "Coeffcient (X)",
       # Add a second axis and specify its features
       sec.axis = sec_axis(~.*1/(round(max(figTable$coef_X)*10)/10), 
-                          name="R2")
-    ) +
+                          name="R2")) +
     theme(axis.title.x = element_blank(),
-          legend.position = "none")
+          legend.position = "none",
+          axis.line.y.right = element_line(color = "#7CAE00"),
+          axis.title.y.right = element_text(color = "#7CAE00"),
+          axis.text.y.right = element_text(color = "#7CAE00"),
+          axis.line.y.left = element_line(color = "blue"),
+          axis.title.y.left = element_text(color = "blue"),
+          axis.text.y.left = element_text(color = "blue"),
+          axis.line.x.bottom = element_line(color = "black"),
+          axis.text.x.bottom = element_text(color = "black"))
     
   if (to_return == "full") {
     output <- list("delta*" = delta_star, 
