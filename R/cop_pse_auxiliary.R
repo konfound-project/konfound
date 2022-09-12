@@ -21,7 +21,7 @@ cal_rxy <- function(ryxGz, rxz, ryz){
     return(rxy)
 }
 
-cal_delta_star <- function(FR2max, R2, R2_uncond, est_eff, eff_thr, var_x, var_y, est_uncond, rxz){
+cal_delta_star <- function(FR2max, R2, R2_uncond, est_eff, eff_thr, var_x, var_y, est_uncond, rxz, n_obs){
     if (FR2max > .99) {FR2max = .99}
     # if (FR2max < R2 + inci) {FR2max = R2 + inci} check with Ken what this means
     if (FR2max > R2) {D = sqrt(FR2max - R2)}
@@ -32,7 +32,10 @@ cal_delta_star <- function(FR2max, R2, R2_uncond, est_eff, eff_thr, var_x, var_y
     b0_m_b1 = est_uncond - est_eff
     rm_m_rt_t_syy = (FR2max - R2) * var_y
     
-    t_x = var_x * (1 - rxz^2)
+    t_x = var_x * (n_obs / (n_obs - 1)) * (1 - rxz^2)
+    ## adjust df for var_x 
+    ## var_x is population variance, need sample variance from x
+    ## this adjustment is to get closer to what robomit generates as they run regression using the sample data 
     num1 = bt_m_b * rt_m_ro_t_syy * t_x
     num2 = bt_m_b * var_x * t_x * b0_m_b1^2
     num3 = 2 * bt_m_b^2 * (t_x * b0_m_b1 * var_x)
@@ -74,7 +77,7 @@ cal_delta_exact <- function(ryx, ryz, rxz, beta_thr, FR2max, R2, sdx, sdz){
         rcvy = rycv = 
         D * sqrt(1 - (rcvx^2 / v)) +
         (ryx * rcvx) / (v) -
-        (ryz * rcvx * rxz) / (v * sdz)
+        (ryz * rcvx * rxz) / (v)
         delta_exact = rcvx / rxz
         result = list(rxcv, rycv, delta_exact)
     }
@@ -184,6 +187,9 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
     }
 }
 
+## TO DO 
+## need to code the other solutions for pse as well 
+## then see how the different solutions perform in different scenarios (run the regression)
 cal_pse <- function(thr, kryx){
     # calculations for preserving standard error
     i1 <- complex(real = 1, imaginary = -sqrt(3))
