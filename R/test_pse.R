@@ -10,7 +10,6 @@ test_pse <- function(est_eff,
     ## test_pse(est_eff = .5, std_err = .056, n_obs = 6174, 
     ##         eff_thr = .1, sdx = 0.22, sdy = 1, R2 = .3,to_return = "full")
     ## prepare input
-    ## df = n_obs - n_covariates - 2
     var_x = sdx^2
     var_y = sdy^2
     var_z = sdz = 1
@@ -93,17 +92,17 @@ test_pse <- function(est_eff,
     colnames(fTable) <- c("M1:X", "M2:X,Z", "M3:X,Z,CV")
     
     if (to_return == "raw_output") {
-        output <- list("rxcvGz" = rxcvGz, 
-                       "rycvGz" = rycvGz, 
-                       "rxcv" = rxcv, 
-                       "rycv" = rycv,
-                       "cov" = cov_pse, 
+        output <- list("correlation between X and CV conditional on Z" = rxcvGz, 
+                       "correlation between Y and CV conditional on Z" = rycvGz, 
+                       "correlation between X and CV" = rxcv, 
+                       "correlation between Y and CV" = rycv,
+                       "covariance matrix" = cov_pse, 
                        "Table" = fTable)
         return(output)
     }
     
     if (to_return == "print") {
-        cat("This function calculates the correlations that change the inference while preserving the standard error.")
+        cat("This function calculates the conditions that set the estimated effect approximately equal to the threshold while preserving the standard error.")
         cat("\n")
         cat(sprintf("The correlation between X and CV is %.3f, and the correlation between Y and CV is %.3f.", rxcv, rycv))
         cat("\n")
