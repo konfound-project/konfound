@@ -23,6 +23,12 @@ pkonfound(
   two_by_two_table = NULL,
   test = "fisher",
   replace = "control",
+  sdx,
+  sdy,
+  R2,
+  eff_thr = 0,
+  FR2max,
+  FR2max_multiplier = 1.3,
   to_return = "print"
 )
 }
@@ -63,6 +69,18 @@ pkonfound(
 
 \item{replace}{whether using entire sample or the control group to calculate the base rate; default is the entire sample}
 
+\item{sdx}{the standard deviation of X}
+
+\item{sdy}{the standard deviation of Y}
+
+\item{R2}{the unadjusted,original R2 in the observed function}
+
+\item{eff_thr}{unstandardized coefficient threshold to change an inference}
+
+\item{FR2max}{the largest R2, or R2max, in the final model with unobserved confounder}
+
+\item{FR2max_multiplier}{the multiplier of R2 to get R2max, default is set to 1.3}
+
 \item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
 }
 \value{
@@ -95,5 +113,6 @@ pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01)
 pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01, switch_trm = FALSE)
 pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
 
+# use pkonfound to calculate delta* and delta_exact 
 
 }

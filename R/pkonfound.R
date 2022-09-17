@@ -18,8 +18,16 @@
 #' @param two_by_two_table table that is a matrix or can be coerced to one (data.frame, tibble, tribble) from which the a, b, c, and d arguments can be extracted
 #' @param test whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test
 #' @param replace whether using entire sample or the control group to calculate the base rate; default is the entire sample
+#' @param sdx the standard deviation of X
+#' @param sdy the standard deviation of Y
+#' @param R2 the unadjusted,original R2 in the observed function
+#' @param eff_thr unstandardized coefficient threshold to change an inference
+#' @param FR2max the largest R2, or R2max, in the final model with unobserved confounder 
+#' @param FR2max_multiplier the multiplier of R2 to get R2max, default is set to 1.3
 #' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return
 #' @importFrom stats fisher.test
+#' @import lavaan
+#' @import ggplot2
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @examples
 #' # using pkonfound for linear models
@@ -52,7 +60,11 @@
 # )
 # 
 # pkonfound(two_by_two_table = my_table)
-#'
+#
+#' # use pkonfound to calculate delta* and delta_exact 
+#' pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7, eff_thr = 0, FR2max = .8, index = "COP", to_return = "raw_output")
+#' # use pkonfound to calculate rxcv and rycv when preserving standard error
+#' pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1, sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
 #' @export
 
  pkonfound <- function(est_eff,
@@ -73,10 +85,43 @@
                       two_by_two_table = NULL,
                       test = "fisher",
                       replace = "control",
+                      sdx,
+                      sdy,
+                      R2,
+                      eff_thr = 0,
+                      FR2max,
+                      FR2max_multiplier = 1.3,
                       to_return = "print") {
   if ("table" %in% to_return) stop("a table can only be output when using konfound")
-   
-  if (model_type == "logistic" & !is.null(n_treat)) {
+  
+   if (index == "COP") {
+     
+     out <- test_cop(
+       est_eff = est_eff, # unstandardized
+       std_err = std_err, # unstandardized
+       n_obs = n_obs,
+       sdx = sdx,
+       sdy = sdy,
+       R2 = R2, # NOT the adjusted R2, should be the original R2
+       eff_thr = eff_thr, # this is the unstandardized version
+       FR2max_multiplier = FR2max_multiplier,
+       FR2max = FR2max, # NOT the adjusted R2, should be the original R2
+       to_return = to_return)
+     
+   } else if (index == "PSE") {
+     
+     out <- test_pse(
+       est_eff = est_eff,
+       std_err = std_err,
+       n_obs = n_obs,
+       sdx = sdx,
+       sdy = sdy,
+       R2 = R2,
+       eff_thr = eff_thr,
+       to_return = to_return
+     )
+     
+   } else if (model_type == "logistic" & !is.null(n_treat)) {
     out <- test_sensitivity_ln(
       est_eff = est_eff,
       std_err = std_err,
@@ -154,8 +199,8 @@
     to_return = to_return
     
   )
-}
-
+} 
+      
 if (!is.null(out)) { # dealing with a strange print issue
   return(out)
 }
