@@ -154,7 +154,7 @@ The effect from this example is quite robust, too. 89.924% of the effect
 (unstandardized beta coefficient) would have to be due to another
 variable not included in this model to invalidate this inference. Also,
 90 cases within the sample size would have to be replaced with zero
-effect cases in order to invaldiate this inference. Therefore, this
+effect cases in order to invalidate this inference. Therefore, this
 inference is quite robust.
 
 1.  **mkonfound**: This function performs a sensitivity analysis for a
