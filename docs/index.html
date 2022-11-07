@@ -34,6 +34,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -46,23 +48,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">konfound</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -79,7 +75,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jrosen48/konfound/">
+  <a href="https://github.com/jrosen48/konfound/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -98,141 +94,153 @@
   <div class="contents col-md-9">
 
 
-<div id="konfound" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#konfound" class="anchor"></a>konfound</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="konfound">konfound<a class="anchor" aria-label="anchor" href="#konfound"></a>
+</h1></div>
 <p>In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias. The goal of <code>konfound</code> is to carry out sensitivity analysis to help analysts to <em>quantify how robust inferences are to potential sources of bias</em>. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.</p>
 </div>
-<div id="installation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h1>
+<div class="section level1">
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h1>
 <p>You can install the CRAN version of konfound with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"konfound"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"konfound"</span><span class="op">)</span></span></code></pre></div>
 <p>You can install the development version from GitHub with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"jrosen48/konfound"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"jrosen48/konfound"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="use-of-konfound" class="section level1">
-<h1 class="hasAnchor">
-<a href="#use-of-konfound" class="anchor"></a>Use of konfound</h1>
-<div id="pkonfound-for-published-studies" class="section level2">
-<h2 class="hasAnchor">
-<a href="#pkonfound-for-published-studies" class="anchor"></a>pkonfound() for published studies</h2>
+<div class="section level1">
+<h1 id="use-of-konfound">Use of konfound<a class="anchor" aria-label="anchor" href="#use-of-konfound"></a>
+</h1>
+<div class="section level2">
+<h2 id="pkonfound-for-published-studies">pkonfound() for published studies<a class="anchor" aria-label="anchor" href="#pkonfound-for-published-studies"></a>
+</h2>
 <p><code><a href="reference/pkonfound.html">pkonfound()</a></code>, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jrosen48/konfound">konfound</a></span><span class="op">)</span>
-<span class="co">#&gt; Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).</span>
-<span class="co">#&gt; For more information visit http://konfound-it.com.</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jrosen48/konfound" class="external-link">konfound</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).</span></span>
+<span><span class="co">#&gt; For more information visit http://konfound-it.com.</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/pkonfound.html">pkonfound</a></span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">2</span>, 
-          std_err <span class="op">=</span> <span class="fl">.4</span>, 
-          n_obs <span class="op">=</span> <span class="fl">100</span>, 
-          n_covariates <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt; Percent Bias Necessary to Invalidate the Inference:</span>
-<span class="co">#&gt; To invalidate an inference, 60.3% of the estimate would have to be due to bias. This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).</span>
-<span class="co">#&gt; To invalidate an inference, 60 observations would have to be replaced with cases for which the effect is 0 (RIR = 60).</span>
-<span class="co">#&gt; See Frank et al. (2013) for a description of the method</span>
-<span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span>
-<span class="co">#&gt; Impact Threshold for a Confounding Variable:</span>
-<span class="co">#&gt; The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.568 with the outcome and at 0.568 with the predictor of interest (conditioning on observed covariates) based on a threshold of 0.201 for statistical significance (alpha = 0.05).</span>
-<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null hypothesis of 0 effect.</span>
-<span class="co">#&gt; See Frank (2000) for a description of the method</span>
-<span class="co">#&gt; Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194</span>
-<span class="co">#&gt; For other forms of output, run ?pkonfound and inspect the to_return argument</span>
-<span class="co">#&gt; For models fit in R, consider use of konfound().</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/pkonfound.html">pkonfound</a></span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">2</span>, </span>
+<span>          std_err <span class="op">=</span> <span class="fl">.4</span>, </span>
+<span>          n_obs <span class="op">=</span> <span class="fl">100</span>, </span>
+<span>          n_covariates <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Robustness of Inference to Replacement (RIR):</span></span>
+<span><span class="co">#&gt; To invalidate an inference,  60.3 % of the estimate would have to be due to bias. </span></span>
+<span><span class="co">#&gt; This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; To invalidate an inference,  60  observations would have to be replaced with cases</span></span>
+<span><span class="co">#&gt; for which the effect is 0 (RIR = 60).</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; See Frank et al. (2013) for a description of the method.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span></span>
+<span><span class="co">#&gt; What would it take to change an inference?</span></span>
+<span><span class="co">#&gt; Using Rubin's causal model to interpret the robustness of causal inferences.</span></span>
+<span><span class="co">#&gt; Education, Evaluation and Policy Analysis, 35 437-460.</span></span>
+<span><span class="co">#&gt; For other forms of output, run ?pkonfound and inspect the to_return argument</span></span>
+<span><span class="co">#&gt; For models fit in R, consider use of konfound().</span></span></code></pre></div>
 </div>
-<div id="konfound-for-models-fit-in-r" class="section level2">
-<h2 class="hasAnchor">
-<a href="#konfound-for-models-fit-in-r" class="anchor"></a>konfound() for models fit in R</h2>
-<p><code><a href="reference/konfound.html">konfound()</a></code> calculates the same for models fit in R. For example, here are the coefficients for a linear model fit with <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> using the built-in dataset <code>mtcars</code>:</p>
+<div class="section level2">
+<h2 id="konfound-for-models-fit-in-r">konfound() for models fit in R<a class="anchor" aria-label="anchor" href="#konfound-for-models-fit-in-r"></a>
+</h2>
+<p><code><a href="reference/konfound.html">konfound()</a></code> calculates the same for models fit in R. For example, here are the coefficients for a linear model fit with <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> using the built-in dataset <code>mtcars</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
-<span class="va">m1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Call:</span>
-<span class="co">#&gt; lm(formula = mpg ~ wt + hp, data = mtcars)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Coefficients:</span>
-<span class="co">#&gt; (Intercept)           wt           hp  </span>
-<span class="co">#&gt;    37.22727     -3.87783     -0.03177</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Call:</span>
-<span class="co">#&gt; lm(formula = mpg ~ wt + hp, data = mtcars)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Residuals:</span>
-<span class="co">#&gt;    Min     1Q Median     3Q    Max </span>
-<span class="co">#&gt; -3.941 -1.600 -0.182  1.050  5.854 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Coefficients:</span>
-<span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span>
-<span class="co">#&gt; (Intercept) 37.22727    1.59879  23.285  &lt; 2e-16 ***</span>
-<span class="co">#&gt; wt          -3.87783    0.63273  -6.129 1.12e-06 ***</span>
-<span class="co">#&gt; hp          -0.03177    0.00903  -3.519  0.00145 ** </span>
-<span class="co">#&gt; ---</span>
-<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Residual standard error: 2.593 on 29 degrees of freedom</span>
-<span class="co">#&gt; Multiple R-squared:  0.8268, Adjusted R-squared:  0.8148 </span>
-<span class="co">#&gt; F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="va">m1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; lm(formula = mpg ~ wt + hp, data = mtcars)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt; (Intercept)           wt           hp  </span></span>
+<span><span class="co">#&gt;    37.22727     -3.87783     -0.03177</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; lm(formula = mpg ~ wt + hp, data = mtcars)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Residuals:</span></span>
+<span><span class="co">#&gt;    Min     1Q Median     3Q    Max </span></span>
+<span><span class="co">#&gt; -3.941 -1.600 -0.182  1.050  5.854 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span><span class="co">#&gt; (Intercept) 37.22727    1.59879  23.285  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; wt          -3.87783    0.63273  -6.129 1.12e-06 ***</span></span>
+<span><span class="co">#&gt; hp          -0.03177    0.00903  -3.519  0.00145 ** </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Residual standard error: 2.593 on 29 degrees of freedom</span></span>
+<span><span class="co">#&gt; Multiple R-squared:  0.8268, Adjusted R-squared:  0.8148 </span></span>
+<span><span class="co">#&gt; F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12</span></span></code></pre></div>
 <p>Sensitivity analysis for the effect for <code>wt</code> on <code>mpg</code> can be carried out as follows, specifying the fitted model object:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">wt</span><span class="op">)</span>
-<span class="co">#&gt; Percent Bias Necessary to Invalidate the Inference:</span>
-<span class="co">#&gt; To invalidate an inference, 66.629% of the estimate would have to be due to bias. This is based on a threshold of -1.294 for statistical significance (alpha = 0.05).</span>
-<span class="co">#&gt; To invalidate an inference, 21 observations would have to be replaced with cases for which the effect is 0 (RIR = 21).</span>
-<span class="co">#&gt; See Frank et al. (2013) for a description of the method</span>
-<span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference? Using Rubin's causal model to interpret the robustness of causal inferences. Education, Evaluation and Policy Analysis, 35 437-460.</span>
-<span class="co">#&gt; Impact Threshold for a Confounding Variable:</span>
-<span class="co">#&gt; The minimum impact to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of 0.791 with the outcome and at 0.791 with the predictor of interest (conditioning on observed covariates) based on a threshold of -0.366 for statistical significance (alpha = 0.05).</span>
-<span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 0.791 X 0.791 = 0.626 to invalidate an inference for a null hypothesis of 0 effect.</span>
-<span class="co">#&gt; See Frank (2000) for a description of the method</span>
-<span class="co">#&gt; Citation: Frank, K. 2000. Impact of a confounding variable on the inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194</span>
-<span class="co">#&gt; For more detailed output, consider setting `to_return` to table</span>
-<span class="co">#&gt; To consider other predictors of interest, consider setting `test_all` to TRUE.</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">wt</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Robustness of Inference to Replacement (RIR):</span></span>
+<span><span class="co">#&gt; To invalidate an inference,  66.629 % of the estimate would have to be due to bias. </span></span>
+<span><span class="co">#&gt; This is based on a threshold of -1.294 for statistical significance (alpha = 0.05).</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; To invalidate an inference,  21  observations would have to be replaced with cases</span></span>
+<span><span class="co">#&gt; for which the effect is 0 (RIR = 21).</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; See Frank et al. (2013) for a description of the method.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span></span>
+<span><span class="co">#&gt; What would it take to change an inference?</span></span>
+<span><span class="co">#&gt; Using Rubin's causal model to interpret the robustness of causal inferences.</span></span>
+<span><span class="co">#&gt; Education, Evaluation and Policy Analysis, 35 437-460.</span></span>
+<span><span class="co">#&gt; For more detailed output, consider setting `to_return` to table</span></span>
+<span><span class="co">#&gt; To consider other predictors of interest, consider setting `test_all` to TRUE.</span></span></code></pre></div>
 </div>
-<div id="mkonfound-for-meta-analyses-including-sensitivity-analysis" class="section level2">
-<h2 class="hasAnchor">
-<a href="#mkonfound-for-meta-analyses-including-sensitivity-analysis" class="anchor"></a>mkonfound for meta-analyses including sensitivity analysis</h2>
-<p>We can use an existing dataset, such as the CSV file <a href="https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv">here</a>.</p>
+<div class="section level2">
+<h2 id="mkonfound-for-meta-analyses-including-sensitivity-analysis">mkonfound for meta-analyses including sensitivity analysis<a class="anchor" aria-label="anchor" href="#mkonfound-for-meta-analyses-including-sensitivity-analysis"></a>
+</h2>
+<p>We can use an existing (and built-in) dataset, such as <code>mkonfound_ex</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> 
-<span class="co">#&gt;           t  df</span>
-<span class="co">#&gt; 1  7.076763 178</span>
-<span class="co">#&gt; 2  4.127893 193</span>
-<span class="co">#&gt; 3  1.893137  47</span>
-<span class="co">#&gt; 4 -4.166395 138</span>
-<span class="co">#&gt; 5 -1.187599  97</span>
-<span class="co">#&gt; 6  3.585478  87</span>
-<span class="fu"><a href="reference/mkonfound.html">mkonfound</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">t</span>, <span class="va">df</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 30 x 7</span>
-<span class="co">#&gt;         t    df action      inference       pct_bias_to_change_inf…   itcv r_con</span>
-<span class="co">#&gt;     &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;                             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1  7.08    178 to_invalid… reject_null                       68.8   0.378 0.614</span>
-<span class="co">#&gt;  2  4.13    193 to_invalid… reject_null                       50.6   0.168 0.41 </span>
-<span class="co">#&gt;  3  1.89     47 to_sustain  fail_to_reject…                    5.47 -0.012 0.11 </span>
-<span class="co">#&gt;  4 -4.17    138 to_invalid… reject_null                       50.3   0.202 0.449</span>
-<span class="co">#&gt;  5 -1.19     97 to_sustain  fail_to_reject…                   39.4  -0.065 0.255</span>
-<span class="co">#&gt;  6  3.59     87 to_invalid… reject_null                       41.9   0.19  0.436</span>
-<span class="co">#&gt;  7  0.282   117 to_sustain  fail_to_reject…                   85.5  -0.131 0.361</span>
-<span class="co">#&gt;  8  2.55     75 to_invalid… reject_null                       20.6   0.075 0.274</span>
-<span class="co">#&gt;  9 -4.44    137 to_invalid… reject_null                       53.0   0.225 0.475</span>
-<span class="co">#&gt; 10 -2.05    195 to_invalid… reject_null                        3.51  0.006 0.077</span>
-<span class="co">#&gt; # … with 20 more rows</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">mkonfound_ex</span></span>
+<span><span class="co">#&gt; # A tibble: 30 x 2</span></span>
+<span><span class="co">#&gt;         t    df</span></span>
+<span><span class="co">#&gt;     &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  7.08    178</span></span>
+<span><span class="co">#&gt;  2  4.13    193</span></span>
+<span><span class="co">#&gt;  3  1.89     47</span></span>
+<span><span class="co">#&gt;  4 -4.17    138</span></span>
+<span><span class="co">#&gt;  5 -1.19     97</span></span>
+<span><span class="co">#&gt;  6  3.59     87</span></span>
+<span><span class="co">#&gt;  7  0.282   117</span></span>
+<span><span class="co">#&gt;  8  2.55     75</span></span>
+<span><span class="co">#&gt;  9 -4.44    137</span></span>
+<span><span class="co">#&gt; 10 -2.05    195</span></span>
+<span><span class="co">#&gt; # … with 20 more rows</span></span>
+<span><span class="fu"><a href="reference/mkonfound.html">mkonfound</a></span><span class="op">(</span><span class="va">mkonfound_ex</span>, <span class="va">t</span>, <span class="va">df</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 30 x 7</span></span>
+<span><span class="co">#&gt;         t    df action      inference       pct_bias_to_change_inf…   itcv r_con</span></span>
+<span><span class="co">#&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;                             &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  7.08    178 to_invalid… reject_null                       68.8   0.378 0.614</span></span>
+<span><span class="co">#&gt;  2  4.13    193 to_invalid… reject_null                       50.6   0.168 0.41 </span></span>
+<span><span class="co">#&gt;  3  1.89     47 to_sustain  fail_to_reject…                    5.47 -0.012 0.11 </span></span>
+<span><span class="co">#&gt;  4 -4.17    138 to_invalid… reject_null                       50.3   0.202 0.449</span></span>
+<span><span class="co">#&gt;  5 -1.19     97 to_sustain  fail_to_reject…                   39.4  -0.065 0.255</span></span>
+<span><span class="co">#&gt;  6  3.59     87 to_invalid… reject_null                       41.9   0.19  0.436</span></span>
+<span><span class="co">#&gt;  7  0.282   117 to_sustain  fail_to_reject…                   85.5  -0.131 0.361</span></span>
+<span><span class="co">#&gt;  8  2.55     75 to_invalid… reject_null                       20.6   0.075 0.274</span></span>
+<span><span class="co">#&gt;  9 -4.44    137 to_invalid… reject_null                       53.0   0.225 0.475</span></span>
+<span><span class="co">#&gt; 10 -2.05    195 to_invalid… reject_null                        3.51  0.006 0.077</span></span>
+<span><span class="co">#&gt; # … with 20 more rows</span></span></code></pre></div>
 </div>
 </div>
-<div id="overview-of-available-functionality" class="section level1">
-<h1 class="hasAnchor">
-<a href="#overview-of-available-functionality" class="anchor"></a>Overview of available functionality</h1>
+<div class="section level1">
+<h1 id="overview-of-available-functionality">Overview of available functionality<a class="anchor" aria-label="anchor" href="#overview-of-available-functionality"></a>
+</h1>
 <p>The above functions have a number of extensions; the below tables represent how <code><a href="reference/pkonfound.html">pkonfound()</a></code> and <code><a href="reference/konfound.html">konfound()</a></code> can be used:</p>
 <table class="table">
 <colgroup>
 <col width="5%">
 <col width="38%">
-<col width="56%">
+<col width="55%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Outcome</th>
@@ -242,19 +250,24 @@
 <tbody>
 <tr class="odd">
 <td align="left">Continuous</td>
-<td align="left"><code><a href="reference/pkonfound.html">pkonfound(est_eff, std_err, n_obs, n_covariates)</a></code></td>
-<td align="left"><code><a href="reference/pkonfound.html">pkonfound(est_eff, std_err, n_obs, n_covariates)</a></code></td>
+<td align="left"><code>pkonfound(est_eff, std_err, n_obs, n_covariates)</code></td>
+<td align="left"><code>pkonfound(est_eff, std_err, n_obs, n_covariates)</code></td>
 </tr>
 <tr class="even">
 <td align="left">Logistic</td>
-<td align="left"><code><a href="reference/pkonfound.html">pkonfound(est_eff, std_err, n_obs, n_covariates, model_type = 'logistic')</a></code></td>
+<td align="left"><code>pkonfound(est_eff, std_err, n_obs, n_covariates, model_type = 'logistic')</code></td>
 <td align="left">
-<code><a href="reference/pkonfound.html">pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, model_type = 'logistic')</a></code> or <code><a href="reference/pkonfound.html">pkonfound(a, b, c, d)</a></code>
+<code>pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, model_type = 'logistic')</code> or <code>pkonfound(a, b, c, d)</code>
 </td>
 </tr>
 </tbody>
 </table>
 <table class="table">
+<colgroup>
+<col width="16%">
+<col width="31%">
+<col width="52%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">Outcome</th>
 <th align="left">Predictor: Continuous</th>
@@ -263,41 +276,41 @@
 <tbody>
 <tr class="odd">
 <td align="left">Continuous</td>
-<td align="left"><code><a href="reference/konfound.html">konfound(m, var)</a></code></td>
-<td align="left"><code><a href="reference/konfound.html">konfound(m, var)</a></code></td>
+<td align="left"><code>konfound(m, var)</code></td>
+<td align="left"><code>konfound(m, var)</code></td>
 </tr>
 <tr class="even">
 <td align="left">Logistic</td>
-<td align="left"><code><a href="reference/konfound.html">konfound(m, var)</a></code></td>
-<td align="left"><code><a href="reference/konfound.html">konfound(m, var, two_by_two = TRUE)</a></code></td>
+<td align="left"><code>konfound(m, var)</code></td>
+<td align="left"><code>konfound(m, var, two_by_two = TRUE)</code></td>
 </tr>
 </tbody>
 </table>
 <p>Note that there are additional arguments for each of thes functions; see <code>?pkonfound()</code> or <code>?konfound()</code> for more details.</p>
 </div>
-<div id="other-information" class="section level1">
-<h1 class="hasAnchor">
-<a href="#other-information" class="anchor"></a>Other information</h1>
-<div id="how-to-learn-more-about-sensitivity-analysis" class="section level3">
-<h3 class="hasAnchor">
-<a href="#how-to-learn-more-about-sensitivity-analysis" class="anchor"></a>How to learn more about sensitivity analysis</h3>
+<div class="section level1">
+<h1 id="other-information">Other information<a class="anchor" aria-label="anchor" href="#other-information"></a>
+</h1>
+<div class="section level3">
+<h3 id="how-to-learn-more-about-sensitivity-analysis">How to learn more about sensitivity analysis<a class="anchor" aria-label="anchor" href="#how-to-learn-more-about-sensitivity-analysis"></a>
+</h3>
 <p>To learn more about sensitivity analysis, please visit:</p>
 <ul>
-<li>The <a href="https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html">Introduction to konfound vignette</a>, with detailed information about each of the functions (<code><a href="reference/pkonfound.html">pkonfound()</a></code>, <code><a href="reference/konfound.html">konfound()</a></code>, and <code>mkounfound()</code>)</li>
-<li>The causal inference section of Ken Frank’s website <a href="https://msu.edu/~kenfrank/research.htm#causal">here</a>
+<li>The <a href="https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html" class="external-link">Introduction to konfound vignette</a>, with detailed information about each of the functions (<code><a href="reference/pkonfound.html">pkonfound()</a></code>, <code><a href="reference/konfound.html">konfound()</a></code>, and <code>mkounfound()</code>)</li>
+<li>The causal inference section of Ken Frank’s website <a href="https://msu.edu/~kenfrank/research.htm#causal" class="external-link">here</a>
 </li>
-<li>The <a href="https://jmichaelrosenberg.shinyapps.io/shinykonfound/">konfound interactive web application</a>, with links to PowerPoints and key publications</li>
+<li>The <a href="https://jmichaelrosenberg.shinyapps.io/shinykonfound/" class="external-link">konfound interactive web application</a>, with links to PowerPoints and key publications</li>
 </ul>
 </div>
-<div id="feedback-issues-and-feature-requests" class="section level3">
-<h3 class="hasAnchor">
-<a href="#feedback-issues-and-feature-requests" class="anchor"></a>Feedback, issues, and feature requests</h3>
-<p>We prefer for issues to be filed via GitHub (link to the issues page for <code>konfound</code> <a href="https://github.com/jrosen48/konfound/issues">here</a>) though we also welcome questions or feedback via email (see the DESCRIPTION file).</p>
+<div class="section level3">
+<h3 id="feedback-issues-and-feature-requests">Feedback, issues, and feature requests<a class="anchor" aria-label="anchor" href="#feedback-issues-and-feature-requests"></a>
+</h3>
+<p>We prefer for issues to be filed via GitHub (link to the issues page for <code>konfound</code> <a href="https://github.com/jrosen48/konfound/issues" class="external-link">here</a>) though we also welcome questions or feedback via email (see the DESCRIPTION file).</p>
 </div>
-<div id="code-of-conduct" class="section level3">
-<h3 class="hasAnchor">
-<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h3>
-<p>gPlease note that this project is released with a Contributor Code of Conduct available at <a href="http://contributor-covenant.org/version/1/0/0/" class="uri">http://contributor-covenant.org/version/1/0/0/</a></p>
+<div class="section level3">
+<h3 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
+</h3>
+<p>Please note that this project is released with a Contributor Code of Conduct available at <a href="https://www.contributor-covenant.org/version/1/0/0/" class="external-link uri">https://www.contributor-covenant.org/version/1/0/0/</a></p>
 </div>
 </div>
 
@@ -305,49 +318,59 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=konfound">https://​cloud.r-project.org/​package=konfound</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/jrosen48/konfound/">https://​github.com/​jrosen48/​konfound/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/jrosen48/konfound/issues">https://​github.com/​jrosen48/​konfound/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Joshua M Rosenberg <br><small class="roles"> Author, maintainer </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://cloud.r-project.org/package=konfound" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/jrosen48/konfound/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/jrosen48/konfound/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=konfound"><img src="https://www.r-pkg.org/badges/version/konfound" alt="CRAN status"></a></li>
-<li><a href="https://github.com/jrosen48/konfound/actions"><img src="https://github.com/jrosen48/konfound/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/gh/jrosen48/konfound?branch=master"><img src="https://codecov.io/gh/jrosen48/konfound/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing konfound</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Joshua M Rosenberg <br><small class="roles"> Author, maintainer </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=konfound" class="external-link"><img src="https://www.r-pkg.org/badges/version/konfound" alt="CRAN status"></a></li>
+<li><a href="https://github.com/jrosen48/konfound/actions" class="external-link"><img src="https://github.com/jrosen48/konfound/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/gh/jrosen48/konfound?branch=master" class="external-link"><img src="https://codecov.io/gh/jrosen48/konfound/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Joshua M Rosenberg.</p>
+  <p></p>
+<p>Developed by Joshua M Rosenberg.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -355,6 +378,8 @@
 
   
 
+
+  
 
   </body>
 </html>
