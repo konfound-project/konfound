@@ -180,7 +180,7 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
     if (class(flag_cor) == "lavaan" && class(flag_cov) == "lavaan") {
         result = list(R2, betaX, seX, betaZ, seZ, betaCV, seCV,
                       std_R2, std_betaX, std_seX,
-                      cov.matrix)
+                      cov.matrix, cor.matrix)
         return(result)
     } else {
         stop("Error!")

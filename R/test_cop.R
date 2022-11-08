@@ -47,14 +47,14 @@ test_cop <- function(est_eff, # unstandardized
   
   ## observed regression, reg y on x Given z
   tyxGz = beta / SE  ### this should be equal to est_eff / std_err
-  ryxGz = tyxGz / sqrt(n_obs + tyxGz^2)
+  ryxGz = tyxGz / sqrt(df + tyxGz^2) 
   
   ## make sure R2 due to x alone is not larger than overall or observed R2
   if (ryxGz^2 > R2) {illcnd_ryxGz = T} else {illcond_ryxGz = F}
   
   ## calculate ryz, rxz, rxy
   ryz = rzy = cal_ryz(ryxGz, R2)
-  rxz = rzx = cal_rxz(var_x, var_y, R2, df, std_err) 
+  rxz = rzx = cal_rxz(var_x, var_y, R2, n_obs, std_err)  
   ## use df in M2 rather than n_obs, in M2, we assume one latent
   rxy = ryx = cal_rxy(ryxGz, rxz, ryz)
   
@@ -97,6 +97,7 @@ test_cop <- function(est_eff, # unstandardized
   eff_cv_M3_oster = as.numeric(verify_oster[6])
   se_cv_M3_oster = as.numeric(verify_oster[7])
   cov_oster = verify_oster[[11]]
+  cor_oster = verify_oster[[12]]
   
   ## calculate the exact/true rcvx, rcvy, delta
   exact_result = cal_delta_exact(ryx, ryz, rxz, beta_thr, FR2max, R2, sdx, sdz)
@@ -125,6 +126,7 @@ test_cop <- function(est_eff, # unstandardized
   eff_cv_M3 = as.numeric(verify_exact[6])
   se_cv_M3 = as.numeric(verify_exact[7])
   cov_exact = verify_exact[[11]]
+  cor_exact = verify_exact[[12]]
   
   verify_pse_reg_M2 = verify_reg_Gz(n_obs, sdx, sdy, sdz, rxy, rxz, rzy)
   R2_M2 = as.numeric(verify_pse_reg_M2[1])
@@ -214,8 +216,14 @@ test_cop <- function(est_eff, # unstandardized
     output <- list("delta*" = delta_star, 
                    "delta_exact" = delta_exact, 
                    "delta_pctbias" = delta_pctbias,
-                   "cov_oster" = cov_oster,
-                   "cov_exact" = cov_exact,
+                   #"cov_oster" = cov_oster,
+                   #"cov_exact" = cov_exact,
+                   "cor_oster" = cor_oster,
+                   "cor_exact" = cor_exact,
+                   "var(Y)" = sdy^2,
+                   "var(X)" = sdx^2,
+                   "var(Z)" = sdz^2,
+                   "var(CV)" = sdcv^2,
                    "Table" = fTable,
                    "Figure" = fig)
     return(output)
