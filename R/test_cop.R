@@ -47,7 +47,7 @@ test_cop <- function(est_eff, # unstandardized
   
   ## observed regression, reg y on x Given z
   tyxGz = beta / SE  ### this should be equal to est_eff / std_err
-  ryxGz = tyxGz / sqrt(df + tyxGz^2) 
+  ryxGz = tyxGz / sqrt(n_obs + tyxGz^2) 
   
   ## make sure R2 due to x alone is not larger than overall or observed R2
   if (ryxGz^2 > R2) {illcnd_ryxGz = T} else {illcond_ryxGz = F}
