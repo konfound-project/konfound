@@ -69,6 +69,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
       cat("\n")
       cat(" for statistical significance (alpha = ", alpha, ").\n",
           sep = "")
+      cat("\n")
       cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ")
       cat("\n")
       cat(-r_con, " X ", r_con, " = ", -round(r_con^2, 3), " to sustain an inference for a null hypothesis of 0 effect.\n", sep = "")
@@ -80,6 +81,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
       cat("\n")
       cat(" for statistical significance (alpha = ", alpha, ").\n",
           sep = "")
+      cat("\n")
       cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ")
       cat("\n")
       cat(r_con, " X ", r_con, " = ", round(r_con^2, 3), " to sustain an inference for a null hypothesis of 0 effect.\n", sep = "")
