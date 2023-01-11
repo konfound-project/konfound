@@ -99,3 +99,4 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
     cat("\n")
   }
 }
+
