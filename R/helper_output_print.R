@@ -98,5 +98,6 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
     cat("inference of a regression coefficient.", crayon::italic("Sociological Methods and Research, 29"), "(2), 147-194")
     cat("\n")
   }
+    
 }
 
