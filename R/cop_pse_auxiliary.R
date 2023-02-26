@@ -51,43 +51,46 @@ cal_delta_star <- function(FR2max, R2, R2_uncond, est_eff, eff_thr, var_x, var_y
     return(delta_star)
 }
 
-cal_delta_exact <- function(ryx, ryz, rxz, beta_thr, FR2max, R2, sdx, sdz){
-    # setting up simple values to align with Mathematica
-    y = ryx
-    z = ryz
-    w = rxz
-    b = beta_thr ## check with Ken, is beta_thr here or eff_thr here? 
-    v = 1 - rxz^2 # this is to simplify calculation later
-    D = sqrt(FR2max - R2) # same above
-    
-    kden1 = sqrt(b^2 * v^2 + 
-                     2 * b * v * w * z - 
-                     2 * b * v * y + 
-                     D^2 * v + 
-                     w^2 * z^2 -
-                     2 * w * y * z +
-                     y^2)
-    knum1 = sqrt(v) * (b * v + w * z - y)
-    rcvx = rxcv = - knum1 / kden1
+# this is the original approach
+# cal_delta_exact <- function(ryx, ryz, rxz, beta_thr, FR2max, R2, sdx, sdz){
+#     # setting up simple values to align with Mathematica
+#     y = ryx
+#     z = ryz
+#     w = rxz
+#     b = beta_thr ## check with Ken, is beta_thr here or eff_thr here? 
+#     v = 1 - rxz^2 # this is to simplify calculation later
+#     D = sqrt(FR2max - R2) # same above
+#     
+#     kden1 = sqrt(b^2 * v^2 + 
+#                      2 * b * v * w * z - 
+#                      2 * b * v * y + 
+#                      D^2 * v + 
+#                      w^2 * z^2 -
+#                      2 * w * y * z +
+#                      y^2)
+#     knum1 = sqrt(v) * (b * v + w * z - y)
+#     rcvx = rxcv = - knum1 / kden1
+# 
+#     # If regular conditions hold, calculate rycv from rxcv 
+#     yescalc = 0
+#     if (abs(rcvx) < 1 && (rcvx^2 / v) < 1){
+#         yescalc = 1
+#         rcvy = rycv = 
+#         D * sqrt(1 - (rcvx^2 / v)) +
+#         (ryx * rcvx) / (v) -
+#         (ryz * rcvx * rxz) / (v)
+#         delta_exact = rcvx / rxz
+#         result = list(rxcv, rycv, delta_exact)
+#     }
+#     
+#     if (yescalc == 1) {
+#         return(result)
+#     } else {
+#         stop("Error!")
+#     }
+# }
 
-    # If regular conditions hold, calculate rycv from rxcv 
-    yescalc = 0
-    if (abs(rcvx) < 1 && (rcvx^2 / v) < 1){
-        yescalc = 1
-        rcvy = rycv = 
-        D * sqrt(1 - (rcvx^2 / v)) +
-        (ryx * rcvx) / (v) -
-        (ryz * rcvx * rxz) / (v)
-        delta_exact = rcvx / rxz
-        result = list(rxcv, rycv, delta_exact)
-    }
-    
-    if (yescalc == 1) {
-        return(result)
-    } else {
-        stop("Error!")
-    }
-}
+# see test_cop for updated approach to calculate delta exact 
 
 verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv, 
                            rxy, rxz, rzy, rcvy, rcvx, rcvz){

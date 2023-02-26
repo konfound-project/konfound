@@ -1,6 +1,6 @@
 test_pse <- function(est_eff,
                      std_err,
-                     n_obs,
+                     n_obs, # input df for now
                      eff_thr,
                      sdx,
                      sdy,

@@ -100,6 +100,7 @@
        est_eff = est_eff, # unstandardized
        std_err = std_err, # unstandardized
        n_obs = n_obs,
+       n_covariates, # the number of z 
        sdx = sdx,
        sdy = sdy,
        R2 = R2, # NOT the adjusted R2, should be the original R2
