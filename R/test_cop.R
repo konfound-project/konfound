@@ -4,7 +4,7 @@
 test_cop <- function(est_eff, # unstandardized
                      std_err, # unstandardized
                      n_obs,
-                     # n_covariates,
+                     n_covariates, # the number of z 
                      sdx,
                      sdy,
                      R2, # NOT the adjusted R2, should be the original R2
@@ -32,8 +32,7 @@ test_cop <- function(est_eff, # unstandardized
     negest <- 1
   }
   ## prepare input
-  n_covariates = 1 ## assume one latent z 
-  df = n_obs - n_covariates - 2 ## df of M2
+  df = n_obs - n_covariates - 3 ## df of M2
   var_x = sdx^2
   var_y = sdy^2
   ### if the user specifies R2max directly then we use the specified R2max 
@@ -47,7 +46,8 @@ test_cop <- function(est_eff, # unstandardized
   
   ## observed regression, reg y on x Given z
   tyxGz = beta / SE  ### this should be equal to est_eff / std_err
-  ryxGz = tyxGz / sqrt(n_obs + tyxGz^2) 
+  ryxGz = tyxGz / sqrt(df + tyxGz^2)
+  ryxGz_M2 = tyxGz / sqrt(n_obs + tyxGz^2)
   
   ## make sure R2 due to x alone is not larger than overall or observed R2
   if (ryxGz^2 > R2) {illcnd_ryxGz = T} else {illcond_ryxGz = F}
@@ -55,9 +55,9 @@ test_cop <- function(est_eff, # unstandardized
   ## calculate ryz, rxz, rxy
   ryz = rzy = cal_ryz(ryxGz, R2)
   rxz = rzx = cal_rxz(var_x, var_y, R2, n_obs, std_err)  
-  ## use df in M2 rather than n_obs, in M2, we assume one latent
   ## note that in the updated approach rxy is not necessary to calculate rxcv_exact, ryxcv_exact and delta_exact
   rxy = ryx = cal_rxy(ryxGz, rxz, ryz)
+  rxy_M2 = cal_rxy(ryxGz_M2, rxz, ryz)
   
   ## baseline regression model, no z (unconditional)
   eff_uncond = sqrt((var_y / var_x)) * rxy
@@ -148,7 +148,7 @@ test_cop <- function(est_eff, # unstandardized
   cov_exact = verify_exact[[11]]
   cor_exact = verify_exact[[12]]
   
-  verify_pse_reg_M2 = verify_reg_Gz(n_obs, sdx, sdy, sdz, rxy, rxz, rzy)
+  verify_pse_reg_M2 = verify_reg_Gz(n_obs, sdx, sdy, sdz, rxy_M2, rxz, rzy)
   R2_M2 = as.numeric(verify_pse_reg_M2[1])
   eff_x_M2 = as.numeric(verify_pse_reg_M2[2]) # should be equivalent or very close to est_eff
   se_x_M2 = as.numeric(verify_pse_reg_M2[3]) # should be equivalent or very close to std_err
