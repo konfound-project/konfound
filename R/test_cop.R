@@ -104,15 +104,15 @@ test_cop <- function(est_eff, # unstandardized
   ### the idea is to calculate everything conditional on z
   sdxGz = sdx * sqrt(1 - rxz^2)
   sdyGz = sdy * sqrt(1 - ryz^2)
-  ryxcvGz_exact = (FR2max - ryz^2) / (1 - ryz^2)
+  ryxcvGz_exact_sq = (FR2max - ryz^2) / (1 - ryz^2)
   ### equation 7 in the manuscript
   rxcvGz_exact = (ryxGz - sdxGz / sdyGz * beta_thr) / 
     sqrt((sdxGz^2) / (sdyGz^2) * (beta_thr^2) - 
            2 * ryxGz * sdxGz / sdyGz * beta_thr + 
-           ryxcvGz_exact^2)
+           ryxcvGz_exact_sq)
   ### equation 6 in the manuscript
   rycvGz_exact =  ryxGz * rxcvGz_exact + 
-    sqrt((ryxcvGz_exact^2 - ryxGz^2) *
+    sqrt((ryxcvGz_exact_sq - ryxGz^2) *
            (1 - rxcvGz_exact^2))
   ### now get unconditional exact rxcv and rycv
   rycv_exact = sqrt(1 - ryz^2) * rycvGz_exact
