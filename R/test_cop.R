@@ -242,7 +242,7 @@ test_cop <- function(est_eff, # unstandardized
                    "cor_exact" = cor_exact,
                    "var(Y)" = sdy^2,
                    "var(X)" = sdx^2,
-                   "var(Z)" = sdz^2,
+                  #"var(Z)" = sdz^2,
                    "var(CV)" = sdcv^2,
                    "Table" = fTable,
                    "Figure" = fig)
