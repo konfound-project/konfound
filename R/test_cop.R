@@ -256,7 +256,7 @@ test_cop <- function(est_eff, # unstandardized
       cat("Using the absolute value of the estimated effect, results can be interpreted by symmetry.")
       cat("\n")
     }
-    cat(sprintf("delta* is %.3f, the exact delta is %.3f, with a bias of %.3f%%", delta_star, delta_exact, delta_pctbias))
+    cat(sprintf("delta* is %.3f (assuming no covariates in the baseline model M1), the exact delta is %.3f, with a bias of %.3f%%", delta_star, delta_exact, delta_pctbias))
     cat("\n")
     cat(sprintf("With delta*, the coefficient in the final model will be %.3f. With the exact delta, the coefficient will be %.3f.",  
                 eff_x_M3_oster,eff_x_M3))
