@@ -28,6 +28,21 @@ test_sensitivity_ln <- function(est_eff,
   }
   
   odds_ratio <- exp(est_eff)
+  
+  # updated approach to deal with imaginary
+  minse <- sqrt((4 * n_obs + 
+                   sqrt(16 * n_obs^2 + 4 * n_treat * (n_obs - n_treat) * 
+                          ((4 + 4 * odds_ratio^2) / odds_ratio - 8)))/
+                  (2 * n_treat * (n_obs - n_treat)))
+  # check if the implied table solution may contain imaginary numbers
+  changeSE <- F
+  if (std_err < minse) {
+    haveimaginary <- T
+    changeSE <- T
+    user_std_err <- std_err
+    std_err <- minse
+  }
+    
   # n_treat is the number of observations in the treatment group (c+d)
   # n_cnt is the number of observations in the control group (a+b)
   n_cnt <- n_obs - n_treat
@@ -38,27 +53,28 @@ test_sensitivity_ln <- function(est_eff,
   # dcroddsratio_ob is true - our goal is to decrease the odds ratio
   dcroddsratio_ob <- isdcroddsratio(thr_t, t_ob)
   
+  # previous approach to deal with imaginary 
   # to record the original treatment cases in case we need to adjust it
-  user_ntrm <- n_treat
+  # user_ntrm <- n_treat
   # check if the implied table solution may contain imaginary numbers
-  haveimaginary <- F
-  changepi <- F
+  # haveimaginary <- F
+  # changepi <- F
   # set the default value for whether we need and can adjust pi (ratio of treatment cases)
   # to remove the imaginary part
-  keyimagin <- (4 + 4 * odds_ratio^2 + odds_ratio *
-                  (-8 + 4 * n_obs * std_err^2 - n_obs * n_treat * std_err^4 + n_treat^2 * std_err^4))
-  minimgain <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + n_obs * std_err^2 * (4 - 0.25 * n_obs * std_err^2))
-  keyx1 <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + 4 * n_obs * std_err^2)
-  if (keyimagin > 0) {
-    haveimaginary <- T
-    if (minimgain <= 0 && keyx1 > 0) {
-      changepi <- T
-      n_treat <- n_obs * get_pi(odds_ratio, std_err, n_obs, n_treat)
-      n_cnt <- n_obs - n_treat
-    } else {
-      stop("Cannot generate a usable contingency table; Please consider using the Pearson's chi-squared approach (under development).")
-    }
-  }
+  # keyimagin <- (4 + 4 * odds_ratio^2 + odds_ratio *
+  #                 (-8 + 4 * n_obs * std_err^2 - n_obs * n_treat * std_err^4 + n_treat^2 * std_err^4))
+  # minimgain <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + n_obs * std_err^2 * (4 - 0.25 * n_obs * std_err^2))
+  # keyx1 <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + 4 * n_obs * std_err^2)
+  # if (keyimagin > 0) {
+    # haveimaginary <- T
+    # if (minimgain <= 0 && keyx1 > 0) {
+      # changepi <- T
+      # n_treat <- n_obs * get_pi(odds_ratio, std_err, n_obs, n_treat)
+      # n_cnt <- n_obs - n_treat
+  #  } else {
+  #    stop("Cannot generate a usable contingency table; Please consider using the Pearson's chi-squared approach (under development).")
+  #  }
+  #}
   
   # a1, b1, c1, d1 are one solution for the 4 cells in the contingency table
   a1 <- get_a1_kfnl(odds_ratio, std_err, n_obs, n_treat)
@@ -234,10 +250,6 @@ test_sensitivity_ln <- function(est_eff,
     final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start
   )
   
-  conclusion2b <- sprintf("and a t-ratio of %.3f.",
-    final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start
-  )
-  
   conclusion3 <- sprintf(
     "For the Transfer Table, we have an estimate of %.3f, with a SE of %.3f and a t-ratio of %.3f.",
     final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final
@@ -246,11 +258,10 @@ test_sensitivity_ln <- function(est_eff,
   notice <- "Note: Values have been rounded to the nearest integer."
   noticeb <- "This may cause a little change to the estimated effect for the Implied Table."
   
-  if (haveimaginary && changepi) {
-    conclusion1 <- paste(sprintf(
-      "In order to generate a usable implied contingency table, we change the number of treatment cases to %d (originally this number is %d).",
-      final_solution$table_start[2, 1] + final_solution$table_start[2, 2], user_ntrm
-    ), conclusion1)
+  if (changeSE) {
+    notice_SE <- sprintf(
+      "In order to generate a usable implied contingency table, we increased the standard error to %.3f (the original one is %.3f).",
+      std_err, user_std_err)
   }
   
   if (final_solution$needtworows) {
@@ -270,16 +281,29 @@ test_sensitivity_ln <- function(est_eff,
   # output dispatch
   if (to_return == "raw_output") {
     
-    result <- list(conclusion1,
-                   conclusion1b,
-                   conclusion1c,
-                   Implied_Table = final_solution$table_start, 
-                   notice,
-                   Transfer_Table = final_solution$table_final,
-                   conclusion2, 
-                   conclusion3,
-                   RIR = RIR)
-    
+    if (changeSE) {
+      result <- list(conclusion1,
+                     conclusion1b,
+                     conclusion1c,
+                     Implied_Table = final_solution$table_start, 
+                     notice_SE,
+                     notice,
+                     Transfer_Table = final_solution$table_final,
+                     conclusion2, 
+                     conclusion3,
+                     RIR = RIR)
+    } else {
+      result <- list(conclusion1,
+                     conclusion1b,
+                     conclusion1c,
+                     Implied_Table = final_solution$table_start, 
+                     notice,
+                     Transfer_Table = final_solution$table_final,
+                     conclusion2, 
+                     conclusion3,
+                     RIR = RIR)
+    }
+  
     return(result)
     
   } else  if (to_return == "print") {
@@ -295,9 +319,11 @@ test_sensitivity_ln <- function(est_eff,
     cat("\n")
     print(final_solution$table_start)
     cat("\n")
-    cat("\n")
+    if (changeSE) {
+      cat(notice_SE)
+      cat("\n")
+      }
     cat(notice)
-    cat("\n")
     cat(noticeb)
     cat("\n")
     cat("\n")
@@ -309,13 +335,15 @@ test_sensitivity_ln <- function(est_eff,
     cat("\n")
     cat(conclusion1c)
     cat("\n")
+    cat("\n")
     cat(crayon::underline("Transfer Table:"))
     cat("\n")
     print(final_solution$table_final)
     cat("\n")
     cat(conclusion2)
     cat("\n")
-    cat(conclusion2b)
+    cat(conclusion3)
+    cat("\n")
     cat("\n")
     cat(crayon::bold("RIR:"))
     cat("\n")
