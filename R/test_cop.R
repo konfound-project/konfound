@@ -307,6 +307,7 @@ test_cop <- function(est_eff, # unstandardized
     cat("If the replacement cases follow a null distribution, then RIR =", cond_RIR_null)
     cat("\n")
     cat("If the replacement cases satisfy rxy|Z = 0, then RIR =", cond_RIR_rxyz)
+    cat("\n")
   }
   
 }
