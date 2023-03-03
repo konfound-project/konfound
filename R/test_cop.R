@@ -11,6 +11,8 @@ test_cop <- function(est_eff, # unstandardized
                      eff_thr = 0, # this is the unstandardized version
                      FR2max_multiplier = 1.3,
                      FR2max = 0, # NOT the adjusted R2, should be the original R2
+                     alpha = 0.05,
+                     tails = 2, 
                      to_return = to_return){
   
   ## test example
@@ -55,6 +57,7 @@ test_cop <- function(est_eff, # unstandardized
   ## calculate ryz, rxz, rxy
   ryz = rzy = cal_ryz(ryxGz, R2)
   rxz = rzx = cal_rxz(var_x, var_y, R2, n_obs, std_err)  
+  
   ## note that in the updated approach rxy is not necessary to calculate rxcv_exact, ryxcv_exact and delta_exact
   rxy = ryx = cal_rxy(ryxGz, rxz, ryz)
   rxy_M2 = cal_rxy(ryxGz_M2, rxz, ryz)
@@ -167,16 +170,16 @@ test_cop <- function(est_eff, # unstandardized
                      se_x_M1, se_x_M2, se_x_M3, se_x_M3_oster, # unstd reg se for X in three reg models
                      rxy, ryxGz, beta_x_M3, beta_x_M3_oster,  # std reg coef for X in three reg models
                      t_x_M1, t_x_M2, t_x_M3, t_x_M3_oster, # t values for X in three reg models
-                     NA, eff_z_M2, eff_z_M3,  eff_z_M3_oster, # reg coef for Z in three reg models
-                     NA, se_z_M2, se_z_M3, se_z_M3_oster,  # se for Z in three reg models
-                     NA, eff_z_M2 / se_z_M2, eff_z_M3 / se_z_M3, eff_z_M3_oster / se_z_M3_oster, # t for Z in three reg models,
+                     # NA, eff_z_M2, eff_z_M3,  eff_z_M3_oster, # reg coef for Z in three reg models
+                     # NA, se_z_M2, se_z_M3, se_z_M3_oster,  # se for Z in three reg models
+                     # NA, eff_z_M2 / se_z_M2, eff_z_M3 / se_z_M3, eff_z_M3_oster / se_z_M3_oster, # t for Z in three reg models,
                      NA, NA, eff_cv_M3, eff_cv_M3_oster, # reg coef for CV in three reg models
                      NA, NA, se_cv_M3, se_cv_M3_oster, # se for CV in three reg models
                      NA, NA, eff_cv_M3 / se_cv_M3, eff_cv_M3_oster / se_cv_M3_oster), # t for CV in three reg models
-                   nrow = 11, ncol = 4, byrow = T) 
+                   nrow = 8, ncol = 4, byrow = T) 
   
   rownames(fTable) <- c("R2", "coef_X", "SE_X", "std_coef_X", "t_X",
-                        "coef_Z", "SE_Z", "t_Z",
+                        # "coef_Z", "SE_Z", "t_Z",
                         "coef_CV", "SE_CV", "t_CV")
   
   colnames(fTable) <- c("M1:X", "M2:X,Z", 
@@ -228,6 +231,33 @@ test_cop <- function(est_eff, # unstandardized
           axis.line.x.bottom = ggplot2::element_line(color = "black"),
           axis.text.x.bottom = ggplot2::element_text(color = "black"))
     
+  ##############################################
+  ######### conditional RIR ####################
+  
+  # calculating critical r
+  if (est_eff < 0) {
+    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
+  } else {
+    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
+  }
+  critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 2))
+  
+  # final solutions 
+  cond_RIRpi_fixedY <- (R2 - ryz^2 + ryz^2 * critical_r^2 - critical_r^2) / 
+    (R2 - ryz^2 + ryz^2 * critical_r^2)
+  cond_RIR_fixedY <- cond_RIRpi_fixedY * n_obs
+  
+  cond_RIRpi_null <- 1 - sqrt(critical_r^2 / 
+                                (R2 - ryz^2 + ryz^2 * critical_r^2))
+  cond_RIR_null <- cond_RIRpi_null * n_obs
+  
+  cond_RIRpi_rxyz <- 1 - sqrt((critical_r^2 * (1 - ryz^2)) / 
+                                (R2 - ryz^2))
+  cond_RIR_rxyz <- cond_RIRpi_rxyz * n_obs
+  
+  ##############################################
+  ######### output #############################
+  
   if (to_return == "raw_output") {
     if (negest == 1) {
       cat("Using the absolute value of the estimated effect, results can be interpreted by symmetry.")
@@ -245,7 +275,13 @@ test_cop <- function(est_eff, # unstandardized
                   #"var(Z)" = sdz^2,
                    "var(CV)" = sdcv^2,
                    "Table" = fTable,
-                   "Figure" = fig)
+                   "Figure" = fig,
+                   "conditional RIR pi (fixed y)" = cond_RIRpi_fixedY,
+                   "conditional RIR (fixed y)" = cond_RIR_fixedY,
+                   "conditional RIR pi (null)" = cond_RIRpi_null,
+                   "conditional RIR (null)" = cond_RIR_null,
+                   "conditional RIR pi (rxyGz)" = cond_RIRpi_rxyz,
+                   "conditional RIR (rxyGz)" = cond_RIR_rxyz)
     return(output)
   }
   
@@ -262,6 +298,16 @@ test_cop <- function(est_eff, # unstandardized
                 eff_x_M3_oster,eff_x_M3))
     cat("\n")
     cat("Use to_return = raw_ouput to see more specific results and graphic presentation of the result.")
+    cat("\n")
+    cat("\n")
+    cat("This function also calculates conditional RIR that invalidates the statistical inference.")
+    cat("\n")
+    cat("If the replacement cases have a fixed value, then RIR =", cond_RIR_fixedY)
+    cat("\n")
+    cat("If the replacement cases follow a null distribution, then RIR =", cond_RIR_null)
+    cat("\n")
+    cat("If the replacement cases satisfy rxy|Z = 0, then RIR =", cond_RIR_rxyz)
+    cat("\n")
     cat("\n")
   }
   
