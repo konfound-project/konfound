@@ -286,12 +286,12 @@ test_sensitivity_ln <- function(est_eff,
                      conclusion1b,
                      conclusion1c,
                      Implied_Table = final_solution$table_start, 
-                     notice_SE,
                      notice,
                      Transfer_Table = final_solution$table_final,
                      conclusion2, 
                      conclusion3,
-                     RIR = RIR)
+                     RIR = RIR,
+                     notice_SE)
     } else {
       result <- list(conclusion1,
                      conclusion1b,
