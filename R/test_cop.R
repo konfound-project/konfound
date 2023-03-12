@@ -28,6 +28,7 @@ test_cop <- function(est_eff, # unstandardized
   # test_cop(est_eff = .4, std_err = .1, n_obs = 290, 
   #          sdx = 2, sdy = 6, R2 = .7, eff_thr = 0, FR2max = .8, to_return = "short")
   
+  
   negest <- 0 # an indicator of whether the use specified est_eff is negative, 1 is yes negative
   if (est_eff < 0) {
     est_eff <- abs(est_eff)
@@ -206,19 +207,21 @@ test_cop <- function(est_eff, # unstandardized
                                     "star"))
   figTable$coef_X <- as.numeric(figTable$coef_X)
   figTable$R2 <- as.numeric(figTable$R2)
-  fig <- 
-    ggplot2::ggplot(figTable, ggplot2::aes(x = ModelLabel)) +
+
+scale = 1/(round(max(figTable$coef_X)*10)/10)
+
+fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = ModelLabel)) +
     ggplot2::geom_point(ggplot2::aes(y = coef_X, group = cat, shape = cat), color = "blue", size = 3) + 
     ggplot2::scale_shape_manual(values = c(16, 1)) +
-    ggplot2::geom_point(ggplot2::aes(y = R2), color = "#7CAE00", shape = 18, size = 4) + 
+    ggplot2::geom_point(ggplot2::aes(y = R2/scale), color = "#7CAE00", shape = 18, size = 4) + 
     # scale_linetype_manual(values=c("solid", "dotted")) +
-    ggplot2::geom_line(ggplot2::aes(y = R2, group = cat), linetype = "solid", color = "#7CAE00") + 
+    ggplot2::geom_line(ggplot2::aes(y = R2/scale, group = cat), linetype = "solid", color = "#7CAE00") + 
     ggplot2::geom_line(ggplot2::aes(y = coef_X, group = cat, linetype = cat), color = "blue") + 
     ggplot2::scale_y_continuous(
       # Features of the first axis
       name = "Coeffcient (X)",
       # Add a second axis and specify its features
-      sec.axis = ggplot2::sec_axis(~.*1/(round(max(figTable$coef_X)*10)/10), 
+      sec.axis = ggplot2::sec_axis(~.* scale, 
                           name="R2")) +
     ggplot2::theme(axis.title.x = ggplot2::element_blank(),
           legend.position = "none",
