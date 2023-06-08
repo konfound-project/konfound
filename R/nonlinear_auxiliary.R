@@ -354,12 +354,12 @@ table_ob <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
 p_ob <- chisq_p(a, b, c, d)
 chisq_ob <- chisq_value(a, b, c, d)
 
-# to evaluate whther we are moving cases to invalidate or sustain the inference
+# to evaluate whether we are moving cases to invalidate or sustain the inference
 if (p_ob < thr_p){isinvalidate_ob <- TRUE}
 if (p_ob > thr_p){isinvalidate_ob <- FALSE}
 
 # to evaluate what kind of switches we need - increase or decrease the odds ratio
-if (odds_ratio > 1) {dcroddsratio_ob <- isinvalidate_ob}
+if (odds_ratio >= 1) {dcroddsratio_ob <- isinvalidate_ob}
 if (odds_ratio < 1) {dcroddsratio_ob <- !isinvalidate_ob}
 
 isinvalidate_start <- isinvalidate_ob
@@ -698,7 +698,7 @@ getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
   if (p_ob > thr_p){isinvalidate_ob <- FALSE}
   
   # to evaluate what kind of switches we need - increase or decrease the odds ratio
-  if (odds_ratio > 1) {dcroddsratio_ob <- isinvalidate_ob}
+  if (odds_ratio >= 1) {dcroddsratio_ob <- isinvalidate_ob}
   if (odds_ratio < 1) {dcroddsratio_ob <- !isinvalidate_ob}
   
   isinvalidate_start <- isinvalidate_ob
