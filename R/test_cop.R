@@ -167,6 +167,9 @@ test_cop <- function(est_eff, # unstandardized
   se_x_M1 = as.numeric(verify_pse_reg_M1[3]) 
   t_x_M1 = eff_x_M1 / se_x_M1 
   
+  delta_star_restricted = ((est_eff - eff_thr)/(eff_x_M1 - est_eff))*
+    ((R2_M2 - R2_M1)/(R2_M3 - R2_M2))
+  
   fTable <- matrix(c(R2_M1, R2_M2, R2_M3, R2_M3_oster, # R2 for three reg models
                      eff_x_M1, eff_x_M2, eff_x_M3, eff_x_M3_oster, # unstd reg coef for X in three reg  models
                      se_x_M1, se_x_M2, se_x_M3, se_x_M3_oster, # unstd reg se for X in three reg models
@@ -267,7 +270,8 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = ModelLabel)) +
       cat("Using the absolute value of the estimated effect, results can be interpreted by symmetry.")
       cat("\n")
     }
-    output <- list("delta*" = delta_star, 
+    output <- list("delta*" = delta_star,
+                   "delta*restricted" = delta_star_restricted,
                    "delta_exact" = delta_exact, 
                    "delta_pctbias" = delta_pctbias,
                    #"cov_oster" = cov_oster,
