@@ -57,7 +57,8 @@ test_cop <- function(est_eff, # unstandardized
   
   ## calculate ryz, rxz, rxy
   ryz = rzy = cal_ryz(ryxGz, R2)
-  rxz = rzx = cal_rxz(var_x, var_y, R2, n_obs, std_err)  
+  rxz = rzx = cal_rxz(var_x, var_y, R2, df, std_err)  
+  #### we change the n_obs to df to recover the rxz as in the particular sample
   
   ## note that in the updated approach rxy is not necessary to calculate rxcv_exact, ryxcv_exact and delta_exact
   rxy = ryx = cal_rxy(ryxGz, rxz, ryz)
