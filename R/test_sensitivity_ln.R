@@ -32,7 +32,7 @@ test_sensitivity_ln <- function(est_eff,
   # updated approach to deal with imaginary
   minse <- sqrt((4 * n_obs + 
                    sqrt(16 * n_obs^2 + 4 * n_treat * (n_obs - n_treat) * 
-                          ((4 + 4 * odds_ratio^2) / odds_ratio - 8)))/
+                          ((4 + 4 * odds_ratio^2) / odds_ratio - 7.999999)))/
                   (2 * n_treat * (n_obs - n_treat)))
   # check if the implied table solution may contain imaginary numbers
   changeSE <- F
