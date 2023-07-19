@@ -115,6 +115,7 @@
        est_eff = est_eff,
        std_err = std_err,
        n_obs = n_obs,
+       n_covariates = n_covariates, # the number of z
        sdx = sdx,
        sdy = sdy,
        R2 = R2,
