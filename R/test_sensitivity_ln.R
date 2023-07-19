@@ -13,10 +13,15 @@ test_sensitivity_ln <- function(est_eff,
                                 to_return,
                                 model_object,
                                 tested_variable) {
+  
+  ## error message if input is inappropriate
+  if !(std_err > 0) {stop("Did not run! Standard error needs to be greater than zero.")}
+  if !(n_obs > n_covariates + 3) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
+
   if (est_eff < 0) {
-    thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1) * -1
+    thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3) * -1
   } else {
-    thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 1)
+    thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3)
   }
   
   # stop message

@@ -28,20 +28,30 @@ test_cop <- function(est_eff, # unstandardized
   # test_cop(est_eff = .4, std_err = .1, n_obs = 290, 
   #          sdx = 2, sdy = 6, R2 = .7, eff_thr = 0, FR2max = .8, to_return = "short")
   
+  ## prepare input
+  df = n_obs - n_covariates - 3 ## df of M3
+  var_x = sdx^2
+  var_y = sdy^2
   
+  ### if the user specifies R2max directly then we use the specified R2max 
+  if (FR2max == 0){FR2max = FR2max_multiplier * R2}
+  var_z = sdz = 1
+  
+  ## error message if input is inappropriate
+  if !(std_err > 0) {stop("Did not run! Standard error needs to be greater than zero.")}
+  if !(sdx > 0) {stop("Did not run! Standard deviation of x needs to be greater than zero.")}
+  if !(sdy > 0) {stop("Did not run! Standard deviation of y needs to be greater than zero.")}
+  if !(n_obs > n_covariates + 3) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
+  if !(R2 < FR2max) {stop("Did not run! R2 Max needs to be greater than R2.")}
+  if !(FR2max < 1) {stop("Did not run! R2 Max needs to be less than 1.")}
+  if !(1-((sdy^2/sdx^2)*(1-R2)/((df+1) * std_err^2))>0) {stop("Did not run! Entered values produced Rxz^2 <=0, consider adding more significant digits to your entered values.")}
+
   negest <- 0 # an indicator of whether the use specified est_eff is negative, 1 is yes negative
   if (est_eff < 0) {
     est_eff <- abs(est_eff)
     negest <- 1
   }
-  ## prepare input
-  df = n_obs - n_covariates - 3 ## df of M2
-  var_x = sdx^2
-  var_y = sdy^2
-  ### if the user specifies R2max directly then we use the specified R2max 
-  if (FR2max == 0){FR2max = FR2max_multiplier * R2}
-  var_z = sdz = 1
-  
+
   ## now standardize 
   beta_thr = eff_thr * sdx / sdy
   beta = est_eff * sdx / sdy
@@ -49,20 +59,24 @@ test_cop <- function(est_eff, # unstandardized
   
   ## observed regression, reg y on x Given z
   tyxGz = beta / SE  ### this should be equal to est_eff / std_err
-  ryxGz = tyxGz / sqrt(df + tyxGz^2)
+  ryxGz = tyxGz / sqrt(df + 1 + tyxGz^2)
+  ## df + 1 because omitted variable is NOT included in M2 
   ryxGz_M2 = tyxGz / sqrt(n_obs + tyxGz^2)
+  ## ryxGz_M2 is only for simulation to recover the exact number
   
   ## make sure R2 due to x alone is not larger than overall or observed R2
   if (ryxGz^2 > R2) {illcnd_ryxGz = T} else {illcond_ryxGz = F}
   
   ## calculate ryz, rxz, rxy
   ryz = rzy = cal_ryz(ryxGz, R2)
-  rxz = rzx = cal_rxz(var_x, var_y, R2, df, std_err)  
+  rxz = rzx = cal_rxz(var_x, var_y, R2, df + 1, std_err) 
+  ## df + 1 because omitted variable is NOT included in M2 
   #### we change the n_obs to df to recover the rxz as in the particular sample
-  
+
   ## note that in the updated approach rxy is not necessary to calculate rxcv_exact, ryxcv_exact and delta_exact
   rxy = ryx = cal_rxy(ryxGz, rxz, ryz)
-  rxy_M2 = cal_rxy(ryxGz_M2, rxz, ryz)
+  rxy_M2 = cal_rxy(ryxGz_M2, rxz, ryz) 
+  ## rxy_M2 is only for simulation to recover the exact number
   
   ## baseline regression model, no z (unconditional)
   eff_uncond = sqrt((var_y / var_x)) * rxy
