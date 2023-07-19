@@ -38,13 +38,13 @@ test_cop <- function(est_eff, # unstandardized
   var_z = sdz = 1
   
   ## error message if input is inappropriate
-  if !(std_err > 0) {stop("Did not run! Standard error needs to be greater than zero.")}
-  if !(sdx > 0) {stop("Did not run! Standard deviation of x needs to be greater than zero.")}
-  if !(sdy > 0) {stop("Did not run! Standard deviation of y needs to be greater than zero.")}
-  if !(n_obs > n_covariates + 3) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
-  if !(R2 < FR2max) {stop("Did not run! R2 Max needs to be greater than R2.")}
-  if !(FR2max < 1) {stop("Did not run! R2 Max needs to be less than 1.")}
-  if !(1-((sdy^2/sdx^2)*(1-R2)/((df+1) * std_err^2))>0) {stop("Did not run! Entered values produced Rxz^2 <=0, consider adding more significant digits to your entered values.")}
+  if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
+  if (!(sdx > 0)) {stop("Did not run! Standard deviation of x needs to be greater than zero.")}
+  if (!(sdy > 0)) {stop("Did not run! Standard deviation of y needs to be greater than zero.")}
+  if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
+  if (!(R2 < FR2max)) {stop("Did not run! R2 Max needs to be greater than R2.")}
+  if (!(FR2max < 1)) {stop("Did not run! R2 Max needs to be less than 1.")}
+  if (!(1-((sdy^2/sdx^2)*(1-R2)/((df+1) * std_err^2))>0)) {stop("Did not run! Entered values produced Rxz^2 <=0, consider adding more significant digits to your entered values.")}
 
   negest <- 0 # an indicator of whether the use specified est_eff is negative, 1 is yes negative
   if (est_eff < 0) {

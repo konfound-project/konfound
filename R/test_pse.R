@@ -17,13 +17,13 @@ test_pse <- function(est_eff,
     df = n_obs - n_covariates - 3
     
     ## error message if input is inappropriate
-    if !(std_err > 0) {stop("Did not run! Standard error needs to be greater than zero.")}
-    if !(sdx > 0) {stop("Did not run! Standard deviation of x needs to be greater than zero.")}
-    if !(sdy > 0) {stop("Did not run! Standard deviation of y needs to be greater than zero.")}
-    if !(n_obs > n_covariates + 3) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
-    if !(0 < R2) {stop("Did not run! R2 needs to be greater than zero.")}
-    if !(R2 < 1) {stop("Did not run! R2 needs to be less than one.")}
-    if !(1-((sdy^2/sdx^2)*(1-R2)/((df+1) * std_err^2))>0) {stop("Did not run! Entered values produced Rxz^2 <=0, consider adding more significant digits to your entered values.")}
+    if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
+    if (!(sdx > 0)) {stop("Did not run! Standard deviation of x needs to be greater than zero.")}
+    if (!(sdy > 0)) {stop("Did not run! Standard deviation of y needs to be greater than zero.")}
+    if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
+    if (!(0 < R2)) {stop("Did not run! R2 needs to be greater than zero.")}
+    if (!(R2 < 1)) {stop("Did not run! R2 needs to be less than one.")}
+    if (!(1-((sdy^2/sdx^2)*(1-R2)/((df+1) * std_err^2))>0)) {stop("Did not run! Entered values produced Rxz^2 <=0, consider adding more significant digits to your entered values.")}
     
     
     ## now standardize 

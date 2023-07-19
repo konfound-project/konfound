@@ -35,8 +35,8 @@ test_sensitivity <- function(est_eff,
   if (nu != 0) warning("You entered a non-zero null hypothesis about an effect; this is being interpreted in terms of a partial correlation. Sampling variability is not accounted for.")
 
   ## error message if input is inappropriate
-  if !(std_err > 0) {stop("Did not run! Standard error needs to be greater than zero.")}
-  if !(n_obs > n_covariates + 3) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
+  if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
+  if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
 
   # calculating statistics used in every case
   if (est_eff < 0) {
