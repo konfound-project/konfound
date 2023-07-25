@@ -45,7 +45,7 @@ affiliations:
 
 Statistical methods which quantify the conditions necessary to alter inferences are important to a variety of disciplines [@razavi2021]. One line of work is rooted in linear models and foregrounds the sensitivity of inferences to the strength of omitted variables [@frank2000; @cinelli2019]. A more recent approach is rooted in the potential outcomes framework for causal inference and foregrounds how hypothetical changes in a sample would alter an inference if such variables or cases were otherwise observed [@frank2007; @frank2008; @frank2013; @xu2019). We have implemented two measures from these lines of work within R via the `konfound` R package. One measure is the Impact Threshold of a Confounding Variable (ITCV), which generates statements such as "to invalidate an inference of an effect, an omitted variable would have to be correlated at \_\_ with the predictor of interest and with the outcome" [@frank2000]. This sensitivity analysis can be calculated for any linear model. The second measure is the Robustness of an Inference to Replacement (RIR) which generates statements such as "to invalidate the inference, \_\_ % of the cases would have to be replaced with counterfactual cases with zero effect of the treatment" [@frank2013]. The RIR represents a more generally applicable approach not limited to linear models, and is recommended for all cases that use binary outcomes [@frank2021].
 
-# The Need for an R Package
+# Statement of Need: The Need for an R Package
 
 We have implemented these recent developments of sensitivity analysis for causal inferences within R via the `konfound` R package. In particular, the `konfound` package is used to calculate two robustness indices: ITCV and RIR.
 
@@ -202,5 +202,7 @@ The output indicates that to invalidate the inference, approximately 60% of the 
 We have created a Shiny interactive web application at <http://konfound-it.com/> that can be applied to linear models, 2 x 2 tables resulting corresponding to treatment and control by success and failure conditions, and logistic regression models (functionality for designs including mediation, differences in difference, and regression discontinuity are under development). We are also developing extensions of the sensitivity analysis techniques described in this paper, including preserving the standard error [@frank2023] and calculating the coefficient of proportionality [@frank2022] for ITCV analyses. Additional documentation on the R package and future extensions will be available at <https://konfound-project.github.io/konfound/>.
 
 # Acknowledgements
+
+The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305D220022 to Michigan State University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
 
 # References
