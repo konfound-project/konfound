@@ -1,5 +1,5 @@
 ---
-title: 'Konfound: An R Sensitivity Analysis Package to Quantify the Robustness of
+title: 'konfound: An R Sensitivity Analysis Package to Quantify the Robustness of
   Causal'
 tags:
 - Sensitivity analysis
