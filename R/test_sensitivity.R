@@ -25,15 +25,26 @@ test_sensitivity <- function(est_eff,
                              std_err,
                              n_obs,
                              n_covariates,
+                             sdx = 1, 
+                             sdy = 1,
                              alpha,
                              tails,
                              index,
-                             nu,
+                             nu, # null hypothesis 
+                             suppression,
+                             ## by default is zero
+                             ## alternative is one 
+                             eff_thr, # another arbitrary threshold in terms of beta
                              to_return,
                              model_object,
                              tested_variable) {
-  if (nu != 0) warning("You entered a non-zero null hypothesis about an effect; this is being interpreted in terms of a partial correlation. Sampling variability is not accounted for.")
+  
+  if (suppression == 1) warning("suppression is defined by statistical significance and of opposite sign of the estimated effect.")
 
+  if (nu != 0) warning("You entered a non-zero null hypothesis about an effect. ITCV is calculated assuming omitted variable is equally correlated with predictor of interest and outcome. This approach maximizes the impact in the correlation metric and could be applied to standardized variables. An alternative approach is to preserve the original metric and choose the two correlations to preserve the standard error. See index = PSE. ")
+
+  if ("user specifies the eff_thr argument")  {"The threshold you specified will be used without regard for the standard error and statistical significance (assuming sdx = sdy = 1 unless otherwise specified). If you seek to account for the standard error, specify a non-zero null hypothesis as in nu argument."}
+  
   ## error message if input is inappropriate
   if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
   if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
@@ -46,7 +57,9 @@ test_sensitivity <- function(est_eff,
     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3)
   }
 
-  beta_threshold <- critical_t * std_err
+  beta_threshold <- critical_t * std_err + nu * std_err 
+  # to account for non-zero nu, assuming stat sig is determined by non-zero nu
+  
   # dealing with cases where hypotheses other than whether est_eff differs from 0
   if (nu != 0) {
     est_eff <- abs(est_eff - nu)
@@ -73,19 +86,57 @@ test_sensitivity <- function(est_eff,
 
   # transforming t into r
   obs_r <- (est_eff / std_err) / sqrt(((n_obs - n_covariates - 3) + ((est_eff / std_err)^2)))
+  
   # finding critical r
-  critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 3))
-  # calculating threshold
-  if ((abs(obs_r) > abs(critical_r)) & ((obs_r * critical_r) > 0)) {
-    mp <- -1
+  if ("eff_thr is NOT specified") {
+    critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 3))
   } else {
-    mp <- 1
+      critical_r <- eff_thr * sdx / sdy 
   }
-  # calculating impact of the confounding variable
-  itcv <- (obs_r - critical_r) / (1 + mp * abs(critical_r))
-  # finding correlation of confound to invalidate / sustain inference
-  r_con <- round(sqrt(abs(itcv)), 3)
+  
+  # calculating threshold
+  
+  # mp is for suppression
+  if ((abs(obs_r) > abs(critical_r)) & ((obs_r * critical_r) > 0)) {
+     mp <- -1
+   } else {
+     mp <- 1
+   }
 
+  # now determine the sign of ITCV 
+  if ((est_eff >= nu) & (nu >= 0) & (est_eff > beta_threshold)) {signITCV = 1}
+  if ((est_eff <= nu) & (nu <= 0) & (est_eff < beta_threshold)) {signITCV = -1}
+  if ((est_eff >= nu) & (nu >= 0) & (est_eff < beta_threshold)) {signITCV = -1}
+  if ((est_eff <= nu) & (nu <= 0) & (est_eff > beta_threshold)) {signITCV = 1}
+  
+  if ((est_eff >= 0) & (0 > nu) & (est_eff > beta_threshold)) {signITCV = 1}
+  if ((est_eff <= 0) & (0 < nu) & (est_eff < beta_threshold)) {signITCV = -1}
+  if ((est_eff >= 0) & (0 > nu) & (est_eff < beta_threshold)) {signITCV = -1}
+  # if b1>0>nu but not significant, then ITCV<0 (for b1 ultimately >nu); then ITCV>0 (for b1 ultimately <nu)
+  # here we take the first approach, meaning for b1 ultimately > nu
+  # this means we are NOT dealing with suppression 
+  if ((est_eff <= 0) & (0 < nu) & (est_eff > beta_threshold)) {signITCV = 1}
+  #if b1<0<nu but not significant, then ITCV>0 (for b1 ultimately <nu); then ITCV<0 (for b1 ultimately >nu)
+  #current convention: only work with final beta of same sign as estimated beta, only use 1st condition in lines above
+  
+  if (est_eff == beta_threshold) {signITCV = 0}
+  
+  if (nu == 0) {
+    # calculating impact of the confounding variable
+    itcv <- signITCV * (obs_r - critical_r) / (1 + mp * abs(critical_r))
+    # finding correlation of confound to invalidate / sustain inference
+    r_con <- round(sqrt(abs(itcv)), 3)
+  }
+  
+  if (nu != 0) {
+    ## add Ken's code
+  }
+  
+  ## calculate the unconditional ITCV 
+  ## pull in the auxilliary function for R2yz and R2xz 
+  uncond_rycv <- r_con * sqrt(1 - R2yz)
+  uncond_rxcv <- r_con * sqrt(1 - R2xz)
+  
   # if (component_correlations == FALSE){
   #     rsq <- # has to come from some kind of model object
   #         varY <- # has to come from some kind of model object
