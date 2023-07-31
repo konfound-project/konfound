@@ -6,7 +6,9 @@ tags:
 - Causal inference
 - R
 date: "24 July 2023"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 authors:
 - name: Sarah Narvaiz
   equal-contrib: yes

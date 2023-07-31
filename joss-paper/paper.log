@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.3.24)  24 JUL 2023 13:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.3.24)  31 JUL 2023 11:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -502,57 +502,57 @@ LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 137.
+(Font)              <10> on input line 139.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 137.
+(Font)              <7> on input line 139.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 137.
+(Font)              <5> on input line 139.
 [1
 
 {/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (65.74342pt too wide) in paragraph at lines 205--205
+Overfull \hbox (65.74342pt too wide) in paragraph at lines 207--207
 []\T1/lmtt/m/n/10 ## Sensitivity analysis as described in Frank, Maroulis, Duon
 g, and Kelcey (2013) and in Frank (2000).[] 
  []
 
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-205.
+207.
 (/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-Overfull \hbox (265.24284pt too wide) in paragraph at lines 237--237
+Overfull \hbox (265.24284pt too wide) in paragraph at lines 239--239
 []\T1/lmtt/m/n/10 ## The minimum impact of an omitted variable to invalidate an
  inference for a null hypothesis of 0 effect is based on a correlation of  0.52
 [] 
  []
 
 
-Overfull \hbox (196.99304pt too wide) in paragraph at lines 237--237
+Overfull \hbox (196.99304pt too wide) in paragraph at lines 239--239
 []\T1/lmtt/m/n/10 ##  with the outcome and at  0.52  with the predictor of inte
 rest (conditioning on observed covariates) based on a threshold of[] 
  []
 
-
-Overfull \hbox (13.24358pt too wide) in paragraph at lines 237--237
+[2]
+Overfull \hbox (13.24358pt too wide) in paragraph at lines 239--239
 []\T1/lmtt/m/n/10 ## inference of a regression coefficient. Sociological Method
 s and Research, 29 (2), 147-194[] 
  []
 
-[2] [3]
-Overfull \hbox (270.49283pt too wide) in paragraph at lines 331--331
+[3]
+Overfull \hbox (270.49283pt too wide) in paragraph at lines 334--334
 []\T1/lmtt/m/n/10 ## The minimum impact of an omitted variable to invalidate an
  inference for a null hypothesis of 0 effect is based on a correlation of  0.56
 8[] 
  []
 
 
-Overfull \hbox (202.24303pt too wide) in paragraph at lines 331--331
+Overfull \hbox (202.24303pt too wide) in paragraph at lines 334--334
 []\T1/lmtt/m/n/10 ##  with the outcome and at  0.568  with the predictor of int
 erest (conditioning on observed covariates) based on a threshold of[] 
  []
 
 
-Overfull \hbox (13.24358pt too wide) in paragraph at lines 331--331
+Overfull \hbox (13.24358pt too wide) in paragraph at lines 334--334
 []\T1/lmtt/m/n/10 ## inference of a regression coefficient. Sociological Method
 s and Research, 29 (2), 147-194[] 
  []
@@ -566,15 +566,15 @@ See the inputenc package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.422 Tait. 2022. {``Improving Oster's δ
-                                         *: Exact Calculation for the 
+l.447 ---------. 2022. {``Improving Oster's δ
+                                              *: Exact Calculation for the 
 Here is how much of TeX's memory you used:
- 12609 strings out of 478994
- 187524 string characters out of 5858184
- 531482 words of memory out of 5000000
+ 12621 strings out of 478994
+ 187653 string characters out of 5858184
+ 530482 words of memory out of 5000000
  29758 multiletter control sequences out of 15000+600000
- 462317 words of font info for 118 fonts, out of 8000000 for 9000
+ 462898 words of font info for 125 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 85i,5n,88p,510b,475s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 85i,6n,88p,510b,475s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 !  ==> Fatal error occurred, no output PDF file produced!
