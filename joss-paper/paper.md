@@ -51,7 +51,7 @@ Statistical methods which quantify the conditions necessary to alter inferences 
 
 We have implemented these recent developments of sensitivity analysis for causal inferences within R via the `konfound` R package. In particular, the `konfound` package is used to calculate two robustness indices: ITCV and RIR.
 
-This paper provides an overview of two core functions within the `konfound package`: `konfound()`, `pkonfound()`. These functions allow users to calculate the robustness of inferences using a model estimated in R in or using information about a model from a published study, respectively. The package is available from the Comprehensive R Archive Network (CRAN) at <https://CRAN.R-project.org/package=konfound>; it can be installed via the standard `install.packages(“konfound”)` function. These two core functions within the `konfound` package are briefly summarized below along with their functionality.
+This paper provides an overview of two core functions within the `konfound` package: `konfound()`, `pkonfound()`. These functions allow users to calculate the robustness of inferences using a model estimated in R in or using information about a model from a published study, respectively. The package is available from the Comprehensive R Archive Network (CRAN) at <https://CRAN.R-project.org/package=konfound>; it can be installed via the standard `install.packages(“konfound”)` function. These two core functions within the `konfound` package are briefly summarized below along with their functionality.
 
 # Summary and Functionality
 
