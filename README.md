@@ -217,3 +217,7 @@ file).
 Please note that this project is released with a Contributor Code of
 Conduct available at
 <https://www.contributor-covenant.org/version/1/0/0/>
+
+### Coding team biweekly meeting note
+
+Please see coding team meeting note [here](https://docs.google.com/document/d/1uidXEt0EPrCA_0Vq3pxpyr5b9XL3oJqG10UoDUeJIvk/edit?usp=sharing).
