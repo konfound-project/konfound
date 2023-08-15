@@ -1,6 +1,6 @@
 ---
 title: 'konfound: An R Sensitivity Analysis Package to Quantify the Robustness of
-  Causal'
+  Causal Inferences'
 tags:
 - Sensitivity analysis
 - Causal inference
