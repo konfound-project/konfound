@@ -6,14 +6,18 @@ konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, t
 
   if (test_all == FALSE) {
     coef_df <- tidy_output[tidy_output$term == tested_variable_string, ]
+    sdx = unname(sqrt(diag(var(model_object$model)))[tested_variable_string])
   } else {
-    coef_df <- tidy_output[-1, ]
-  } # to remove intercept
+    coef_df <- tidy_output[-1, ] # to remove intercept
+    sdx = unname(sqrt(diag(var(model_object$model)))[-1]) # to remove outcome var
+  } 
 
   est_eff <- coef_df$estimate
   std_err <- coef_df$std.error
   n_obs <- glance_output$nobs
-  n_covariates <- glance_output$df
+  n_covariates <- unname(glance_output$df)
+  sdy <- unname(sqrt(diag(var(model_object$model)))[1])
+  R2 <- summary(model_object)$r.squared
 
   if (test_all == FALSE) {
     out <- test_sensitivity(
@@ -21,10 +25,15 @@ konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, t
       std_err = std_err,
       n_obs = n_obs,
       n_covariates = n_covariates,
+      sdx = sdx,
+      sdy = sdy,
+      R2 = R2, 
       alpha = alpha,
       tails = tails,
       index = index,
       nu = 0,
+      suppression = 0,
+      eff_thr = 0, 
       to_return = to_return,
       model_object = model_object,
       tested_variable = tested_variable_string

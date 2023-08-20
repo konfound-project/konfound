@@ -85,10 +85,13 @@
                       two_by_two_table = NULL,
                       test = "fisher",
                       replace = "control",
-                      sdx,
-                      sdy,
-                      R2,
-                      eff_thr = 0,
+                      sdx = NA,
+                      sdy = NA,
+                      R2 = NA,
+                      suppression = 0,
+                      ## by default is zero
+                      ## alternative is one  
+                      eff_thr = NA,
                       FR2max,
                       FR2max_multiplier = 1.3,
                       to_return = "print") {
@@ -194,10 +197,15 @@
     std_err = std_err,
     n_obs = n_obs,
     n_covariates = n_covariates,
+    sdx = sdx,
+    sdy = sdy,
+    R2 = R2,
     alpha = alpha,
     tails = tails,
     index = index,
     nu = nu,
+    suppression = suppression,
+    eff_thr = eff_thr,
     to_return = to_return
     
   )

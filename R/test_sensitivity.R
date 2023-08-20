@@ -25,79 +25,95 @@ test_sensitivity <- function(est_eff,
                              std_err,
                              n_obs,
                              n_covariates,
-                             sdx = 1, 
-                             sdy = 1,
-                             alpha,
-                             tails,
+                             sdx = NA, 
+                             sdy = NA,
+                             R2 = NA,
+                             alpha = 0.05,
+                             tails = 2,
                              index,
-                             nu, # null hypothesis 
-                             suppression,
+                             nu = 0, # null hypothesis 
+                             suppression = 0,
                              ## by default is zero
-                             ## alternative is one 
-                             eff_thr, # another arbitrary threshold in terms of beta
+                             ## alternative is one  
+                             eff_thr = NA, # another non-zero and arbitrary threshold in terms of beta
                              to_return,
                              model_object,
                              tested_variable) {
   
-  if (suppression == 1) warning("suppression is defined by statistical significance and of opposite sign of the estimated effect.")
+  ## warning messages for potential confusion 
+  
+  if (suppression == 1) warning("suppression is defined by a threshold
+                                of opposite sign of the estimated effect.")
 
-  if (nu != 0) warning("You entered a non-zero null hypothesis about an effect. ITCV is calculated assuming omitted variable is equally correlated with predictor of interest and outcome. This approach maximizes the impact in the correlation metric and could be applied to standardized variables. An alternative approach is to preserve the original metric and choose the two correlations to preserve the standard error. See index = PSE. ")
+  if (nu != 0) warning("You entered a non-zero null hypothesis about an effect. 
+                       ITCV is calculated assuming omitted variable is equally 
+                       correlated with predictor of interest and outcome. 
+                       This approach maximizes the impact in the correlation metric 
+                       and could be applied to standardized variables. 
+                       An alternative approach is to preserve the original metric 
+                       and choose the two correlations to preserve the standard error. 
+                       See index = PSE. ")
 
-  if ("user specifies the eff_thr argument")  {"The threshold you specified will be used without regard for the standard error and statistical significance (assuming sdx = sdy = 1 unless otherwise specified). If you seek to account for the standard error, specify a non-zero null hypothesis as in nu argument."}
+  if (!is.na(eff_thr)) warning("The threshold you specified will be used without 
+                                regard for the standard error and statistical significance 
+                                (assuming sdx = sdy = 1 unless otherwise specified). 
+                                If you seek to account for the standard error, 
+                                specify a non-zero null hypothesis as in the nu argument.")
   
   ## error message if input is inappropriate
+  
   if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
   if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
-
+  if ((!is.na(sdx) | !is.na(sdy) | !is.na(R2)) & (!((!is.na(sdx) & !is.na(sdy) & !is.na(R2))))) {
+    stop("Did not run! Info regarding sdx, sdy and R2 are all needed to generate unconditional ITCV.")
+  }
+  
+  
   # calculating statistics used in every case
   if (est_eff < 0) {
     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3) * -1
-  }
-  else {
+  } else {
     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3)
   }
 
   beta_threshold <- critical_t * std_err + nu * std_err 
   # to account for non-zero nu, assuming stat sig is determined by non-zero nu
   
-  # dealing with cases where hypotheses other than whether est_eff differs from 0
-  if (nu != 0) {
-    est_eff <- abs(est_eff - nu)
-  } else {
-    est_eff <- est_eff - 0
-  } # this is just to make what this is doing evident
-
   # for replacement of cases approach
 
   # calculating percentage of effect and number of observations to sustain or invalidate inference
   if (abs(est_eff) > abs(beta_threshold)) {
-    bias <- 100 * (1 - (beta_threshold / est_eff))
+    perc_to_change <- bias <- 100 * (1 - (beta_threshold / est_eff))
     recase <- round(n_obs * (bias / 100))
-  }
-  else if (abs(est_eff) < abs(beta_threshold)) {
-    sustain <- 100 * (1 - (est_eff / beta_threshold))
+  } else if (abs(est_eff) < abs(beta_threshold)) {
+      perc_to_change <- sustain <- 100 * (1 - (est_eff / beta_threshold))
     recase <- round(n_obs * (sustain / 100))
-  }
-  else if (est_eff == beta_threshold) {
+  } else if (est_eff == beta_threshold) {
     stop("The coefficient is exactly equal to the threshold.")
   }
 
   # for correlation-based approach
 
-  # transforming t into r
+  # transforming t into obs_r
   obs_r <- (est_eff / std_err) / sqrt(((n_obs - n_covariates - 3) + ((est_eff / std_err)^2)))
   
   # finding critical r
-  if ("eff_thr is NOT specified") {
+  if (is.na(eff_thr)) {
     critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 3))
   } else {
-      critical_r <- eff_thr * sdx / sdy 
+    critical_r <- eff_thr * sdx / sdy 
   }
   
-  # calculating threshold
+  if (suppression == 1) {
+    critical_r = critical_r * -1
+  }
   
-  # mp is for suppression
-  if ((abs(obs_r) > abs(critical_r)) & ((obs_r * critical_r) > 0)) {
+  # calculating actual t and r (to account for non-zero nu)
+  act_t <- (est_eff - nu)/std_err
+  act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 3)
+  
+  # mp is for to sustain (sustain is 1, invalidate is -1)
+  if ((abs(act_r) > abs(critical_r)) & ((act_r * critical_r) > 0)) {
      mp <- -1
    } else {
      mp <- 1
@@ -121,21 +137,22 @@ test_sensitivity <- function(est_eff,
   
   if (est_eff == beta_threshold) {signITCV = 0}
   
-  if (nu == 0) {
-    # calculating impact of the confounding variable
-    itcv <- signITCV * (obs_r - critical_r) / (1 + mp * abs(critical_r))
-    # finding correlation of confound to invalidate / sustain inference
-    r_con <- round(sqrt(abs(itcv)), 3)
-  }
+  # calculating impact of the confounding variable
+  itcv <- signITCV * abs(act_r - critical_r) / (1 + mp * abs(critical_r))
   
-  if (nu != 0) {
-    ## add Ken's code
+  # finding correlation of confound to invalidate / sustain inference
+  r_con <- round(sqrt(abs(itcv)), 3)
+
+  ## calculate the unconditional ITCV if user inputs sdx, sdy and R2
+  if (!is.na(sdx) & !is.na(sdy) & !is.na(R2)) {
+    ## pull in the auxiliary function for R2yz and R2xz 
+    ryz <- cal_ryz(obs_r, R2)
+    uncond_rycv <- r_con * sqrt(1 - ryz^2)
+    rxz <- cal_rxz(sdx^2, sdy^2, R2, n_obs - n_covariates - 3, std_err)
+    uncond_rxcv <- r_con * sqrt(1 - rxz^2)
+  } else {
+    ryz = uncond_rycv = rxz = uncond_rxcv = NA
   }
-  
-  ## calculate the unconditional ITCV 
-  ## pull in the auxilliary function for R2yz and R2xz 
-  uncond_rycv <- r_con * sqrt(1 - R2yz)
-  uncond_rxcv <- r_con * sqrt(1 - R2xz)
   
   # if (component_correlations == FALSE){
   #     rsq <- # has to come from some kind of model object
@@ -181,7 +198,23 @@ test_sensitivity <- function(est_eff,
   }
 
   else if (to_return == "raw_output") {
-    return(output_df(est_eff, beta_threshold, est_eff, bias, sustain, recase, obs_r, critical_r, r_con, itcv))
+    return(output_list(obs_r, critical_r, 
+                       rxcv = uncond_rxcv, rycv = uncond_rycv, 
+                       rxcvGz = r_con, rycvGz = r_con, 
+                       itcvGz = itcv, itcv = uncond_rxcv * uncond_rycv, 
+                       rxz = rxz, ryz = ryz, 
+                       delta_star = NA, delta_star_restricted = NA, 
+                       delta_exact = NA, delta_pctbias = NA, 
+                       cor_oster = NA, cor_exact = NA, 
+                       beta_threshold = beta_threshold, 
+                       perc_bias_to_change = perc_to_change, 
+                       RIR = recase, RIR_perc = perc_to_change, 
+                       fragility = NA, starting_table = NA, 
+                       SE = NA, 
+                       Fig_ITCV = 
+                         plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r),
+                       Fig_RIR = plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff)
+                       ))
   } else if (to_return == "thresh_plot") { # this still makes sense for NLMs (just not quite as accurate)
     return(plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff))
   } else if (to_return == "corr_plot") {
