@@ -42,8 +42,7 @@ test_sensitivity <- function(est_eff,
   
   ## warning messages for potential confusion 
   
-  if (suppression == 1) warning("suppression is defined by a threshold
-                                of opposite sign of the estimated effect.")
+  if (suppression == 1) warning("suppression is defined by a threshold of opposite sign of the estimated effect.")
 
   if (nu != 0) warning("You entered a non-zero null hypothesis about an effect. 
                        ITCV is calculated assuming omitted variable is equally 
@@ -100,8 +99,10 @@ test_sensitivity <- function(est_eff,
   # finding critical r
   if (is.na(eff_thr)) {
     critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 3))
+  } else if (is.na(sdx) & is.na(sdy)) {
+      critical_r <- eff_thr
   } else {
-    critical_r <- eff_thr * sdx / sdy 
+      critical_r <- eff_thr * sdx / sdy 
   }
   
   if (suppression == 1) {
