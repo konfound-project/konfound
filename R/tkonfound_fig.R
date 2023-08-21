@@ -7,7 +7,7 @@
 #' @param thr_p the p-value threshold used to evaluate statistical significance, with the default of 0.05
 #' @param switch_trm whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row
 #' @param test whether using Fisher's Exact Test (default) or chi-square test
-#' @param replace whether using entire sample or the control group to calculate the base rate, with the default of the entire sample  
+#' @param replace whether using entire sample or the control group to calculate the base rate, with the default of the control group  
 #' @importFrom stats chisq.test
 #' @return prints 2 figures for how number of hypothetical cases switched changes the effect size 
 #' @examples
@@ -16,7 +16,7 @@
 #' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01)
 #' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
 #' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq")
-#' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq", replace = "control")
+#' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq", replace = "entire")
 #' 
 #' @export
 #' 
