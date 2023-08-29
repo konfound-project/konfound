@@ -113,7 +113,8 @@ test_sensitivity <- function(est_eff,
   act_t <- (est_eff - nu)/std_err
   act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 3)
   
-  # mp is for to sustain (sustain is 1, invalidate is -1)
+  # mp takes on 1 when suppression == 1
+  # or when act_r is below threshold and have the same direction
   if ((abs(act_r) > abs(critical_r)) & ((act_r * critical_r) > 0)) {
      mp <- -1
    } else {
