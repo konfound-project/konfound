@@ -314,7 +314,7 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = ModelLabel)) +
       cat("Using the absolute value of the estimated effect, results can be interpreted by symmetry.")
       cat("\n")
     }
-    cat(sprintf("delta* is %.3f (assuming no covariates in the baseline model M1), the exact delta is %.3f, with a bias of %.3f%%", delta_star, delta_exact, delta_pctbias))
+    cat(sprintf("delta* is %.3f (assuming no covariates in the baseline model M1), the exact delta is %.3f, with a bias of %.3f%%.", delta_star, delta_exact, delta_pctbias))
     cat("\n")
     cat(sprintf("With delta*, the coefficient in the final model will be %.3f. With the exact delta, the coefficient will be %.3f.",  
                 eff_x_M3_oster,eff_x_M3))
@@ -324,11 +324,11 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = ModelLabel)) +
     cat("\n")
     cat("This function also calculates conditional RIR that invalidates the statistical inference.")
     cat("\n")
-    cat("If the replacement cases have a fixed value, then RIR =", cond_RIR_fixedY)
+    cat("If the replacement cases have a fixed value, then RIR =", cond_RIR_fixedY, ".")
     cat("\n")
-    cat("If the replacement cases follow a null distribution, then RIR =", cond_RIR_null)
+    cat("If the replacement cases follow a null distribution, then RIR =", cond_RIR_null, ".")
     cat("\n")
-    cat("If the replacement cases satisfy rxy|Z = 0, then RIR =", cond_RIR_rxyz)
+    cat("If the replacement cases satisfy rxy|Z = 0, then RIR =", cond_RIR_rxyz, ".")
     cat("\n")
     cat("\n")
   }
