@@ -24,7 +24,7 @@ konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, t
       est_eff = est_eff,
       std_err = std_err,
       n_obs = n_obs,
-      n_covariates = n_covariates,
+      n_covariates = n_covariates - 1,
       sdx = sdx,
       sdy = sdy,
       R2 = R2, 
