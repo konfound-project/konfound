@@ -148,13 +148,16 @@ test_sensitivity <- function(est_eff,
   ## calculate the unconditional ITCV if user inputs sdx, sdy and R2
   if (!is.na(sdx) & !is.na(sdy) & !is.na(R2)) {
     ## pull in the auxiliary function for R2yz and R2xz 
-    ryz <- cal_ryz(obs_r, R2)
-    uncond_rycv <- r_con * sqrt(1 - ryz^2)
-    rxz <- cal_rxz(sdx^2, sdy^2, R2, n_obs - 1, std_err)
-    uncond_rxcv <- r_con * sqrt(1 - rxz^2)
+    r2yz <- cal_ryz(obs_r, R2)^2
+    uncond_rycv <- r_con * sqrt(1 - r2yz)
+    r2xz <- cal_rxz(sdx^2, sdy^2, R2, n_obs - 1, std_err)^2
+    uncond_rxcv <- r_con * sqrt(1 - r2xz)
   } else {
-    ryz = uncond_rycv = rxz = uncond_rxcv = NA
+    r2yz = uncond_rycv = r2xz = uncond_rxcv = NA
   }
+  
+  uncond_rycv = uncond_rycv * signITCV
+  rycvGz = r_con * signITCV
   
   # if (component_correlations == FALSE){
   #     rsq <- # has to come from some kind of model object
@@ -202,10 +205,10 @@ test_sensitivity <- function(est_eff,
   else if (to_return == "raw_output") {
     return(output_list(obs_r, critical_r, 
                        # rxcv always be positive, rycv goes with itcv
-                       rxcv = uncond_rxcv, rycv = uncond_rycv*signITCV, 
-                       rxcvGz = r_con, rycvGz = r_con*signITCV, 
+                       rxcv = uncond_rxcv, rycv = uncond_rycv, 
+                       rxcvGz = r_con, rycvGz = rycvGz, 
                        itcvGz = itcv, itcv = uncond_rxcv * uncond_rycv, 
-                       r2xz = rxz^2, r2yz = ryz^2, 
+                       r2xz = r2xz, r2yz = r2yz, 
                        delta_star = NA, delta_star_restricted = NA, 
                        delta_exact = NA, delta_pctbias = NA, 
                        cor_oster = NA, cor_exact = NA, 
