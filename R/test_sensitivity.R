@@ -201,8 +201,9 @@ test_sensitivity <- function(est_eff,
 
   else if (to_return == "raw_output") {
     return(output_list(obs_r, critical_r, 
-                       rxcv = uncond_rxcv, rycv = uncond_rycv, 
-                       rxcvGz = r_con, rycvGz = r_con, 
+                       # rxcv always be positive, rycv goes with itcv
+                       rxcv = uncond_rxcv, rycv = uncond_rycv*signITCV, 
+                       rxcvGz = r_con, rycvGz = r_con*signITCV, 
                        itcvGz = itcv, itcv = uncond_rxcv * uncond_rycv, 
                        r2xz = rxz^2, r2yz = ryz^2, 
                        delta_star = NA, delta_star_restricted = NA, 
