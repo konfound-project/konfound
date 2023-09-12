@@ -150,7 +150,7 @@ test_sensitivity <- function(est_eff,
     ## pull in the auxiliary function for R2yz and R2xz 
     r2yz <- cal_ryz(obs_r, R2)^2
     uncond_rycv <- r_con * sqrt(1 - r2yz)
-    r2xz <- cal_rxz(sdx^2, sdy^2, R2, n_obs - 1, std_err)^2
+    r2xz <- cal_rxz(sdx^2, sdy^2, R2, n_obs-n_covariates-2, std_err)^2
     uncond_rxcv <- r_con * sqrt(1 - r2xz)
   } else {
     r2yz = uncond_rycv = r2xz = uncond_rxcv = NA
