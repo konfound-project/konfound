@@ -40,7 +40,7 @@ test_pse <- function(est_eff,
     
     ## calculate ryz, rxz, rxy
     ryz = rzy = cal_ryz(ryxGz, R2)
-    rxz = rzx = cal_rxz(var_x, var_y, R2, n_obs, std_err)
+    rxz = rzx = cal_rxz(var_x, var_y, R2, df+1, std_err)
     rxy = ryx = cal_rxy(ryxGz, rxz, ryz)
     
     thr = eff_thr * sdx / sdy
