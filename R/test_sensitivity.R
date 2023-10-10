@@ -122,10 +122,19 @@ test_sensitivity <- function(est_eff,
    }
 
   # now determine the sign of ITCV 
+  ## signITCV may not be a function of whether nu > 0
   if ((est_eff >= nu) & (nu >= 0) & (est_eff > beta_threshold)) {signITCV = 1}
+  if ((est_eff >= nu) & (nu < 0) & (est_eff > beta_threshold)) {signITCV = 1}
+  
   if ((est_eff <= nu) & (nu <= 0) & (est_eff < beta_threshold)) {signITCV = -1}
+  if ((est_eff <= nu) & (nu > 0) & (est_eff < beta_threshold)) {signITCV = -1}
+  
   if ((est_eff >= nu) & (nu >= 0) & (est_eff < beta_threshold)) {signITCV = -1}
+  if ((est_eff >= nu) & (nu < 0) & (est_eff < beta_threshold)) {signITCV = -1}
+  
   if ((est_eff <= nu) & (nu <= 0) & (est_eff > beta_threshold)) {signITCV = 1}
+  if ((est_eff <= nu) & (nu > 0) & (est_eff > beta_threshold)) {signITCV = 1}
+  
   
   if ((est_eff >= 0) & (0 > nu) & (est_eff > beta_threshold)) {signITCV = 1}
   if ((est_eff <= 0) & (0 < nu) & (est_eff < beta_threshold)) {signITCV = -1}
