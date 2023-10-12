@@ -5,7 +5,7 @@ test_sensitivity_ln <- function(est_eff,
                                 n_obs,
                                 n_covariates,
                                 n_treat,
-                                switch_trm = T,
+                                switch_trm = TRUE,
                                 replace = "control",
                                 alpha,
                                 tails,
@@ -40,10 +40,10 @@ test_sensitivity_ln <- function(est_eff,
                           ((4 + 4 * odds_ratio^2) / odds_ratio - 7.999999)))/
                   (2 * n_treat * (n_obs - n_treat)))
   # check if the implied table solution may contain imaginary numbers
-  changeSE <- F
+  changeSE <- FALSE
   if (std_err < minse) {
-    haveimaginary <- T
-    changeSE <- T
+    haveimaginary <- TRUE
+    changeSE <- TRUE
     user_std_err <- std_err
     std_err <- minse
   }
