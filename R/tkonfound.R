@@ -1,6 +1,6 @@
 tkonfound <- function(a, b, c, d, 
                       alpha = 0.05, 
-                      switch_trm = T, 
+                      switch_trm = TRUE, 
                       test = "fisher", 
                       replace = "control", 
                       to_return = to_return){
