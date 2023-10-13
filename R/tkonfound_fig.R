@@ -21,13 +21,13 @@
 #' @export
 #' 
 
-tkonfound_fig <- function(a, b, c, d, thr_p = 0.05, switch_trm = T, test = "fisher", replace = "control"){
+tkonfound_fig <- function(a, b, c, d, thr_p = 0.05, switch_trm = TRUE, test = "fisher", replace = "control"){
 
 n_obs <- a + b + c + d
 ###***generate the log odds for each step of switch
 meta <- data.frame(matrix(ncol = 10, nrow = n_obs-3))
 colnames(meta) <- c("a", "b", "c", "d", "nobs", "switch", "logodds","cntrl_p","tr_p","pdif")
-if (switch_trm == T) {
+if (switch_trm == TRUE) {
   for (i in 1:(n_obs-3)){ 
     if (i <= a){
       #from table(1, a+b-1, c+d-1, 1) to table(a, b, c+d-1, 1)
@@ -67,7 +67,7 @@ if (switch_trm == T) {
     }  
   }
 }
-if (switch_trm == F) {
+if (switch_trm == FALSE) {
   for (i in 1:(n_obs-3)){ 
     if (i <= d){
       #from table(1, a+b-1, c+d-1, 1) to table(1, a+b-1, c, d)
@@ -327,7 +327,7 @@ if (neg_thr_pdif <= max(zoom$pdif) && neg_thr_pdif >= min(zoom$pdif)) {
 #          axis.text = element_text(size = 12))
 #} 
 
-if (switch_trm == T) {
+if (switch_trm == TRUE) {
   note <- "A bend in line indicates switches from the control row because the treatment row was exhausted."
   } else {
   note <- "A bend in line indicates switches from the treatment row because the control row was exhausted."
