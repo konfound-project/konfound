@@ -70,9 +70,9 @@ test_sensitivity <- function(est_eff,
   
   # calculating statistics used in every case
   if (est_eff < 0) {
-    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3) * -1
+    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
   } else {
-    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3)
+    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
   }
 
   beta_threshold <- critical_t * std_err + nu * std_err 
@@ -94,11 +94,11 @@ test_sensitivity <- function(est_eff,
   # for correlation-based approach
 
   # transforming t into obs_r
-  obs_r <- (est_eff / std_err) / sqrt(((n_obs - n_covariates - 3) + ((est_eff / std_err)^2)))
+  obs_r <- (est_eff / std_err) / sqrt(((n_obs - n_covariates - 2) + ((est_eff / std_err)^2)))
   
   # finding critical r
   if (is.na(eff_thr)) {
-    critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 3))
+    critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 2))
   } else if (is.na(sdx) & is.na(sdy)) {
       critical_r <- eff_thr
   } else {
@@ -111,7 +111,7 @@ test_sensitivity <- function(est_eff,
   
   # calculating actual t and r (to account for non-zero nu)
   act_t <- (est_eff - nu)/std_err
-  act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 3)
+  act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
   
   # mp takes on 1 when suppression == 1
   # or when act_r is below threshold and have the same direction

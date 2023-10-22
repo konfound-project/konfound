@@ -19,9 +19,9 @@ test_sensitivity_ln <- function(est_eff,
   if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
 
   if (est_eff < 0) {
-    thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3) * -1
+    thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
   } else {
-    thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3)
+    thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
   }
   
   # stop message
