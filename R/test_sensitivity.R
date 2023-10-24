@@ -74,20 +74,30 @@ test_sensitivity <- function(est_eff,
   } else {
     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
   }
+    
+  # critical_t for rir
+    if (nu == 0) {
+        critical_t_rir = critical_t
+    } else if (nu < 0) {
+        critical_t_rir <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
+    } else {
+        critical_t_rir <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
+    }
 
-  beta_threshold <- critical_t * std_err + nu * std_err 
+  beta_threshold <- critical_t * std_err + nu
+  beta_threshold_rir <- critical_t_rir * std_err + nu
   # to account for non-zero nu, assuming stat sig is determined by non-zero nu
   
   # for replacement of cases approach
 
   # calculating percentage of effect and number of observations to sustain or invalidate inference
-  if (abs(est_eff) > abs(beta_threshold)) {
-    perc_to_change <- bias <- 100 * (1 - (beta_threshold / est_eff))
+  if (abs(est_eff) > abs(beta_threshold_rir)) {
+    perc_to_change <- bias <- 100 * (1 - (beta_threshold_rir / est_eff))
     recase <- round(n_obs * (bias / 100))
-  } else if (abs(est_eff) < abs(beta_threshold)) {
-      perc_to_change <- sustain <- 100 * (1 - (est_eff / beta_threshold))
+  } else if (abs(est_eff) < abs(beta_threshold_rir)) {
+    perc_to_change <- sustain <- 100 * (1 - (est_eff / beta_threshold_rir))
     recase <- round(n_obs * (sustain / 100))
-  } else if (est_eff == beta_threshold) {
+  } else if (est_eff == beta_threshold_rir) {
     stop("The coefficient is exactly equal to the threshold.")
   }
 
@@ -168,6 +178,9 @@ test_sensitivity <- function(est_eff,
   uncond_rycv = uncond_rycv * signITCV
   rycvGz = r_con * signITCV
   
+  # verify 
+  r_final = (act_r - r_con * rycvGz)/sqrt((1 - r_con^2) * (1 - rycvGz^2))
+  
   # if (component_correlations == FALSE){
   #     rsq <- # has to come from some kind of model object
   #         varY <- # has to come from some kind of model object
@@ -212,7 +225,7 @@ test_sensitivity <- function(est_eff,
   }
 
   else if (to_return == "raw_output") {
-    return(output_list(obs_r, critical_r, 
+    return(output_list(obs_r, critical_r, r_final = r_final,
                        # rxcv always be positive, rycv goes with itcv
                        rxcv = uncond_rxcv, rycv = uncond_rycv, 
                        rxcvGz = r_con, rycvGz = rycvGz, 
@@ -221,15 +234,15 @@ test_sensitivity <- function(est_eff,
                        delta_star = NA, delta_star_restricted = NA, 
                        delta_exact = NA, delta_pctbias = NA, 
                        cor_oster = NA, cor_exact = NA, 
-                       beta_threshold = beta_threshold, 
+                       beta_threshold = beta_threshold,
+                       beta_threshold_rir = beta_threshold_rir,
                        perc_bias_to_change = perc_to_change, 
                        RIR = recase, RIR_perc = perc_to_change, 
                        fragility = NA, starting_table = NA, 
                        SE = NA, 
                        Fig_ITCV = 
                          plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r),
-                       Fig_RIR = plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff)
-                       ))
+                       Fig_RIR = plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff)))
   } else if (to_return == "thresh_plot") { # this still makes sense for NLMs (just not quite as accurate)
     return(plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff))
   } else if (to_return == "corr_plot") {
