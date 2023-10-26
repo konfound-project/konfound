@@ -11,9 +11,9 @@ test_pse <- function(est_eff,
     ## test_pse(est_eff = .5, std_err = .056, n_obs = 6174, 
     ##         eff_thr = .1, sdx = 0.22, sdy = 1, R2 = .3,to_return = "full")
     ## prepare input
-    var_x = sdx^2
-    var_y = sdy^2
-    var_z = sdz = 1
+    var_x <- sdx^2
+    var_y <- sdy^2
+    var_z <- sdz <- 1
     df = n_obs - n_covariates - 3
     
     ## error message if input is inappropriate
@@ -27,62 +27,62 @@ test_pse <- function(est_eff,
     
     
     ## now standardize 
-    beta_thr = eff_thr * sdx / sdy
-    beta = est_eff * sdx / sdy
-    SE = std_err * sdx / sdy
+    beta_thr <- eff_thr * sdx / sdy
+    beta <- est_eff * sdx / sdy
+    SE <- std_err * sdx / sdy
     
     ## observed regression, reg y on x Given z
-    tyxGz = beta / SE  ### this should be equal to est_eff / std_err
-    ryxGz = tyxGz / sqrt(df + tyxGz^2) 
+    tyxGz <- beta / SE  ### this should be equal to est_eff / std_err
+    ryxGz <- tyxGz / sqrt(df + tyxGz^2) 
     
     ## make sure R2 due to x alone is not larger than overall or observed R2
     if (ryxGz^2 > R2) {stop("Error! ryxGz^2 > R2")}
     
     ## calculate ryz, rxz, rxy
-    ryz = rzy = cal_ryz(ryxGz, R2)
-    rxz = rzx = cal_rxz(var_x, var_y, R2, n_obs, std_err)
-    rxy = ryx = cal_rxy(ryxGz, rxz, ryz)
+    ryz <- rzy <- cal_ryz(ryxGz, R2)
+    rxz <- rzx <- cal_rxz(var_x, var_y, R2, n_obs, std_err)
+    rxy <- ryx <- cal_rxy(ryxGz, rxz, ryz)
     
-    thr = eff_thr * sdx / sdy
-    sdz = sdcv = 1
-    rcvz = rzcv = 0
+    thr <- eff_thr * sdx / sdy
+    sdz <- sdcv <- 1
+    rcvz <- rzcv <- 0
     
     Gz_pse <- cal_pse(thr, ryxGz)
-    rxcvGz = as.numeric(Gz_pse[1])
-    rycvGz = as.numeric(Gz_pse[2])
+    rxcvGz <- as.numeric(Gz_pse[1])
+    rycvGz <- as.numeric(Gz_pse[2])
     
     # convert conditional correlations to unconditional correlations to be used in new regression
-    rxcv = rxcvGz * sqrt((1 - rcvz^2) * (1 - rxz^2)) + rxz * rcvz
-    rycv = rycvGz * sqrt((1 - rcvz^2) * (1 - rzy^2)) + rzy * rcvz
+    rxcv <- rxcvGz * sqrt((1 - rcvz^2) * (1 - rxz^2)) + rxz * rcvz
+    rycv <- rycvGz * sqrt((1 - rcvz^2) * (1 - rzy^2)) + rzy * rcvz
     
-    verify_pse_reg_M3 = verify_reg_Gzcv(n_obs, sdx, sdy, sdz, sdcv, rxy, rxz, rzy, rycv, rxcv, rcvz)
-    verfiy_pse_manual_thr = verify_manual(rxy, rxz, rxcv, ryz, rycv, rzcv, sdy, sdx)
-    cov_pse = verify_pse_reg_M3[[11]]
+    verify_pse_reg_M3 <- verify_reg_Gzcv(n_obs, sdx, sdy, sdz, sdcv, rxy, rxz, rzy, rycv, rxcv, rcvz)
+    verfiy_pse_manual_thr <- verify_manual(rxy, rxz, rxcv, ryz, rycv, rzcv, sdy, sdx)
+    cov_pse <- verify_pse_reg_M3[[11]]
     
     # prepare some other values in the final Table (long output)
-    R2_M3 = as.numeric(verify_pse_reg_M3[1])
-    eff_x_M3 = as.numeric(verify_pse_reg_M3[2]) # should be equivalent or very close to eff_thr
-    se_x_M3 = as.numeric(verify_pse_reg_M3[3])
-    beta_x_M3 = as.numeric(verify_pse_reg_M3[9]) # should be equivalent or very close to thr
-    t_x_M3 = eff_x_M3 / se_x_M3 
-    eff_z_M3 = as.numeric(verify_pse_reg_M3[4])
-    se_z_M3 = as.numeric(verify_pse_reg_M3[5])
-    eff_cv_M3 = as.numeric(verify_pse_reg_M3[6])
-    se_cv_M3 = as.numeric(verify_pse_reg_M3[7])
+    R2_M3 <- as.numeric(verify_pse_reg_M3[1])
+    eff_x_M3 <- as.numeric(verify_pse_reg_M3[2]) # should be equivalent or very close to eff_thr
+    se_x_M3 <- as.numeric(verify_pse_reg_M3[3])
+    beta_x_M3 <- as.numeric(verify_pse_reg_M3[9]) # should be equivalent or very close to thr
+    t_x_M3 <- eff_x_M3 / se_x_M3 
+    eff_z_M3 <- as.numeric(verify_pse_reg_M3[4])
+    se_z_M3 <- as.numeric(verify_pse_reg_M3[5])
+    eff_cv_M3 <- as.numeric(verify_pse_reg_M3[6])
+    se_cv_M3 <- as.numeric(verify_pse_reg_M3[7])
     
-    verify_pse_reg_M2 = verify_reg_Gz(n_obs, sdx, sdy, sdz, rxy, rxz, rzy)
-    R2_M2 = as.numeric(verify_pse_reg_M2[1])
-    eff_x_M2 = as.numeric(verify_pse_reg_M2[2]) # should be equivalent or very close to est_eff
-    se_x_M2 = as.numeric(verify_pse_reg_M2[3]) # should be equivalent or very close to std_err
-    eff_z_M2 = as.numeric(verify_pse_reg_M2[4]) 
-    se_z_M2 = as.numeric(verify_pse_reg_M2[5]) 
-    t_x_M2 = eff_x_M2 / se_x_M2 
+    verify_pse_reg_M2 <- verify_reg_Gz(n_obs, sdx, sdy, sdz, rxy, rxz, rzy)
+    R2_M2 <- as.numeric(verify_pse_reg_M2[1])
+    eff_x_M2 <- as.numeric(verify_pse_reg_M2[2]) # should be equivalent or very close to est_eff
+    se_x_M2 <- as.numeric(verify_pse_reg_M2[3]) # should be equivalent or very close to std_err
+    eff_z_M2 <- as.numeric(verify_pse_reg_M2[4]) 
+    se_z_M2 <- as.numeric(verify_pse_reg_M2[5]) 
+    t_x_M2 <- eff_x_M2 / se_x_M2 
     
-    verify_pse_reg_M1 = verify_reg_uncond(n_obs, sdx, sdy, rxy)
-    R2_M1 = as.numeric(verify_pse_reg_M1[1]) # should be equivalent or very close to rxy^2
-    eff_x_M1 = as.numeric(verify_pse_reg_M1[2]) # should be equivalent or very close to rxy*sdy/sdx
-    se_x_M1 = as.numeric(verify_pse_reg_M1[3]) 
-    t_x_M1 = eff_x_M1 / se_x_M1 
+    verify_pse_reg_M1 <- verify_reg_uncond(n_obs, sdx, sdy, rxy)
+    R2_M1 <- as.numeric(verify_pse_reg_M1[1]) # should be equivalent or very close to rxy^2
+    eff_x_M1 <- as.numeric(verify_pse_reg_M1[2]) # should be equivalent or very close to rxy*sdy/sdx
+    se_x_M1 <- as.numeric(verify_pse_reg_M1[3]) 
+    t_x_M1 <- eff_x_M1 / se_x_M1 
     
     fTable <- matrix(c(R2_M1, R2_M2, R2_M3, # R2 for three reg models
                        eff_x_M1, eff_x_M2, eff_x_M3, # unstd reg coef for X in three reg  models
