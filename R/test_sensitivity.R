@@ -67,41 +67,44 @@ test_sensitivity <- function(est_eff,
     stop("Did not run! Info regarding sdx, sdy and R2 are all needed to generate unconditional ITCV.")
   }
   
-  
-  # calculating statistics used in every case
-  if (est_eff < 0) {
-    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
+  # calculate critical_t 
+  if (est_eff < nu) {
+     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
   } else {
-    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
+     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
   }
-    
-  # critical_t for rir
-    if (nu == 0) {
-        critical_t_rir = critical_t
-    } else if (nu < 0) {
-        critical_t_rir <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
-    } else {
-        critical_t_rir <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
-    }
 
-  beta_threshold <- critical_t * std_err + nu
-  beta_threshold_rir <- critical_t_rir * std_err + nu
-  # to account for non-zero nu, assuming stat sig is determined by non-zero nu
+  # create CI centered nu    
+  UPbound <- nu + abs(critical_t * std_err)
+  LWbound <- nu - abs(critical_t * std_err)
+
+  # determine mp 
+  if ((est_eff > LWbound) & (est_eff < UPbound)) {mp <- 1}
+  if (est_eff < LWbound | est_eff > UPbound) {mp <- -1}
   
-  # for replacement of cases approach
+  # determine beta_threshold 
+  if (est_eff < nu) {beta_threshold <- LWbound}
+  if (est_eff > nu) {beta_threshold <- UPbound}
+  
+  # determine signITCV
+  if (est_eff < beta_threshold) {signITCV <- -1}
+  if (est_eff > beta_threshold) {signITCV <- 1}
+  if (est_eff == beta_threshold) {signITCV <- 0}
+  
+  # I. for RIR
 
   # calculating percentage of effect and number of observations to sustain or invalidate inference
-  if (abs(est_eff) > abs(beta_threshold_rir)) {
-    perc_to_change <- bias <- 100 * (1 - (beta_threshold_rir / est_eff))
+  if (abs(est_eff) > abs(beta_threshold)) {
+    perc_to_change <- bias <- 100 * (1 - (beta_threshold / est_eff))
     recase <- round(n_obs * (bias / 100))
-  } else if (abs(est_eff) < abs(beta_threshold_rir)) {
-    perc_to_change <- sustain <- 100 * (1 - (est_eff / beta_threshold_rir))
+  } else if (abs(est_eff) < abs(beta_threshold)) {
+    perc_to_change <- sustain <- 100 * (1 - (est_eff / beta_threshold))
     recase <- round(n_obs * (sustain / 100))
-  } else if (est_eff == beta_threshold_rir) {
+  } else if (est_eff == beta_threshold) {
     stop("The coefficient is exactly equal to the threshold.")
   }
 
-  # for correlation-based approach
+  # II. for correlation-based approach
 
   # transforming t into obs_r
   obs_r <- (est_eff / std_err) / sqrt(((n_obs - n_covariates - 2) + ((est_eff / std_err)^2)))
@@ -122,41 +125,6 @@ test_sensitivity <- function(est_eff,
   # calculating actual t and r (to account for non-zero nu)
   act_t <- (est_eff - nu)/std_err
   act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
-  
-  # mp takes on 1 when suppression == 1
-  # or when act_r is below threshold and have the same direction
-  if ((abs(act_r) > abs(critical_r)) & ((act_r * critical_r) > 0)) {
-     mp <- -1
-   } else {
-     mp <- 1
-   }
-
-  # now determine the sign of ITCV 
-  ## signITCV may not be a function of whether nu > 0
-  if ((est_eff >= nu) & (nu >= 0) & (est_eff > beta_threshold)) {signITCV = 1}
-  if ((est_eff >= nu) & (nu < 0) & (est_eff > beta_threshold)) {signITCV = 1}
-  
-  if ((est_eff <= nu) & (nu <= 0) & (est_eff < beta_threshold)) {signITCV = -1}
-  if ((est_eff <= nu) & (nu > 0) & (est_eff < beta_threshold)) {signITCV = -1}
-  
-  if ((est_eff >= nu) & (nu >= 0) & (est_eff < beta_threshold)) {signITCV = -1}
-  if ((est_eff >= nu) & (nu < 0) & (est_eff < beta_threshold)) {signITCV = -1}
-  
-  if ((est_eff <= nu) & (nu <= 0) & (est_eff > beta_threshold)) {signITCV = 1}
-  if ((est_eff <= nu) & (nu > 0) & (est_eff > beta_threshold)) {signITCV = 1}
-  
-  
-  if ((est_eff >= 0) & (0 > nu) & (est_eff > beta_threshold)) {signITCV = 1}
-  if ((est_eff <= 0) & (0 < nu) & (est_eff < beta_threshold)) {signITCV = -1}
-  if ((est_eff >= 0) & (0 > nu) & (est_eff < beta_threshold)) {signITCV = -1}
-  # if b1>0>nu but not significant, then ITCV<0 (for b1 ultimately >nu); then ITCV>0 (for b1 ultimately <nu)
-  # here we take the first approach, meaning for b1 ultimately > nu
-  # this means we are NOT dealing with suppression 
-  if ((est_eff <= 0) & (0 < nu) & (est_eff > beta_threshold)) {signITCV = 1}
-  #if b1<0<nu but not significant, then ITCV>0 (for b1 ultimately <nu); then ITCV<0 (for b1 ultimately >nu)
-  #current convention: only work with final beta of same sign as estimated beta, only use 1st condition in lines above
-  
-  if (est_eff == beta_threshold) {signITCV = 0}
   
   # calculating impact of the confounding variable
   itcv <- signITCV * abs(act_r - critical_r) / (1 + mp * abs(critical_r))
