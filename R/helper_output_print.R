@@ -4,7 +4,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
   if (index == "RIR"){ 
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
     if (abs(eff_diff) > abs(beta_threshhold)) {
-      cat("Test of JC // To invalidate an inference, ", round(bias, 3), "% of the estimate would have to be due to bias. ")
+      cat("To invalidate an inference, ", round(bias, 3), "% of the estimate would have to be due to bias. ")
       cat("\n")
       cat("This is based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = "")
       cat("\n")
