@@ -296,10 +296,8 @@ test_sensitivity_ln <- function(est_eff,
                      conclusion2, 
                      conclusion3,
                      needtworows = final_solution$needtworows, 
-                     fragility = final_solution$final_switch,
-                     fragility_extra = final_solution$final_extra, 
-                     RIR = RIR,
-                     RIR_extra = RIR_extra,
+                     fragility = total_switch,
+                     RIR = total_RIR,
                      notice_SE)
     } else {
       result <- list(conclusion1,
@@ -311,10 +309,8 @@ test_sensitivity_ln <- function(est_eff,
                      conclusion2, 
                      conclusion3,
                      needtworows = final_solution$needtworows, 
-                     fragility = final_solution$final_switch,
-                     fragility_extra = final_solution$final_extra, 
-                     RIR = RIR,
-                     RIR_extra = RIR_extra)
+                     fragility = total_switch,
+                     RIR = total_RIR)
     }
     result <- result[!is.na(result)]
     return(result)
