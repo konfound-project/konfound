@@ -69,9 +69,9 @@ test_sensitivity <- function(est_eff,
   
   # calculate critical_t 
   if (est_eff < nu) {
-     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
+     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3) * -1
   } else {
-     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
+     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3)
   }
 
   # create CI centered nu    
@@ -111,7 +111,7 @@ test_sensitivity <- function(est_eff,
   
   # finding critical r
   if (is.na(eff_thr)) {
-    critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 2))
+    critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 3))
   } else if (is.na(sdx) & is.na(sdy)) {
       critical_r <- eff_thr
   } else {
