@@ -69,9 +69,9 @@ test_sensitivity <- function(est_eff,
   
   # calculate critical_t 
   if (est_eff < nu) {
-     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates) * -1
+     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3) * -1
   } else {
-     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates)
+     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3)
   }
 
   # create CI centered nu    
@@ -107,11 +107,11 @@ test_sensitivity <- function(est_eff,
   # II. for correlation-based approach
 
   # transforming t into obs_r
-  obs_r <- (est_eff / std_err) / sqrt(((n_obs - n_covariates) + ((est_eff / std_err)^2)))
+  obs_r <- (est_eff / std_err) / sqrt(((n_obs - n_covariates - 3) + ((est_eff / std_err)^2)))
   
   # finding critical r
   if (is.na(eff_thr)) {
-    critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates))
+    critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 3))
   } else if (is.na(sdx) & is.na(sdy)) {
       critical_r <- eff_thr
   } else {
@@ -124,7 +124,7 @@ test_sensitivity <- function(est_eff,
   
   # calculating actual t and r (to account for non-zero nu)
   act_t <- (est_eff - nu)/std_err
-  act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates)
+  act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 3)
   
   # calculating impact of the confounding variable
   itcv <- signITCV * abs(act_r - critical_r) / (1 + mp * abs(critical_r))
@@ -137,7 +137,7 @@ test_sensitivity <- function(est_eff,
     ## pull in the auxiliary function for R2yz and R2xz 
     r2yz <- cal_ryz(obs_r, R2)^2
     uncond_rycv <- r_con * sqrt(1 - r2yz)
-    r2xz <- cal_rxz(sdx^2, sdy^2, R2, n_obs-n_covariates, std_err)^2
+    r2xz <- cal_rxz(sdx^2, sdy^2, R2, n_obs-n_covariates-2, std_err)^2
     uncond_rxcv <- r_con * sqrt(1 - r2xz)
   } else {
     r2yz = uncond_rycv = r2xz = uncond_rxcv = NA
