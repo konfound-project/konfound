@@ -107,7 +107,7 @@ test_sensitivity <- function(est_eff,
   # II. for correlation-based approach
 
   # transforming t into obs_r
-  obs_r <- (est_eff / std_err) / sqrt(((n_obs - n_covariates - 2) + ((est_eff / std_err)^2)))
+  obs_r <- (est_eff / std_err) / sqrt(((n_obs - n_covariates - 3) + ((est_eff / std_err)^2)))
   
   # finding critical r
   if (is.na(eff_thr)) {
@@ -124,7 +124,7 @@ test_sensitivity <- function(est_eff,
   
   # calculating actual t and r (to account for non-zero nu)
   act_t <- (est_eff - nu)/std_err
-  act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
+  act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 3)
   
   # calculating impact of the confounding variable
   itcv <- signITCV * abs(act_r - critical_r) / (1 + mp * abs(critical_r))
