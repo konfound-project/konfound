@@ -3,12 +3,18 @@
 get_kr_df <- function(model_object) {
   L <- diag(rep(1, length(lme4::fixef(model_object))))
   L <- as.data.frame(L)
-  out <- suppressWarnings(purrr::map_dbl(L, pbkrtest::get_Lb_ddf, object = model_object))
+  out <- suppressWarnings(purrr::map_dbl(
+    L, pbkrtest::get_Lb_ddf, object = model_object))
   names(out) <- names(lme4::fixef(model_object))
   out
 }
 
-konfound_lmer <- function(model_object, tested_variable_string, test_all, alpha, tails, index, to_return) {
+konfound_lmer <- function(model_object, 
+                          tested_variable_string, 
+                          test_all, alpha, 
+                          tails, 
+                          index, 
+                          to_return) {
   tidy_output <- broom.mixed::tidy(model_object) # tidying output
 
   if (test_all == FALSE) {
