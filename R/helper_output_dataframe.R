@@ -1,6 +1,15 @@
 # Function to output the data frame
 
-output_df <- function(est_eff, beta_threshhold, unstd_beta, bias = NULL, sustain = NULL, recase, obs_r, critical_r, r_con, itcv, non_linear) {
+output_df <- function(est_eff, 
+                      beta_threshhold,
+                      unstd_beta, 
+                      bias = NULL, 
+                      sustain = NULL, 
+                      recase, obs_r, 
+                      critical_r, 
+                      r_con, 
+                      itcv, 
+                      non_linear) {
   if (abs(est_eff) > abs(beta_threshhold)) {
     df <- dplyr::tibble(
       action = "to_invalidate",
