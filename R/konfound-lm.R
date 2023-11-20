@@ -1,6 +1,11 @@
 # konfound-lm
 
-konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, tails, index, to_return) {
+konfound_lm <- function(model_object, 
+                        tested_variable_string, 
+                        test_all, alpha, 
+                        tails, 
+                        index, 
+                        to_return) {
   tidy_output <- broom::tidy(model_object) # tidying output
   glance_output <- broom::glance(model_object)
 
@@ -31,10 +36,12 @@ konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, t
     )
     return(out)
   } else {
-    message("Note that this output is calculated based on the correlation-based approach used in mkonfound()")
+    message("Note that this output is calculated based on 
+            the correlation-based approach used in mkonfound()")
     d <- data.frame(t = est_eff / std_err, df = (n_obs - n_covariates - 1))
     o <- mkonfound(d, .data$t, .data$df)
-    term_names <- dplyr::select(tidy_output, var_name = .data$term) # remove the first row for intercept
+    term_names <- dplyr::select(tidy_output, var_name = .data$term)
+    # remove the first row for intercept
     term_names <- dplyr::filter(term_names, .data$var_name != "(Intercept)")
     return(dplyr::bind_cols(term_names, o))
   }
