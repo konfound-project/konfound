@@ -52,13 +52,18 @@ konfound <- function(model_object,
   
   # Stop messages
   if (!(class(model_object)[1] %in% c("lm", "glm", "lmerMod"))) {
-    stop("konfound() is currently implemented for models estimated with lm(), glm(), and lme4::lmer(); consider using pkonfound() instead")
+    stop("konfound() is currently implemented for models estimated with
+         lm(), glm(), and lme4::lmer(); consider using pkonfound() instead")
   }
   
-  if ("table" %in% to_return & test_all == TRUE) stop("cannot return a table when test_all is set to TRUE")
-  
+  if ("table" %in% to_return & test_all == TRUE){
+    stop("cannot return a table when test_all is set to TRUE")
+  }
   # Dealing with non-standard evaluation
-  tested_variable_enquo <- rlang::enquo(tested_variable) # dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
+
+  # dealing with non-standard evaluation
+  #(so unquoted names for tested_variable can be used)
+  tested_variable_enquo <- rlang::enquo(tested_variable) 
   tested_variable_string <- rlang::quo_name(tested_variable_enquo)
   
   # Dispatching based on class
@@ -81,9 +86,14 @@ konfound <- function(model_object,
   }
   
   if (inherits(model_object, "glm") & two_by_two == FALSE) {
-    message("Note that for a non-linear model, impact threshold should not be interpreted.")
-    message("Note that this is only an approximation. For exact results in terms of the number of cases that must be switched from treatment success to treatment failure to invalidate the inference see: https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm")
-    message("If a dichotomous independent variable is used, consider using the 2X2 table approach enabled with the argument two_by_two = TRUE")
+    message("Note that for a non-linear model, 
+            impact threshold should not be interpreted.")
+    message("Note that this is only an approximation. For exact results 
+            in terms of the number of cases that must be switched from treatment 
+            success to treatment failure to invalidate the inference see: 
+            https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm")
+    message("If a dichotomous independent variable is used, consider using 
+            the 2X2 table approach enabled with the argument two_by_two = TRUE")
     output <- konfound_glm(
       model_object = model_object,
       tested_variable_string = tested_variable_string,
@@ -98,9 +108,13 @@ konfound <- function(model_object,
   
   if (inherits(model_object, "glm") & two_by_two == TRUE) {
     
-    if(is.null(n_treat)) stop("Please provide a value for n_treat to use this functionality with a dichotomous predictor")
-    if (test_all == TRUE) stop("test_all = TRUE is not supported when two_by_two is specified")
-    
+    if(is.null(n_treat)){ 
+      stop("Please provide a value for 
+           n_treat to use this functionality with a dichotomous predictor")
+      }
+    if (test_all == TRUE) {
+      stop("test_all = TRUE is not supported when two_by_two is specified")
+    }
     output <- konfound_glm_dichotomous(
       model_object = model_object,
       tested_variable_string = tested_variable_string,
@@ -128,7 +142,14 @@ konfound <- function(model_object,
       to_return = to_return
     )
     
-    message("Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest. We are presently working to add other methods for calculating the degrees of freedom for the predictor(s) of interest. If you wish to use other methods now, consider those detailed here: https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. You can then enter degrees of freedom obtained from another method along with the coefficient, number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.")
+    message("Note that the Kenward-Roger approximation is used to 
+            estimate degrees of freedom for the predictor(s) of interest. 
+            We are presently working to add other methods for calculating 
+            the degrees of freedom for the predictor(s) of interest. 
+            If you wish to use other methods now, consider those detailed here: 
+            https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. 
+            You can then enter degrees of freedom obtained from another method along with the coefficient, 
+            number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.")
     
     return(output)
   }
@@ -138,8 +159,10 @@ konfound <- function(model_object,
   }
   
   if (test_all == FALSE) {
-    message("To consider other predictors of interest, consider setting `test_all` to TRUE.")
+    message("To consider other predictors of interest, 
+            consider setting `test_all` to TRUE.")
   } else {
-    message("Note that presently these predictors of interest are tested independently; future output may use the approach used in mkonfound.")
+    message("Note that presently these predictors of interest are tested 
+            independently; future output may use the approach used in mkonfound.")
   }
 }
