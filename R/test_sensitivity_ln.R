@@ -313,47 +313,334 @@ test_sensitivity_ln <- function(est_eff,
     
   } else  if (to_return == "print") {
     
-    # cat(crayon::bold("Background Information:"))
-    # cat("\n")
-    # cat(info1)
-    # cat("\n")
-    # cat("\n")
-    cat(crayon::bold("Conclusion:"))
-    cat("\n")
-    cat(crayon::underline("User-entered Table:"))
-    cat("\n")
-    print(final_solution$table_start)
-    cat("\n")
-    if (changeSE) {
-      cat(notice_SE)
-      cat("\n")
-      }
-    cat(notice)
-    cat(noticeb)
-    cat("\n")
-    cat("\n")
-    cat(conclusion1)
-    cat("\n")
-    cat(conclusion1a)
-    cat("\n")
-    cat(conclusion1b)
-    cat("\n")
-    cat(conclusion1c)
-    cat("\n")
-    cat("\n")
-    cat(crayon::underline("Transfer Table:"))
-    cat("\n")
-    print(final_solution$table_final)
-    cat("\n")
-    cat(conclusion2)
-    cat("\n")
-    cat(conclusion3)
-    cat("\n")
-    cat("\n")
-    cat(crayon::bold("RIR:"))
-    cat("\n")
-    cat("RIR =", RIR)
-    cat("\n")
+    result <- list(conclusion1,conclusion1b, conclusion1c,
+                   Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
+                   conclusion2, conclusion3,
+                   total_RIR = total_RIR, total_switch = total_switch)
+
+    # Extracting the results into variables for cleaner reference
+    conclusion1 <- result$conclusion1
+    conclusion1b <- result$conclusion1b
+    conclusion1c <- result$conclusion1c
+    Implied_Table <- result$Implied_Table
+    Transfer_Table <- result$Transfer_Table
+    conclusion2 <- result$conclusion2
+    conclusion3 <- result$conclusion3
+    notice <- result$notice
+    RIR_value <- result$RIR
+    fragility <- result$total_switch
     
+    if (changeSE) {
+     cat(sprintf("RIR = %d\n\n", RIR))
+      cat("The table you entered or is implied by your effect size:\n\n")
+      print(Implied_Table)
+      cat("\n")
+      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f. Values have\n",
+                        final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final),
+                sprintf("been rounded to the nearest integer. This may cause a little\n"), 
+                sprintf("change to the estimated effect for the table. In order to\n"),
+                sprintf("generate a usable implied contingency table, we increased the\n"), 
+                sprintf("standard error to %.3f (the original one is %.3f)).\n\n", std_err, user_std_err))
+      )
+      
+      ### start here (changeSE = T, invalidate_ob = T)
+      
+      if (invalidate_ob) {
+        change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha =%.2f)", alpha)
+        ### 
+        if (!final_solution$needtworows & final_solution$final_switch > 1) {
+          #conclusion1 <- 
+          cat(paste(
+            change, sprintf("you would need to replace %d", RIR), RIRway, "\ncases "))
+          
+          if (replace == "control") {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of failure in the \ncontrol group applies (RIR = %d).", RIR))
+          } else {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of failure in the \nentire sample applies (RIR = %d).", RIR))
+          }
+          
+          #conclusion1b <- 
+          cat(paste(
+            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
+            c("case from"), transferway, 
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("This transfer of cases \nyields the following table:")
+          ))
+          
+        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+          #conclusion1 <- 
+          cat(paste(
+            change, sprintf("you would need to replace %d", RIR), RIRway, "\ncases"))
+          
+          if (replace == "control") {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of failure in the \ncontrol group applies (RIR = %d).", RIR))
+          } else {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of failure in the \nentire sample applies (RIR = %d).", RIR))
+          }
+          
+          #conclusion1b <- 
+          cat(paste(
+            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
+            c("case from"), transferway, 
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("This transfer of cases \nyields the following table:")
+          ))
+          
+        } else {
+          #conclusion1 <- 
+          cat(paste(
+            change, c("only transferring cases from"), transferway, "is not enough."))
+          
+          #conclusion1b <- 
+          cat(paste(sprintf("We also need to transfer %d cases from", final_solution$final_extra),
+                    transferway_extra, c("as shown, from the User-entered Table to the Transfer Table.")))
+          
+          #conclusion1c <- 
+          cat(paste(sprintf("This means we need to replace %d of", RIR), RIRway, 
+                    sprintf("with null hypothesis cases; and replace %d", RIR_extra), RIRway_extra, 
+                    c("with null hypothesis cases to change the inference.")
+          ))
+        }
+    
+      } else {
+        
+        ### (changeSE = T, invalidate_ob = F)
+        ### bit different due to consistent linebreak
+        
+        if (est_eff >= 0) {
+          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.2f)", alpha)
+        } else {
+          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.2f)", alpha)
+        }
+        ###
+        if (!final_solution$needtworows & final_solution$final_switch > 1) {
+          #conclusion1 
+          cat(paste(
+            change, sprintf("you would need to replace \n%d", RIR), RIRway, "cases "))
+          
+          if (replace == "control") {
+            #conclusion1a 
+            cat(sprintf("with cases for which the probability of \nfailure in the control group applies (RIR = %d).", RIR))
+          } else {
+            #conclusion1a 
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample applies (RIR = %d).", RIR))
+          }
+          
+          #conclusion1b 
+          cat(paste(
+            sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
+            c("case from"), transferway, 
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("This transfer of cases \nyields the following table:"))
+             )
+          
+        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+          #conclusion1 
+          cat(paste(
+            change, sprintf("you would need to replace \n%d", RIR), RIRway, "\ncases"))
+          
+          if (replace == "control") {
+            #conclusion1a 
+            cat(sprintf("with cases for which the probability of \nfailure in the control group applies (RIR = %d).", RIR))
+          } else {
+            #conclusion1a 
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample applies (RIR = %d).", RIR))
+          }
+          
+          #conclusion1b 
+          cat(paste(
+            sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
+            c("case from"), transferway, 
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("This transfer of cases \nyields the following table:"))
+             )
+          
+        } else {
+          #conclusion1
+          cat(paste(
+            change, c("only transferring cases from"), transferway, "is not enough."))
+          
+          #conclusion1b
+          cat(paste(sprintf("We also need to transfer %d cases from", final_solution$final_extra),
+                    transferway_extra, c("as shown, from the User-entered Table to the Transfer Table.")))
+          
+          #conclusion1c
+          cat(paste(sprintf("This means we need to replace %d of", RIR), RIRway, 
+                    sprintf("with null hypothesis cases; and replace %d", RIR_extra), RIRway_extra, 
+                    c("with null hypothesis cases to change the inference."))
+             )
+        }
+      }
+      
+      cat("\n")
+      cat("\n")
+      
+      cat("Table after transfer:\n\n")
+      print(Transfer_Table)
+      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f.)",
+                        final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final))
+          )
+          
+      
+    } else {
+      
+      cat(sprintf("RIR = %d\n\n", RIR))
+      cat("The table you entered or is implied by your effect size:\n\n")
+      print(Implied_Table)
+      cat("\n")
+      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f. Values have\n",
+                        final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final),
+                sprintf("been rounded to the nearest integer. This may cause a little\n"), 
+                sprintf("change to the estimated effect for the table.\n\n"))
+         )
+      
+      if (invalidate_ob) {
+        
+        ### (changeSE = F, invalidate_ob = T)
+
+        change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha =%.2f)", alpha)
+        ### 
+        if (!final_solution$needtworows & final_solution$final_switch > 1) {
+          #conclusion1
+          cat(paste(
+            change, sprintf("you would need to replace %d", RIR), RIRway, "\ncases "))
+          
+          if (replace == "control") {
+            #conclusion1a
+            cat(sprintf("with cases for which the probability of failure in the \ncontrol group applies (RIR = %d).", RIR))
+          } else {
+            #conclusion1a
+            cat(sprintf("with cases for which the probability of failure in the \nentire sample applies (RIR = %d).", RIR))
+          }
+          
+          #conclusion1b 
+          cat(paste(
+            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
+            c("case from"), transferway, 
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("This transfer of cases \nyields the following table:"))
+             )
+          
+        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+          #conclusion1 
+          cat(paste(
+            change, sprintf("you would need to replace %d", RIR), RIRway, "\ncases"))
+          
+          if (replace == "control") {
+            #conclusion1a
+            cat(sprintf("with cases for which the probability of failure in the \ncontrol group applies (RIR = %d).", RIR))
+          } else {
+            #conclusion1a 
+            cat(sprintf("with cases for which the probability of failure in the \nentire sample applies (RIR = %d).", RIR))
+          }
+          
+          #conclusion1b 
+          cat(paste(
+            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
+            c("case from"), transferway, 
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("This transfer of cases \nyields the following table:")
+          ))
+          
+        } else {
+          #conclusion1
+          cat(paste(
+            change, c("only transferring cases from"), transferway, "is not enough."))
+          
+          #conclusion1b 
+          cat(paste(sprintf("We also need to transfer %d cases from", final_solution$final_extra),
+                    transferway_extra, c("as shown, from the User-entered Table to the Transfer Table.")))
+          
+          #conclusion1c
+          cat(paste(sprintf("This means we need to replace %d of", RIR), RIRway, 
+                    sprintf("with null hypothesis cases; and replace %d", RIR_extra), RIRway_extra, 
+                    c("with null hypothesis cases to change the inference."))
+             )
+        }
+      } else {
+        
+          ### (changeSE = F, invalidate_ob = F)
+          ### bit different due to consistent linebreak
+
+        if (est_eff >= 0) {
+          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.2f)", alpha)
+        } else {
+          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.2f)", alpha)
+        }
+
+        if (!final_solution$needtworows & final_solution$final_switch > 1) {
+          #conclusion1
+          cat(paste(
+            change, sprintf("you would need to replace \n%d", RIR), RIRway, "cases "))
+          
+          if (replace == "control") {
+            #conclusion1a
+            cat(sprintf("with cases for which the probability of \nfailure in the control group applies (RIR = %d).", RIR))
+          } else {
+            #conclusion1a
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample applies (RIR = %d).", RIR))
+          }
+          
+          #conclusion1b
+          cat(paste(
+            sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
+            c("case from"), transferway, 
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("This transfer of cases \nyields the following table:"))
+             )
+          
+        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+          #conclusion1 
+          cat(paste(
+            change, sprintf("you would need to replace \n%d", RIR), RIRway, "\ncases"))
+          
+          if (replace == "control") {
+            #conclusion1a 
+            cat(sprintf("with cases for which the probability of \nfailure in the control group applies (RIR = %d).", RIR))
+          } else {
+            #conclusion1a 
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample applies (RIR = %d).", RIR))
+          }
+          
+          #conclusion1b
+          cat(paste(
+            sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
+            c("case from"), transferway, 
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("This transfer of cases \nyields the following table:")
+          ))
+          
+        } else {
+          #conclusion1
+          cat(paste(
+            change, c("only transferring cases from"), transferway, "is not enough."))
+          
+          #conclusion1b 
+          cat(paste(sprintf("We also need to transfer %d cases from", final_solution$final_extra),
+                    transferway_extra, c("as shown, from the User-entered Table to the Transfer Table.")))
+          
+          #conclusion1c
+          cat(paste(sprintf("This means we need to replace %d of", RIR), RIRway, 
+                    sprintf("with null hypothesis cases; and replace %d", RIR_extra), RIRway_extra, 
+                    c("with null hypothesis cases to change the inference."))
+             )
+        }
+      }
+      
+      cat("\n")
+      cat("\n")
+      
+      cat("Table after transfer:\n\n")
+      print(Transfer_Table)
+      cat(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f.)",
+                        final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final)
+      )
+      
+      
+    }
   }
 }
