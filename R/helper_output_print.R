@@ -1,24 +1,72 @@
 # Function to output printed text
 
-output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL, nu, recase, obs_r, critical_r, r_con, itcv, alpha, index) {
+output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index) {
   if (index == "RIR"){ 
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
-    if (abs(eff_diff) > abs(beta_threshhold)) {
-      cat("To invalidate an inference, ", round(bias, 3), "% of the estimate would have to be due to bias. ")
+    if ((abs(eff_diff) > abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
+      cat("TO INVALIDATE:\n")
       cat("\n")
-      cat("This is based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = "")
+      cat(paste0("RIR = ", round(recase, 3), "\n"))
       cat("\n")
-      cat("To invalidate an inference, ", round(recase, 3), " observations would have to be replaced with cases")
+      cat(paste0("You entered an estimated effect of ", round(eff_diff, 3), ". To invalidate"))
       cat("\n")
-      cat("for which the effect is ", nu, " (RIR = ", round(recase, 3), ").\n", sep = "")
+      cat(paste0("the inference of an effect using the threshold of ", round(beta_threshhold, 3), " for"))
+      cat("\n")
+      cat(paste0("statistical significance with alpha= ", alpha, " ,", round(bias, 3), " % of the (", round(eff_diff, 3), ")"))
+      cat("\n")
+      cat(paste0("estimate would have to be due to bias. This implies ", round(recase, 3)))
+      cat("\n")
+      cat("observations would have to be replaced with cases for which the\n")
+      cat(paste0("effect is 0 (RIR = ", round(recase, 3), ").\n"))
       cat("\n")
     }
-    else if (abs(eff_diff) < abs(beta_threshhold)) {
-      cat("To sustain an inference, ", round(sustain, 3), "% of the estimate would have to be due to bias. ")
+    else if ((abs(eff_diff) > abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
+      cat("TO INVALIDATE:\n")
       cat("\n")
-      cat("This is based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = "")
+      cat(paste0("RIR = ", round(recase, 3), "\n"))
       cat("\n")
-      cat("To sustain an inference, ", round(recase, 3), " of the cases with ", nu, " effect would have to be replaced with cases at the threshold of inference"," (RIR = ", round(recase, 3), ").\n", sep = "")
+      cat(paste0("You entered an effect of ", round(eff_diff, 3), ", and specified a threshold"))
+      cat("\n")
+      cat(paste0("value of ", round(eff_thr, 3), ". To invalidate the inference based on your estimate"))
+      cat("\n")
+      cat(paste0(round(bias, 3), " % of the (", round(eff_diff, 3), ") estimate would have to be due to bias.")
+      cat("\n")
+      cat(paste0("This implies ", round(recase, 3), " observations would have to be replaced with cases"))
+      cat("\n")
+      cat("for which the effect is", nu, "(RIR = ", round(recase, 3),").\n")
+      cat("\n")
+    }
+    else if ((abs(eff_diff) < abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
+      cat("TO SUSTAIN:\n", sep = "")
+      cat("\n")
+      cat(paste0("RIR = ", round(recase, 3), "\n"))
+      cat("\n")
+      cat(paste0("You entered an estimated effect of ", round(eff_diff, 3), ". The threshold value for"))
+      cat("\n")
+      cat(paste0("statistical significance is ", round(beta_threshhold, 3), " (alpha = ", alpha, "). To reach that"))
+      cat("\n")
+      cat(paste0("threshold, ", round(bias, 3), "% of the (", round(eff_diff, 3), ") estimate would have to be due to"))
+      cat("\n")
+      cat("bias. This implies", round(recase, 3), "observations with", nu, "effect would have to")
+      cat("\n")
+      cat(paste0("be replaced with cases for which the effect is ", round(beta_threshhold, 3), " (RIR = ", round(recase, 3), ")."))
+      cat("\n")
+    } 
+    else if ((abs(eff_diff) < abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
+      cat("TO SUSTAIN:\n", sep = "")
+      cat("\n")
+      cat(paste0("RIR = ", round(recase, 3), "\n"))
+      cat("\n")
+      cat(paste0("You entered an effect size of ", round(eff_diff, 3), ", and specified a threshold"))
+      cat("\n")
+      cat(paste0("value of ", round(eff_thr, 3), ". To reach that threshold, ", round(bias, 3), "% of the (", round(eff_diff, 3), ")"))
+      cat("\n")
+      cat(paste0("estimate would have to be due to bias. This implies ", round(recase, 3)))
+      cat("\n")
+      cat("observations with", nu, "effect would have to be replaced with cases")
+      cat("\n")
+      cat(paste0("for which the effect is ", round(beta_threshhold, 3), " (RIR = ", round(recase, 3), ")."))
+      cat("\n")
     }
     else if (eff_diff == beta_threshhold) {
       warning("The coefficient is exactly equal to the threshold.\n")
