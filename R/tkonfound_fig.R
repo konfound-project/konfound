@@ -199,7 +199,8 @@ tkonfound_fig <- function(a, b, c, d, thr_p = 0.05, switch_trm = T,
             zoom_upper <- -(negsig - 4)
             meta$sigpoint <- ifelse(meta$switch==negsig,"negative","other")
         } else {
-    # from sig to not sig by increasing odds ratio that is smaller than 1 
+    # from sig to not sig by increasing odds ratio 
+    # that is smaller than 1 
             neginsig <- meta[meta$sig==1,]$switch
             neg_thr <- (meta[meta$switch==neginsig,]$logodds+
                             meta[meta$switch==(neginsig-1),]$logodds)/2
