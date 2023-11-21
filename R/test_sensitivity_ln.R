@@ -312,8 +312,7 @@ test_sensitivity_ln <- function(est_eff,
     return(result)
     
   } else  if (to_return == "print") {
-    
-    
+
     result <- list(conclusion1,conclusion1b, conclusion1c,
                    Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
                    conclusion2, conclusion3,
@@ -339,21 +338,21 @@ test_sensitivity_ln <- function(est_eff,
     fragility <- result$Implied_Table["Treatment", "Fail"] - result$Transfer_Table["Treatment", "Fail"]
     
     if (changeSE) {
-    
+      
       cat(sprintf("RIR = %d\n\n", RIR))
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f. Values have
-      been rounded to the nearest integer. This may cause a little
-      change to the estimated effect for the table.)\n\n", 
-                  final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start))
+      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f. Values have\n",
+                        final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final),
+                sprintf("been rounded to the nearest integer. This may cause a little\n"), 
+                sprintf("change to the estimated effect for the table. In order to\n"),
+                sprintf("generate a usable implied contingency table, we increased the\n"), 
+                sprintf("standard error to %.3f (the original one is %.3f)).\n\n", std_err, user_std_err))
+      )
       
       ### start here
       if (invalidate_ob) {
-
-      ### start here (changeSE = T, invalidate_ob = T)
-        
         change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha =%.2f)", alpha)
         ### 
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
@@ -371,7 +370,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste(
-            sprintf("This is equivalent to \ntransferring %d", total_switch), 
+            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("\nin the initial table (Fragility = %d).", result$fragility),
             sprintf("This transfer of cases \nyields the following table:")
@@ -392,7 +391,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste(
-            sprintf("This is equivalent to \ntransferring %d", total_switch), 
+            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("\nin the initial table (Fragility = %d).", result$fragility),
             sprintf("This transfer of cases \nyields the following table:")
@@ -415,9 +414,6 @@ test_sensitivity_ln <- function(est_eff,
         }
         ### changed due to consistent linebreak
       } else {
-
-        ### (changeSE = T, invalidate_ob = F)
-        ### bit different due to consistent linebreak
         
         if (est_eff >= 0) {
           change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.2f)", alpha)
@@ -442,7 +438,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", total_switch),
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
@@ -463,7 +459,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", total_switch),
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
@@ -490,29 +486,26 @@ test_sensitivity_ln <- function(est_eff,
       
       cat("Table after transfer:\n\n")
       print(Transfer_Table)
-      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f. In order\n",
-                        final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final),
-                sprintf("to generate a usable implied contingency table, we increased\n"), 
-                sprintf("the standard error to %.3f (the original one is %.3f)).", std_err, user_std_err))
+      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f.)",
+                        final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final))
       )
       
       
     } else {
+      ## when changeSE=F
       
       cat(sprintf("RIR = %d\n\n", RIR))
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f. Values have
-      been rounded to the nearest integer. This may cause a little
-      change to the estimated effect for the table.)\n\n", 
-                  final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start))
+      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f. Values have\n",
+                        final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final),
+                sprintf("been rounded to the nearest integer. This may cause a little\n"), 
+                sprintf("change to the estimated effect for the table.\n\n"))
+      )
       
       ### start here
       if (invalidate_ob) {
-
-        ### (changeSE = F, invalidate_ob = T)
-
         change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha =%.2f)", alpha)
         ### 
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
@@ -532,7 +525,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", total_switch),
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
@@ -553,7 +546,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", total_switch),
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
@@ -572,10 +565,7 @@ test_sensitivity_ln <- function(est_eff,
                     c("with null hypothesis cases to change the inference.")
           ))
         }
-
-        ### (changeSE = F, invalidate_ob = F)
-        ### bit different due to consistent linebreak
-        
+        ### changed due to consistent linebreak
       } else {
         if (est_eff >= 0) {
           change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.2f)", alpha)
@@ -600,7 +590,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", total_switch),
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
@@ -621,7 +611,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", total_switch),
+            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
