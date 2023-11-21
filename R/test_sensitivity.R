@@ -235,7 +235,7 @@ test_sensitivity <- function(est_eff,
   } else if (to_return == "corr_plot") {
     return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
   } else if (to_return == "print") {
-    return(output_print(est_eff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, alpha, index))
+    return(output_print(est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index))
   } else if (to_return == "table") {
     return(output_table(model_object, tested_variable))
   } else {
