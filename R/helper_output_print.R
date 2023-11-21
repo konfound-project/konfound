@@ -19,8 +19,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
       cat("observations would have to be replaced with cases for which the\n")
       cat(paste0("effect is 0 (RIR = ", round(recase, 3), ").\n"))
       cat("\n")
-    }
-    else if ((abs(eff_diff) > abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
+    } else if ((abs(eff_diff) > abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
       cat("TO INVALIDATE:\n")
       cat("\n")
       cat(paste0("RIR = ", round(recase, 3), "\n"))
@@ -35,8 +34,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
       cat("\n")
       cat("for which the effect is", nu, "(RIR = ", round(recase, 3),").\n")
       cat("\n")
-    }
-    else if ((abs(eff_diff) < abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
+    } else if ((abs(eff_diff) < abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
       cat("TO SUSTAIN:\n", sep = "")
       cat("\n")
       cat(paste0("RIR = ", round(recase, 3), "\n"))
@@ -51,8 +49,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
       cat("\n")
       cat(paste0("be replaced with cases for which the effect is ", round(beta_threshhold, 3), " (RIR = ", round(recase, 3), ")."))
       cat("\n")
-    } 
-    else if ((abs(eff_diff) < abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
+    } else if ((abs(eff_diff) < abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
       cat("TO SUSTAIN:\n", sep = "")
       cat("\n")
       cat(paste0("RIR = ", round(recase, 3), "\n"))
@@ -67,8 +64,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
       cat("\n")
       cat(paste0("for which the effect is ", round(beta_threshhold, 3), " (RIR = ", round(recase, 3), ")."))
       cat("\n")
-    }
-    else if (eff_diff == beta_threshhold) {
+    } else if (eff_diff == beta_threshhold) {
       warning("The coefficient is exactly equal to the threshold.\n")
     }
     cat("See Frank et al. (2013) for a description of the method.")
