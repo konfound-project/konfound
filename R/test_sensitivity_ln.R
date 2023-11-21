@@ -332,11 +332,9 @@ test_sensitivity_ln <- function(est_eff,
     conclusion3 <- result$conclusion3
     notice <- result$notice
     RIR_value <- result$RIR
-    fragility <- result$fragility
+    fragility <- result$total_switch
     
-    
-    fragility <- result$Implied_Table["Treatment", "Fail"] - result$Transfer_Table["Treatment", "Fail"]
-    
+      
     if (changeSE) {
       
       cat(sprintf("RIR = %d\n\n", RIR))
@@ -372,7 +370,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("\nin the initial table (Fragility = %d).", fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
@@ -393,7 +391,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("\nin the initial table (Fragility = %d).", fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
@@ -438,7 +436,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("\nin the initial table (Fragility = %d).", fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
@@ -459,7 +457,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("\nin the initial table (Fragility = %d).", fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
@@ -525,7 +523,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("\nin the initial table (Fragility = %d).", fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
@@ -546,7 +544,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("\nin the initial table (Fragility = %d).", fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
@@ -590,7 +588,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("\nin the initial table (Fragility = %d).", fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
@@ -611,7 +609,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
+            sprintf("\nin the initial table (Fragility = %d).", fragility),
             sprintf("This transfer of cases \nyields the following table:")
           ))
           
