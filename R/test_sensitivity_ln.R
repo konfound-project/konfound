@@ -317,7 +317,11 @@ test_sensitivity_ln <- function(est_eff,
                    Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
                    conclusion2, conclusion3,
                    total_RIR = total_RIR, total_switch = total_switch)
-
+    
+    fragility <- result$Implied_Table["Treatment", "Fail"] - result$Transfer_Table["Treatment", "Fail"]
+    
+    result$fragility <- abs(fragility)
+    
     # Extracting the results into variables for cleaner reference
     conclusion1 <- result$conclusion1
     conclusion1b <- result$conclusion1b
@@ -328,7 +332,8 @@ test_sensitivity_ln <- function(est_eff,
     conclusion3 <- result$conclusion3
     notice <- result$notice
     RIR_value <- result$RIR
-    fragility <- result$total_switch
+    fragility <- result$fragility
+    total_switch <- result$total_switch
     
     if (changeSE) {
      cat(sprintf("RIR = %d\n\n", RIR))
@@ -363,11 +368,11 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b 
           cat(paste(
-            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
-            c("case from"), transferway), 
+            sprintf("This is equivalent to \ntransferring %d", total_switch), 
+            c("case from"), transferway, 
             sprintf("\nin the initial table (Fragility = %d).", result$fragility),
-            sprintf("\nThis transfer of cases yields the following table:")
-          )
+            sprintf("This transfer of cases \nyields the following table:")
+          ))
           
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 
@@ -384,11 +389,11 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b 
           cat(paste(
-            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
-            c("case from"), transferway), 
+            sprintf("This is equivalent to \ntransferring %d", total_switch), 
+            c("case from"), transferway, 
             sprintf("\nin the initial table (Fragility = %d).", result$fragility),
-            sprintf("\nThis transfer of cases yields the following table:")
-          )
+            sprintf("This transfer of cases \nyields the following table:")
+          ))
           
         } else {
           #conclusion1 
@@ -432,11 +437,11 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b 
           cat(paste(
-            sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
-            c("case from"), transferway), 
-            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
-            sprintf("\nThis transfer of cases yields the following table:")
-             )
+            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
+            c("case from"), transferway, 
+            sprintf("\nin the initial table (Fragility = %d).", total_switch),
+            sprintf("This transfer of cases \nyields the following table:")
+          ))
              
           
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
@@ -454,11 +459,11 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b 
           cat(paste(
-            sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
-            c("case from"), transferway), 
-            sprintf("\nin the initial table (Fragility = %d).", result$fragility),
-            sprintf("\nThis transfer of cases yields the following table:")
-             )
+            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
+            c("case from"), transferway, 
+            sprintf("\nin the initial table (Fragility = %d).", total_switch),
+            sprintf("This transfer of cases \nyields the following table:")
+          ))
              
           
         } else {
@@ -521,11 +526,11 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b 
           cat(paste(
-            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
-            c("case from"), transferway), 
-            sprintf("\nin the initial table (Fragility = %d).\n", result$fragility),
-            sprintf("This transfer of cases yields the following table:")
-             )
+            sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
+            c("case from"), transferway, 
+            sprintf("\nin the initial table (Fragility = %d).", total_switch),
+            sprintf("This transfer of cases \nyields the following table:")
+          ))
              
           
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
@@ -543,11 +548,11 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b 
           cat(paste(
-            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
-            c("case from"), transferway), 
-            sprintf("\nin the initial table (Fragility = %d).\n", result$fragility),
-            sprintf("This transfer of cases yields the following table:")
-          )
+            sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
+            c("case from"), transferway, 
+            sprintf("\nin the initial table (Fragility = %d).", total_switch),
+            sprintf("This transfer of cases \nyields the following table:")
+          ))
           
         } else {
           #conclusion1
