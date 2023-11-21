@@ -296,7 +296,8 @@ test_sensitivity_ln <- function(est_eff,
                      conclusion2, 
                      conclusion3,
                      RIR = RIR,
-                     notice_SE)
+                     notice_SE,
+                     total_switch)
     } else {
       result <- list(conclusion1,
                      conclusion1b,
