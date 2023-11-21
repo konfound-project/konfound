@@ -212,11 +212,11 @@
       
 if (!is.null(out)) { # dealing with a strange print issue
   return(out)
- cat("\n")
 }
 
 
 if (to_return == "print") {
+  cat("\n")
   message("For other forms of output, run ?pkonfound and inspect the to_return argument")
 }
 
