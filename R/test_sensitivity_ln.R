@@ -316,7 +316,7 @@ test_sensitivity_ln <- function(est_eff,
     result <- list(conclusion1,conclusion1b, conclusion1c,
                    Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
                    conclusion2, conclusion3,
-                   total_RIR = total_RIR, total_switch = total_switch)
+                   total_RIR, total_switch)
     
     fragility <- result$Implied_Table["Treatment", "Fail"] - result$Transfer_Table["Treatment", "Fail"]
     
