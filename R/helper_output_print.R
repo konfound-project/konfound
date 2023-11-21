@@ -29,7 +29,7 @@ output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
       cat("\n")
       cat(paste0("value of ", round(eff_thr, 3), ". To invalidate the inference based on your estimate"))
       cat("\n")
-      cat(paste0(round(bias, 3), " % of the (", round(eff_diff, 3), ") estimate would have to be due to bias.")
+      cat(paste0(round(bias, 3), " % of the (", round(eff_diff, 3), ") estimate would have to be due to bias."))
       cat("\n")
       cat(paste0("This implies ", round(recase, 3), " observations would have to be replaced with cases"))
       cat("\n")
