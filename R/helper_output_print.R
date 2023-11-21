@@ -1,6 +1,6 @@
 # Function to output printed text
 
-output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index = NULL) {
+output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index) {
   if (index == "RIR"){ 
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
     if ((abs(eff_diff) > abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
