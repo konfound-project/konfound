@@ -5,7 +5,7 @@ test_sensitivity_ln <- function(est_eff,
                                 n_obs,
                                 n_covariates,
                                 n_treat,
-                                switch_trm = T,
+                                switch_trm = TRUE,
                                 replace = "control",
                                 alpha,
                                 tails,
@@ -40,10 +40,10 @@ test_sensitivity_ln <- function(est_eff,
                           ((4 + 4 * odds_ratio^2) / odds_ratio - 7.999999)))/
                   (2 * n_treat * (n_obs - n_treat)))
   # check if the implied table solution may contain imaginary numbers
-  changeSE <- F
+  changeSE <- FALSE
   if (std_err < minse) {
-    haveimaginary <- T
-    changeSE <- T
+    haveimaginary <- TRUE
+    changeSE <- TRUE
     user_std_err <- std_err
     std_err <- minse
   }
@@ -219,7 +219,7 @@ test_sensitivity_ln <- function(est_eff,
       sprintf("This is equivalent to transferring %d", final_solution$final_switch), 
       c("cases from"), transferway)
     
-    conclusion1c <- "as shown, from the Implied Table to the Transfer Table."
+    conclusion1c <- " as shown, from the Implied Table to the Transfer Table."
     
   } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
     conclusion1 <- paste(
@@ -235,14 +235,14 @@ test_sensitivity_ln <- function(est_eff,
       sprintf("This is equivalent to transferring %d", final_solution$final_switch), 
       c("case from"), transferway)
     
-    conclusion1c <- "as shown, from the Implied Table to the Transfer Table."
+    conclusion1c <- " as shown, from the Implied Table to the Transfer Table."
     
   } else {
     conclusion1 <- paste(
       change, c("only transferring cases from"), transferway, "is not enough.")
       
     conclusion1b <- paste(sprintf("We also need to transfer %d cases from", final_solution$final_extra),
-      transferway_extra, c("as shown, from the User-entered Table to the Transfer Table."))
+      transferway_extra, c("as shown, from the User-entered Table to the Transfer Table. "))
     
     conclusion1c <- paste(sprintf("This means we need to replace %d of", RIR), RIRway, 
       sprintf("with null hypothesis cases; and replace %d", RIR_extra), RIRway_extra, 

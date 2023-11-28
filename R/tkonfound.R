@@ -1,6 +1,6 @@
 tkonfound <- function(a, b, c, d, 
                       alpha = 0.05, 
-                      switch_trm = T, 
+                      switch_trm = TRUE, 
                       test = "fisher", 
                       replace = "control", 
                       to_return = to_return){
@@ -130,14 +130,14 @@ tkonfound <- function(a, b, c, d,
     
     if (replace == "control") {
       conclusion1b <- paste0(
-        sprintf("cases for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+        sprintf(" cases for which the probability of failure in the control group applies (RIR = %d). ", RIR))
     } else {
       conclusion1b <- paste0(
-        sprintf("cases for which the probability of failure in the entire group applies (RIR = %d). ", RIR))    
+        sprintf(" cases for which the probability of failure in the entire group applies (RIR = %d). ", RIR))    
     }
     
     conclusion1c <- paste0(
-      sprintf("This is equivalent to transferring %d", final), 
+      sprintf("This is equivalent to transferring %d ", final), 
       " cases from ", transferway, "."
     )
   }
@@ -148,10 +148,10 @@ tkonfound <- function(a, b, c, d,
     
     if (replace == "control") {
       conclusion1b <- paste0(
-        sprintf("cases for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+        sprintf(" cases for which the probability of failure in the control group applies (RIR = %d). ", RIR))
     } else {
       conclusion1b <- paste0(
-        sprintf("cases for which the probability of failure in the entire group applies (RIR = %d). ", RIR))    
+        sprintf(" cases for which the probability of failure in the entire group applies (RIR = %d). ", RIR))    
       }
     
     conclusion1c <- paste0(
@@ -186,16 +186,17 @@ tkonfound <- function(a, b, c, d,
       "For the Transfer Table, we have an estimated odds ratio of %.3f, with p-value of %.3f:", fisher_final, p_final)
   }
   
-  info1 <- "This function calculates the number of cases that would have to be replaced"
-  info2 <- "with no effect cases (RIR) to invalidate an inference made about the association"
-  info3 <- "between the rows and columns in a 2x2 table."
-  info4 <- "One can also interpret this as switches from one cell to another, such as from"
-  info5 <- "the treatment success cell to the treatment failure cell."
+  info1 <- "This function calculates the number of cases that would have to be replaced "
+  info2 <- "with no effect cases (RIR) to invalidate an inference made about the association "
+  info3 <- "between the rows and columns in a 2x2 table. "
+  info4 <- "One can also interpret this as switches from one cell to another, such as from "
+  info5 <- "the treatment success cell to the treatment failure cell. "
   
   if (to_return == "raw_output") {
     
     result <- list(info1,
                    info2,
+                   info3,
                    conclusion1,
                    conclusion1b,
                    conclusion1c,
