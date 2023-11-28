@@ -3,7 +3,7 @@ Package: konfound
 Title: Quantify the Robustness of Causal Inferences
 Version: 0.4.0
 Authors@R: c(
-    person(c("Joshua", "M"), "Rosenberg", role = c("aut", "cre"), email = "jmichaelrosenberg@gmail.com"),
+    person(c("Joshua", "M"), "Rosenberg", role = c("aut", "cre"), email = "jmrosen48@gmail.com"),
     person(c("Ran"), "Xu", role = "ctb", email = "ranxu@msu.edu"),
     person(c("Qinyun"), "Lin", role = "ctb", email = "linqinyun1001@gmail.com"),
     person(c("Spiro"), "Maroulis", role = "ctb", email = "Spiro.Maroulis@asu.edu"),
