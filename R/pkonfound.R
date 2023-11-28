@@ -26,6 +26,7 @@
 #' @param FR2max_multiplier the multiplier of R2 to get R2max, default is set to 1.3
 #' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return
 #' @importFrom stats fisher.test
+#' @importFrom dplyr select
 #' @import lavaan
 #' @import ggplot2
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference

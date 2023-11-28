@@ -7,6 +7,7 @@ tags:
 - R
 date: "31 July 2023"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 authors:
@@ -45,7 +46,9 @@ affiliations:
 
 # Quantifying the Robustness of Inferences
 
-Statistical methods which quantify the conditions necessary to alter inferences are important to a variety of disciplines [@razavi2021]. One line of work is rooted in linear models and foregrounds the sensitivity of inferences to the strength of omitted variables [@frank2000; @cinelli2019]. A more recent approach is rooted in the potential outcomes framework for causal inference and foregrounds how hypothetical changes in a sample would alter an inference if such variables or cases were otherwise observed [@frank2007; @frank2008; @frank2013; @xu2019). We have implemented two measures from these lines of work within R via the `konfound` R package. One measure is the Impact Threshold of a Confounding Variable (ITCV), which generates statements such as "to invalidate an inference of an effect, an omitted variable would have to be correlated at \_\_ with the predictor of interest and with the outcome" [@frank2000]. This sensitivity analysis can be calculated for any linear model. The second measure is the Robustness of an Inference to Replacement (RIR) which generates statements such as "to invalidate the inference, \_\_ % of the cases would have to be replaced with counterfactual cases with zero effect of the treatment" [@frank2013]. The RIR represents a more generally applicable approach not limited to linear models, and is recommended for all cases that use binary outcomes [@frank2021].
+Statistical methods which quantify the conditions necessary to alter inferences are important to a variety of disciplines [@razavi2021]. One line of work is rooted in linear models and foregrounds the sensitivity of inferences to the strength of omitted variables [@frank2000; @cinelli2019]. A more recent approach is rooted in the potential outcomes framework for causal inference and foregrounds how hypothetical changes in a sample would alter an inference if such variables or cases were otherwise observed [@frank2007; @frank2008; @frank2013; @xu2019). **It differs from other sensitivity analysis approaches in the variety of dependent variable types it accomodates, its internal logic, and its analytic (rather than simulation-based) approach. [@frank2023].**
+
+We have implemented two measures from these lines of work within R via the `konfound` R package. **The audience for this R package is primarily social scientists, as well as interested individuals in other fields**. One measure is the Impact Threshold of a Confounding Variable (ITCV), which generates statements such as "to invalidate an inference of an effect, an omitted variable would have to be correlated at \_\_ with the predictor of interest and with the outcome" [@frank2000]. This sensitivity analysis can be calculated for any linear model. The second measure is the Robustness of an Inference to Replacement (RIR) which generates statements such as "to invalidate the inference, \_\_ % of the cases would have to be replaced with counterfactual cases with zero effect of the treatment" [@frank2013]. The RIR represents a more generally applicable approach not limited to linear models, and is recommended for all cases that use binary outcomes [@frank2021].
 
 # Statement of Need: The Need for an R Package
 
@@ -65,7 +68,8 @@ We will model the impact the following variables have on household water consump
 
     library(konfound)
 
-    ## Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).
+    ## Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey 
+    ## (2013) and in Frank (2000).
     ## For more information visit http://konfound-it.com.
 
     m <- lm(water81 ~ water80 + income + educat + retire + peop80, data = concord1)
@@ -104,23 +108,27 @@ Now let's examine the robustness of the `peop80` effect by calculating the ITCV.
     konfound(m, peop80, index = "IT")
 
     ## Impact Threshold for a Confounding Variable:
-    ## The minimum impact of an omitted variable to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of  0.52
-    ##  with the outcome and at  0.52  with the predictor of interest (conditioning on observed covariates) based on a threshold of 
-    ## 0.089 for statistical significance (alpha = 0.05).
+    ## The minimum impact of an omitted variable to invalidate an inference
+    ## for a null hypothesis of 0 effect is based on a correlation of 0.52 with 
+    ## the outcome and at  0.52  with the predictor of interest (conditioning on
+    ## observed covariates) based on a threshold of 0.089 for statistical 
+    ## significance (alpha = 0.05).
     ## 
-    ## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 
-    ## 0.52 X 0.52 = 0.27 to invalidate an inference for a null hypothesis of 0 effect.
-    ## See Frank (2000) for a description of the method.
+    ## Correspondingly the impact of an omitted variable (as defined in Frank 
+    ## 2000) must be 0.52 X 0.52 = 0.27 to invalidate an inference for a null 
+    ## hypothesis of 0 effect. See Frank (2000) for a description of the method.
     ## 
     ## Citation:
     ## Frank, K. (2000). Impact of a confounding variable on the
-    ## inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194
+    ## inference of a regression coefficient. Sociological Methods and Research,
+    ## 29(2), 147-194
 
     ## For more detailed output, consider setting `to_return` to table
 
-    ## To consider other predictors of interest, consider setting `test_all` to TRUE.
+    ## To consider other predictors of interest, consider setting `test_all` to
+    ## TRUE.
 
-The output indicates that in order to invalidate the inference that `peop80` has an effect on `water81` using statistical significance as a threshold (e.g., p=.05), an omitted variable would have to be correlated at 0.52 with `peop80` and 0.52 with `water81`, conditioning on observed covariates. Correspondingly, the impact of an omitted variable (as defined in [@frank2000]) must be 0.52 X 0.52 = 0.27.
+The output indicates that in order to invalidate the inference that `peop80` has an effect on `water81` using statistical significance as a threshold (e.g., p=.05), an omitted variable would have to be correlated at 0.52 with `peop80` and 0.52 with `water81`, conditioning on observed covariates. Correspondingly, the impact of an omitted variable as defined in [@frank2000] must be 0.52 X 0.52 = 0.27.
 
 ## *RIR example for linear models fit with lm()*
 
@@ -146,20 +154,22 @@ We can also examine the robustness by calculating the RIR.
 
     ## To consider other predictors of interest, consider setting `test_all` to TRUE.
 
-The output presents two interpretations of the RIR. First, 74.956% of the estimated effect of `peop80` on `water81` would have to be attributed to bias to invalidate the inference. Equivalently, we would expect to have to replace 372 out of the 486 households (about 76%) with cases for which `peop80` had no effect to invalidate the inference. See [@frank2013; @frank2021] for guidelines on evaluating the RIR relative to the bias accounted for by observed covariates or published norms.
+The output presents two interpretations of the RIR. First, 74.956% of the estimated effect of `peop80` on `water81` would have to be attributed to bias to invalidate the inference. Equivalently, we would expect to have to replace 372 out of the 486 households (about 76%) with cases for which `peop80` had no effect to invalidate the inference. We have created guidelines on evaluating the RIR relative to the bias accounted for by observed covariates or published norms [@frank2013; @frank2021].
 
 2.  **pkonfound**: This function quantifies the sensitivity for analyses which have already been conducted, such as in an already-published study or from analysis carried out using other software. This function calculates 1) how much bias there must be in an estimate to invalidate/sustain an inference which can be interpreted as the percentage of cases that would have to be replaced (with cases for which the predictor had no effect on the outcome) to invalidate the inference and 2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient (note: impact is defined as the correlation between omitted variable and focal predictor x correlation between omitted variable and outcome).
 
 ## *ITCV example for a regression analysis*
 
-For this example, the following parameters from a regression analysis would be entered into the `pkonfound` function: unstandardized beta coefficient for the predictor of interest (B = 2), standard error (SE = .4), sample size (n = 100), and the number of covariates (cv = 3).
+For this example, the following parameters from a regression analysis would be entered into the `pkonfound` function: unstandardized beta coefficient for the predictor of interest (`est_eff` = 2), estimated standard error (`std_err` = .4), sample size (`n_obs` = 100), and the number of covariates (`n_covariates` = 3).
 
     pkonfound(2, .4, 100, 3, index = "IT")
 
     ## Impact Threshold for a Confounding Variable:
-    ## The minimum impact of an omitted variable to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of  0.568
-    ##  with the outcome and at  0.568  with the predictor of interest (conditioning on observed covariates) based on a threshold of 
-    ## 0.201 for statistical significance (alpha = 0.05).
+    ## The minimum impact of an omitted variable to invalidate an inference for 
+    ## a null hypothesis of 0 effect is based on a correlation of  0.568 with 
+    ## the outcome and at  0.568  with the predictor of interest (conditioning 
+    ## on observed covariates) based on a threshold of 0.201 for statistical 
+    ## significance (alpha = 0.05).
     ## 
     ## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 
     ## 0.568 X 0.568 = 0.323 to invalidate an inference for a null hypothesis of 0 effect.

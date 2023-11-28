@@ -75,7 +75,7 @@ pkonfound(.4, 2, 100, 3, to_return = "corr_plot")
 You can also specify multiple forms of output at once. 
 
 ```{r}
-model_output <- pkonfound(2, .4, 200, 3, to_return = c("raw_output", "thresh_plot", "corr_plot"))
+model_output <- pkonfound(2, .4, 200, 3, to_return = c("raw_output", "corr_plot"))
 summary(model_output)
 ```
 
@@ -101,19 +101,19 @@ This function can be used with the values from a two-by-two table associated wit
 - `d` represents a successful treatment group outcome
 
 ```{r}
-pkonfound(a = 35, b = 17, c = 17, d = 38)
+# pkonfound(a = 35, b = 17, c = 17, d = 38)
 ```
 
 A table can also be passed to this function: 
 
 ```{r}
-my_table <- tibble::tribble(
-~unsuccess, ~success,
-35,         17,
-17,         38,
-)
-
-pkonfound(two_by_two_table = my_table)
+# my_table <- tibble::tribble(
+# ~unsuccess, ~success,
+# 35,         17,
+# 17,         38,
+# )
+# 
+# pkonfound(two_by_two_table = my_table)
 ```
 
 ## Use of konfound() for models fit in R
@@ -152,7 +152,7 @@ konfound(m1, wt, test_all = TRUE)
 Whereas this cannot be carried out with `pkonfound()`, with `konfound()` you can also return a table with some key output from the correlation-based approach.
 
 ```{r}
-konfound(m1, wt, to_return = "table")
+# konfound(m1, wt, to_return = "table")
 ```
 
 If the impact threshhold is greater than the impacts of the `Z`s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference. Note that in fields in which there is a lot known about covariates given the outcome of interest, then the omitted ones are likely less important than those that are known an included (i.e., we have a good sense of the factors that matter in terms of educational achievement).
