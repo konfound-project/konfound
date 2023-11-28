@@ -42,7 +42,7 @@ mkonfound <- function(d, t, df, alpha = .05, tails = 2, return_plot = FALSE) {
       ggplot2::theme_bw() +
       ggplot2::ggtitle("Histogram of Percent Bias") +
       ggplot2::facet_grid(~action) +
-      ggplot2::scale_y_continuous(breaks = 1:nrow(results_df)) +
+      ggplot2::scale_y_continuous(breaks = seq_len(nrow(results_df))) +
       ggplot2::theme(legend.position = "none") +
       ggplot2::ylab("Count") +
       ggplot2::xlab("Percent Bias")
