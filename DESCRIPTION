@@ -7,7 +7,7 @@ Authors@R: c(
     person("Ran", "Xu", , "ranxu@msu.edu", role = "ctb"),
     person("Qinyun", "Lin", , "linqinyun1001@gmail.com", role = "ctb"),
     person("Spiro", "Maroulis", , "Spiro.Maroulis@asu.edu", role = "ctb"),
-    person("Sarah", "Narvais", , "snarvaiz@alum.utk.edu", role = "ctb"),
+    person("Sarah", "Narvaiz", , "snarvaiz@alum.utk.edu", role = "ctb"),
     person(c("Kenneth", "A"), "Frank", , "kenfrank@msu.edu", role = "ctb")
   )
 Description: Statistical methods that quantify the conditions necessary to
