@@ -147,22 +147,22 @@ test_sensitivity_ln <- function(est_eff,
   d <- final_solution$table_start[2,2]
   
   if (switch_trm && dcroddsratio_ob) {
-    transferway <- "treatment success to treatment failure,"
+    transferway <- "treatment success to treatment failure"
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment success"
   }
   if (switch_trm && !dcroddsratio_ob) {
-    transferway <- "treatment failure to treatment success,"
+    transferway <- "treatment failure to treatment success"
     RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment failure"
   }
   if (!switch_trm && dcroddsratio_ob) {
-    transferway <- "control failure to control success,"
+    transferway <- "control failure to control success"
     RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control failure"
   }
   if (!switch_trm && !dcroddsratio_ob) {
-    transferway <- "control success to control failure,"
+    transferway <- "control success to control failure"
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control success"
   }
@@ -170,25 +170,25 @@ test_sensitivity_ln <- function(est_eff,
   if (final_solution$needtworows) {
     final_extra <- final_solution$final_extra
     if (switch_trm && dcroddsratio_ob) {
-      transferway_extra <- "control failure to control success,"
+      transferway_extra <- "control failure to control success"
       RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") + 
         ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
       RIRway_extra <- "control failure"
     }
     if (switch_trm && !dcroddsratio_ob) {
-      transferway_extra <- "control success to control failure,"
+      transferway_extra <- "control success to control failure"
       RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
         ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
       RIRway_extra <- "control success"
     }
     if (!switch_trm && dcroddsratio_ob) {
-      transferway_extra <- "treatment success to treatment failure,"
+      transferway_extra <- "treatment success to treatment failure"
       RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
         ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
       RIRway_extra <- "treatment success"
     }
     if (!switch_trm && !dcroddsratio_ob) {
-      transferway_extra <- "treatment failure to treatment success,"
+      transferway_extra <- "treatment failure to treatment success"
       RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
         ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
       RIRway_extra <- "treatment failure"
@@ -265,7 +265,7 @@ test_sensitivity_ln <- function(est_eff,
   
   if (changeSE) {
     notice_SE <- sprintf(
-      "In order to generate a usable implied contingency table, we increased the standard error to %.3f (the original one is %.3f).",
+      "In order to generate a usable implied contingency table, we increased the standard error to %.3f (the reported standard error is %.3f).",
       std_err, user_std_err)
   }
   
@@ -342,12 +342,12 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f. Values have\n",
+      cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f Values have\n",
                         final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final),
                 sprintf("been rounded to the nearest integer. This may cause a little\n"), 
                 sprintf("change to the estimated effect for the table. In order to\n"),
                 sprintf("generate a usable implied contingency table, we increased the\n"), 
-                sprintf("standard error to %.3f (the original one is %.3f)).\n\n", std_err, user_std_err))
+                sprintf("standard error to %.3f (the reported standard error is %.3f))\n\n", std_err, user_std_err))
       )
       
       ### start here
@@ -485,7 +485,7 @@ test_sensitivity_ln <- function(est_eff,
       
       cat("Table after transfer:\n\n")
       print(Transfer_Table)
-      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f.)",
+      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f)",
                         final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final))
       )
       
@@ -497,7 +497,7 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f. Values have\n",
+      cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f Values have\n",
                         final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final),
                 sprintf("been rounded to the nearest integer. This may cause a little\n"), 
                 sprintf("change to the estimated effect for the table.\n\n"))
@@ -510,7 +510,7 @@ test_sensitivity_ln <- function(est_eff,
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("you would need to replace %d", RIR), RIRway, "\ncases "))
+            change, sprintf("one would need to replace %d", RIR), RIRway, "\ncases "))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -531,7 +531,7 @@ test_sensitivity_ln <- function(est_eff,
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("you would need to replace %d", RIR), RIRway, "\ncases"))
+            change, sprintf("one would need to replace %d", RIR), RIRway, "\ncases"))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -575,7 +575,7 @@ test_sensitivity_ln <- function(est_eff,
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("you would need to replace \n%d", RIR), RIRway, "cases "))
+            change, sprintf("one would need to replace \n%d", RIR), RIRway, "cases "))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -596,7 +596,7 @@ test_sensitivity_ln <- function(est_eff,
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("you would need to replace \n%d", RIR), RIRway, "\ncases"))
+            change, sprintf("one would need to replace \n%d", RIR), RIRway, "\ncases"))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -609,7 +609,7 @@ test_sensitivity_ln <- function(est_eff,
           #conclusion1b <- 
           cat(paste(
             sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
-            c("case from"), transferway, 
+            c("case from"), transferway,
             sprintf("\nin the initial table (Fragility = %d).", total_switch),
             sprintf("This transfer of cases \nyields the following table:")
           ))
@@ -637,7 +637,7 @@ test_sensitivity_ln <- function(est_eff,
       
       cat("Table after transfer:\n\n")
       print(Transfer_Table)
-      cat(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f.)",
+      cat(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f)",
                   final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final)
       )
       
