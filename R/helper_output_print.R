@@ -19,7 +19,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat("that to invalidate the inference one would expect to have to\n")
       cat(paste0("replace ", round(recase, 3), " observations with cases for which the treatment"))
       cat("\n")    
-      cat(paste0("effect is ", nu, "(RIR = ", round(recase, 3), ").\n"))
+      cat(paste0("effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
       cat("\n")    
     } else if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
       cat("TO INVALIDATE:\n")
@@ -36,7 +36,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat("\n")
       cat("to have to replace ", round(recase, 3), "observations with cases for which")
       cat("\n")
-      cat(paste0("the treatment effect is ", nu, "(RIR = ", round(recase, 3), ").\n"))
+      cat(paste0("the treatment effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
       cat("\n") 
     } else if ((abs(est_eff) < abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
       cat("TO SUSTAIN:\n", sep = "")
