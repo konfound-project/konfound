@@ -405,7 +405,7 @@ test_sensitivity_ln <- function(est_eff,
             c("\n"), transferway, c(" and from"),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR", total_switch),
-            c("reflects both sets of changes. \nPlease compare the after transfer table with the implied table")
+            c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table")
             )
               )
         }
@@ -463,12 +463,12 @@ test_sensitivity_ln <- function(est_eff,
         } else {
           #conclusion1 <- 
         cat(paste0(
-            sprintf("The inference cannot be invalidated merely by switching cases in"),
+            sprintf("The inference cannot be sustained merely by switching cases in"),
             sprintf("\nonly one treatment condition. Therefore,cases have been switched from"),
             c("\n"), transferway, c(" and from"),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR", total_switch),
-            c("reflects both sets of changes. \nPlease compare the after transfer table with the implied table")
+            c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table")
             )
               )
         }
@@ -552,7 +552,7 @@ test_sensitivity_ln <- function(est_eff,
             c("\n"), transferway, c(" and from"),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR", total_switch),
-            c("reflects both sets of changes. \nPlease compare the after transfer table with the implied table")
+            c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table")
             )
               )
                    }
@@ -609,12 +609,12 @@ test_sensitivity_ln <- function(est_eff,
         } else {
           #conclusion1 <- 
             cat(paste0(
-            sprintf("The inference cannot be invalidated merely by switching cases in"),
+            sprintf("The inference cannot be sustained merely by switching cases in"),
             sprintf("\nonly one treatment condition. Therefore,cases have been switched from"),
             c("\n"), transferway, c(" and from"),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR", total_switch),
-            c("reflects both sets of changes. \nPlease compare the after transfer table with the implied table")
+            c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table")
             )
               )
         }
