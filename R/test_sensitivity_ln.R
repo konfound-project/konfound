@@ -348,8 +348,8 @@ test_sensitivity_ln <- function(est_eff,
                 sprintf("a little change to the estimated effect for the table.\n"),
                 sprintf("In order to generate a usable implied contingency table, we\n"), 
                 sprintf("increased the standard error to %.3f (the reported", std_err),
-                sprintf("(standard error is %.3f))\n\n". user_std_err)
-      )
+                sprintf("(standard error is %.3f))\n\n", user_std_err)
+      ))
       
       ### start here
       if (invalidate_ob) {
