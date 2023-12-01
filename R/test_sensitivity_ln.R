@@ -462,13 +462,13 @@ test_sensitivity_ln <- function(est_eff,
           
         } else {
           #conclusion1 <- 
-        cat(paste(
-            sprintf("The inference cannot be invalidated merely by switching\n"),
-            sprintf("cases in only one treatment condition. Therefore,\n"),
-            c("cases have been switched from"), transferway, c("and\n"),
-            c("from"), transferway_extra, c("."), 
-            sprintf("The final Fragility (= %d) and RIR\n", total_switch),
-            c("reflects both sets of changes. Please compare the \nafter transfer table with the implied table")
+          cat(paste0(
+            sprintf("The inference cannot be invalidated merely by switching cases in"),
+            sprintf("\nonly one treatment condition. Therefore,cases have been"),
+            c("\nswitched from"), transferway, c("and from"),
+            c("\n"), transferway_extra, c("."), 
+            sprintf("The final Fragility(= %d) and RIR\n", total_switch),
+            c("reflects both sets of changes. Please compare the after transfer table with the implied table")
             )
               )
         }
@@ -546,13 +546,13 @@ test_sensitivity_ln <- function(est_eff,
           
         } else {
           #conclusion1 <- 
-          cat(paste(
-            sprintf("The inference cannot be invalidated merely by switching\n"),
-            sprintf("cases in only one treatment condition. Therefore,\n"),
-            c("cases have been switched from"), transferway, c("and\n"),
-            c("from"), transferway_extra, c("."), 
-            sprintf("The final Fragility (= %d) and RIR\n", total_switch),
-            c("reflects both sets of changes. Please compare the \nafter transfer table with the implied table")
+            cat(paste0(
+            sprintf("The inference cannot be invalidated merely by switching cases in"),
+            sprintf("\nonly one treatment condition. Therefore,cases have been"),
+            c("\nswitched from"), transferway, c("and from"),
+            c("\n"), transferway_extra, c("."), 
+            sprintf("The final Fragility(= %d) and RIR\n", total_switch),
+            c("reflects both sets of changes. Please compare the after transfer table with the implied table")
             )
               )
                    }
