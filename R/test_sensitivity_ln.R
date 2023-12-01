@@ -372,7 +372,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent to transferring \n%d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\n(Fragility = %d).", total_switch),
+            sprintf("(Fragility = %d).\n", total_switch),
             sprintf("This transfer of cases yields the following table:")
           ))
           
@@ -393,7 +393,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf("This is equivalent to transferring \n%d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\ntable (Fragility = %d).", total_switch),
+            sprintf("(Fragility = %d).\n", total_switch),
             sprintf("This transfer of cases yields the following table:")
           ))
           
