@@ -49,10 +49,11 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat("\n")
       cat(paste0("threshold, ", round(sustain, 3), "% of the (", round(est_eff, 3), ") estimate would have to be due to"))
       cat("\n")
-      cat("bias. This implies that to sustain the inference on would expect to have")
+      cat("bias. This implies that to sustain the inference on would expect to")
       cat("\n")
-      cat(paste0("to replace ", round(recase, 3), "observation with effect of", nu, "with cases with effect of ", round(beta_threshhold, 3), "(RIR = ", round(recase, 3), ")."))
+      cat(paste0("have to replace ", round(recase, 3), " observation with effect of ", nu, " with\n"))
       cat("\n")
+      cat(paste0("cases with effect of ", round(beta_threshhold, 3), "(RIR = ", round(recase, 3), ").\n"))
     } else if ((abs(est_eff) < abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
       cat("TO SUSTAIN:\n", sep = "")
       cat("\n")
@@ -66,8 +67,10 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat("\n")
       cat("to sustain the inference one would expect to have to replace ")
       cat("\n")
-      cat(paste0(round(recase, 3), "observation with effect of ", nu, "with cases with effect of ", round(beta_threshhold, 3), " (RIR = ", round(recase, 3), ")."))
+      cat(paste0(round(recase, 3), " observation with effect of ", nu, " with cases with effect\n"))
       cat("\n")
+      cat(paste0("of ", round(beta_threshhold, 3), "(RIR = ", round(recase, 3), ").\n"))
+
     } else if (est_eff == beta_threshhold) {
       warning("The coefficient is exactly equal to the threshold.\n")
     }
