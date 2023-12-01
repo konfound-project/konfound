@@ -337,6 +337,8 @@ test_sensitivity_ln <- function(est_eff,
     
       
     if (changeSE) {
+
+      ### start from changeSE = T
       
       cat(sprintf("RIR = %d\n\n", RIR))
       cat("The table you entered or is implied by your effect size:\n\n")
@@ -350,9 +352,11 @@ test_sensitivity_ln <- function(est_eff,
                 sprintf("the standard error to %.3f (the reported standard error", std_err),
                 sprintf("is %.3f))\n\n", user_std_err)
       ))
-      
-      ### start here
+            
       if (invalidate_ob) {
+
+        ### when invalidate = T
+
         change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha =%.2f)", alpha)
         ### 
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
@@ -398,6 +402,9 @@ test_sensitivity_ln <- function(est_eff,
           ))
           
         } else {
+
+          ### when needtworows = T
+          
           #conclusion1 <- 
         cat(paste0(
             sprintf("The inference cannot be invalidated merely by switching cases in"),
@@ -411,6 +418,8 @@ test_sensitivity_ln <- function(est_eff,
         }
         ### changed due to consistent linebreak
       } else {
+
+          ### when invalidate = F (sustain)
         
         if (est_eff >= 0) {
           change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.2f)", alpha)
@@ -461,6 +470,9 @@ test_sensitivity_ln <- function(est_eff,
           ))
           
         } else {
+
+          ### when needtworows = T
+
           #conclusion1 <- 
         cat(paste0(
             sprintf("The inference cannot be sustained merely by switching cases in"),
@@ -486,7 +498,8 @@ test_sensitivity_ln <- function(est_eff,
       
       
     } else {
-      ## when changeSE=F
+      
+      ### when changeSE = F
       
       cat(sprintf("RIR = %d\n\n", RIR))
       cat("The table you entered or is implied by your effect size:\n\n")
@@ -500,6 +513,9 @@ test_sensitivity_ln <- function(est_eff,
       
       ### start here
       if (invalidate_ob) {
+
+        ### invalidate = T
+        
         change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha =%.2f)", alpha)
         ### 
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
@@ -545,6 +561,9 @@ test_sensitivity_ln <- function(est_eff,
           ))
           
         } else {
+
+            ### needtworows = T
+          
           #conclusion1 <- 
             cat(paste0(
             sprintf("The inference cannot be invalidated merely by switching cases in"),
@@ -558,6 +577,9 @@ test_sensitivity_ln <- function(est_eff,
                    }
         ### changed due to consistent linebreak
       } else {
+
+        ### invalidate = F (sustain) 
+        
         if (est_eff >= 0) {
           change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.2f)", alpha)
         } else {
@@ -607,6 +629,9 @@ test_sensitivity_ln <- function(est_eff,
           ))
           
         } else {
+
+            ### needtworows = T
+          
           #conclusion1 <- 
             cat(paste0(
             sprintf("The inference cannot be sustained merely by switching cases in"),
