@@ -608,18 +608,15 @@ test_sensitivity_ln <- function(est_eff,
           
         } else {
           #conclusion1 <- 
-          cat(paste(
-            change, c("only transferring cases from"), transferway, "is not enough."))
-          
-          #conclusion1b <- 
-          cat(paste(sprintf("We also need to transfer %d cases from", final_solution$final_extra),
-                    transferway_extra, c("as shown, from the User-entered Table to the Transfer Table.")))
-          
-          #conclusion1c <- 
-          cat(paste(sprintf("This means we need to replace %d of", RIR), RIRway, 
-                    sprintf("with null hypothesis cases; and replace %d", RIR_extra), RIRway_extra, 
-                    c("with null hypothesis cases to change the inference.")
-          ))
+               cat(paste(
+            sprintf("The inference cannot be invalidated merely by switching\n"),
+            sprintf("cases in only one treatment condition. Therefore,\n"),
+            c("cases have been switched from"), transferway, c("and\n"),
+            c("from"), transferway_extra, c("."), 
+            sprintf("The final Fragility (= %d) and RIR\n", total_switch),
+            c("reflects both sets of changes. Please compare the \nafter transfer table with the implied table")
+            )
+              )
         }
         ###
       }
