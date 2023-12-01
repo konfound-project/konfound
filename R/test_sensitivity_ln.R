@@ -412,7 +412,7 @@ test_sensitivity_ln <- function(est_eff,
             c("\n"), transferway, c(" and from"),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR", total_switch),
-            c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table")
+            c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
         }
@@ -480,7 +480,7 @@ test_sensitivity_ln <- function(est_eff,
             c("\n"), transferway, c(" and from"),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR", total_switch),
-            c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table")
+            c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
         }
@@ -571,7 +571,7 @@ test_sensitivity_ln <- function(est_eff,
             c("\n"), transferway, c(" and from"),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR", total_switch),
-            c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table")
+            c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
                    }
@@ -639,7 +639,7 @@ test_sensitivity_ln <- function(est_eff,
             c("\n"), transferway, c(" and from"),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR", total_switch),
-            c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table")
+            c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
         }
