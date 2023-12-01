@@ -53,6 +53,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat("\n")
       cat(paste0("have to replace ", round(recase, 3), " observation with effect of ", nu, " with cases with\n"))
       cat(paste0("effect of ", round(beta_threshhold, 3), "(RIR = ", round(recase, 3), ").\n"))
+      cat("\n")
     } else if ((abs(est_eff) < abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
       cat("TO SUSTAIN:\n", sep = "")
       cat("\n")
@@ -66,10 +67,10 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat("\n")
       cat("to sustain the inference one would expect to have to replace ")
       cat("\n")
-      cat(paste0(round(recase, 3), " observation with effect of ", nu, " with cases with effect\n"))
+      cat(paste0(round(recase, 3), " observation with effect of ", nu, " with cases with effect"))
       cat("\n")
       cat(paste0("of ", round(beta_threshhold, 3), "(RIR = ", round(recase, 3), ").\n"))
-
+      cat("\n")
     } else if (est_eff == beta_threshhold) {
       warning("The coefficient is exactly equal to the threshold.\n")
     }
