@@ -344,12 +344,12 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f\n",
-                        final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final),
-                sprintf("Values have been rounded to the nearest integer. This may cause\n"), 
-                sprintf("a little change to the estimated effect for the table. In order\n"),
-                sprintf("to generate a usable implied contingency table, we increased\n"), 
-                sprintf("the standard error to %.3f (the reported standard error", std_err),
+      cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f",
+                        est_eff, std_err, t_obs),
+                sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
+                sprintf("\na little change to the estimated effect for the table. In order"),
+                sprintf("\nto generate a usable implied contingency table, we increased"), 
+                sprintf("\nthe standard error to %.3f (the reported standard error", std_err),
                 sprintf("is %.3f))\n\n", user_std_err)
       ))
             
@@ -505,10 +505,10 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f\n",
-                        final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final),
-                sprintf("Values have been rounded to the nearest integer. This may cause\n"), 
-                sprintf("a little change to the estimated effect for the table.\n\n"))
+      cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f",
+                        est_eff, std_err, t_obs),
+                sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
+                sprintf("\na little change to the estimated effect for the table.\n\n"))
       )
       
       ### start here
