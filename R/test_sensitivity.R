@@ -54,10 +54,10 @@ test_sensitivity <- function(est_eff,
                        See index = PSE. ")
 
   if (!is.na(eff_thr)) warning("The threshold you specified will be used without 
-                                regard for the standard error and statistical significance 
-                                (assuming sdx = sdy = 1 unless otherwise specified). 
-                                If you seek to account for the standard error, 
-                                specify a non-zero null hypothesis as in the nu argument.")
+                                \nregard for the standard error and statistical significance 
+                                \n(assuming sdx = sdy = 1 unless otherwise specified). 
+                                \nIf you seek to account for the standard error, 
+                                \nspecify a non-zero null hypothesis as in the nu argument.")
   
   ## error message if input is inappropriate
   
