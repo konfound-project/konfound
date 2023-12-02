@@ -297,7 +297,13 @@ test_sensitivity_ln <- function(est_eff,
                      conclusion3,
                      RIR = RIR,
                      notice_SE,
-                     total_switch)
+                     total_switch,
+                    ### check intermediate vars.
+                    thr_t = thr_t, t_ob = t_ob,
+                    invalidate_ob = invalidate_ob,
+                    final_switch = final_switch,
+                    total_RIR = total_RIR,
+                    total_switch = total_switch)
     } else {
       result <- list(conclusion1,
                      conclusion1b,
@@ -307,7 +313,13 @@ test_sensitivity_ln <- function(est_eff,
                      Transfer_Table = final_solution$table_final,
                      conclusion2, 
                      conclusion3,
-                     RIR = RIR)
+                     RIR = RIR,
+                    ### check intermediate vars.
+                    thr_t = thr_t, t_ob = t_ob,
+                    invalidate_ob = invalidate_ob,
+                    final_switch = final_switch,
+                    total_RIR = total_RIR,
+                    total_switch = total_switch)
     }
   
     return(result)
