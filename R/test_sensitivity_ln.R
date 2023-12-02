@@ -301,7 +301,7 @@ test_sensitivity_ln <- function(est_eff,
                     ### check intermediate vars.
                     thr_t = thr_t, t_ob = t_ob,
                     invalidate_ob = invalidate_ob,
-                    final_switch = final_switch,
+                    final_switch = final_solution$final_switch,
                     total_RIR = total_RIR,
                     total_switch = total_switch)
     } else {
@@ -317,7 +317,7 @@ test_sensitivity_ln <- function(est_eff,
                     ### check intermediate vars.
                     thr_t = thr_t, t_ob = t_ob,
                     invalidate_ob = invalidate_ob,
-                    final_switch = final_switch,
+                    final_switch = final_solution$final_switch,
                     total_RIR = total_RIR,
                     total_switch = total_switch)
     }
