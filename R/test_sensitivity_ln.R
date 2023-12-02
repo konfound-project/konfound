@@ -345,7 +345,7 @@ test_sensitivity_ln <- function(est_eff,
       print(Implied_Table)
       cat("\n")
       cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f",
-                        est_eff, std_err, t_obs),
+                        est_eff, std_err, t_ob),
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
                 sprintf("\na little change to the estimated effect for the table. In order"),
                 sprintf("\nto generate a usable implied contingency table, we increased"), 
@@ -506,7 +506,7 @@ test_sensitivity_ln <- function(est_eff,
       print(Implied_Table)
       cat("\n")
       cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f",
-                        est_eff, std_err, t_obs),
+                        est_eff, std_err, t_ob),
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
                 sprintf("\na little change to the estimated effect for the table.\n\n"))
       )
