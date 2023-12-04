@@ -32,9 +32,11 @@ test_sensitivity <- function(est_eff,
                              tails = 2,
                              index,
                              nu = 0, # null hypothesis 
-                             suppression = 0,
+                             signsuppression = 0,
+                             ## signsuprresion  means towards the other side of nu
                              ## by default is zero
                              ## alternative is one  
+                             
                              eff_thr = NA, # another non-zero and arbitrary threshold in terms of beta
                              to_return,
                              model_object,
@@ -42,7 +44,7 @@ test_sensitivity <- function(est_eff,
   
   ## warning messages for potential confusion 
   
-  if (suppression == 1) warning("suppression is defined by a threshold of opposite sign of the estimated effect.")
+  if (signsuppression == 1) warning("signsuppression is defined by a threshold of opposite sign of the estimated effect.")
 
   if (nu != 0) warning("You entered a non-zero null hypothesis about an effect. 
                        ITCV is calculated assuming omitted variable is equally 
@@ -79,12 +81,21 @@ test_sensitivity <- function(est_eff,
   LWbound <- nu - abs(critical_t * std_err)
 
   # determine mp 
+  # qqq user specified suppression argument should NOT impact this 
+  ##### qqqqq when mp == 1, actually mp may be affected need to try both ways 
   if ((est_eff > LWbound) & (est_eff < UPbound)) {mp <- 1}
   if (est_eff < LWbound | est_eff > UPbound) {mp <- -1}
   
   # determine beta_threshold 
-  if (est_eff < nu) {beta_threshold <- LWbound}
-  if (est_eff > nu) {beta_threshold <- UPbound}
+  # if signsuppression == 1, then the opposite 
+  if (est_eff < nu) {
+      beta_threshold <- (signsuppression == 0) * LWbound +
+          (signsuppression == 1) * UPbound
+      }
+  if (est_eff >= nu) {
+      beta_threshold <- (signsuppression == 1) * LWbound +
+          (signsuppression == 0) * UPbound
+      }
   
   # determine signITCV
   if (est_eff < beta_threshold) {signITCV <- -1}
@@ -94,14 +105,34 @@ test_sensitivity <- function(est_eff,
   # I. for RIR
 
   # calculating percentage of effect and number of observations to sustain or invalidate inference
-  if (abs(est_eff) > abs(beta_threshold)) {
-    perc_to_change <- bias <- 100 * (1 - (beta_threshold / est_eff))
-    recase <- round(n_obs * (bias / 100))
-  } else if (abs(est_eff) < abs(beta_threshold)) {
-    perc_to_change <- sustain <- 100 * (1 - (est_eff / beta_threshold))
-    recase <- round(n_obs * (sustain / 100))
-  } else if (est_eff == beta_threshold) {
-    stop("The coefficient is exactly equal to the threshold.")
+  if (signsuppression == 0) {
+      if (abs(est_eff) > abs(beta_threshold)) {
+        perc_to_change <- bias <- 100 * (1 - (beta_threshold / est_eff))
+        recase <- round(n_obs * (bias / 100))
+      } else if (abs(est_eff) < abs(beta_threshold)) {
+        perc_to_change <- sustain <- 100 * (1 - (est_eff / beta_threshold))
+        recase <- round(n_obs * (sustain / 100))
+      } else if (est_eff == beta_threshold) {
+        stop("The coefficient is exactly equal to the threshold.")
+      }
+  }
+  
+  if (signsuppression == 1) {
+      if (est_eff < LWbound | est_eff > UPbound) {
+          stop("Such scenarios do not make sense to consider RIR.")
+      } 
+      if (est_eff >= LWbound & est_eff < nu) {
+          ## B case
+          ## consider est_eff as a combination of pi*LB+(1-pi)*UB
+          perc_to_change <- bias <- 100 * (UPbound - est_eff)/(UPbound - LWbound)
+          recase <- round(n_obs * (bias / 100))
+      }
+      if (est_eff >= nu & est_eff <= UPbound) {
+          ## C case
+          ## consider est_eff as a combination of pi*UB+(1-pi)*LB
+          perc_to_change <- bias <- 100 * (est_eff - LWbound)/(UPbound - LWbound)
+          recase <- round(n_obs * (bias / 100))
+      }
   }
 
   # II. for correlation-based approach
@@ -112,16 +143,17 @@ test_sensitivity <- function(est_eff,
   # finding critical r
   if (is.na(eff_thr)) {
     critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 2))
+    # critical_t follows the direction of relative position of est_eff and nu
+    # so critical_r should follow the same
+        if (signsuppression == 1) {
+        critical_r <- critical_r * (-1)
+    }
   } else if (is.na(sdx) & is.na(sdy)) {
       critical_r <- eff_thr
   } else {
       critical_r <- eff_thr * sdx / sdy 
   }
-  
-  if (suppression == 1) {
-    critical_r = critical_r * -1
-  }
-  
+ 
   # calculating actual t and r (to account for non-zero nu)
   act_t <- (est_eff - nu)/std_err
   act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
@@ -147,7 +179,10 @@ test_sensitivity <- function(est_eff,
   rycvGz = r_con * signITCV
   
   # verify 
-  r_final = (act_r - r_con * rycvGz)/sqrt((1 - r_con^2) * (1 - rycvGz^2))
+  # act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
+  ## calculate act_r using one less df or maybe -1 instead
+  act_r_forVF <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
+  r_final = (act_r_forVF - r_con * rycvGz)/sqrt((1 - r_con^2) * (1 - rycvGz^2))
   
   # if (component_correlations == FALSE){
   #     rsq <- # has to come from some kind of model object
