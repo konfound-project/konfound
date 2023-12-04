@@ -41,10 +41,10 @@ test_sensitivity_ln <- function(est_eff,
                   (2 * n_treat * (n_obs - n_treat)))
   # check if the implied table solution may contain imaginary numbers
   changeSE <- F
+  user_std_err <- std_err
   if (std_err < minse) {
     haveimaginary <- T
     changeSE <- T
-    user_std_err <- std_err
     std_err <- minse
   }
     
@@ -285,35 +285,53 @@ test_sensitivity_ln <- function(est_eff,
   
   # output dispatch
   if (to_return == "raw_output") {
-    
-    if (changeSE) {
-      result <- list(conclusion1,
-                     conclusion1b,
-                     conclusion1c,
-                     Implied_Table = final_solution$table_start, 
-                     notice,
-                     Transfer_Table = final_solution$table_final,
-                     conclusion2, 
-                     conclusion3,
-                     needtworows = final_solution$needtworows, 
-                     fragility = total_switch,
-                     RIR = total_RIR,
-                     notice_SE)
-    } else {
-      result <- list(conclusion1,
-                     conclusion1b,
-                     conclusion1c,
-                     Implied_Table = final_solution$table_start, 
-                     notice,
-                     Transfer_Table = final_solution$table_final,
-                     conclusion2, 
-                     conclusion3,
-                     needtworows = final_solution$needtworows, 
-                     fragility = total_switch,
-                     RIR = total_RIR)
-    }
-    result <- result[!is.na(result)]
-    return(result)
+      return(output_list(obs_r = NA, act_r = NA, 
+                  critical_r = NA, r_final = NA,
+                  rxcv = NA, rycv = NA, 
+                  rxcvGz = NA, rycvGz = NA, 
+                  itcvGz = NA, itcv = NA, 
+                  r2xz = NA, r2yz = NA, 
+                  delta_star = NA, delta_star_restricted = NA, 
+                  delta_exact = NA, delta_pctbias = NA, 
+                  cor_oster = NA, cor_exact = NA, 
+                  beta_threshold = NA,
+                  perc_bias_to_change = NA, 
+                  RIR = total_RIR, 
+                  RIR_perc = NA,  # need to discuss the denominator
+                  fragility = total_switch, 
+                  starting_table = final_solution$table_start,
+                  final_table = final_solution$table_final,
+                  user_SE = user_std_err,
+                  analysis_SE = std_err, 
+                  Fig_ITCV = NA,
+                  Fig_RIR = NA))
+     
+#    if (changeSE) {
+#      result <- list(conclusion1,
+#                     conclusion1b,
+#                     conclusion1c,
+#                     Implied_Table = final_solution$table_start, 
+#                     notice,
+#                     Transfer_Table = final_solution$table_final,
+#                     conclusion2, 
+#                     conclusion3,
+#                     needtworows = final_solution$needtworows, 
+#                     fragility = total_switch,
+#                     RIR = total_RIR,
+#                     notice_SE)
+#    } else {
+#      result <- list(conclusion1,
+#                     conclusion1b,
+#                     conclusion1c,
+#                     Implied_Table = final_solution$table_start, 
+#                     notice,
+#                     Transfer_Table = final_solution$table_final,
+#                     conclusion2, 
+#                     conclusion3,
+#                     needtworows = final_solution$needtworows, 
+#                     fragility = total_switch,
+#                     RIR = total_RIR)
+#    }
     
   } else  if (to_return == "print") {
     
