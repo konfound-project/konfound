@@ -227,7 +227,10 @@ test_sensitivity <- function(est_eff,
   }
 
   else if (to_return == "raw_output") {
-    return(output_list(obs_r, critical_r, r_final = r_final,
+    return(output_list(obs_r, 
+                       act_r, 
+                       # act_r only makes sense when nu!=0 
+                       critical_r, r_final = r_final,
                        # rxcv always be positive, rycv goes with itcv
                        rxcv = uncond_rxcv, rycv = uncond_rycv, 
                        rxcvGz = r_con, rycvGz = rycvGz, 
