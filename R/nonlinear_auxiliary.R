@@ -289,10 +289,10 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
 
   ### return result
   result <- list(
-    final_switch <- final, table_start <- table_start, table_final <- table_final, est_eff_start <- est_eff_start,
-    est_eff_final <- est_eff_final, std_err_start <- std_err_start, std_err_final <- std_err_final,
-    t_start <- t_start, t_final <- t_final, taylor_pred <- taylor_pred, perc_bias_pred <- perc_bias_pred,
-    step <- step, needtworows <- allnotenough, final_extra <- final_extra
+    final_switch = final, table_start = table_start, table_final = table_final, est_eff_start = est_eff_start,
+    est_eff_final = est_eff_final, std_err_start = std_err_start, std_err_final = std_err_final,
+    t_start = t_start, t_final = t_final, taylor_pred = taylor_pred, perc_bias_pred = perc_bias_pred,
+    step = step, needtworows = allnotenough, final_extra = final_extra
   )
 
   return(result)
@@ -669,11 +669,11 @@ if (allnotenough) {
 
 total_switch <- final + allnotenough*final_extra
 
-result <- list(final_switch <- final, User_enter_value <- table_start, Transfer_Table <- table_final, 
-               p_final <- p_final, chisq_final <- chisq_final,
-               needtworows<-allnotenough, taylor_pred <- taylor_pred,
-               perc_bias_pred <- perc_bias_pred, final_extra <- final_extra, 
-               dcroddsratio_ob <- dcroddsratio_ob, total_switch <- total_switch, isinvalidate_ob <- isinvalidate_ob)
+result <- list(final_switch = final, User_enter_value = table_start, Transfer_Table = table_final, 
+               p_final = p_final, chisq_final = chisq_final,
+               needtworows = allnotenough, taylor_pred = taylor_pred,
+               perc_bias_pred = perc_bias_pred, final_extra = final_extra, 
+               dcroddsratio_ob = dcroddsratio_ob, total_switch = total_switch, isinvalidate_ob = isinvalidate_ob)
 
 return(result)
 }
@@ -1025,11 +1025,11 @@ getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
   
   total_switch <- final + allnotenough*final_extra
   
-  result <- list(final_switch <- final, User_enter_value <- table_start, Transfer_Table <- table_final, 
-                 p_final <- p_final, fisher_final <- fisher_final,
-                 needtworows<-allnotenough, taylor_pred <- taylor_pred,
-                 perc_bias_pred <- perc_bias_pred, final_extra <- final_extra, 
-                 dcroddsratio_ob <- dcroddsratio_ob, total_switch <- total_switch, isinvalidate_ob <- isinvalidate_ob)
+  result <- list(final_switch = final, User_enter_value = table_start, Transfer_Table = table_final, 
+                 p_final = p_final, fisher_final = fisher_final,
+                 needtworows = allnotenough, taylor_pred = taylor_pred,
+                 perc_bias_pred = perc_bias_pred, final_extra = final_extra, 
+                 dcroddsratio_ob = dcroddsratio_ob, total_switch = total_switch, isinvalidate_ob = isinvalidate_ob)
   
   return(result)
 }
