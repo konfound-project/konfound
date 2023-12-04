@@ -36,7 +36,6 @@ test_sensitivity <- function(est_eff,
                              ## signsuprresion  means towards the other side of nu
                              ## by default is zero
                              ## alternative is one  
-                             
                              eff_thr = NA, # another non-zero and arbitrary threshold in terms of beta
                              to_return,
                              model_object,

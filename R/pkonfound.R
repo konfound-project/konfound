@@ -88,7 +88,7 @@
                       sdx = NA,
                       sdy = NA,
                       R2 = NA,
-                      suppression = 0,
+                      signsuppression = 0,
                       ## by default is zero
                       ## alternative is one  
                       eff_thr = NA,
@@ -204,7 +204,7 @@
     tails = tails,
     index = index,
     nu = nu,
-    suppression = suppression,
+    signsuppression = signsuppression,
     eff_thr = eff_thr,
     to_return = to_return
   )
