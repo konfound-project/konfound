@@ -303,7 +303,9 @@ test_sensitivity_ln <- function(est_eff,
                     invalidate_ob = invalidate_ob,
                     final_switch = final_solution$final_switch,
                     total_RIR = total_RIR,
-                    total_switch = total_switch)
+                    total_switch = total_switch,
+                    needtworows = final_solution$needtworows,
+                    changeSE = changeSE)
     } else {
       result <- list(conclusion1,
                      conclusion1b,
@@ -319,7 +321,9 @@ test_sensitivity_ln <- function(est_eff,
                     invalidate_ob = invalidate_ob,
                     final_switch = final_solution$final_switch,
                     total_RIR = total_RIR,
-                    total_switch = total_switch)
+                    total_switch = total_switch,
+                    needtworows = final_solution$needtworows,
+                    changeSE = changeSE)
     }
   
     return(result)
