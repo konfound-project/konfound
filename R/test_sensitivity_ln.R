@@ -357,7 +357,7 @@ test_sensitivity_ln <- function(est_eff,
       print(Implied_Table)
       cat("\n")
       cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f",
-                        est_eff, std_err, t_ob),
+                        final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start),
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
                 sprintf("\na little change to the estimated effect for the table. In order"),
                 sprintf("\nto generate a usable implied contingency table, we increased"), 
@@ -421,9 +421,9 @@ test_sensitivity_ln <- function(est_eff,
         cat(paste0(
             sprintf("The inference cannot be invalidated merely by switching cases in"),
             sprintf("\nonly one treatment condition. Therefore,cases have been switched from"),
-            c("\n"), transferway, c(" and from"),
+            c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR", total_switch),
+            sprintf("The final Fragility(= %d) and RIR(= %d)", final_switch, RIR),
             c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
@@ -489,9 +489,9 @@ test_sensitivity_ln <- function(est_eff,
         cat(paste0(
             sprintf("The inference cannot be sustained merely by switching cases in"),
             sprintf("\nonly one treatment condition. Therefore,cases have been switched from"),
-            c("\n"), transferway, c(" and from"),
+            c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR", total_switch),
+            sprintf("The final Fragility(= %d) and RIR(= %d)", final_switch, RIR),
             c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
@@ -518,7 +518,7 @@ test_sensitivity_ln <- function(est_eff,
       print(Implied_Table)
       cat("\n")
       cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f",
-                        est_eff, std_err, t_ob),
+                        final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start),
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
                 sprintf("\na little change to the estimated effect for the table.\n\n"))
       )
@@ -580,9 +580,9 @@ test_sensitivity_ln <- function(est_eff,
             cat(paste0(
             sprintf("The inference cannot be invalidated merely by switching cases in"),
             sprintf("\nonly one treatment condition. Therefore,cases have been switched from"),
-            c("\n"), transferway, c(" and from"),
+            c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR", total_switch),
+            sprintf("The final Fragility(= %d) and RIR(= %d)", final_switch, RIR),
             c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
@@ -648,9 +648,9 @@ test_sensitivity_ln <- function(est_eff,
             cat(paste0(
             sprintf("The inference cannot be sustained merely by switching cases in"),
             sprintf("\nonly one treatment condition. Therefore,cases have been switched from"),
-            c("\n"), transferway, c(" and from"),
+            c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR", total_switch),
+            sprintf("The final Fragility(= %d) and RIR(= %d)", final_switch, RIR),
             c(" reflects both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
