@@ -37,5 +37,6 @@ output_list <- function(obs_r, act_r,
                  Fig_ITCV = Fig_ITCV,
                  Fig_RIR = Fig_RIR)
   result <- result[!is.na(result)]
+  message("For interpretation, check out to_return = 'print'.")
   return(result)
 }
