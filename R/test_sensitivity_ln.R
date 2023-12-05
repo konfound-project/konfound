@@ -367,7 +367,7 @@ test_sensitivity_ln <- function(est_eff,
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
                 sprintf("\na little change to the estimated effect for the table. In order"),
                 sprintf("\nto generate a usable implied contingency table, we increased"), 
-                sprintf("\nthe standard error to %.3f (the reported standard error", final_solution$est_eff_start),
+                sprintf("\nthe standard error to %.3f (the reported standard error", final_solution$std_err_start),
                 sprintf("is %.3f))\n\n", user_std_err)
       ))
             
