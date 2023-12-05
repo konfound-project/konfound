@@ -526,7 +526,7 @@ test_sensitivity_ln <- function(est_eff,
       cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f",
                         final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start),
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
-                sprintf("\na little change to the estimated effect for the table.\n\n"))
+                sprintf("\na little change to the estimated effect for the table.)\n\n"))
       )
       
       ### start here
