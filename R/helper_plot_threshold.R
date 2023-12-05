@@ -6,8 +6,8 @@ plot_threshold <- function(beta_threshold, est_eff) {
 
   if (est_eff > beta_threshold) { # beta is above threshold
     dd <- dplyr::tibble(
-      est_eff <- est_eff,
-      beta_threshold <- beta_threshold
+      est_eff = est_eff,
+      beta_threshold = beta_threshold
     )
 
     dd <- dplyr::mutate(dd, `Above Threshold` = est_eff - beta_threshold)
