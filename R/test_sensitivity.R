@@ -55,8 +55,7 @@ test_sensitivity <- function(est_eff,
                        See index = PSE. ")
 
   if (!is.na(eff_thr)) warning("The threshold you specified will be used without 
-                                regard for the standard error and statistical significance 
-                                (assuming sdx = sdy = 1 unless otherwise specified). 
+                                regard for the standard error and statistical significance. 
                                 If you seek to account for the standard error, 
                                 specify a non-zero null hypothesis as in the nu argument.")
   
@@ -102,6 +101,9 @@ test_sensitivity <- function(est_eff,
   if (est_eff == beta_threshold) {signITCV <- 0}
   
   # I. for RIR
+  # right now calculation in terms of effect size (not correlation)
+  # if swtich to correlation could do A D for signsuppression as well 
+  ## using -1 and +1 in the replacement 
 
   # calculating percentage of effect and number of observations to sustain or invalidate inference
   if (signsuppression == 0) {
