@@ -362,13 +362,12 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f",
-                        final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start),
-                sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
-                sprintf("\na little change to the estimated effect for the table. In order"),
-                sprintf("\nto generate a usable implied contingency table, we increased"), 
-                sprintf("\nthe standard error to %.3f. (the reported standard error", final_solution$std_err_start),
-                sprintf("is %.3f))\n\n", user_std_err)
+      cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f.",
+                        final_solution$est_eff_start, final_solution$std_err_start),
+                sprintf("\nThe SE has been adjusted to %.3f to generate real number in the", final_solution$std_err_start), 
+                sprintf("\nimpilied table. Numbers in the table celss have been rounded"),
+                sprintf("\nto integers, which may slightly alter the estimated effect from"), 
+                sprintf("\nthe value originally entered\n\n")
       ))
             
       if (invalidate_ob) {
@@ -380,7 +379,7 @@ test_sensitivity_ln <- function(est_eff,
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("you would need to replace %d", RIR), RIRway, "\ncases "))
+            change, sprintf("one would need to replace %d", RIR), RIRway, "\ncases "))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -392,7 +391,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste(
-            sprintf("This is equivalent to transferring \n%d", final_solution$final_switch), 
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("(Fragility = %d).", total_switch),
             sprintf("\nThis transfer of cases yields the following table:")
@@ -401,7 +400,7 @@ test_sensitivity_ln <- function(est_eff,
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("you would need to replace %d", RIR), RIRway, "\ncases"))
+            change, sprintf("one would need to replace %d", RIR), RIRway, "\ncases"))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -413,7 +412,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste(
-            sprintf("This is equivalent to transferring \n%d", final_solution$final_switch), 
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("(Fragility = %d).", total_switch),
             sprintf("\nThis transfer of cases yields the following table:")
@@ -448,7 +447,7 @@ test_sensitivity_ln <- function(est_eff,
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("you would need to replace \n%d", RIR), RIRway, "cases "))
+            change, sprintf("one would need to replace \n%d", RIR), RIRway, "cases "))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -460,7 +459,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste(
-            sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("\ntable (Fragility = %d).", total_switch),
             sprintf("This transfer of cases yields the following \ntable:")
@@ -469,7 +468,7 @@ test_sensitivity_ln <- function(est_eff,
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("you would need to replace \n%d", RIR), RIRway, "\ncases"))
+            change, sprintf("one would need to replace \n%d", RIR), RIRway, "\ncases"))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -481,7 +480,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste(
-            sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("\ntable (Fragility = %d).", total_switch),
             sprintf("This transfer of cases yields the following \ntable:")
@@ -523,7 +522,7 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f, t-ratio = %.3f",
+      cat(paste(sprintf("(The reported effect size = %.3f, and SE = %.3f, p-value = %.3f",
                         final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start),
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
                 sprintf("\na little change to the estimated effect for the table.)\n\n"))
@@ -551,7 +550,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste(
-            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
+            sprintf(" This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("\ntable (Fragility = %d).", total_switch),
             sprintf("This transfer of cases yields the following \ntable:")
@@ -572,7 +571,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste(
-            sprintf("This is equivalent to \ntransferring %d", final_solution$final_switch), 
+            sprintf(" This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("\ntable (Fragility = %d).", total_switch),
             sprintf("This transfer of cases yields the following \ntable:")
@@ -619,7 +618,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste(
-            sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("\ntable (Fragility = %d).", total_switch),
             sprintf("This transfer of cases yields the following \ntable:")
@@ -640,7 +639,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste(
-            sprintf("This is equivalent \nto transferring %d", final_solution$final_switch), 
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway,
             sprintf("\ntable (Fragility = %d).", total_switch),
             sprintf("This transfer of cases yields the following \ntable:")
