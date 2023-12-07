@@ -362,10 +362,10 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("(The reported effect size = %.3f, SE = %.3f.",
-                        final_solution$est_eff_start, final_solution$std_err_start),
+      cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f.",
+                        est_eff, std_err),
                 sprintf("\nThe SE has been adjusted to %.3f to generate real number in the", final_solution$std_err_start), 
-                sprintf("\nimpilied table. Numbers in the table celss have been rounded"),
+                sprintf("\nimplied table. Numbers in the table cells have been rounded"),
                 sprintf("\nto integers, which may slightly alter the estimated effect from"), 
                 sprintf("\nthe value originally entered\n\n")
       ))
@@ -522,8 +522,8 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("(The reported effect size = %.3f, and SE = %.3f, p-value = %.3f",
-                        final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start),
+      cat(paste(sprintf("(The reported effect size = %.3f, and SE = %.3f.",
+                        est_eff, std_err),
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
                 sprintf("\na little change to the estimated effect for the table.)\n\n"))
       )
@@ -641,7 +641,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway,
-            sprintf("\ntable (Fragility = %d).", total_switch),
+            sprintf("\n(Fragility = %d).", total_switch),
             sprintf("This transfer of cases yields the following \ntable:")
           ))
           
