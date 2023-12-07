@@ -41,10 +41,10 @@ test_sensitivity_ln <- function(est_eff,
                   (2 * n_treat * (n_obs - n_treat)))
   # check if the implied table solution may contain imaginary numbers
   changeSE <- F
+  user_std_err <- std_err
   if (std_err < minse) {
     haveimaginary <- T
     changeSE <- T
-    user_std_err <- std_err
     std_err <- minse
   }
     
@@ -285,50 +285,70 @@ test_sensitivity_ln <- function(est_eff,
   
   # output dispatch
   if (to_return == "raw_output") {
+       return(output_list(obs_r = NA, act_r = NA, 
+                  critical_r = NA, r_final = NA,
+                  rxcv = NA, rycv = NA, 
+                  rxcvGz = NA, rycvGz = NA, 
+                  itcvGz = NA, itcv = NA, 
+                  r2xz = NA, r2yz = NA, 
+                  delta_star = NA, delta_star_restricted = NA, 
+                  delta_exact = NA, delta_pctbias = NA, 
+                  cor_oster = NA, cor_exact = NA, 
+                  beta_threshold = NA,
+                  perc_bias_to_change = NA, 
+                  RIR = total_RIR, 
+                  RIR_perc = NA,  # need to discuss the denominator
+                  fragility = total_switch, 
+                  starting_table = final_solution$table_start,
+                  final_table = final_solution$table_final,
+                  user_SE = user_std_err,
+                  analysis_SE = std_err, 
+                  Fig_ITCV = NA,
+                  Fig_RIR = NA))
     
-    if (changeSE) {
-      result <- list(conclusion1,
-                     conclusion1b,
-                     conclusion1c,
-                     Implied_Table = final_solution$table_start, 
-                     notice,
-                     Transfer_Table = final_solution$table_final,
-                     conclusion2, 
-                     conclusion3,
-                     RIR = RIR,
-                     notice_SE,
-                     total_switch,
+  #  if (changeSE) {
+  #   result <- list(conclusion1,
+  #                   conclusion1b,
+  #                   conclusion1c,
+  #                   Implied_Table = final_solution$table_start, 
+  #                   notice,
+  #                   Transfer_Table = final_solution$table_final,
+  #                   conclusion2, 
+  #                   conclusion3,
+  #                   RIR = RIR,
+  #                   notice_SE,
+  #                   total_switch,
                     ### check intermediate vars.
-                    thr_t = thr_t, t_ob = t_ob,
-                    invalidate_ob = invalidate_ob,
-                    final_switch = final_solution$final_switch,
-                    total_RIR = total_RIR,
-                    total_switch = total_switch,
-                    needtworows = final_solution$needtworows,
-                    changeSE = changeSE,
-                    est_eff = est_eff, std_err = std_err)
-    } else {
-      result <- list(conclusion1,
-                     conclusion1b,
-                     conclusion1c,
-                     Implied_Table = final_solution$table_start, 
-                     notice,
-                     Transfer_Table = final_solution$table_final,
-                     conclusion2, 
-                     conclusion3,
-                     RIR = RIR,
+  #                  thr_t = thr_t, t_ob = t_ob,
+  #                  invalidate_ob = invalidate_ob,
+  #                  final_switch = final_solution$final_switch,
+  #                  total_RIR = total_RIR,
+  #                  total_switch = total_switch,
+  #                  needtworows = final_solution$needtworows,
+  #                  changeSE = changeSE,
+  #                  est_eff = est_eff, std_err = std_err)
+  #  } else {
+  #    result <- list(conclusion1,
+  #                   conclusion1b,
+  #                   conclusion1c,
+  #                   Implied_Table = final_solution$table_start, 
+  #                   notice,
+  #                   Transfer_Table = final_solution$table_final,
+  #                   conclusion2, 
+  #                   conclusion3,
+  #                   RIR = RIR,
                     ### check intermediate vars.
-                    thr_t = thr_t, t_ob = t_ob,
-                    invalidate_ob = invalidate_ob,
-                    final_switch = final_solution$final_switch,
-                    total_RIR = total_RIR,
-                    total_switch = total_switch,
-                    needtworows = final_solution$needtworows,
-                    changeSE = changeSE,
-                    est_eff = est_eff, std_err = std_err)
-    }
+  #                  thr_t = thr_t, t_ob = t_ob,
+  #                  invalidate_ob = invalidate_ob,
+  #                  final_switch = final_solution$final_switch,
+  #                  total_RIR = total_RIR,
+  #                  total_switch = total_switch,
+  #                  needtworows = final_solution$needtworows,
+  #                  changeSE = changeSE,
+  #                  est_eff = est_eff, std_err = std_err)
+  #  }
   
-    return(result)
+  #  return(result)
     
   } else  if (to_return == "print") {
 
