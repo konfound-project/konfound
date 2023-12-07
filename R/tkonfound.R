@@ -90,6 +90,9 @@ tkonfound <- function(a, b, c, d,
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control success"
   }
+
+  RIR_extra <- 0
+
   
   if (allnotenough) {
     if (switch_trm && dcroddsratio_ob) {
@@ -194,6 +197,27 @@ tkonfound <- function(a, b, c, d,
   
   if (to_return == "raw_output") {
     
+     return(output_list(obs_r = NA, act_r = NA, 
+                     critical_r = NA, r_final = NA,
+                     rxcv = NA, rycv = NA, 
+                     rxcvGz = NA, rycvGz = NA, 
+                     itcvGz = NA, itcv = NA, 
+                     r2xz = NA, r2yz = NA, 
+                     delta_star = NA, delta_star_restricted = NA, 
+                     delta_exact = NA, delta_pctbias = NA, 
+                     cor_oster = NA, cor_exact = NA, 
+                     beta_threshold = NA,
+                     perc_bias_to_change = NA, 
+                     RIR = RIR + RIR_extra, 
+                     RIR_perc = NA,  # need to discuss the denominator
+                     fragility = total_switch, 
+                     starting_table = table_start,
+                     final_table = table_final,
+                     user_SE = NA,
+                     analysis_SE = NA, 
+                     Fig_ITCV = NA,
+                     Fig_RIR = NA))
+      
     result <- list(info1,
                    info2,
                    conclusion1,
