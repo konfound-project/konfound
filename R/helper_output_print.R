@@ -76,7 +76,6 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
     }
     cat("See Frank et al. (2013) for a description of the method.")
     cat("\n")
-    "<a href='https://journals.sagepub.com/doi/10.3102/0162373713493129' target='_blank'>",
     cat("\n")
     cat(crayon::underline("Citation:"), "Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).")
     cat("\n")
