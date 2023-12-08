@@ -63,7 +63,6 @@ tkonfound <- function(a, b, c, d,
   p_final <- solution$p_final
   taylor_pred <- solution$taylor_pred
   perc_bias_pred <- solution$perc_bias_pred
-  final_extra <- solution$final_extra
   total_switch <- solution$total_switch
   
   ### add column and row names to contingency tables
@@ -74,26 +73,34 @@ tkonfound <- function(a, b, c, d,
     transferway <- "treatment success to treatment failure"
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment success"
+    RIR_pi <- RIR / d * 100
   }
   if (switch_trm && !dcroddsratio_ob) {
     transferway <- "treatment failure to treatment success"
     RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment failure"
+    RIR_pi <- RIR / c * 100
   }
   if (!switch_trm && dcroddsratio_ob) {
     transferway <- "control failure to control success"
     RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control failure"
+    RIR_pi <- RIR / a * 100
   }
   if (!switch_trm && !dcroddsratio_ob) {
     transferway <- "control success to control failure"
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control success"
+    RIR_pi <- RIR / b * 100
   }
   
-  RIR_extra <- 0
+  RIR_extra <- final_extra <- NA
   
   if (allnotenough) {
+      # if need two rows, then do not report RIR_pi 
+      ## because denominator is tricky 
+      RIR_pi <- NA
+      final_extra <- solution$final_extra
     if (switch_trm && dcroddsratio_ob) {
       transferway_extra <- "control failure to control success"
       RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") + 
@@ -207,9 +214,11 @@ tkonfound <- function(a, b, c, d,
                      cor_oster = NA, cor_exact = NA, 
                      beta_threshold = NA,
                      perc_bias_to_change = NA, 
-                     RIR = RIR + RIR_extra, 
-                     RIR_perc = NA,  # need to discuss the denominator
-                     fragility = total_switch, 
+                     RIR_primary = RIR,
+                     RIR_supplemental = RIR_extra, 
+                     RIR_perc = RIR_pi,  
+                     fragility_primary = final,
+                     fragility_supplemental = final_extra,
                      starting_table = table_start,
                      final_table = table_final,
                      user_SE = NA,
