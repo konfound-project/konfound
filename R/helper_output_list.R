@@ -38,7 +38,7 @@ output_list <- function(obs_r, act_r,
                  final_table = final_table, 
                  user_SE = user_SE,
                  analysis_SE = analysis_SE,
-                 SE = SE, 
+              #   SE = SE, 
                  Fig_ITCV = Fig_ITCV,
                  Fig_RIR = Fig_RIR)
   result <- result[!is.na(result)]
