@@ -366,12 +366,8 @@ test_sensitivity_ln <- function(est_eff,
     result <- list(conclusion1,conclusion1b, conclusion1c,
                    Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
                    conclusion2, conclusion3,
-                   total_RIR = total_RIR, total_switch = total_switch)
-    
-    fragility <- result$Implied_Table["Treatment", "Fail"] - result$Transfer_Table["Treatment", "Fail"]
-    
-    result$fragility <- abs(fragility)
-    
+                   total_RIR = total_RIR, total_switch = total_switch)    
+   
     # Extracting the results into variables for cleaner reference
     conclusion1 <- result$conclusion1
     conclusion1b <- result$conclusion1b
@@ -382,7 +378,6 @@ test_sensitivity_ln <- function(est_eff,
     conclusion3 <- result$conclusion3
     notice <- result$notice
     RIR_value <- result$RIR
-    fragility <- result$total_switch
     
       
     if (changeSE) {
@@ -410,7 +405,7 @@ test_sensitivity_ln <- function(est_eff,
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("one would need to replace %d", RIR), RIRway, "\ncases "))
+            change, sprintf("one would need to replace %d (%.2f%)", RIR, RIR_pi), RIRway, "\ncases "))
           
           if (replace == "control") {
             #conclusion1a <- 
