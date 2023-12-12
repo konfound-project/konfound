@@ -76,23 +76,69 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
   }
 
-  beta_threshold <- critical_t * std_err + nu * std_err 
-  # to account for non-zero nu, assuming stat sig is determined by non-zero nu
+  # create CI centered nu    
+  UPbound <- nu + abs(critical_t * std_err)
+  LWbound <- nu - abs(critical_t * std_err)
+
+  # determine mp 
+  # qqq user specified suppression argument should NOT impact this 
+  ##### qqqqq when mp == 1, actually mp may be affected need to try both ways 
+  if ((est_eff > LWbound) & (est_eff < UPbound)) {mp <- 1}
+  if (est_eff < LWbound | est_eff > UPbound) {mp <- -1}
   
-  # for replacement of cases approach
+  # determine beta_threshold 
+  # if signsuppression == 1, then the opposite 
+  if (est_eff < nu) {
+      beta_threshold <- (signsuppression == 0) * LWbound +
+          (signsuppression == 1) * UPbound
+      }
+  if (est_eff >= nu) {
+      beta_threshold <- (signsuppression == 1) * LWbound +
+          (signsuppression == 0) * UPbound
+      }
+  
+  # determine signITCV
+  if (est_eff < beta_threshold) {signITCV <- -1}
+  if (est_eff > beta_threshold) {signITCV <- 1}
+  if (est_eff == beta_threshold) {signITCV <- 0}
+  
+  # I. for RIR
+  # right now calculation in terms of effect size (not correlation)
+  # if swtich to correlation could do A D for signsuppression as well 
+  ## using -1 and +1 in the replacement 
 
   # calculating percentage of effect and number of observations to sustain or invalidate inference
-  if (abs(est_eff) > abs(beta_threshold)) {
-    perc_to_change <- bias <- 100 * (1 - (beta_threshold / est_eff))
-    recase <- round(n_obs * (bias / 100))
-  } else if (abs(est_eff) < abs(beta_threshold)) {
-      perc_to_change <- sustain <- 100 * (1 - (est_eff / beta_threshold))
-    recase <- round(n_obs * (sustain / 100))
-  } else if (est_eff == beta_threshold) {
-    stop("The coefficient is exactly equal to the threshold.")
+  if (signsuppression == 0) {
+      if (abs(est_eff) > abs(beta_threshold)) {
+        perc_to_change <- bias <- 100 * (1 - (beta_threshold / est_eff))
+        recase <- round(n_obs * (bias / 100))
+      } else if (abs(est_eff) < abs(beta_threshold)) {
+        perc_to_change <- sustain <- 100 * (1 - (est_eff / beta_threshold))
+        recase <- round(n_obs * (sustain / 100))
+      } else if (est_eff == beta_threshold) {
+        stop("The coefficient is exactly equal to the threshold.")
+      }
+  }
+  
+  if (signsuppression == 1) {
+      if (est_eff < LWbound | est_eff > UPbound) {
+          stop("Such scenarios do not make sense to consider RIR.")
+      } 
+      if (est_eff >= LWbound & est_eff < nu) {
+          ## B case
+          ## consider est_eff as a combination of pi*LB+(1-pi)*UB
+          perc_to_change <- bias <- 100 * (UPbound - est_eff)/(UPbound - LWbound)
+          recase <- round(n_obs * (bias / 100))
+      }
+      if (est_eff >= nu & est_eff <= UPbound) {
+          ## C case
+          ## consider est_eff as a combination of pi*UB+(1-pi)*LB
+          perc_to_change <- bias <- 100 * (est_eff - LWbound)/(UPbound - LWbound)
+          recase <- round(n_obs * (bias / 100))
+      }
   }
 
-  # for correlation-based approach
+  # II. for correlation-based approach
 
   # transforming t into obs_r
   obs_r <- (est_eff / std_err) / sqrt(((n_obs - n_covariates - 2) + ((est_eff / std_err)^2)))
@@ -100,54 +146,20 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
   # finding critical r
   if (is.na(eff_thr)) {
     critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 2))
+    # critical_t follows the direction of relative position of est_eff and nu
+    # so critical_r should follow the same
+        if (signsuppression == 1) {
+        critical_r <- critical_r * (-1)
+    }
   } else if (is.na(sdx) & is.na(sdy)) {
       critical_r <- eff_thr
   } else {
       critical_r <- eff_thr * sdx / sdy 
   }
-  
-  if (suppression == 1) {
-    critical_r = critical_r * -1
-  }
-  
+ 
   # calculating actual t and r (to account for non-zero nu)
   act_t <- (est_eff - nu)/std_err
   act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
-  
-  # mp takes on 1 when suppression == 1
-  # or when act_r is below threshold and have the same direction
-  if ((abs(act_r) > abs(critical_r)) & ((act_r * critical_r) > 0)) {
-     mp <- -1
-   } else {
-     mp <- 1
-   }
-
-  # now determine the sign of ITCV 
-  ## signITCV may not be a function of whether nu > 0
-  if ((est_eff >= nu) & (nu >= 0) & (est_eff > beta_threshold)) {signITCV = 1}
-  if ((est_eff >= nu) & (nu < 0) & (est_eff > beta_threshold)) {signITCV = 1}
-  
-  if ((est_eff <= nu) & (nu <= 0) & (est_eff < beta_threshold)) {signITCV = -1}
-  if ((est_eff <= nu) & (nu > 0) & (est_eff < beta_threshold)) {signITCV = -1}
-  
-  if ((est_eff >= nu) & (nu >= 0) & (est_eff < beta_threshold)) {signITCV = -1}
-  if ((est_eff >= nu) & (nu < 0) & (est_eff < beta_threshold)) {signITCV = -1}
-  
-  if ((est_eff <= nu) & (nu <= 0) & (est_eff > beta_threshold)) {signITCV = 1}
-  if ((est_eff <= nu) & (nu > 0) & (est_eff > beta_threshold)) {signITCV = 1}
-  
-  
-  if ((est_eff >= 0) & (0 > nu) & (est_eff > beta_threshold)) {signITCV = 1}
-  if ((est_eff <= 0) & (0 < nu) & (est_eff < beta_threshold)) {signITCV = -1}
-  if ((est_eff >= 0) & (0 > nu) & (est_eff < beta_threshold)) {signITCV = -1}
-  # if b1>0>nu but not significant, then ITCV<0 (for b1 ultimately >nu); then ITCV>0 (for b1 ultimately <nu)
-  # here we take the first approach, meaning for b1 ultimately > nu
-  # this means we are NOT dealing with suppression 
-  if ((est_eff <= 0) & (0 < nu) & (est_eff > beta_threshold)) {signITCV = 1}
-  #if b1<0<nu but not significant, then ITCV>0 (for b1 ultimately <nu); then ITCV<0 (for b1 ultimately >nu)
-  #current convention: only work with final beta of same sign as estimated beta, only use 1st condition in lines above
-  
-  if (est_eff == beta_threshold) {signITCV = 0}
   
   # calculating impact of the confounding variable
   itcv <- signITCV * abs(act_r - critical_r) / (1 + mp * abs(critical_r))
@@ -168,6 +180,12 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
   
   uncond_rycv = uncond_rycv * signITCV
   rycvGz = r_con * signITCV
+  
+  # verify 
+  # act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
+  ## calculate act_r using one less df or maybe -1 instead
+  act_r_forVF <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
+  r_final = (act_r_forVF - r_con * rycvGz)/sqrt((1 - r_con^2) * (1 - rycvGz^2))
   
   # if (component_correlations == FALSE){
   #     rsq <- # has to come from some kind of model object
