@@ -285,6 +285,18 @@ test_sensitivity_ln <- function(est_eff,
     total_switch <- final_solution$final_switch
     total_RIR <- RIR
   }
+
+  ### not sure whether it is right way to calculate p-value
+  if (tails == 2) {
+    p_start <- (2 * (1 - pt(abs(final_solution$t_start), n_obs - n_covariates - 2)))
+    p_final <- (2 * (1 - pt(abs(final_solution$t_final), n_obs - n_covariates - 2)))
+  } 
+  # For a one-tailed test (assuming upper tail)
+  else if (tails == 1) {
+    p_start <- (1 - pt(final_solution$t_start, n_obs - n_covariates - 2))
+    p_final <- (1 - pt(final_solution$t_start, n_obs - n_covariates - 2))
+  } 
+
   
   # result <- list(conclusion1,
   #                Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
@@ -388,8 +400,8 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f.",
-                        est_eff, user_std_err),
+      cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, p-value = %.3f",
+                        est_eff, user_std_err, p_start),
                 sprintf("\nThe SE has been adjusted to %.3f to generate real number in the", final_solution$std_err_start), 
                 sprintf("\nimplied table. Numbers in the table cells have been rounded"),
                 sprintf("\nto integers, which may slightly alter the estimated effect from"), 
@@ -535,8 +547,8 @@ test_sensitivity_ln <- function(est_eff,
       
       cat("Table after transfer:\n\n")
       print(Transfer_Table)
-      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f)",
-                        final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final))
+      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f)",
+                        final_solution$est_eff_final, final_solution$std_err_final, p_final))
       )
       
       
@@ -548,8 +560,8 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("(The reported effect size = %.3f, and SE = %.3f.",
-                        est_eff, user_std_err),
+      cat(paste(sprintf("(The reported effect size = %.3f, and SE = %.3f, p-value = %.3f.",
+                        est_eff, user_std_err, p_final),
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
                 sprintf("\na little change to the estimated effect for the table.)\n\n"))
       )
@@ -694,8 +706,8 @@ test_sensitivity_ln <- function(est_eff,
       
       cat("Table after transfer:\n\n")
       print(Transfer_Table)
-      cat(sprintf("(Effect size = %.3f, SE = %.3f, t-ratio = %.3f)",
-                  final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final)
+      cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f)",
+                  final_solution$est_eff_final, final_solution$std_err_final, p_final)
       )
       
       
