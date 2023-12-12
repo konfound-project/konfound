@@ -37,7 +37,7 @@ output_list <- function(obs_r, act_r,
                  starting_table = starting_table, 
                  final_table = final_table, 
                  user_SE = user_SE,
-                 analysis_SE = analysis_SE
+                 analysis_SE = analysis_SE,
                  SE = SE, 
                  Fig_ITCV = Fig_ITCV,
                  Fig_RIR = Fig_RIR)
