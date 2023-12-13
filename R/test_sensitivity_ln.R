@@ -417,7 +417,7 @@ test_sensitivity_ln <- function(est_eff,
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("one would need to replace %d (%.2f)", RIR, RIR_pi), RIRway, "\ncases "))
+            change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases "))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -438,7 +438,7 @@ test_sensitivity_ln <- function(est_eff,
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("one would need to replace %d (%.2f)", RIR, RIR_pi), RIRway, "\ncases"))
+            change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases"))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -485,7 +485,7 @@ test_sensitivity_ln <- function(est_eff,
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("one would need to replace %d \n(%.2f)", RIR, RIR_pi), RIRway, "cases "))
+            change, sprintf("one would need to replace %d \n(%.2f%%)", RIR, RIR_pi), RIRway, "cases "))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -506,7 +506,7 @@ test_sensitivity_ln <- function(est_eff,
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("one would need to replace %d \n(%.2f)", RIR, RIR_pi), RIRway, "\ncases"))
+            change, sprintf("one would need to replace %d \n(%.2f%%)", RIR, RIR_pi), RIRway, "\ncases"))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -576,7 +576,7 @@ test_sensitivity_ln <- function(est_eff,
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("one would need to replace %d (%.2f)", RIR, RIR_pi), RIRway, "\ncases "))
+            change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases "))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -597,7 +597,7 @@ test_sensitivity_ln <- function(est_eff,
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("one would need to replace %d (%.2f)", RIR, RIR_pi), RIRway, "\ncases"))
+            change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases"))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -644,7 +644,7 @@ test_sensitivity_ln <- function(est_eff,
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("one would need to replace %d \n(%.2f)", RIR, RIR_pi), RIRway, "cases "))
+            change, sprintf("one would need to replace %d \n(%.2f%%)", RIR, RIR_pi), RIRway, "cases "))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -665,7 +665,7 @@ test_sensitivity_ln <- function(est_eff,
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("one would need to replace %d (%.2f)", RIR, RIR_pi), RIRway, "\ncases"))
+            change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases"))
           
           if (replace == "control") {
             #conclusion1a <- 
