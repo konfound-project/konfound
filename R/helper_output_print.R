@@ -87,24 +87,8 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
     cat(crayon::italic("Education, Evaluation and Policy Analysis, 35"), "437-460.")
     cat("\n")
 
-    if (!requireNamespace("cli", quietly = TRUE)) {
-  install.packages("cli")
-}
-library(cli)
-
-    cat("See Frank et al. (2013) for a description of the method.")
-cat("\n\n")
-cli_h1(
-  text = "Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).",
-  url = "https://journals.sagepub.com/doi/10.3102/0162373713493129"
-)
-cat("\n")
-cat("What would it take to change an inference?")
-cat("\n")
-cat("Using Rubin's causal model to interpret the robustness of causal inferences.")
-cat("\n")
-cat(crayon::italic("Education, Evaluation and Policy Analysis, 35"), " 437-460.")
-cat("\n")
+ html_content <- '<a href="https://journals.sagepub.com/doi/10.3102/0162373713493129">Link to the article</a>'
+rstudioapi::viewer(html_content)
    
   } 
   if (index == "IT") { 
