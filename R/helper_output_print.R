@@ -75,21 +75,36 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       warning("The coefficient is exactly equal to the threshold.\n")
     }
  
+   cat("See Frank et al. (2013) for a description of the method.")
+    cat("\n")
+    cat("\n")
+    cat(crayon::underline("Citation:"), "Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).")
+    cat("\n")
+    cat("What would it take to change an inference?")
+    cat("\n")
+    cat("Using Rubin's causal model to interpret the robustness of causal inferences.")
+    cat("\n")
+    cat(crayon::italic("Education, Evaluation and Policy Analysis, 35"), "437-460.")
+    cat("\n")
 
-    # Create a string with HTML content
-html_content <- '
-<html>
-<body>
-<p>See Frank et al. (2013) for a description of the method.</p>
-<p><b>Citation:</b> <a href="https://journals.sagepub.com/doi/10.3102/0162373713493129">Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</a></p>
-<p>What would it take to change an inference?</p>
-<p>Using Rubin\'s causal model to interpret the robustness of causal inferences.</p>
-<p><i>Education, Evaluation and Policy Analysis, 35</i> 437-460.</p>
-</body>
-</html>'
+    if (!requireNamespace("cli", quietly = TRUE)) {
+  install.packages("cli")
+}
+library(cli)
 
-# Write the HTML content to a file
-writeLines(html_content, "output.html")
+    cat("See Frank et al. (2013) for a description of the method.")
+cat("\n\n")
+cli_h1(
+  text = "Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).",
+  url = "https://journals.sagepub.com/doi/10.3102/0162373713493129"
+)
+cat("\n")
+cat("What would it take to change an inference?")
+cat("\n")
+cat("Using Rubin's causal model to interpret the robustness of causal inferences.")
+cat("\n")
+cat(crayon::italic("Education, Evaluation and Policy Analysis, 35"), " 437-460.")
+cat("\n")
    
   } 
   if (index == "IT") { 
