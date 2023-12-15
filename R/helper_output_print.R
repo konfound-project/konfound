@@ -74,17 +74,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
     } else if (est_eff == beta_threshhold) {
       warning("The coefficient is exactly equal to the threshold.\n")
     }
-    cat("See Frank et al. (2013) for a description of the method.")
-    cat("\n")
-    cat("\n")
-    cat(crayon::underline("Citation:"), "Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).")
-    cat("\n")
-    cat("What would it take to change an inference?")
-    cat("\n")
-    cat("Using Rubin's causal model to interpret the robustness of causal inferences.")
-    cat("\n")
-    cat(crayon::italic("Education, Evaluation and Policy Analysis, 35"), "437-460.")
-    cat("\n")
+ 
 
     # Create a string with HTML content
 html_content <- '
