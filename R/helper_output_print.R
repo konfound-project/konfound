@@ -87,8 +87,12 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
     cat(crayon::italic("Education, Evaluation and Policy Analysis, 35"), "437-460.")
     cat("\n")
 
- html_content <- '<a href="https://journals.sagepub.com/doi/10.3102/0162373713493129">Link to the article</a>'
-rstudioapi::viewer(html_content)
+link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.3102/0162373713493129">Click here for the article</a></body></html>'
+if (requireNamespace("htmltools", quietly = TRUE)) {
+    htmltools::html_print(htmltools::HTML(link_html))
+} else {
+    message("htmltools package is required")
+}
    
   } 
   if (index == "IT") { 
