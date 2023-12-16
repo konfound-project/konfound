@@ -540,12 +540,11 @@ test_sensitivity_ln <- function(est_eff,
                         "control failure" = final_solution$table_start[1,1],
                         "control success" = final_solution$table_start[1,2],
                         NA)
-            transfer <- as.integer(transfer)
             if (!is.na(a)) {
               # Calculate the value for the %d placeholder
               successRate <- 1 - total_switch / transfer
               # Display the message
-              cat(paste(sprintf("Note the RIR exceeds 100%. Generating the transfer of %d cases would require replacing\n cases with a probability of success of %.2f of", a, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
+              cat(paste(sprintf("1Note the RIR exceeds 100%. Generating the transfer of %f cases would require replacing\n cases with a probability of success of %.2f of", a, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
             }
           }
           
@@ -577,12 +576,11 @@ test_sensitivity_ln <- function(est_eff,
                         "control failure" = final_solution$table_start[1,1],
                         "control success" = final_solution$table_start[1,2],
                         NA)
-            transfer <- as.integer(transfer)
             if (!is.na(a)) {
               # Calculate the value for the %d placeholder
               successRate <- 1 - total_switch / transfer
               # Display the message
-              cat(paste(sprintf("Note the RIR exceeds 100%. Generating the transfer of %d cases would require replacing\n cases with a probability of success of %.2f of", a, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
+              cat(paste(sprintf("2Note the RIR exceeds 100%. Generating the transfer of %f cases would require replacing\n cases with a probability of success of %.2f of", a, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
             }
           }
           
