@@ -532,7 +532,7 @@ test_sensitivity_ln <- function(est_eff,
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("\n(Fragility = %d).", total_switch)))
-          cat(sprintf("This transfer of cases yields the following \ntable:\n"))
+          cat(sprintf(" This transfer of cases yields the following \ntable:\n"))
           
      cat("\n")
 
@@ -561,7 +561,7 @@ test_sensitivity_ln <- function(est_eff,
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("\n(Fragility = %d).", total_switch)))                  
-           cat(sprintf("This transfer of cases yields the following \ntable:"))
+           cat(sprintf(" This transfer of cases yields the following \ntable:"))
            cat("\n")
 
           ### for RIR_perc larger than 100%
