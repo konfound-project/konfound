@@ -517,7 +517,7 @@ test_sensitivity_ln <- function(est_eff,
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("one would need to replace %d \n(%.2f%%)", RIR, RIR_pi), RIRway, "cases "))
+            change, sprintf("one would need to replace %d \n(%.0f%%)", RIR, RIR_pi), RIRway, "cases "))
           
           if (replace == "control") {
             #conclusion1a <- 
@@ -545,8 +545,10 @@ test_sensitivity_ln <- function(est_eff,
     if (!is.na(transfer)) {
         # Calculate the value for the successRate
       successRate <- 1 - total_switch / transfer
-      
-      cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases\n would require replacing cases with a probability of success of\n %.2f of", total_switch, successRate), RIRway, "which is smaller\n than the probability of success for the control group used to calculate the RIR. "))
+      cat("\n")
+      cat(paste(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would\n", total_switch),
+                sprintf("require replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
+                sprintf("which is smaller than the probability of success for the control group \nused to calculate the RIR.")))
     }
 }
           
