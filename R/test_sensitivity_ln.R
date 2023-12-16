@@ -534,19 +534,14 @@ test_sensitivity_ln <- function(est_eff,
             sprintf("\ntable (Fragility = %d).", total_switch)))
 
           if (RIR_pi > 100) {
-            transfer <- switch(RIRway,
-                        "treatment success" = final_solution$table_start[2,2],
-                        "treatment failure" = final_solution$table_start[2,1],
-                        "control failure" = final_solution$table_start[1,1],
-                        "control success" = final_solution$table_start[1,2],
-                        NA)
+            transfer <- total_switch
            if (!is.na(transfer)) {
         # Calculate the value for the successRate
         successRate <- 1 - total_switch / transfer
              cat("Transfer:", transfer, "\n")
 cat("Success Rate:", successRate, "\n")
         # Display the message
-        cat(sprintf("1Note the RIR exceeds 100%. Generating the transfer of %f cases would require replacing cases with a probability of success of %.2f of", transfer, successRate), RIRway, "which is smaller than the probability of success for the control group used to calculate the RIR.")
+        cat(sprintf("1Note the RIR exceeds 100%. Generating the transfer of %d cases would require replacing cases with a probability of success of %.2f of", transfer, successRate), RIRway, "which is smaller than the probability of success for the control group used to calculate the RIR.")
     }
 }
           
