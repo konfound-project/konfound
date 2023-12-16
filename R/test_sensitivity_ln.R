@@ -456,8 +456,8 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
-                sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
+                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), 
+                sprintf("which is smaller than the probability of success for the control \ngroup used to calculate the RIR.")))
             }
           
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
@@ -485,8 +485,8 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
-                sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
+                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), 
+                sprintf("which is smaller than the probability of success for the control \ngroup used to calculate the RIR.")))
             }
         } else {
 
@@ -539,8 +539,8 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
-                sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
+                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), 
+                sprintf("which is smaller than the probability of success for the control \ngroup used to calculate the RIR.")))
             }
           
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
@@ -567,8 +567,8 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
-                sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
+                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), 
+                sprintf("which is smaller than the probability of success for the control \ngroup used to calculate the RIR.")))
             }
           
         } else {
@@ -666,8 +666,8 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
-                sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
+                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), 
+                sprintf("which is smaller than the probability of success for the control \ngroup used to calculate the RIR.")))
             }
           
     
@@ -743,8 +743,8 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
-                sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
+                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), 
+                sprintf("which is smaller than the probability of success for the control \ngroup used to calculate the RIR.")))
             }
           
         } else {
