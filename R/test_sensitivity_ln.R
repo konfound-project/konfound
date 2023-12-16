@@ -540,13 +540,13 @@ test_sensitivity_ln <- function(est_eff,
                         "control failure" = final_solution$table_start[1,1],
                         "control success" = final_solution$table_start[1,2],
                         NA)
-            if (!is.na(a)) {
-              # Calculate the value for the %d placeholder
-              successRate <- 1 - total_switch / transfer
-              # Display the message
-              cat(paste(sprintf("1Note the RIR exceeds 100%. Generating the transfer of %f cases would require replacing\n cases with a probability of success of %.2f of", a, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
-            }
-          }
+           if (!is.na(transfer)) {
+        # Calculate the value for the successRate
+        successRate <- 1 - total_switch / transfer
+        # Display the message
+        cat(sprintf("Note the RIR exceeds 100%. Generating the transfer of %f cases would require replacing cases with a probability of success of %.2f of", transfer, successRate), RIRway, "which is smaller than the probability of success for the control group used to calculate the RIR.")
+    }
+}
           
           cat(sprintf("This transfer of cases yields the following \ntable:"))
           
