@@ -309,6 +309,8 @@ test_sensitivity_ln <- function(est_eff,
       successRate <- 1 - total_switch / transfer
 
     }
+    }
+      
   
   # result <- list(conclusion1,
   #                Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
@@ -552,7 +554,7 @@ test_sensitivity_ln <- function(est_eff,
      cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
                 sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
                 sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
-}
+        } 
           
           
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
