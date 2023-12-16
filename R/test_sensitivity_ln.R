@@ -533,25 +533,24 @@ test_sensitivity_ln <- function(est_eff,
             c("case from"), transferway, 
             sprintf("\ntable (Fragility = %d).", total_switch)))
 
-          if (RIR_pi > 100) {
-          
-            transfer <- switch(RIRway,
-                               "treatment success" = final_solution$table_start[2,2],
-                               "treatment failure" = final_solution$table_start[2,1],
-                               "control failure" = final_solution$table_start[1,1],
-                               "control success" = final_solution$table_start[1,2],
-                               NA)
+   if (RIR_pi > 100) {
+    transfer <- switch(RIRway,
+                       "treatment success" = final_solution$table_start[2,2],
+                       "treatment failure" = final_solution$table_start[2,1],
+                       "control failure" = final_solution$table_start[1,1],
+                       "control success" = final_solution$table_start[1,2],
+                       NA)
             
-           if (!is.na(transfer)) {
+    if (!is.na(transfer)) {
         # Calculate the value for the successRate
         successRate <- 1 - total_switch / transfer
-             cat("Transfer:", transfer, class(transfer))
-             cat("Success Rate:", successRate, class(successRate))
-             cat("total_switch:", total_switch, class(total_switch))
-             cat("RIRway:", RIRway, class(RIRway))
+        cat("Transfer:", transfer, "Class:", class(transfer), "\n")
+        cat("Success Rate:", successRate, "Class:", class(successRate), "\n")
+        cat("total_switch:", total_switch, "Class:", class(total_switch), "\n")
+        cat("RIRway:", RIRway, "Class:", class(RIRway), "\n")
 
         # Display the message
-        cat(sprintf("1Note the RIR exceeds 100%. Generating the transfer of %d cases would require replacing cases with a probability of success of %.2f of", total_switch, successRate), RIRway, "which is smaller than the probability of success for the control group used to calculate the RIR.")
+        cat(sprintf("Note the RIR exceeds 100%. Generating the transfer of %.0f cases would require replacing cases with a probability of success of %.2f of", transfer, successRate), RIRway, "which is smaller than the probability of success for the control group used to calculate the RIR.")
     }
 }
           
