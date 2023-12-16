@@ -550,7 +550,7 @@ test_sensitivity_ln <- function(est_eff,
         cat("RIRway:", RIRway, "Class:", class(RIRway), "\n")
 
        # Separate sprintf statements
-        transferMsg <- sprintf("1Note the RIR exceeds 100%. Generating the transfer of %.0f cases", total_switch)
+        transferMsg <- sprintf("1Note the RIR exceeds 100%. Generating the transfer of %d cases", total_switch)
         successRateMsg <- sprintf("would require replacing cases with a probability of success of %.2f of", successRate)
 
         # Combine with cat
