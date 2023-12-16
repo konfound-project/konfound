@@ -544,7 +544,8 @@ test_sensitivity_ln <- function(est_eff,
     if (!is.na(transfer)) {
         # Calculate the value for the successRate
       successRate <- 1 - total_switch / transfer
-      cat(paste(sprintf("Note the RIR exceeds 100%%. Generating\n the transfer of %d cases would require replacing cases with a probability\n of success of %.2f of", total_switch, successRate), RIRway, "which is smaller\n than the probability of success for the control group used to calculate the RIR."))
+      
+      cat(paste0(sprintf(" 1Note the RIR exceeds 100%%. Generating the\n transfer of %d cases would require replacing cases with a \nprobability of success of %.2f of", total_switch, successRate), RIRway, "which is smaller\n than the probability of success for the control group used to calculate \nthe RIR. "))
     }
 }
           
