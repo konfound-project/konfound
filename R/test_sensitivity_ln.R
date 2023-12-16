@@ -605,10 +605,10 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("(The reported effect size = %.3f, and SE = %.3f, p-value = %.3f.",
+      cat(paste(sprintf("The reported effect size = %.3f, and SE = %.3f, p-value = %.3f",
                         est_eff, user_std_err, p_final),
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
-                sprintf("\na little change to the estimated effect for the table.)\n\n"))
+                sprintf("\na little change to the estimated effect for the table.\n\n"))
       )
       
       ### start here
