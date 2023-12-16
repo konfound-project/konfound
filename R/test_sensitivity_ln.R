@@ -446,25 +446,17 @@ test_sensitivity_ln <- function(est_eff,
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("(Fragility = %d).", total_switch))
-              )
-            
-          if (RIR_pi > 100) {
-            a <- switch(RIRway,
-                        "treatment success" = d,
-                        "treatment failure" = c,
-                        "control failure" = a,
-                        "control success" = b,
-                        NA)
-            if (!is.na(a)) {
-              # Calculate the value for the %d placeholder
-              successRate <- 1 - total_switch / a
-              # Display the message
-              cat(paste(sprintf("Note the RIR exceeds 100%. Generating the transfer of %f cases would require replacing\n cases with a probability of success of %f of", a, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
-              
-            }
-          }
-          
+              )       
           cat(sprintf("\nThis transfer of cases yields the following table:"))
+
+          cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
+                sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
+            }
           
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 
@@ -484,24 +476,16 @@ test_sensitivity_ln <- function(est_eff,
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c("case from"), transferway, 
             sprintf("(Fragility = %d).", total_switch)))
-       
-          if (RIR_pi > 100) {
-            a <- switch(RIRway,
-                        "treatment success" = d,
-                        "treatment failure" = c,
-                        "control failure" = a,
-                        "control success" = b,
-                        NA)
-            if (!is.na(a)) {
-              # Calculate the value for the %d placeholder
-              successRate <- 1 - total_switch / a
-              # Display the message
-              cat(paste(sprintf("Note the RIR exceeds 100%. Generating the transfer of %d cases would require replacing\n cases with a probability of success of %.2f of", a, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
-            }
-          }
-            
           cat(sprintf("\nThis transfer of cases yields the following table:"))
           
+          cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
+                sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
+            }
         } else {
 
           ### when needtworows = T
@@ -549,13 +533,13 @@ test_sensitivity_ln <- function(est_eff,
           cat(sprintf("This transfer of cases yields the following \ntable:\n"))
           
      cat("\n")
-          
-     cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
                 sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
                 sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
-        
-        
-          
+            }
           
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 
@@ -574,24 +558,16 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\ntable (Fragility = %d).", total_switch)))
-            
-          if (RIR_pi > 100) {
-            transfer <- switch(RIRway,
-                        "treatment success" = final_solution$table_start[2,2],
-                        "treatment failure" = final_solution$table_start[2,1],
-                        "control failure" = final_solution$table_start[1,1],
-                        "control success" = final_solution$table_start[1,2],
-                        NA)
-            if (!is.na(a)) {
-              # Calculate the value for the %d placeholder
-              successRate <- 1 - total_switch / transfer
-              # Display the message
-              cat(paste(sprintf("2Note the RIR exceeds 100%. Generating the transfer of %f cases would require replacing\n cases with a probability of success of %.2f of", a, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
-            }
-          }
-          
+            sprintf("\ntable (Fragility = %d).", total_switch)))                  
            cat(sprintf("This transfer of cases yields the following \ntable:"))
+           cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
+                sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
+            }
           
         } else {
 
@@ -683,6 +659,14 @@ test_sensitivity_ln <- function(est_eff,
             sprintf("\ntable (Fragility = %d).", total_switch),
             sprintf("This transfer of cases yields the following \ntable:")
           ))
+          cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
+                sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
+            }
           
     
           
@@ -751,24 +735,15 @@ test_sensitivity_ln <- function(est_eff,
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway,
             sprintf("\n(Fragility = %d).", total_switch)
-          ))
-  
-          if (RIR_pi > 100) {
-            transfer <- switch(RIRway,
-                               "treatment success" = d,
-                               "treatment failure" = c,
-                               "control failure" = a,
-                               "control success" = b,
-                               NA)
-            if (!is.na(a)) {
-              # Calculate the value for the %d placeholder
-              successRate <- 1 - total_switch / a
-              # Display the message
-              cat(sprintf("Note the RIR exceeds 100%. Generating the transfer of %d cases would require replacing\n cases with a probability of success of %d of %s which is smaller than the \nprobability of success for the control group used to calculate the RIR.", a, successRate, RIRway))
-            }
-          }
-          
+          ))          
           cat(sprintf("This transfer of cases yields the following \ntable:"))
+          cat("\n")
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
+                sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
+            }
           
         } else {
 
