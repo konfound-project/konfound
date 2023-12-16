@@ -445,8 +445,8 @@ test_sensitivity_ln <- function(est_eff,
               # Calculate the value for the %d placeholder
               successRate <- 1 - total_switch / a
               # Display the message
-              cat(paste(sprintf("Note the RIR exceeds 100%. Generating the transfer of %d cases would require replacing\n cases with a probability of success of %d of", a, successRate, RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
-                 )
+              cat(paste(sprintf("Note the RIR exceeds 100%. Generating the transfer of %d cases would require replacing\n cases with a probability of success of %d of", a, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
+              
             }
           }
           
@@ -482,8 +482,7 @@ test_sensitivity_ln <- function(est_eff,
               # Calculate the value for the %d placeholder
               successRate <- 1 - total_switch / a
               # Display the message
-              cat(paste(sprintf("Note the RIR exceeds 100%. Generating the transfer of %d cases would require replacing\n cases with a probability of success of %d of", a, successRate, RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
-                 )          
+              cat(paste(sprintf("Note the RIR exceeds 100%. Generating the transfer of %d cases would require replacing\n cases with a probability of success of %d of", a, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
             }
           }
             
