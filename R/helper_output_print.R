@@ -30,7 +30,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat("\n")
       cat(paste0("for inference of ", round(eff_thr, 3), ". To invalidate the inference based on your"))
       cat("\n")
-      cat(paste0("estimate, ", round(bias, 3), " % of the (", round(est_eff, 3), ") estimate would have to be due to"))
+      cat(paste0("estimate, ", round(bias, 3), "% of the (", round(est_eff, 3), ") estimate would have to be due to"))
       cat("\n")
       cat(paste0("bias. This implies that to invalidate the inference one would"))
       cat("\n")
