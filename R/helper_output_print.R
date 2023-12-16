@@ -67,7 +67,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat("\n")
       cat("that to sustain an inference one would expect to have to replace ")
       cat("\n")
-      cat(paste0(round(recase, 3), "(", round(sustain, 3), "%) observations with effect of ", nu, " with cases"))
+      cat(paste0(round(recase, 3), " (", round(sustain, 3), "%) observations with effect of ", nu, " with cases"))
       cat("\n")
       cat(paste0("with effect of ", round(beta_threshhold, 3), " (RIR = ", round(recase, 3), ").\n"))
       cat("\n")
