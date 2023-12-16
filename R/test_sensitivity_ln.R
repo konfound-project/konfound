@@ -295,8 +295,20 @@ test_sensitivity_ln <- function(est_eff,
   else if (tails == 1) {
     p_start <- (1 - pt(final_solution$t_start, n_obs - n_covariates - 2))
     p_final <- (1 - pt(final_solution$t_start, n_obs - n_covariates - 2))
-  } 
+  }                    
+  
+  if (RIR_pi > 100) {   
+    transfer <- switch(RIRway,
+                       "treatment success" = final_solution$table_start[2,2],
+                       "treatment failure" = final_solution$table_start[2,1],
+                       "control failure" = final_solution$table_start[1,1],
+                       "control success" = final_solution$table_start[1,2],
+                       NA)       
+    if (!is.na(transfer)) {
+        # Calculate the value for the successRate
+      successRate <- 1 - total_switch / transfer
 
+    }
   
   # result <- list(conclusion1,
   #                Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
@@ -534,19 +546,7 @@ test_sensitivity_ln <- function(est_eff,
             sprintf("\ntable (Fragility = %d).", total_switch)))
           cat(sprintf("This transfer of cases yields the following \ntable:\n"))
 
-   if (RIR_pi > 100) {
-    transfer <- switch(RIRway,
-                       "treatment success" = final_solution$table_start[2,2],
-                       "treatment failure" = final_solution$table_start[2,1],
-                       "control failure" = final_solution$table_start[1,1],
-                       "control success" = final_solution$table_start[1,2],
-                       NA)
-            
-    if (!is.na(transfer)) {
-        # Calculate the value for the successRate
-      successRate <- 1 - total_switch / transfer
 
-    }
 
      cat("\n")
      cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
