@@ -531,7 +531,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\ntable (Fragility = %d).", total_switch)))
+            sprintf("\n(Fragility = %d).", total_switch)))
           cat(sprintf("This transfer of cases yields the following \ntable:\n"))
           
      cat("\n")
@@ -560,7 +560,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\ntable (Fragility = %d).", total_switch)))                  
+            sprintf("\n(Fragility = %d).", total_switch)))                  
            cat(sprintf("This transfer of cases yields the following \ntable:"))
            cat("\n")
 
@@ -637,7 +637,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf(" This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\ntable (Fragility = %d).", total_switch),
+            sprintf("\n(Fragility = %d).", total_switch),
             sprintf("This transfer of cases yields the following \ntable:")
           ))
           
@@ -658,7 +658,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf(" This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\ntable (Fragility = %d).", total_switch),
+            sprintf("\n(Fragility = %d).", total_switch),
             sprintf("This transfer of cases yields the following \ntable:")
           ))
           cat("\n")
@@ -715,7 +715,7 @@ test_sensitivity_ln <- function(est_eff,
           cat(paste(
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c("case from"), transferway, 
-            sprintf("\ntable (Fragility = %d).", total_switch),
+            sprintf("\n(Fragility = %d).", total_switch),
             sprintf("This transfer of cases yields the following \ntable:")
           ))
           
