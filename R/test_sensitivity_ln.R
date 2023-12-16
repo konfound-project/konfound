@@ -534,17 +534,17 @@ test_sensitivity_ln <- function(est_eff,
             sprintf("\ntable (Fragility = %d).", total_switch)))
 
           if (RIR_pi > 100) {
-            a <- switch(RIRway,
-                        "treatment success" = d,
-                        "treatment failure" = c,
-                        "control failure" = a,
-                        "control success" = b,
+            transfer <- switch(RIRway,
+                        "treatment success" = final_solution$table_start[2,2],
+                        "treatment failure" = final_solution$table_start[2,1],
+                        "control failure" = final_solution$table_start[1,1],
+                        "control success" = final_solution$table_start[1,2],
                         NA)
             if (!is.na(a)) {
               # Calculate the value for the %d placeholder
-              successRate <- 1 - total_switch / a
+              successRate <- 1 - total_switch / transfer
               # Display the message
-              cat(paste(sprintf("Note the RIR exceeds 100%. Generating the transfer of %f cases would require replacing\n cases with a probability of success of %f of", a, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
+              cat(paste(sprintf("Note the RIR exceeds 100%. Generating the transfer of %d cases would require replacing\n cases with a probability of success of %d of", transfer, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
             }
           }
           
@@ -570,17 +570,17 @@ test_sensitivity_ln <- function(est_eff,
             sprintf("\ntable (Fragility = %d).", total_switch)))
             
           if (RIR_pi > 100) {
-            a <- switch(RIRway,
-                        "treatment success" = d,
-                        "treatment failure" = c,
-                        "control failure" = a,
-                        "control success" = b,
+            transfer <- switch(RIRway,
+                        "treatment success" = final_solution$table_start[2,2],
+                        "treatment failure" = final_solution$table_start[2,1],
+                        "control failure" = final_solution$table_start[1,1],
+                        "control success" = final_solution$table_start[1,2],
                         NA)
             if (!is.na(a)) {
               # Calculate the value for the %d placeholder
-              successRate <- 1 - total_switch / a
+              successRate <- 1 - total_switch / transfer
               # Display the message
-              cat(paste(sprintf("Note the RIR exceeds 100%. Generating the transfer of %f cases would require replacing\n cases with a probability of success of %f of", a, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
+              cat(paste(sprintf("Note the RIR exceeds 100%. Generating the transfer of %d cases would require replacing\n cases with a probability of success of %d of", transfer, successRate), RIRway, "which is smaller than the \nprobability of success for the control group used to calculate the RIR."))
             }
           }
           
@@ -747,12 +747,12 @@ test_sensitivity_ln <- function(est_eff,
           ))
   
           if (RIR_pi > 100) {
-            a <- switch(RIRway,
-                        "treatment success" = d,
-                        "treatment failure" = c,
-                        "control failure" = a,
-                        "control success" = b,
-                        NA)
+            transfer <- switch(RIRway,
+                               "treatment success" = d,
+                               "treatment failure" = c,
+                               "control failure" = a,
+                               "control success" = b,
+                               NA)
             if (!is.na(a)) {
               # Calculate the value for the %d placeholder
               successRate <- 1 - total_switch / a
