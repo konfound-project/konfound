@@ -296,8 +296,9 @@ test_sensitivity_ln <- function(est_eff,
     p_start <- (1 - pt(final_solution$t_start, n_obs - n_covariates - 2))
     p_final <- (1 - pt(final_solution$t_start, n_obs - n_covariates - 2))
   }                    
-  
-  if (RIR_pi > 100) {   
+
+  ### Add for some cases with RIR_pi exceeding 100%
+  if (!is.na(RIR_pi) && RIR_pi > 100) {   
     transfer <- switch(RIRway,
                        "treatment success" = final_solution$table_start[2,2],
                        "treatment failure" = final_solution$table_start[2,1],
