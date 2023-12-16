@@ -306,9 +306,10 @@ test_sensitivity_ln <- function(est_eff,
                        NA)       
     if (!is.na(transfer)) {
         # Calculate the value for the successRate
-      successRate <- 1 - total_switch / transfer
-
-    }
+      successRate <- 1 - total_switch / transfer}
+    } else {
+    transfer <- NA
+    successRate <- NA
     }
       
   
@@ -419,14 +420,14 @@ test_sensitivity_ln <- function(est_eff,
                 sprintf("\nThe SE has been adjusted to %.3f to generate real number in the", final_solution$std_err_start), 
                 sprintf("\nimplied table. Numbers in the table cells have been rounded"),
                 sprintf("\nto integers, which may slightly alter the estimated effect from"), 
-                sprintf("\nthe value originally entered\n\n")
+                sprintf("\nthe value originally entered.\n\n")
       ))
             
       if (invalidate_ob) {
 
         ### when invalidate = T
 
-        change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha =%.2f)", alpha)
+        change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha =%.3f)", alpha)
         ### 
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
@@ -507,9 +508,9 @@ test_sensitivity_ln <- function(est_eff,
           ### when invalidate = F (sustain)
         
         if (est_eff >= 0) {
-          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.2f)", alpha)
+          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.3f)", alpha)
         } else {
-          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.2f)", alpha)
+          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.3f)", alpha)
         }
         ###
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
@@ -616,7 +617,7 @@ test_sensitivity_ln <- function(est_eff,
 
         ### invalidate = T
         
-        change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha =%.2f)", alpha)
+        change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha =%.3f)", alpha)
         ### 
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
@@ -691,9 +692,9 @@ test_sensitivity_ln <- function(est_eff,
         ### invalidate = F (sustain) 
         
         if (est_eff >= 0) {
-          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.2f)", alpha)
+          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.3f)", alpha)
         } else {
-          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.2f)", alpha)
+          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.3f)", alpha)
         }
         ###
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
