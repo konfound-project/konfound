@@ -428,7 +428,7 @@ test_sensitivity_ln <- function(est_eff,
 
         ### when invalidate = T
 
-        change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha =%.3f)", alpha)
+        change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha = %.3f)", alpha)
         ### 
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
@@ -509,9 +509,9 @@ test_sensitivity_ln <- function(est_eff,
           ### when invalidate = F (sustain)
         
         if (est_eff >= 0) {
-          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.3f)", alpha)
+          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha = %.3f)", alpha)
         } else {
-          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.3f)", alpha)
+          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha = %.3f)", alpha)
         }
         ###
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
@@ -581,7 +581,7 @@ test_sensitivity_ln <- function(est_eff,
             sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR(= %d)", final_solution$final_switch, RIR),
+            sprintf("The final Fragility (= %d) and RIR (= %d)", final_solution$final_switch, RIR),
             c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
@@ -618,7 +618,7 @@ test_sensitivity_ln <- function(est_eff,
 
         ### invalidate = T
         
-        change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha =%.3f)", alpha)
+        change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha = %.3f)", alpha)
         ### 
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
@@ -693,9 +693,9 @@ test_sensitivity_ln <- function(est_eff,
         ### invalidate = F (sustain) 
         
         if (est_eff >= 0) {
-          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.3f)", alpha)
+          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha = %.3f)", alpha)
         } else {
-          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha =%.3f)", alpha)
+          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha = %.3f)", alpha)
         }
         ###
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
@@ -757,7 +757,7 @@ test_sensitivity_ln <- function(est_eff,
             sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR(= %d)", final_solution$final_switch, RIR),
+            sprintf("The final Fragility (= %d) and RIR (= %d)", final_solution$final_switch, RIR),
             c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
