@@ -549,9 +549,9 @@ test_sensitivity_ln <- function(est_eff,
     }
 
      cat("\n")
-     cat(paste(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing cases with a probability of success of %.2f of", successRate), RIRway, 
-                sprintf("\nwhich is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
+     cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), RIRway, 
+                sprintf("which is smaller than the probability of success \nfor the control group used to calculate the RIR.")))
 }
           
           
