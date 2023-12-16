@@ -540,6 +540,7 @@ test_sensitivity_ln <- function(est_eff,
                         "control failure" = final_solution$table_start[1,1],
                         "control success" = final_solution$table_start[1,2],
                         NA)
+            transfer <- as.integer(transfer)
             if (!is.na(a)) {
               # Calculate the value for the %d placeholder
               successRate <- 1 - total_switch / transfer
@@ -576,6 +577,7 @@ test_sensitivity_ln <- function(est_eff,
                         "control failure" = final_solution$table_start[1,1],
                         "control success" = final_solution$table_start[1,2],
                         NA)
+            transfer <- as.integer(transfer)
             if (!is.na(a)) {
               # Calculate the value for the %d placeholder
               successRate <- 1 - total_switch / transfer
