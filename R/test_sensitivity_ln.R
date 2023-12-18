@@ -294,7 +294,7 @@ test_sensitivity_ln <- function(est_eff,
   # For a one-tailed test (assuming upper tail)
   else if (tails == 1) {
     p_start <- (1 - pt(final_solution$t_start, n_obs - n_covariates - 2))
-    p_final <- (1 - pt(final_solution$t_start, n_obs - n_covariates - 2))
+    p_final <- (1 - pt(final_solution$t_final, n_obs - n_covariates - 2))
   }                    
 
   ### Add for some cases with RIR_pi exceeding 100%
@@ -333,6 +333,8 @@ test_sensitivity_ln <- function(est_eff,
                   cor_oster = NA, cor_exact = NA, 
                   beta_threshold = NA,
                   perc_bias_to_change = NA, 
+                  ## to see intermediate outputs
+                  t_start = final_solution$t_start, t_final = final_solution$t_final,        
                   RIR_primary = RIR,
                   RIR_supplemental = RIR_extra, 
                   RIR_perc = RIR_pi,  # need to discuss the denominator
