@@ -322,7 +322,7 @@ test_sensitivity_ln <- function(est_eff,
   
   # output dispatch
   if (to_return == "raw_output") {
-       return(output_list(obs_r = NA, act_r = NA, 
+       return(list(obs_r = NA, act_r = NA, 
                   critical_r = NA, r_final = NA,
                   rxcv = NA, rycv = NA, 
                   rxcvGz = NA, rycvGz = NA, 
