@@ -296,9 +296,8 @@ test_sensitivity_ln <- function(est_eff,
     p_start <- (1 - pt(final_solution$t_start, n_obs - n_covariates - 2))
     p_final <- (1 - pt(final_solution$t_final, n_obs - n_covariates - 2))
   }                    
-
-p_start_chi_start <- chisq_p(final_solution$table_start[1,1], final_solution$table_start[1,2], final_solution$table_start[2,1] final_solution$table_start[2,2])
-p_start_chi_final <- chisq_p(final_solution$table_final[1,1], final_solution$table_final[1,2], final_solution$table_final[2,1] final_solution$table_final[2,2])
+p_start_chi_start <- chisq.test(final_solution$table_start,correct = FALSE)$p.value
+p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.value
 
   ### Add for some cases with RIR_pi exceeding 100%
   if (!is.na(RIR_pi) && RIR_pi > 100) {   
