@@ -242,7 +242,7 @@ test_sensitivity_ln <- function(est_eff,
     
     conclusion1b <- paste(
       sprintf("This is equivalent to transferring %d", final_solution$final_switch), 
-      c("case from"), transferway)
+      c("cases from"), transferway)
     
     conclusion1c <- "as shown, from the Implied Table to the Transfer Table."
     
@@ -418,9 +418,9 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, p-value = %.3f",
+      cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, p-value = %.3f.",
                         est_eff, user_std_err, p_start),
-                sprintf("\nThe SE has been adjusted to %.3f to generate real number in the", final_solution$std_err_start), 
+                sprintf("\nThe SE has been adjusted to %.3f to generate a real number in the", final_solution$std_err_start), 
                 sprintf("\nimplied table. Numbers in the table cells have been rounded"),
                 sprintf("\nto integers, which may slightly alter the estimated effect from"), 
                 sprintf("\nthe value originally entered.\n\n")
@@ -430,7 +430,7 @@ test_sensitivity_ln <- function(est_eff,
 
         ### when invalidate = T
 
-        change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha = %.3f)", alpha)
+        change <- sprintf("To invalidate the inference that the effect is different from 0 \n(alpha = %.3f)", alpha)
         ### 
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
@@ -448,10 +448,9 @@ test_sensitivity_ln <- function(est_eff,
           #conclusion1b <- 
           cat(paste(
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
-            c("case from"), transferway, 
+            c("cases from"), transferway, 
             sprintf("(Fragility = %d).", total_switch))
               )       
-          cat(sprintf("\nThis transfer of cases yields the following table:"))
 
           cat("\n")
 
@@ -461,6 +460,9 @@ test_sensitivity_ln <- function(est_eff,
                 sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), 
                 sprintf("which is smaller than the probability of success for the control \ngroup used to calculate the RIR.")))
             }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+
           
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 
@@ -478,9 +480,8 @@ test_sensitivity_ln <- function(est_eff,
           #conclusion1b <- 
           cat(paste(
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
-            c("case from"), transferway, 
+            c("cases from"), transferway, 
             sprintf("(Fragility = %d).", total_switch)))
-          cat(sprintf("\nThis transfer of cases yields the following table:"))
           
           cat("\n")
 
@@ -490,6 +491,9 @@ test_sensitivity_ln <- function(est_eff,
                 sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", successRate), 
                 sprintf("which is smaller than the probability of success for the control \ngroup used to calculate the RIR.")))
             }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+
         } else {
 
           ### when needtworows = T
@@ -511,9 +515,9 @@ test_sensitivity_ln <- function(est_eff,
           ### when invalidate = F (sustain)
         
         if (est_eff >= 0) {
-          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha = %.3f)", alpha)
+          change <- sprintf("To reach the threshold that would sustain an inference that the \neffect is different from 0 (alpha = %.3f)", alpha)
         } else {
-          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha = %.3f)", alpha)
+          change <- sprintf("To reach the threshold that would sustain an inference that the \neffect is different from 0 (alpha = %.3f)", alpha)
         }
         ###
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
@@ -532,7 +536,7 @@ test_sensitivity_ln <- function(est_eff,
           #conclusion1b <- 
           cat(paste(
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
-            c("case from"), transferway, 
+            c("cases from"), transferway, 
             sprintf("\n(Fragility = %d).", total_switch)))
           cat(sprintf(" This transfer of cases yields the following \ntable:\n"))
           
@@ -561,7 +565,7 @@ test_sensitivity_ln <- function(est_eff,
           #conclusion1b <- 
           cat(paste(
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
-            c("case from"), transferway, 
+            c("cases from"), transferway, 
             sprintf("\n(Fragility = %d).", total_switch)))                  
            cat(sprintf(" This transfer of cases yields the following \ntable:"))
            cat("\n")
@@ -609,7 +613,7 @@ test_sensitivity_ln <- function(est_eff,
       cat("The table you entered or is implied by your effect size:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("The reported effect size = %.3f, and SE = %.3f, p-value = %.3f",
+      cat(paste(sprintf("The reported effect size = %.3f, and SE = %.3f, p-value = %.3f.",
                         est_eff, user_std_err, p_final),
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
                 sprintf("\na little change to the estimated effect for the table.\n\n"))
@@ -620,7 +624,7 @@ test_sensitivity_ln <- function(est_eff,
 
         ### invalidate = T
         
-        change <- sprintf("To invalidate the inference that the effect is greater than 0 \n(alpha = %.3f)", alpha)
+        change <- sprintf("To invalidate the inference that the effect is different from 0 \n(alpha = %.3f)", alpha)
         ### 
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
@@ -695,9 +699,9 @@ test_sensitivity_ln <- function(est_eff,
         ### invalidate = F (sustain) 
         
         if (est_eff >= 0) {
-          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha = %.3f)", alpha)
+          change <- sprintf("To reach the threshold that would sustain an inference that the \neffect is different from 0 (alpha = %.3f)", alpha)
         } else {
-          change <- sprintf("To reach the threshold that would sustain the inference that the \neffect is greater than 0 (alpha = %.3f)", alpha)
+          change <- sprintf("To reach the threshold that would sustain an inference that the \neffect is different from 0 (alpha = %.3f)", alpha)
         }
         ###
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
@@ -716,7 +720,7 @@ test_sensitivity_ln <- function(est_eff,
           #conclusion1b <- 
           cat(paste(
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
-            c("case from"), transferway, 
+            c("cases from"), transferway, 
             sprintf("\n(Fragility = %d).", total_switch),
             sprintf("This transfer of cases yields the following \ntable:")
           ))
@@ -737,7 +741,7 @@ test_sensitivity_ln <- function(est_eff,
           #conclusion1b <- 
           cat(paste(
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
-            c("case from"), transferway,
+            c("cases from"), transferway,
             sprintf("\n(Fragility = %d).", total_switch)
           ))          
           cat(sprintf("This transfer of cases yields the following \ntable:"))
