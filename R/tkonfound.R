@@ -139,7 +139,7 @@ tkonfound <- function(a, b, c, d,
   
   if (!allnotenough & final > 1) {
     conclusion1 <- paste0(
-      change, sprintf("you would need to replace %d ", RIR), RIRway)
+      change, sprintf("one would need to replace %d ", RIR), RIRway)
     
     if (replace == "control") {
       conclusion1b <- paste0(
@@ -157,7 +157,7 @@ tkonfound <- function(a, b, c, d,
   
   if (!allnotenough & final == 1) {
     conclusion1 <- paste0(
-      change, sprintf("you would need to replace %d ", RIR), RIRway)
+      change, sprintf("one would need to replace %d ", RIR), RIRway)
     
     if (replace == "control") {
       conclusion1b <- paste0(
@@ -187,20 +187,20 @@ tkonfound <- function(a, b, c, d,
   
   if (test == "chisq"){
     conclusion2 <- sprintf(
-      "For the User-entered Table, we have a Pearson's chi square of %.3f, with p-value of %.3f:", chisq_ob, p_ob)
+      "For the User-entered Table, the Pearson's chi square is %.3f, with p-value of %.3f:", chisq_ob, p_ob)
     conclusion3 <- sprintf(
-      "For the Transfer Table, we have a Pearson's chi square of %.3f, with p-value of %.3f:", chisq_final, p_final)
+      "For the Transfer Table, the Pearson's chi square is %.3f, with p-value of %.3f:", chisq_final, p_final)
   }
   
   if (test == "fisher"){
     conclusion2 <- sprintf(
-      "For the User-entered Table, we have an estimated odds ratio of %.3f, with p-value of %.3f:", fisher_ob, p_ob)
+      "For the User-entered Table, the estimated odds ratio is %.3f, with p-value of %.3f:", fisher_ob, p_ob)
     conclusion3 <- sprintf(
-      "For the Transfer Table, we have an estimated odds ratio of %.3f, with p-value of %.3f:", fisher_final, p_final)
+      "For the Transfer Table, the estimated odds ratio is %.3f, with p-value of %.3f:", fisher_final, p_final)
   }
   
   info1 <- "This function calculates the number of cases that would have to be replaced"
-  info2 <- "with no effect cases (RIR) to invalidate an inference made about the association"
+  info2 <- "with zero effect cases (RIR) to invalidate an inference made about the association"
   info3 <- "between the rows and columns in a 2x2 table."
   info4 <- "One can also interpret this as switches from one cell to another, such as from"
   info5 <- "the treatment success cell to the treatment failure cell."
