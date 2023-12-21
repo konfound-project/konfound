@@ -297,6 +297,9 @@ test_sensitivity_ln <- function(est_eff,
     p_final <- (1 - pt(final_solution$t_final, n_obs - n_covariates - 2))
   }                    
 
+p_start_chi_start <- chisq_p(final_solution$table_start[1,1], final_solution$table_start[1,2], final_solution$table_start[2,1] final_solution$table_start[2,2])
+p_start_chi_final <- chisq_p(final_solution$table_final[1,1], final_solution$table_final[1,2], final_solution$table_final[2,1] final_solution$table_final[2,2])
+
   ### Add for some cases with RIR_pi exceeding 100%
   if (!is.na(RIR_pi) && RIR_pi > 100) {   
     transfer <- switch(RIRway,
@@ -334,7 +337,8 @@ test_sensitivity_ln <- function(est_eff,
                   beta_threshold = NA,
                   perc_bias_to_change = NA, 
                   ## to see intermediate outputs
-                  t_start = final_solution$t_start, t_final = final_solution$t_final,        
+                  t_start = final_solution$t_start, t_final = final_solution$t_final,   
+                  p_chi_start = p_start_chi_start, p_chi_final = p_start_chi_final,
                   RIR_primary = RIR,
                   RIR_supplemental = RIR_extra, 
                   RIR_perc = RIR_pi,  # need to discuss the denominator
