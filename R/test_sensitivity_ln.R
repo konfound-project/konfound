@@ -457,11 +457,11 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           }
           
           #conclusion1b <- 
-          cat(paste(
+          cat(paste0(
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c("cases from"), transferway, 
             sprintf("(Fragility = %d).", total_switch),
-            c("Note that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )
                     
 
