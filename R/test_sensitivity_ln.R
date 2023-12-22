@@ -316,7 +316,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
     }
     
   ### Add for indicating calculation of RIR   
-      RIRway_phrase <- switch(RIRway_phrase,
+      RIRway_phrase <- switch(RIRway,
                        "treatment success" = "success in the treatment group",
                        "treatment failure" = "failure in the treatment group",
                        "control failure" = "failure in the treatment group",
