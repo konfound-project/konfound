@@ -322,6 +322,14 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
                        "control failure" = "failure in the treatment group",
                        "control success" = "success in the control group",
                        NA) 
+
+  ### Add for indicating probability of failure in control/entire group  
+  if (replace == "control") {
+  prob_replace <- final_solution$table_start[1,1]/n_cnt*100
+  } else {
+  prob_replace <- final_solution$table_start[1,1]/n_obs*100
+  }
+
   
   # result <- list(conclusion1,
   #                Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
