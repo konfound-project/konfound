@@ -459,10 +459,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           #conclusion1b <- 
           cat(paste0(
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
-            c("cases from"), transferway, 
-            sprintf("(Fragility = %d).", total_switch),
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
             c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
-             )
+             ) 
                     
 
           cat("\n")
@@ -491,19 +491,19 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           }
           
           #conclusion1b <- 
-          cat(paste(
+          cat(paste0(
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
-            c("cases from"), transferway, 
-            sprintf("(Fragility = %d).", total_switch),
-            sprintf("Note that RIR = Fragility/[1-P(", RIRway_phrase, ")]"))
-             )   
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
+            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             )  
           
           cat("\n")
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing more cases that are in the", RIRway, " condition\n"))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
                ) 
             }
 
@@ -549,19 +549,19 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           }
           
           #conclusion1b <- 
-          cat(paste(
+          cat(paste0(
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
-            c("cases from"), transferway, 
-            sprintf("(Fragility = %d).", total_switch),
-            sprintf("Note that RIR = Fragility/[1-P(", RIRway_phrase, ")]"))
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
+            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )  
           
      cat("\n")
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing more cases that are in the", RIRway, " condition\n"))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
                ) 
             }
 
@@ -582,19 +582,19 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           }
           
           #conclusion1b <- 
-          cat(paste(
+          cat(paste0(
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
-            c("cases from"), transferway, 
-            sprintf("(Fragility = %d).", total_switch),
-            sprintf("Note that RIR = Fragility/[1-P(", RIRway_phrase, ")]"))
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
+            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              ) 
 
           cat("\n")
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing more cases that are in the", RIRway, " condition\n"))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
                ) 
             }
 
@@ -621,7 +621,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
       cat("\n")
       cat("\n")
       
-      cat("Table after transfer:\n\n")
+      cat("\n\n")
       print(Transfer_Table)
       cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f)",
                         final_solution$est_eff_final, final_solution$std_err_final, p_final))
@@ -663,12 +663,23 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           }
           
           #conclusion1b <- 
-          cat(paste(
-            sprintf(" This is equivalent to \ntransferring %d", final_solution$final_switch), 
-            c("case from"), transferway, 
-            sprintf("\n(Fragility = %d).", total_switch),
-            sprintf("This transfer of cases yields the following \ntable:")
-          ))
+          cat(paste0(
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
+            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             ) 
+
+          cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
+               ) 
+            }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
           
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 666
@@ -684,20 +695,23 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           }
           
           #conclusion1b <- 
-          cat(paste(
-            sprintf(" This is equivalent to \ntransferring %d", final_solution$final_switch), 
-            c("case from"), transferway, 
-            sprintf("\n(Fragility = %d).", total_switch),
-            sprintf("This transfer of cases yields the following \ntable:")
-          ))
+          cat(paste0(
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
+            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             ) 
+
           cat("\n")
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", success_failure_Rate), 
-                sprintf("which is smaller than the probability of success for the control \ngroup used to calculate the RIR.")))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
+               ) 
             }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
           
     
           
@@ -741,12 +755,23 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           }
           
           #conclusion1b <- 
-          cat(paste(
-            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
-            c("cases from"), transferway, 
-            sprintf("\n(Fragility = %d).", total_switch),
-            sprintf("This transfer of cases yields the following \ntable:")
-          ))
+          cat(paste0(
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
+            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             )  
+
+          cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
+               ) 
+            }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
           
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 888
@@ -762,19 +787,23 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           }
           
           #conclusion1b <- 
-          cat(paste(
-            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
-            c("cases from"), transferway,
-            sprintf("\n(Fragility = %d).", total_switch)
-          ))          
-          cat(sprintf("This transfer of cases yields the following \ntable:"))
+          cat(paste0(
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
+            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             ) 
+
           cat("\n")
+
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing cases with a probability of success of %.2f of\n", success_failure_Rate), 
-                sprintf("which is smaller than the probability of success for the control \ngroup used to calculate the RIR.")))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
+               ) 
             }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
           
         } else {
 
@@ -797,7 +826,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
       cat("\n")
       cat("\n")
       
-      cat("Table after transfer:\n\n")
+      cat("\n\n")
       print(Transfer_Table)
       cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f)",
                   final_solution$est_eff_final, final_solution$std_err_final, p_final)
