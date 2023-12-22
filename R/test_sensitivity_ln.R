@@ -448,7 +448,7 @@ test_sensitivity_ln <- function(est_eff,
       ### start from changeSE = T
       
       cat(sprintf("RIR = %d\n\n", RIR))
-      cat("The table you entered or is implied by your effect size:\n\n")
+      cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
       print(Implied_Table)
       cat("\n")
       cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, p-value = %.3f.",
@@ -654,7 +654,7 @@ test_sensitivity_ln <- function(est_eff,
       ### when changeSE = F
       
       cat(sprintf("RIR = %d\n\n", RIR))
-      cat("The table you entered or is implied by your effect size:\n\n")
+      cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
       print(Implied_Table)
       cat("\n")
       cat(paste(sprintf("The reported effect size = %.3f, and SE = %.3f, p-value = %.3f.",
