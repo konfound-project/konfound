@@ -357,7 +357,7 @@ test_sensitivity_ln <- function(est_eff,
                   beta_threshold = NA,
                   perc_bias_to_change = NA, 
                   ## to see intermediate outputs
-                  thr_t = thr_t,
+                  thr_t = thr_t, t_ob = t_ob,
                   t_start = final_solution$t_start, t_final = final_solution$t_final,   
                   p_start = p_start, p_final = p_final,
                   p_chi_start = p_start_chi, p_chi_final = p_final_chi,
