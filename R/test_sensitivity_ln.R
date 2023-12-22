@@ -458,18 +458,18 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            sprintf(" This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c(" cases from "), transferway, 
-            sprintf(" (Fragility = %d).", total_switch),
-            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+            sprintf("\n(Fragility = %d).", total_switch),
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              ) 
                     
 
@@ -492,18 +492,18 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            sprintf(" This is equivalent to \ntransferring %d", final_solution$final_switch), 
             c(" cases from "), transferway, 
-            sprintf(" (Fragility = %d).", total_switch),
-            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+            sprintf("\n(Fragility = %d).", total_switch),
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )  
           
           cat("\n")
@@ -546,14 +546,14 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("one would need to replace %d \n(%.0f%%)", RIR, RIR_pi), RIRway, "cases "))
+            change, sprintf("one would need to replace %d \n(%.2f%%)", RIR, RIR_pi), RIRway, "cases "))
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -561,7 +561,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf("\n(Fragility = %d).", total_switch),
-            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )  
           
      cat("\n")
@@ -583,10 +583,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -594,7 +594,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf(" (Fragility = %d).", total_switch),
-            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              ) 
 
           cat("\n")
@@ -628,8 +628,9 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
 
       cat("\n\n")
       print(Transfer_Table)
-      cat(paste(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f)",
-                        final_solution$est_eff_final, final_solution$std_err_final, p_final))
+      cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f. Indicate that)",
+                  final_solution$est_eff_final, final_solution$std_err_final, p_final,
+                 c("\nthis is based on t = estimated effect/standard error"))
       )
       
       
@@ -661,10 +662,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -672,7 +673,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf(" (Fragility = %d).", total_switch),
-            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              ) 
 
           cat("\n")
@@ -693,10 +694,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -704,7 +705,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf(" (Fragility = %d).", total_switch),
-            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              ) 
 
           cat("\n")
@@ -753,18 +754,18 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            sprintf(" This is \nequivalent to transferring %d", final_solution$final_switch), 
             c(" cases from "), transferway, 
-            sprintf(" (Fragility = %d).", total_switch),
-            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+            sprintf("\n(Fragility = %d).", total_switch),
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )  
 
           cat("\n")
@@ -785,18 +786,18 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            sprintf(" This is \nequivalent to transferring %d", final_solution$final_switch), 
             c(" cases from "), transferway, 
-            sprintf(" (Fragility = %d).", total_switch),
-            c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+            sprintf("\n(Fragility = %d).", total_switch),
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              ) 
 
           cat("\n")
@@ -830,8 +831,9 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
 
       cat("\n\n")
       print(Transfer_Table)
-      cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f)",
-                  final_solution$est_eff_final, final_solution$std_err_final, p_final)
+      cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f. Indicate that)",
+                  final_solution$est_eff_final, final_solution$std_err_final, p_final,
+                 c("\nthis is based on t = estimated effect/standard error"))
       )
       
       
