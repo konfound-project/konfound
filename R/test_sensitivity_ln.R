@@ -295,10 +295,16 @@ test_sensitivity_ln <- function(est_eff,
   else if (tails == 1) {
     p_start <- (1 - pt(final_solution$t_start, n_obs - n_covariates - 2))
     p_final <- (1 - pt(final_solution$t_final, n_obs - n_covariates - 2))
-  }                    
-p_start_chi_start <- chisq.test(final_solution$table_start,correct = FALSE)$p.value
-p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.value
+  }        
 
+  ### chi-square p
+  p_start_chi <- chisq.test(final_solution$table_start,correct = FALSE)$p.value
+  p_final_chi <- chisq.test(final_solution$table_final,correct = FALSE)$p.value
+
+  ### Fisher's p
+  p_start_fisher <- suppressWarnings(fisher.test(final_solution$table_start)$p.value)
+  p_final_fisher <- suppressWarnings(fisher.test(final_solution$table_final)$p.value)
+  
   ### Add for some cases with RIR_pi exceeding 100%
   if (!is.na(RIR_pi) && RIR_pi > 100) {   
     transfer <- switch(RIRway,
@@ -352,7 +358,9 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
                   perc_bias_to_change = NA, 
                   ## to see intermediate outputs
                   t_start = final_solution$t_start, t_final = final_solution$t_final,   
-                  p_chi_start = p_start_chi_start, p_chi_final = p_start_chi_final,
+                  p_start = p_start, p_final = p_final,
+                  p_chi_start = p_start_chi, p_chi_final = p_final_chi,
+                  p_fisher_start = p_start_fisher, p_fisher_final = p_final_fisher,
                   RIRway_phrase = RIRway_phrase,
                   RIR_primary = RIR,
                   RIR_supplemental = RIR_extra, 
@@ -466,9 +474,9 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent to \ntransferring %d", final_solution$final_switch), 
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c(" cases from "), transferway, 
-            sprintf("\n(Fragility = %d).", total_switch),
+            sprintf(" (Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              ) 
                     
@@ -500,9 +508,9 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent to \ntransferring %d", final_solution$final_switch), 
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c(" cases from "), transferway, 
-            sprintf("\n(Fragility = %d).", total_switch),
+            sprintf(" (Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )  
           
@@ -628,9 +636,9 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
 
       cat("\n\n")
       print(Transfer_Table)
-      cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f. Indicate that",
+      cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f. \nIndicate that",
                   final_solution$est_eff_final, final_solution$std_err_final, p_final),
-                 c("\nthis is based on t = estimated effect/standard error)")
+                 c(" this is based on t = estimated effect/standard error)")
          )
       
       
@@ -763,7 +771,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is \nequivalent to transferring %d", final_solution$final_switch), 
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf("\n(Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
@@ -795,7 +803,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is \nequivalent to transferring %d", final_solution$final_switch), 
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf("\n(Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
@@ -832,9 +840,9 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
 
       cat("\n\n")
       print(Transfer_Table)
-      cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f. Indicate that",
+      cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f. \nIndicate that",
                   final_solution$est_eff_final, final_solution$std_err_final, p_final),
-                 c("\nthis is based on t = estimated effect/standard error)")
+                 c(" this is based on t = estimated effect/standard error)")
          )
       
       
