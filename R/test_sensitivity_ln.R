@@ -458,10 +458,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -478,7 +478,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
                ) 
             }
 
@@ -492,10 +492,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -511,7 +511,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
                ) 
             }
 
@@ -550,17 +550,17 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c(" cases from "), transferway, 
-            sprintf(" (Fragility = %d).", total_switch),
+            sprintf("\n(Fragility = %d).", total_switch),
             c("\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )  
           
@@ -569,7 +569,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
                ) 
             }
 
@@ -583,10 +583,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -602,7 +602,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
                ) 
             }
 
@@ -661,10 +661,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -680,7 +680,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
                ) 
             }
 
@@ -693,10 +693,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -712,7 +712,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
                ) 
             }
 
@@ -753,10 +753,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -772,7 +772,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
                ) 
             }
 
@@ -785,10 +785,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -804,7 +804,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
                ) 
             }
 
