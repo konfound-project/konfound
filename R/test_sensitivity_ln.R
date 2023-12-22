@@ -357,6 +357,7 @@ test_sensitivity_ln <- function(est_eff,
                   beta_threshold = NA,
                   perc_bias_to_change = NA, 
                   ## to see intermediate outputs
+                  thr_t = thr_t,
                   t_start = final_solution$t_start, t_final = final_solution$t_final,   
                   p_start = p_start, p_final = p_final,
                   p_chi_start = p_start_chi, p_chi_final = p_final_chi,
@@ -486,7 +487,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -519,7 +520,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -577,7 +578,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -610,7 +611,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -690,7 +691,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -722,7 +723,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -782,7 +783,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -814,7 +815,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition\n"))
+                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
