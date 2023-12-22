@@ -437,7 +437,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
       ))
             
       if (invalidate_ob) {
-
+#111
         ### when invalidate = T
 
         change <- sprintf("To invalidate the inference that the effect is different from 0 \n(alpha = %.3f)", alpha)
@@ -460,22 +460,22 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c("cases from"), transferway, 
             sprintf("(Fragility = %d).", total_switch),
-            sprintf("Note that RIR = Fragility/[1-P(", RIRway_phrase, ")]"))
+            c("Note that RIR = Fragility/[1-P(", RIRway_phrase, c(")]")))
              )       
 
           cat("\n")
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("Note the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                sprintf("\nrequire replacing more cases that are in the", RIRway, " condition\n"))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases that are in the"), RIRway, c(" condition\n"))
                ) 
             }
 
           cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
 
           
-        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {#222
           #conclusion1 <- 
           cat(paste(
             change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases"))
@@ -523,7 +523,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
               )
         }
         ### changed due to consistent linebreak
-      } else {
+      } else {#333
 
           ### when invalidate = F (sustain)
         
@@ -566,7 +566,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
 
           
-        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {#444
           #conclusion1 <- 
           cat(paste(
             change, sprintf("one would need to replace %d \n(%.2f%%)", RIR, RIR_pi), RIRway, "\ncases"))
@@ -641,7 +641,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
       )
       
       ### start here
-      if (invalidate_ob) {
+      if (invalidate_ob) {#555
 
         ### invalidate = T
         
@@ -668,7 +668,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
             sprintf("This transfer of cases yields the following \ntable:")
           ))
           
-        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {#666
           #conclusion1 <- 
           cat(paste(
             change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases"))
@@ -715,7 +715,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
               )
                    }
         ### changed due to consistent linebreak
-      } else {
+      } else {#777
 
         ### invalidate = F (sustain) 
         
@@ -746,7 +746,7 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
             sprintf("This transfer of cases yields the following \ntable:")
           ))
           
-        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {#888
           #conclusion1 <- 
           cat(paste(
             change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases"))
