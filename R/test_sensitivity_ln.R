@@ -628,10 +628,11 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
 
       cat("\n\n")
       print(Transfer_Table)
-      cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f. Indicate that)",
-                  final_solution$est_eff_final, final_solution$std_err_final, p_final,
-                 c("\nthis is based on t = estimated effect/standard error"))
-      )
+      cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f. Indicate that",
+                  final_solution$est_eff_final, final_solution$std_err_final, p_final),
+                 c("\nthis is based on t = estimated effect/standard error)")
+         )
+      
       
       
     } else {
@@ -831,10 +832,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
 
       cat("\n\n")
       print(Transfer_Table)
-      cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f. Indicate that)",
-                  final_solution$est_eff_final, final_solution$std_err_final, p_final,
-                 c("\nthis is based on t = estimated effect/standard error"))
-      )
+      cat(sprintf("(Effect size = %.3f, SE = %.3f, p-value = %.3f. Indicate that",
+                  final_solution$est_eff_final, final_solution$std_err_final, p_final),
+                 c("\nthis is based on t = estimated effect/standard error)")
+         )
       
       
     }
