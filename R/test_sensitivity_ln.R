@@ -458,10 +458,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -492,10 +492,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -550,10 +550,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -583,10 +583,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -661,10 +661,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -693,10 +693,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \ncontrol group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the \nentire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -753,10 +753,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
@@ -785,10 +785,10 @@ p_start_chi_final <- chisq.test(final_solution$table_final,correct = FALSE)$p.va
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.0f%%) applies (RIR = %d).", prob_replace, RIR))
           }
           
           #conclusion1b <- 
