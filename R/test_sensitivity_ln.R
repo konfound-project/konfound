@@ -292,12 +292,12 @@ test_sensitivity_ln <- function(est_eff,
     p_final <- (2 * (1 - pt(abs(final_solution$t_final), n_obs - n_covariates - 2)))
   } 
   # For a one-tailed test (assuming upper tail)
-  else if (tails == 1 & t_obs > 0) {
+  else if (tails == 1 & t_ob > 0) {
     p_start <- (1 - pt(final_solution$t_start, n_obs - n_covariates - 2))
     p_final <- (1 - pt(final_solution$t_final, n_obs - n_covariates - 2))
   } 
   # For a one-tailed test (assuming lower tail)
-  else if (tails == 1 & t_obs < 0) {
+  else if (tails == 1 & t_ob < 0) {
     p_start <- (pt(final_solution$t_start, n_obs - n_covariates - 2))
     p_final <- (pt(final_solution$t_final, n_obs - n_covariates - 2))
   }       
