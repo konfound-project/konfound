@@ -151,25 +151,48 @@ test_sensitivity_ln <- function(est_eff,
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment success"
     RIR_pi <- RIR / d * 100
+    
+    if (replace == "entire"){
+      RIRway_phrase <- "failure in the entire sample"  
+    } else if (replace == "control"){
+      RIRway_phrase <- "failure in the control group"  
+    }
   }
   if (switch_trm && !dcroddsratio_ob) {
     transferway <- "treatment failure to treatment success"
     RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment failure"
     RIR_pi <- RIR / c * 100
-
+    
+    if (replace == "entire"){
+      RIRway_phrase <- "success in the entire sample"  
+    } else if (replace == "control"){
+      RIRway_phrase <- "success in the control group"  
+    }
   }
   if (!switch_trm && dcroddsratio_ob) {
     transferway <- "control failure to control success"
     RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control failure"
     RIR_pi <- RIR / a * 100
+    
+    if (replace == "entire"){
+      RIRway_phrase <- "success in the entire sample"  
+    } else if (replace == "control"){
+      RIRway_phrase <- "success in the control group"  
+    }
   }
   if (!switch_trm && !dcroddsratio_ob) {
     transferway <- "control success to control failure"
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control success"
     RIR_pi <- RIR / b * 100
+    
+    if (replace == "entire"){
+      RIRway_phrase <- "failure in the entire sample"  
+    } else if (replace == "control"){
+      RIRway_phrase <- "failure in the control group"  
+    }
   }
   RIR_extra <- final_extra <- NA
   
@@ -327,12 +350,7 @@ test_sensitivity_ln <- function(est_eff,
     }
     
   ### Add for indicating calculation of RIR   
-      RIRway_phrase <- switch(RIRway,
-                       "treatment success" = "success in the treatment group",
-                       "treatment failure" = "failure in the treatment group",
-                       "control failure" = "failure in the treatment group",
-                       "control success" = "success in the control group",
-                       NA) 
+
 
   ### Add for indicating probability of failure in control/entire group  
   if (replace == "control") {
