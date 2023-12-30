@@ -368,6 +368,7 @@ test_sensitivity_ln <- function(est_eff,
                   p_chi_start = p_start_chi, p_chi_final = p_final_chi,
                   p_fisher_start = p_start_fisher, p_fisher_final = p_final_fisher,
                   RIRway_phrase = RIRway_phrase,
+                  final = final,
                   RIR_primary = RIR,
                   RIR_supplemental = RIR_extra, 
                   RIR_perc = RIR_pi,  # need to discuss the denominator
