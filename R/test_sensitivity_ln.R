@@ -474,7 +474,7 @@ test_sensitivity_ln <- function(est_eff,
       cat("\n")
       cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, p-value = %.3f.",
                         est_eff, user_std_err, p_start),
-                sprintf("\nThe SE has been adjusted to %.3f to generate a real number in the", final_solution$std_err_start), 
+                sprintf("\nThe SE has been adjusted to %.3f to generate real numbers in the", final_solution$std_err_start), 
                 sprintf("\nimplied table. Numbers in the table cells have been rounded"),
                 sprintf("\nto integers, which may slightly alter the estimated effect from"), 
                 sprintf("\nthe value originally entered.\n\n")
@@ -513,7 +513,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -546,7 +546,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -604,7 +604,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -637,7 +637,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -663,7 +663,7 @@ test_sensitivity_ln <- function(est_eff,
 
       cat("\n\n")
       print(Transfer_Table)
-      cat(sprintf("Effect size = %.3f, SE = %.3f, p-value = %.3f. \nIndicate that",
+      cat(sprintf("Effect size = %.3f, SE = %.3f, p-value = %.3f. \n",
                   final_solution$est_eff_final, final_solution$std_err_final, p_final),
                  c("this is based on t = estimated effect/standard error")
          )
@@ -717,7 +717,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -749,7 +749,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -809,7 +809,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -841,7 +841,7 @@ test_sensitivity_ln <- function(est_eff,
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
             cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases that are in the "), RIRway, c(" condition.\n"))
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
                ) 
             }
 
@@ -867,7 +867,7 @@ test_sensitivity_ln <- function(est_eff,
 
       cat("\n\n")
       print(Transfer_Table)
-      cat(sprintf("Effect size = %.3f, SE = %.3f, p-value = %.3f. \nIndicate that",
+      cat(sprintf("Effect size = %.3f, SE = %.3f, p-value = %.3f. \n",
                   final_solution$est_eff_final, final_solution$std_err_final, p_final),
                  c("this is based on t = estimated effect/standard error")
          )
