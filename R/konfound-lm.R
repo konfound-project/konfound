@@ -1,3 +1,21 @@
+#' Konfound Analysis for Linear Models
+#'
+#' This function performs konfound analysis on a linear model object 
+#' produced by lm.
+#' It calculates the sensitivity of inferences for coefficients in the model.
+#' It supports analysis for a single variable or multiple variables.
+#'
+#' @param model_object The linear model object produced by lm.
+#' @param tested_variable_string The name of the variable being tested.
+#' @param test_all Boolean indicating whether to test all variables or not.
+#' @param alpha Significance level for hypothesis testing.
+#' @param tails Number of tails for the test (1 or 2).
+#' @param index Type of sensitivity analysis ('RIR' by default).
+#' @param to_return The type of output to return.
+#' @return The results of the konfound analysis for the specified variable(s).
+#' @importFrom broom tidy glance
+#' @importFrom dplyr select filter bind_cols
+
 # konfound-lm
 
 konfound_lm <- function(model_object, 

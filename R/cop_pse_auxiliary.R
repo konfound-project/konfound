@@ -1,3 +1,9 @@
+#' Calculate R2yz based on ryxGz and R2
+#'
+#' @param ryxGz correlation coefficient between Y and X given Z
+#' @param R2 coefficient of determination
+#' @return R2yz value
+#' @importFrom lavaan parameterEstimates
 cal_ryz <- function(ryxGz, R2){
     R2yz = (ryxGz^2 - R2)/(ryxGz^2 - 1)
     if (R2yz >= 0) {
@@ -8,6 +14,15 @@ cal_ryz <- function(ryxGz, R2){
     return(ryz)
 }
 
+#' Calculate R2xz based on variances and standard error
+#'
+#' @param var_x variance of X
+#' @param var_y variance of Y
+#' @param R2 coefficient of determination
+#' @param df degrees of freedom
+#' @param std_err standard error
+#' @return R2xz value
+#' @importFrom lavaan parameterEstimates
 cal_rxz <- function(var_x, var_y, R2, df, std_err){
     R2xz = 1 - ((var_y * (1 - R2))/(var_x * df * std_err^2))
     if (R2xz <= 0) {stop("Error! R2xz < 0!")} 
@@ -16,11 +31,32 @@ cal_rxz <- function(var_x, var_y, R2, df, std_err){
     return(rxz)
 }
 
+#' Calculate rxy based on ryxGz, rxz, and ryz
+#'
+#' @param ryxGz correlation coefficient between Y and X given Z
+#' @param rxz correlation coefficient between X and Z
+#' @param ryz correlation coefficient between Y and Z
+#' @return rxy value
+#' @importFrom lavaan parameterEstimates
 cal_rxy <- function(ryxGz, rxz, ryz){
     rxy = ryxGz * sqrt((1 - rxz^2)*(1 - ryz^2)) + rxz * ryz
     return(rxy)
 }
 
+#' Calculate delta star for sensitivity analysis
+#'
+#' @param FR2max maximum R2
+#' @param R2 current R2
+#' @param R2_uncond unconditional R2
+#' @param est_eff estimated effect
+#' @param eff_thr effect threshold
+#' @param var_x variance of X
+#' @param var_y variance of Y
+#' @param est_uncond unconditional estimate
+#' @param rxz correlation coefficient between X and Z
+#' @param n_obs number of observations
+#' @return delta star value
+#' @importFrom lavaan parameterEstimates
 cal_delta_star <- function(FR2max, 
                            R2, R2_uncond, 
                            est_eff, 
@@ -100,6 +136,7 @@ cal_delta_star <- function(FR2max,
 # }
 
 # see test_cop for updated approach to calculate delta exact 
+
 
 verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv, 
                            rxy, rxz, rzy, rcvy, rcvx, rcvz){
@@ -250,6 +287,18 @@ verify_manual <- function(rxy, rxz, rxcv, ryz, rycv, rzcv, sdy, sdx){
     return(beta)
 }
 
+
+#' Verify regression model with control variable Z
+#'
+#' @param n_obs number of observations
+#' @param sdx standard deviation of X
+#' @param sdy standard deviation of Y
+#' @param sdz standard deviation of Z
+#' @param rxy correlation coefficient between X and Y
+#' @param rxz correlation coefficient between X and Z
+#' @param rzy correlation coefficient between Z and Y
+#' @return list of model parameters
+#' @importFrom lavaan sem parameterEstimates
 verify_reg_Gz = function(n_obs, sdx, sdy, sdz, rxy, rxz, rzy){
     
     model <- 'Y ~ beta1 * X + beta2 * Z'
@@ -305,6 +354,15 @@ verify_reg_Gz = function(n_obs, sdx, sdy, sdz, rxy, rxz, rzy){
     }
 }
 
+
+#' Verify unconditional regression model
+#'
+#' @param n_obs number of observations
+#' @param sdx standard deviation of X
+#' @param sdy standard deviation of Y
+#' @param rxy correlation coefficient between X and Y
+#' @return list of model parameters
+#' @importFrom lavaan sem parameterEstimates
 verify_reg_uncond = function(n_obs, sdx, sdy, rxy){
     
     model <- 'Y ~ beta1 * X'

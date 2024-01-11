@@ -92,6 +92,8 @@
 #' # use pkonfound to calculate rxcv and rycv when preserving standard error
 #' pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1, 
 #' sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
+#' @importFrom dplyr pull
+#' @importFrom tibble tribble
 #' @export
 
  pkonfound <- function(est_eff,

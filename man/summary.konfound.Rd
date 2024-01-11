@@ -15,5 +15,6 @@
 Concise summary of konfound output
 }
 \details{
-Prints a concise summary of konfound output with multiple types of data specified in the to_return argument
+Prints a concise summary of konfound output with multiple types
+ of data specified in the to_return argument
 }

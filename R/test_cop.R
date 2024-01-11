@@ -1,5 +1,30 @@
-# COP standards for Coefficient of Proportionality
-# test_cop calculates both versions of COP (Oster's approx & exact)
+#' Coefficient of Proportionality (COP) Test
+#'
+#' Conducts the Coefficient of Proportionality (COP) test, calculating both
+#' Oster's approximate and exact versions of COP.
+#'
+#' @param est_eff The estimated effect (unstandardized).
+#' @param std_err The standard error of the effect (unstandardized).
+#' @param n_obs Number of observations.
+#' @param n_covariates Number of covariates in the model.
+#' @param sdx Standard deviation of the predictor variable.
+#' @param sdy Standard deviation of the outcome variable.
+#' @param R2 R-squared of the model, not adjusted.
+#' @param eff_thr Threshold for the effect size, unstandardized.
+#' @param FR2max_multiplier Multiplier for R2 to get R2max.
+#' @param FR2max Maximum R-squared in the final model with an 
+#' unobserved confounder.
+#' @param alpha Significance level for hypothesis testing (default: 0.05).
+#' @param tails Number of tails for hypothesis testing (default: 2).
+#' @param to_return Type of output to return ('raw_output', 'print', or other).
+#' @return A list containing results of the COP test, including delta star,
+#'  delta exact,percentage bias, and other statistical measures.
+#'   Can also print summary results.
+#' @importFrom stats qt
+#' @importFrom ggplot2 ggplot aes geom_point geom_line scale_shape_manual
+#'  scale_y_continuous
+#' @importFrom ggplot2 sec_axis theme element_blank element_line element_text
+#' @export
 
 test_cop <- function(est_eff, # unstandardized
                      std_err, # unstandardized

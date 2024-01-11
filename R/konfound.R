@@ -1,23 +1,33 @@
-#' Perform sensitivity analysis on fitted models
-#' @description For fitted models, this command calculates 
-#' (1) how much bias there must be in an estimate to invalidate/sustain 
-#' an inference; (2) the impact of an omitted variable necessary to 
-#' invalidate/sustain an inference for a regression coefficient. 
-#' Currently works for: models created with lm() (linear models).
-#' @param model_object output from a model (currently works for: lm)
-#' @param tested_variable Variable associated with the unstandardized beta 
-#' coefficient to be tested
-#' @inheritParams pkonfound
-#' @param index whether output is RIR or IT (impact threshold); 
-#' defaults to "RIR"
-#' @param two_by_two whether or not the tested variable is a dichotomous 
-#' variable in a GLM; if so, the 2X2 table approach is used; only works for 
-#' single variables at present (so test_all = TRUE will return an error)
-#' @param test_all whether to carry out the sensitivity test for all of the 
-#' coefficients (defaults to FALSE)
-#' @return prints the bias and the number of cases that would have to be 
-#' replaced with cases for which there is no effect to invalidate the inference
-#' @importFrom rlang .data
+#' Konfound Analysis for Various Model Types
+#'
+#' Performs sensitivity analysis on fitted models including 
+#' linear models (`lm`), generalized linear models (`glm`), 
+#' and linear mixed-effects models (`lmerMod`).
+#' It calculates the amount of bias required to invalidate or 
+#' sustain an inference,and the impact of an omitted variable 
+#' necessary to affect the inference.
+#'
+#' @param model_object A model object produced by `lm`, `glm`, or `lme4::lmer`.
+#' @param tested_variable Variable associated with the coefficient to be tested.
+#' @param alpha Significance level for hypothesis testing.
+#' @param tails Number of tails for the test (1 or 2).
+#' @param index Type of sensitivity analysis ('RIR' by default).
+#' @param to_return Type of output to return ('print', 'raw_output', 'table').
+#' @param test_all Boolean; if `TRUE`, tests all coefficients.
+#' @param two_by_two Boolean; if `TRUE`, uses a 2x2 table approach 
+#' for `glm` dichotomous variables.
+#' @param n_treat Number of treatment cases 
+#' (used only if `two_by_two` is `TRUE`).
+#' @param switch_trm Boolean; switch treatment and control in the analysis.
+#' @param replace Replacement method for treatment cases ('control' by default).
+#' @return Depending on `to_return`, prints the result, returns a raw output, 
+#' or a summary table.
+#' @importFrom rlang enquo quo_name
+#' @importFrom lme4 fixef lmer
+#' @importFrom broom tidy glance
+#' @importFrom dplyr filter select bind_cols
+#' @importFrom purrr map_dbl
+#' @importFrom pbkrtest get_Lb_ddf
 #' @examples
 #' # using lm() for linear models
 #' m1 <- lm(mpg ~ wt + hp, data = mtcars)
@@ -42,8 +52,7 @@
 #'   konfound(m3, Days)
 #' }
 #' 
-#' m4 <- glm(outcome ~ condition, data = binary_dummy_data, 
-#' family = binomial(link = "logit"))
+#' m4 <- glm(outcome ~ condition, data = binary_dummy_data, family = binomial(link = "logit"))
 #' konfound(m4, condition, two_by_two = TRUE, n_treat = 55)
 #' 
 

@@ -1,3 +1,23 @@
+#' Konfound Analysis for Generalized Linear Models with Dichotomous Outcomes
+#'
+#' This function performs konfound analysis on a generalized linear model
+#' object with a dichotomous outcome. It uses 'broom' to tidy model outputs
+#' and calculates the sensitivity of inferences.
+#'
+#' @param model_object The model object produced by glm.
+#' @param tested_variable_string The name of the variable being tested.
+#' @param test_all Boolean indicating whether to test all variables or not.
+#' @param alpha Significance level for hypothesis testing.
+#' @param tails Number of tails for the test (1 or 2).
+#' @param to_return The type of output to return.
+#' @param n_treat Number of treatment cases.
+#' @param switch_trm Term to switch for sensitivity analysis.
+#' @param replace Boolean indicating whether to replace cases or not.
+#' @return The results of the konfound analysis.
+#' @importFrom broom tidy glance
+#' @importFrom stats glm
+
+
 # konfound-glm
 
 konfound_glm_dichotomous <- function(model_object, 

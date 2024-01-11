@@ -11,6 +11,5 @@
 #'   \item{df}{degrees of freedom associated with the t value}
 #'   ...
 #' }
-#' @source \url
-#' {https://drive.google.com/file/d/1aGhxGjvMvEPVAgOA8rrxvA97uUO5TTMe/view}
+#' @source \url{https://drive.google.com/file/d/1aGhxGjvMvEPVAgOA8rrxvA97uUO5TTMe/view}
 "mkonfound_ex"

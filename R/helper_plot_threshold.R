@@ -1,3 +1,19 @@
+#' Plot Effect Threshold Diagram
+#'
+#' This function creates a plot to illustrate the threshold of an effect 
+#' estimate in relation to a specified beta threshold. It uses ggplot2 
+#' for graphical representation.
+#'
+#' @param beta_threshold The threshold value for the effect.
+#' @param est_eff The estimated effect size.
+#' @return A ggplot object representing the effect threshold diagram.
+#' @importFrom ggplot2 ggplot aes geom_col geom_hline annotate 
+#' scale_fill_manual theme_bw theme xlab ylab
+#' @importFrom dplyr tibble mutate rename select filter pull
+#' @importFrom tidyr gather
+
+
+
 # Function to output the plot
 
 plot_threshold <- function(beta_threshold, est_eff) {

@@ -1,3 +1,29 @@
+#' Test Sensitivity for Non-linear Models
+#'
+#' This function performs sensitivity analysis for non-linear models.
+#' It is used in conjunction with `pkonfound()`, `konfound()`, and `mkonfound()`.
+#'
+#' @param est_eff Estimated effect size.
+#' @param std_err Standard error of the estimated effect.
+#' @param n_obs Number of observations in the study.
+#' @param n_covariates Number of covariates in the model.
+#' @param n_treat Number of cases in the treatment group.
+#' @param switch_trm Logical value indicating whether to switch 
+#' treatment and control groups (default: TRUE).
+#' @param replace Specifies the group for base rate calculation 
+#' ('control' or 'sample').
+#' @param alpha Significance level for hypothesis testing.
+#' @param tails Number of tails for hypothesis testing.
+#' @param nu Hypothesized value to test the effect against.
+#' @param to_return Type of output to return ('raw_output', 'print', or other).
+#' @param model_object A model object used in the sensitivity analysis.
+#' @param tested_variable Name of the variable being tested in the model.
+#' @return Depending on `to_return`,a list of analysis results or printed output
+#' @importFrom stats qt
+#' @importFrom crayon bold underline
+#' @importFrom purrr map
+#' @export
+
 # Main function to test sensitivity for non-linear models to 
 # be wrapped with pkonfound(), konfound(), and mkonfound()
 test_sensitivity_ln <- function(est_eff,

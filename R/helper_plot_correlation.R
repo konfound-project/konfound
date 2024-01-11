@@ -1,3 +1,17 @@
+#' Plot Correlation Diagram
+#'
+#' This function creates a plot to illustrate the correlation between different 
+#' variables,specifically focusing on the confounding variable, predictor of 
+#' interest, and outcome.It uses ggplot2 for graphical representation.
+#'
+#' @param r_con Correlation coefficient related to the confounding variable.
+#' @param obs_r Observed correlation coefficient.
+#' @param critical_r Critical correlation coefficient for decision-making.
+#' @return A ggplot object representing the correlation diagram.
+#' @importFrom ggplot2 ggplot aes_string geom_segment geom_curve annotate 
+#' theme_void ggtitle
+
+
 # plot correlation
 
 plot_correlation <- function(r_con, obs_r, critical_r) {

@@ -1,4 +1,13 @@
+
 # # # konfound-lmer
+
+#' Extract Degrees of Freedom for Fixed Effects in a Linear Mixed-Effects Model
+#'
+#' @param model_object The mixed-effects model object produced by lme4::lmer.
+#' @return A vector containing degrees of freedom for the fixed effects in the model.
+#' @importFrom lme4 fixef
+#' @importFrom pbkrtest get_Lb_ddf
+#' @importFrom purrr map_dbl
 
 get_kr_df <- function(model_object) {
   L <- diag(rep(1, length(lme4::fixef(model_object))))
@@ -8,6 +17,24 @@ get_kr_df <- function(model_object) {
   names(out) <- names(lme4::fixef(model_object))
   out
 }
+
+
+#' Konfound Analysis for Linear Mixed-Effects Models
+#'
+#' This function performs konfound analysis on a linear mixed-effects model
+#' object produced by lme4::lmer. It calculates the sensitivity of inferences
+#' for fixed effects in the model. It supports analysis for a single variable or multiple variables.
+#'
+#' @param model_object The mixed-effects model object produced by lme4::lmer.
+#' @param tested_variable_string The name of the fixed effect being tested.
+#' @param test_all Boolean indicating whether to test all fixed effects or not.
+#' @param alpha Significance level for hypothesis testing.
+#' @param tails Number of tails for the test (1 or 2).
+#' @param index Type of sensitivity analysis ('RIR' by default).
+#' @param to_return The type of output to return.
+#' @return The results of the konfound analysis for the specified fixed effect(s).
+#' @importFrom broom.mixed tidy
+#' @importFrom dplyr filter bind_cols
 
 konfound_lmer <- function(model_object, 
                           tested_variable_string, 

@@ -33,9 +33,11 @@ pkonfound(
 )
 }
 \arguments{
-\item{est_eff}{the estimated effect (such as an unstandardized beta coefficient or a group mean difference)}
+\item{est_eff}{the estimated effect (such as an unstandardized beta 
+coefficient or a group mean difference)}
 
-\item{std_err}{the standard error of the estimate of the unstandardized regression coefficient}
+\item{std_err}{the standard error of the estimate of the unstandardized 
+regression coefficient}
 
 \item{n_obs}{the number of observations in the sample}
 
@@ -43,31 +45,45 @@ pkonfound(
 
 \item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
-\item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
+\item{tails}{integer whether hypothesis testing is one-tailed (1) or 
+two-tailed (2; defaults to 2)}
 
-\item{index}{whether output is RIR or IT (impact threshold); defaults to "RIR"}
+\item{index}{whether output is RIR or IT (impact threshold); 
+defaults to "RIR"}
 
-\item{nu}{what hypothesis to be tested; defaults to testing whether est_eff is significantly different from 0}
+\item{nu}{what hypothesis to be tested; defaults to testing whether 
+est_eff is significantly different from 0}
 
-\item{n_treat}{the number of cases associated with the treatment condition; applicable only when model_type = "logistic"}
+\item{n_treat}{the number of cases associated with the treatment condition; 
+applicable only when model_type = "logistic"}
 
-\item{switch_trm}{whether to switch the treatment and control cases; defaults to FALSE; applicable only when model_type = "logistic"}
+\item{switch_trm}{whether to switch the treatment and control cases; defaults
+to FALSE; applicable only when model_type = "logistic"}
 
-\item{model_type}{the type of model being estimated; defaults to "ols" for a linear regression model; the other option is "logistic"}
+\item{model_type}{the type of model being estimated; defaults to "ols" for 
+a linear regression model; the other option is "logistic"}
 
-\item{a}{cell is the number of cases in the control group showing unsuccessful results}
+\item{a}{cell is the number of cases in the control group showing 
+unsuccessful results}
 
-\item{b}{cell is the number of cases in the control group showing successful results}
+\item{b}{cell is the number of cases in the control group showing successful 
+results}
 
-\item{c}{cell is the number of cases in the treatment group showing unsuccessful results}
+\item{c}{cell is the number of cases in the treatment group showing 
+unsuccessful results}
 
-\item{d}{cell is the number of cases in the treatment group showing successful results}
+\item{d}{cell is the number of cases in the treatment group showing 
+successful results}
 
-\item{two_by_two_table}{table that is a matrix or can be coerced to one (data.frame, tibble, tribble) from which the a, b, c, and d arguments can be extracted}
+\item{two_by_two_table}{table that is a matrix or can be coerced to one 
+(data.frame, tibble, tribble) from which the a, b, c, and d arguments can 
+be extracted}
 
-\item{test}{whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test}
+\item{test}{whether using Fisher's Exact Test or A chi-square test; defaults 
+to Fisher's Exact Test}
 
-\item{replace}{whether using entire sample or the control group to calculate the base rate; default is the entire sample}
+\item{replace}{whether using entire sample or the control group to calculate
+the base rate; default is the control group}
 
 \item{sdx}{the standard deviation of X}
 
@@ -77,17 +93,26 @@ pkonfound(
 
 \item{eff_thr}{unstandardized coefficient threshold to change an inference}
 
-\item{FR2max}{the largest R2, or R2max, in the final model with unobserved confounder}
+\item{FR2max}{the largest R2, or R2max, in the final model with unobserved 
+confounder}
 
-\item{FR2max_multiplier}{the multiplier of R2 to get R2max, default is set to 1.3}
+\item{FR2max_multiplier}{the multiplier of R2 to get R2max, 
+default is set to 1.3}
 
-\item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
+\item{to_return}{whether to return a data.frame 
+(by specifying this argument to equal "raw_output" for use in other analyses)
+ or a plot ("plot"); default is to print ("print") the output to the console;
+  can specify a vector of output to return}
 }
 \value{
-prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
+prints the bias and the number of cases that would have to be 
+replaced with cases for which there is no effect to invalidate the inference
 }
 \description{
-For published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient.
+For published studies, this command calculates 
+(1) how much bias there must be in an estimate to invalidate/sustain 
+an inference; (2) the impact of an omitted variable necessary to 
+invalidate/sustain an inference for a regression coefficient.
 }
 \examples{
 # using pkonfound for linear models
@@ -114,5 +139,9 @@ pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01, switch_trm = FALSE)
 pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
 
 # use pkonfound to calculate delta* and delta_exact 
-
+pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
+ eff_thr = 0, FR2max = .8, index = "COP", to_return = "raw_output")
+# use pkonfound to calculate rxcv and rycv when preserving standard error
+pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1, 
+sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
 }

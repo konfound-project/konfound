@@ -1,3 +1,24 @@
+#' Konfound Analysis for Generalized Linear Models
+#'
+#' This function performs konfound analysis on a generalized linear model
+#' object. It uses 'broom' to tidy model outputs and calculates the sensitivity
+#' of inferences. It supports analysis for a single variable
+#'  or multiple variables.
+#'
+#' @param model_object The model object produced by glm.
+#' @param tested_variable_string The name of the variable being tested.
+#' @param test_all Boolean indicating whether to test all variables or not.
+#' @param alpha Significance level for hypothesis testing.
+#' @param tails Number of tails for the test (1 or 2).
+#' @param index Type of sensitivity analysis ('RIR' by default).
+#' @param to_return The type of output to return.
+#' @return The results of the konfound analysis for the specified variable(s).
+#' @importFrom broom tidy glance
+#' @importFrom dplyr select filter bind_cols
+#' @importFrom stats glm
+#' @importFrom margins margins
+
+
 # konfound-glm
 
 konfound_glm <- function(model_object, 

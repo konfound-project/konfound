@@ -1,3 +1,32 @@
+
+#' Perform Sensitivity Analysis on 2x2 Tables
+#'
+#' This function performs a sensitivity analysis on a 2x2 contingency table.
+#' It calculates the number of cases that need to be replaced to invalidate
+#' or sustain the statistical inference. The function also allows switching
+#' between treatment success and failure or control success and failure
+#' based on the provided parameters.
+#'
+#' @param a Number of unsuccessful cases in the control group.
+#' @param b Number of successful cases in the control group.
+#' @param c Number of unsuccessful cases in the treatment group.
+#' @param d Number of successful cases in the treatment group.
+#' @param alpha Significance level for the statistical test, default is 0.05.
+#' @param switch_trm Boolean indicating whether to switch treatment row cells,
+#'        default is TRUE.
+#' @param test Type of statistical test to use, either "fisher" 
+#' (default) or "chisq".
+#' @param replace Indicates whether to use the entire sample or the control 
+#' group for base rate calculation, default is "control".
+#' @param to_return Type of output to return, either "raw_output" or "print".
+#'
+#' @importFrom crayon bold underline
+#'
+#' @return Returns detailed information about the sensitivity analysis,
+#'         including the number of cases to be replaced (RIR), user-entered
+#'         table, transfer table, and conclusions.
+#'
+#' @export
 tkonfound <- function(a, b, c, d, 
                       alpha = 0.05, 
                       switch_trm = T, 

@@ -9,7 +9,10 @@ create_konfound_class <- function(x) {
 #'  of data specified in the to_return argument
 #' @param object A `konfound` object
 #' @param ... Additional arguments
+#' @method summary konfound
 #' @export
+
+
 
 summary.konfound <- function(object, ...) {
     cat("Created", length(object), "forms of output. To access type: \n")

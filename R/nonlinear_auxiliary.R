@@ -1,3 +1,6 @@
+#' @importFrom stats qt
+
+
 # to evaluate whether we are moving cases to invalidate or sustain the inference
 isinvalidate <- function(thr_t, ob_t) {
   if ((0 < thr_t && thr_t < ob_t) || (ob_t < thr_t && thr_t < 0)) {
@@ -106,6 +109,8 @@ get_abcd_kfnl <- function(a1, b1, c1, d1) {
 }
 
 # get the number of switches
+
+
 getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   ### calculate the est and se after rounding (before any switches)
   a <- table_bstart[1]
@@ -331,6 +336,20 @@ get_pi <- function(odds_ratio, std_err, n_obs, n_trm) {
   }
   return(x)
 }
+
+#' Perform a Chi-Square Test
+#'
+#' @description
+#' `chisq_p` calculates the p-value for a chi-square test given a contingency table.
+#'
+#' @param a Frequency count for row 1, column 1.
+#' @param b Frequency count for row 1, column 2.
+#' @param c Frequency count for row 2, column 1.
+#' @param d Frequency count for row 2, column 2.
+#'
+#' @return P-value from the chi-square test.
+#' @importFrom stats chisq.test
+
 
 # get p value for chi-square test 
 chisq_p <- function(a, b, c, d){
