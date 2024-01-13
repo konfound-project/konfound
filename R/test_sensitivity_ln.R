@@ -152,9 +152,9 @@ test_sensitivity_ln <- function(est_eff,
     RIRway <- "treatment success"
     RIR_pi <- RIR / d * 100
     
-    if (replace == "entire"){
+    if (replace = "entire"){
       RIRway_phrase <- "success in the entire sample"  
-    } else if (replace == "control"){
+    } else if (replace = "control"){
       RIRway_phrase <- "success in the control group"  
     }
   }
@@ -166,9 +166,9 @@ test_sensitivity_ln <- function(est_eff,
     
     ### added to show RIR calculation
     
-    if (replace == "entire"){
+    if (replace = "entire"){
       RIRway_phrase <- "failure in the entire sample"  
-    } else if (replace == "control"){
+    } else if (replace = "control"){
       RIRway_phrase <- "failure in the control group"  
     }
   }
@@ -178,9 +178,9 @@ test_sensitivity_ln <- function(est_eff,
     RIRway <- "control failure"
     RIR_pi <- RIR / a * 100
     
-    if (replace == "entire"){
+    if (replace = "entire"){
       RIRway_phrase <- "failure in the entire sample"  
-    } else if (replace == "control"){
+    } else if (replace = "control"){
       RIRway_phrase <- "failure in the control group"  
     }
   }
@@ -190,9 +190,9 @@ test_sensitivity_ln <- function(est_eff,
     RIRway <- "control success"
     RIR_pi <- RIR / b * 100
     
-    if (replace == "entire"){
+    if (replace = "entire"){
       RIRway_phrase <- "success in the entire sample"  
-    } else if (replace == "control"){
+    } else if (replace = "control"){
       RIRway_phrase <- "success in the control group"  
     }
   }
