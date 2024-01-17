@@ -311,22 +311,17 @@ test_sensitivity_ln <- function(est_eff,
     total_RIR <- RIR
   }
 
-  ### not sure whether it is right way to calculate p-value
-  if (tails == 2) {
-    p_start <- (2 * (1 - pt(abs(final_solution$t_start), n_obs - n_covariates - 2)))
-    p_final <- (2 * (1 - pt(abs(final_solution$t_final), n_obs - n_covariates - 2)))
-  } 
-  # For a one-tailed test (assuming upper tail)
-  else if (tails == 1 & t_ob > 0) {
-    p_start <- (1 - pt(final_solution$t_start, n_obs - n_covariates - 2))
-    p_final <- (1 - pt(final_solution$t_final, n_obs - n_covariates - 2))
-  } 
-  # For a one-tailed test (assuming lower tail)
-  else if (tails == 1 & t_ob < 0) {
-    p_start <- (pt(final_solution$t_start, n_obs - n_covariates - 2))
-    p_final <- (pt(final_solution$t_final, n_obs - n_covariates - 2))
-  }       
+  
+	if (tails == 2) {
+      p_start <- 2 * pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
+      p_final <- 2 * pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
+		}
+		else if (tails == 1) {
+			p_start = pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
+			p_final = pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
+			} 
 
+  
   ### chi-square p
   p_start_chi <- chisq.test(final_solution$table_start,correct = FALSE)$p.value
   p_final_chi <- chisq.test(final_solution$table_final,correct = FALSE)$p.value
