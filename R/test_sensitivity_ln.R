@@ -390,6 +390,7 @@ test_sensitivity_ln <- function(est_eff,
                   RIR_primary = RIR,
                   RIR_supplemental = RIR_extra, 
                   RIR_perc = RIR_pi,  # need to discuss the denominator
+		  prob_replace = prob_replace,
                   fragility_primary = final,
                   fragility_supplemental = final_extra,        
                   starting_table = final_solution$table_start,
