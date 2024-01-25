@@ -231,6 +231,13 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
   }
 
   else if (to_return == "raw_output") {
+  # Check if 'bias' and 'sustain' are defined, if not, assign them as NA (should be erased after comparison)
+  if (!exists("bias")) {
+    bias <- NA
+  }
+  if (!exists("sustain")) {
+    sustain <- NA
+  }
     return(list(obs_r, critical_r, 
                        # rxcv always be positive, rycv goes with itcv
                        rxcv = uncond_rxcv, rycv = uncond_rycv, 
