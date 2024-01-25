@@ -45,7 +45,7 @@ test_sensitivity <- function(est_eff,
   
 if (signsuppression == 1) warning("signsuppression is defined by a threshold of opposite sign of the estimated effect.")
   
-  if (nu != 0) warning("You entered a non-zero null hypothesis about an effect. 
+ # if (nu != 0) warning("You entered a non-zero null hypothesis about an effect. 
                        ITCV is calculated assuming omitted variable is equally 
                        correlated with predictor of interest and outcome. 
                        This approach maximizes the impact in the correlation metric 
