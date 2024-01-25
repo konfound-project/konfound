@@ -231,7 +231,7 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
   }
 
   else if (to_return == "raw_output") {
-    return(output_list(obs_r, critical_r, 
+    return(list(obs_r, critical_r, 
                        # rxcv always be positive, rycv goes with itcv
                        rxcv = uncond_rxcv, rycv = uncond_rycv, 
                        rxcvGz = r_con, rycvGz = rycvGz, 
