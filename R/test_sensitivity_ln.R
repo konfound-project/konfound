@@ -468,7 +468,7 @@ test_sensitivity_ln <- function(est_eff,
 
       ### start from changeSE = T
       
-      cat(sprintf("RIR = %d\n\n", RIR))
+      cat(sprintf("RIR = %d\n\n", total_RIR))
       cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
       print(Implied_Table)
       cat("\n")
@@ -674,7 +674,7 @@ test_sensitivity_ln <- function(est_eff,
       
       ### when changeSE = F
       
-      cat(sprintf("RIR = %d\n\n", RIR))
+      cat(sprintf("RIR = %d\n\n", total_RIR))
       cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
       print(Implied_Table)
       cat("\n")
