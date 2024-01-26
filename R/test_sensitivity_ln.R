@@ -475,9 +475,9 @@ test_sensitivity_ln <- function(est_eff,
       cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, p-value = %.3f.",
                         est_eff, user_std_err, p_start),
                 sprintf("\nThe SE has been adjusted to %.3f to generate real numbers in the", final_solution$std_err_start), 
-                sprintf("\nimplied table. Numbers in the table cells have been rounded"),
-                sprintf("\nto integers, which may slightly alter the estimated effect from"), 
-                sprintf("\nthe value originally entered.\n\n")
+                sprintf("\nimplied table for which the p-value would be %.3f. Numbers in ", p_start_chi),
+                sprintf("\nthe table cells have been rounded to integers, which may slightly "), 
+                sprintf("\nalter the estimated effect from the value originally entered.\n\n")
       ))
             
       if (invalidate_ob) {
