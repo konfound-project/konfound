@@ -562,7 +562,7 @@ test_sensitivity_ln <- function(est_eff,
             sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR(= %d)", final_solution$final_switch, RIR),
+            sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
             c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
@@ -653,7 +653,7 @@ test_sensitivity_ln <- function(est_eff,
             sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR(= %d)", final_solution$final_switch, RIR),
+            sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
             c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
@@ -767,7 +767,7 @@ test_sensitivity_ln <- function(est_eff,
             sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR(= %d)", final_solution$final_switch, RIR),
+            sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
             c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
@@ -857,7 +857,7 @@ test_sensitivity_ln <- function(est_eff,
             sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR(= %d)", final_solution$final_switch, RIR),
+            sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
             c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
             )
               )
