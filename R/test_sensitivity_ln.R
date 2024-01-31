@@ -489,14 +489,14 @@ test_sensitivity_ln <- function(est_eff,
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <- 
           cat(paste(
-            change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases "))
+            change, sprintf("one would need to replace %d (%.2f%%)", total_RIR, RIR_pi), RIRway, "\ncases "))
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.2f%%) applies (RIR = %d).", prob_replace, total_RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.2f%%) applies (RIR = %d).", prob_replace, total_RIR))
           }
           
           #conclusion1b <- 
@@ -523,14 +523,14 @@ test_sensitivity_ln <- function(est_eff,
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 222
           cat(paste(
-            change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases"))
+            change, sprintf("one would need to replace %d (%.2f%%)", total_RIR, RIR_pi), RIRway, "\ncases"))
           
           if (replace == "control") {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.2f%%) applies (RIR = %d).", prob_replace, total_RIR))
           } else {
             #conclusion1a <- 
-            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.2f%%) applies (RIR = %d).", prob_replace, total_RIR))
           }
           
           #conclusion1b <- 
