@@ -179,19 +179,17 @@ test_sensitivity <- function(est_eff,
       } else {
           r2yz = uncond_rycv = r2xz = uncond_rxcv = NA
           }
+
+  uncond_rycv = uncond_rycv * signITCV
+  rycvGz = r_con * signITCV
+  rxcvGz = r_con
+  itcvGz = itcv # conditional ITCV
   
   # verify 
   # act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
   ## calculate act_r using one less df or maybe -1 instead
   act_r_forVF <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
   r_final = (act_r_forVF - r_con * rycvGz)/sqrt((1 - r_con^2) * (1 - rycvGz^2))
-
-  # clean up output 
-  uncond_rycv = uncond_rycv * signITCV
-  rycvGz = r_con * signITCV
-  rxcvGz = r_con
-  itcvGz = itcv # conditional ITCV
-  itcv = uncond_rxcv * uncond_rycv # unconditional ITCV
   
   # if (component_correlations == FALSE){
   #     rsq <- # has to come from some kind of model object
