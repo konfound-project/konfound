@@ -123,12 +123,12 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat(-r_con, " X ", r_con, " = ", -round(r_con^2, 3), " to invalidate an inference for a null hypothesis of 0 effect.\n", sep = "")
     } else if (abs(obs_r) < abs(critical_r) & obs_r > 0) {
-      cat("The maximum impact (in absolute value) of an omitted variable to sustain an inference for a null hypothesis of 0 effect is based on a correlation of ", -r_con)
-      cat("\n")
-      cat(" with the outcome and at ", r_con,
-          " with the predictor of interest (conditioning on all observed covariates in the model; signs are interchangable) based on a threshold of ", round(beta_threshhold, 3))
-      cat("\n")
-      cat(" for statistical significance (alpha = ", alpha, ").\n",
+      cat("The maximum impact (in absolute value) of an omitted variable to") 
+      cat("sustain an inference for a null hypothesis of 0 effect is based on")
+      cat(paste0("a correlation of ", -r_con, "with the outcome an at ", r_con))
+      cat("with the predictor of interest (conditioning on all observed covariates")
+      cat(paste0("in the model; signs are interchangable) based on a threshold of ", round(beta_threshhold, 3)))
+      cat("for statistical significance (alpha = ", alpha, ").\n",
           sep = "")
       cat("\n")
       cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ")
