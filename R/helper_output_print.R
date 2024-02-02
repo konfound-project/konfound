@@ -173,9 +173,9 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     cat("\n")
     cat("Accuracy of results increases with the number of decimals reported")
 
-    link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.1177/0049124100029002001">Click here for the article</a></body></html>'
+    link_html2 <- '<html><body><a href="https://journals.sagepub.com/doi/10.1177/0049124100029002001">Click here for the article</a></body></html>'
     if (requireNamespace("htmltools", quietly = TRUE)) {
-    htmltools::html_print(htmltools::HTML(link_html)) } else {
+    htmltools::html_print(htmltools::HTML(link_html2)) } else {
     message("htmltools package is required")
 }
 
