@@ -88,6 +88,8 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
     cat("\n")
     cat("\n")
     cat("Accuracy of results increases with the number of decimals reported.")
+    cat("\n")
+
 
 link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.3102/0162373713493129">Click here for the article</a></body></html>'
 if (requireNamespace("htmltools", quietly = TRUE)) {
@@ -174,8 +176,9 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     cat("inference of a regression coefficient.", crayon::italic("Sociological Methods and Research, 29"), "(2), 147-194")
     cat("\n")
     cat("\n")
-    cat("Accuracy of results increases with the number of decimals reported")
-    
+    cat("Accuracy of results increases with the number of decimals reported.")
+    cat("\n")
+
 link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.1177/0049124100029002001">Click here for the article</a></body></html>'
 if (requireNamespace("htmltools", quietly = TRUE)) {
   # Redirect output to null
