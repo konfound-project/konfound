@@ -86,6 +86,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
     cat("\n")
     cat(crayon::italic("Education, Evaluation and Policy Analysis, 35"), "437-460.")
     cat("\n")
+    cat("Accuracy of results increases with the number of decimals reported")
 
 link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.3102/0162373713493129">Click here for the article</a></body></html>'
 if (requireNamespace("htmltools", quietly = TRUE)) {
@@ -121,7 +122,7 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat("of interest (conditioning on all observed covariates in the model; signs are interchangeable)")
       cat("\n")
-      cat(paste0("based on a threshold of ", round(beta_threshhold, 3), "for statistical significance))
+      cat(paste0("based on a threshold of ", round(beta_threshhold, 3), "for statistical significance"))
       cat("\n")
       cat("(alpha = ", alpha, ").\n", sep = "")
       cat("\n")
@@ -170,6 +171,14 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     cat("\n")
     cat("inference of a regression coefficient.", crayon::italic("Sociological Methods and Research, 29"), "(2), 147-194")
     cat("\n")
+    cat("Accuracy of results increases with the number of decimals reported")
+
+    link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.1177/0049124100029002001">Click here for the article</a></body></html>'
+    if (requireNamespace("htmltools", quietly = TRUE)) {
+    htmltools::html_print(htmltools::HTML(link_html)) } else {
+    message("htmltools package is required")
+}
+
   }
     
 }
