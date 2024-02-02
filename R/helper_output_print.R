@@ -156,7 +156,7 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat(paste0("with the outcome and at ", r_con, " with the predictor of interest (conditioning"))
       cat("\n")
-      cat(paste0("on all observed covariates in the model) based on a threshold of ", round(critical_r, 3)))
+      cat(paste0("on all observed covariates in the model) based on a threshold of ", round(beta_threshhold, 3)))
       cat("\n")
       cat("for statistical significance (alpha = ", alpha, ").\n", sep = "")
       cat("\n")
