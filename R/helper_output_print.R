@@ -86,7 +86,8 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
     cat("\n")
     cat(crayon::italic("Education, Evaluation and Policy Analysis, 35"), "437-460.")
     cat("\n")
-    cat("Accuracy of results increases with the number of decimals reported")
+    cat("\n")
+    cat("Accuracy of results increases with the number of decimals reported.")
 
 link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.3102/0162373713493129">Click here for the article</a></body></html>'
 if (requireNamespace("htmltools", quietly = TRUE)) {
@@ -117,9 +118,9 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     } else if (abs(obs_r) > abs(critical_r) & obs_r < 0) {
       cat("The minimum (in absolute value) impact of an omitted variable to")
       cat("\n")
-      cat(paste0("invalidate an inference for a null hypothesis of 0 effect is based"))
+      cat(paste0("invalidate an inference for a null hypothesis of 0 effect is based on"))
       cat("\n")
-      cat(paste0("on a correlation of ", -r_con, " with the outcome and at ", r_con, " with the predictor"))
+      cat(paste0("a correlation of ", -r_con, " with the outcome and at ", r_con, " with the predictor"))
       cat("\n")
       cat("of interest (conditioning on all observed covariates in the model;")
       cat("\n")
@@ -172,20 +173,15 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     cat("\n")
     cat("inference of a regression coefficient.", crayon::italic("Sociological Methods and Research, 29"), "(2), 147-194")
     cat("\n")
+    cat("\n")
     cat("Accuracy of results increases with the number of decimals reported")
-
-    link_html <- paste0(
-  '<html><body>',
-  '<p>', citation_text, '</p>',
-  '<p><a href="https://journals.sagepub.com/doi/10.1177/0049124100029002001">Click here for the article</a></p>',
-  '</body></html>'
-)
-
-if (requireNamespace("htmltools", quietly = TRUE)) {
-  htmltools::html_print(htmltools::HTML(link_html))
-} else {
-  message("The 'htmltools' package is required. Install it using install.packages('htmltools').")
-}
+    
+    link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.1177/0049124100029002001">Click here for the article</a></body></html>'
+    if (requireNamespace("htmltools", quietly = TRUE)) {
+      htmltools::html_print(htmltools::HTML(link_html))
+    } else {
+      message("htmltools package is required")
+    }
 
   }
     
