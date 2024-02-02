@@ -178,13 +178,10 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     
 link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.1177/0049124100029002001">Click here for the article</a></body></html>'
 if (requireNamespace("htmltools", quietly = TRUE)) {
-  # Redirect output to a temporary file
-  temp <- tempfile()
-  sink(temp)
-  htmltools::html_print(htmltools::HTML(link_html))
+  # Redirect output to null
+  sink("/dev/null")
+  invisible(htmltools::html_print(htmltools::HTML(link_html)))
   sink()
-  # Delete the temporary file
-  unlink(temp)
 } else {
   message("htmltools package is required")
 }
