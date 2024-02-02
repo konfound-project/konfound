@@ -178,7 +178,7 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     
     link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.1177/0049124100029002001">Click here for the article</a></body></html>'
     if (requireNamespace("htmltools", quietly = TRUE)) {
-      invisible(htmltools::html_print(htmltools::HTML(link_html)))
+      capture.output(htmltools::html_print(htmltools::HTML(link_html)), file = NULL)
     } else {
       message("htmltools package is required")
     }
