@@ -98,12 +98,13 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
   if (index == "IT") { 
     cat(crayon::bold("Impact Threshold for a Confounding Variable:\n"))
     if (abs(obs_r) > abs(critical_r) & obs_r > 0) {
-      cat("The minimum impact of an omitted variable to invalidate an inference for a null hypothesis of 0 effect is based on a correlation of ", r_con)
+      cat("The minimum impact of an omitted variable to invalidate an inference")
+      cat(paste0("for a null hypothesis of 0 effect is based on a correlation of ", r_con))
       cat("\n")
-      cat(" with the outcome and at ", r_con,
-          " with the predictor of interest (conditioning on all observed covariates in the model) based on a threshold of ")
+      cat(paste0("with the outcome and at ", r_con, " with the predictor of interest"))
+      cat(paste0("conditioning on all observed covariates in the model) based on a threshold of", round(critical_r, 3)))
       cat("\n")
-      cat(round(critical_r, 3), " for statistical significance (alpha = ", alpha, ").\n",
+      cat("for statistical significance (alpha = ", alpha, ").\n",
           sep = "")
       cat("\n")
       cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ") 
