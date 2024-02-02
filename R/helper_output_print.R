@@ -98,6 +98,7 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
   } 
   if (index == "IT") { 
     cat(crayon::bold("Impact Threshold for a Confounding Variable:\n"))
+    cat("\n")
     if (abs(obs_r) > abs(critical_r) & obs_r > 0) {
       cat("The minimum impact of an omitted variable to invalidate an inference")
       cat("\n")
@@ -120,11 +121,11 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat(paste0("on a correlation of ", -r_con, " with the outcome and at ", r_con, " with the predictor"))
       cat("\n")
-      cat("of interest (conditioning on all observed covariates in the model; signs are interchangeable)")
+      cat("of interest (conditioning on all observed covariates in the model;")
       cat("\n")
-      cat(paste0("based on a threshold of ", round(beta_threshhold, 3), "for statistical significance"))
+      cat(paste0("signs are interchangeable) based on a threshold of ", round(beta_threshhold, 3)))
       cat("\n")
-      cat("(alpha = ", alpha, ").\n", sep = "")
+      cat("for statistical significance (alpha = ", alpha, ").\n", sep = "")
       cat("\n")
       cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ") 
       cat("\n")
@@ -136,11 +137,11 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat(paste0("a correlation of ", -r_con, " with the outcome an at ", r_con, " with the predictor"))
       cat("\n")
-      cat("of interest (conditioning on all observed covariates in the model; signs are interchangeable)")
+      cat("of interest (conditioning on all observed covariates in the model;")
       cat("\n")
-      cat(paste0("based on a threshold of ", round(beta_threshhold, 3), "for statistical significance"))
+      cat(paste0("signs are interchangeable) based on a threshold of ", round(beta_threshhold, 3)))
       cat("\n")
-      cat("(alpha = ", alpha, ").\n", sep = "")
+      cat("for statistical significance (alpha = ", alpha, ").\n", sep = "")
       cat("\n")
       cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ")
       cat("\n")
@@ -173,10 +174,17 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     cat("\n")
     cat("Accuracy of results increases with the number of decimals reported")
 
-    link_html2 <- '<html><body><a href="https://journals.sagepub.com/doi/10.1177/0049124100029002001">Click here for the article</a></body></html>'
-    if (requireNamespace("htmltools", quietly = TRUE)) {
-    htmltools::html_print(htmltools::HTML(link_html2)) } else {
-    message("htmltools package is required")
+    link_html <- paste0(
+  '<html><body>',
+  '<p>', citation_text, '</p>',
+  '<p><a href="https://journals.sagepub.com/doi/10.1177/0049124100029002001">Click here for the article</a></p>',
+  '</body></html>'
+)
+
+if (requireNamespace("htmltools", quietly = TRUE)) {
+  htmltools::html_print(htmltools::HTML(link_html))
+} else {
+  message("The 'htmltools' package is required. Install it using install.packages('htmltools').")
 }
 
   }
