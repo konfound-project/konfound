@@ -311,15 +311,14 @@ test_sensitivity_ln <- function(est_eff,
     total_RIR <- RIR
   }
 
-  
-	if (tails == 2) {
-      p_start <- 2 * pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
-      p_final <- 2 * pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
-		}
-		else if (tails == 1) {
-			p_start = pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
-			p_final = pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
-			} 
+ ### Add to calculate p-value
+ if (tails == 2) {
+	 p_start <- 2 * pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
+	 p_final <- 2 * pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
+ } else if (tails == 1) {
+	 p_start = pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
+	 p_final = pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
+ } 
 
   
   ### chi-square p
@@ -475,7 +474,7 @@ test_sensitivity_ln <- function(est_eff,
       cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, p-value = %.3f.",
                         est_eff, user_std_err, p_start),
                 sprintf("\nThe SE has been adjusted to %.3f to generate real numbers in the", final_solution$std_err_start), 
-                sprintf("\nimplied table for which the p-value would be %.3f. Numbers in ", p_start_chi),
+                sprintf("\nimplied table for which the p-value would be %.3f. Numbers in ", p_start),
                 sprintf("\nthe table cells have been rounded to integers, which may slightly "), 
                 sprintf("\nalter the estimated effect from the value originally entered.\n\n")
       ))
@@ -668,8 +667,6 @@ test_sensitivity_ln <- function(est_eff,
                  c("\nThis is based on t = estimated effect/standard error")
          )
       
-      
-      
     } else {
       
       ### when changeSE = F
@@ -754,9 +751,7 @@ test_sensitivity_ln <- function(est_eff,
             }
 
           cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
-          
-    
-          
+           
         } else {
 
             ### needtworows = T
