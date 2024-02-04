@@ -385,7 +385,7 @@ test_sensitivity_ln <- function(est_eff,
 		  a = a, b = b, c = c, d = d,
 		  table_bstart1 = table_bstart1,
                   # RIRway_phrase = RIRway_phrase,
-                  final = final, dcroddsratio_ob = dcroddsratio_ob,
+                  final = final, dcroddsratio_ob = dcroddsratio_ob, final_extra = final_extra,
                   RIR_primary = RIR,
                   RIR_supplemental = RIR_extra, 
                   RIR_perc = RIR_pi,  # need to discuss the denominator
