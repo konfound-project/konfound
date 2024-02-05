@@ -32,7 +32,7 @@ konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, t
       tails = tails,
       index = index,
       nu = 0,
-      suppression = 0,
+      signsuppression = 0,
       eff_thr = NA, 
       to_return = to_return,
       model_object = model_object,

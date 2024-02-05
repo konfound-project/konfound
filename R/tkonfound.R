@@ -63,7 +63,6 @@ tkonfound <- function(a, b, c, d,
   p_final <- solution$p_final
   taylor_pred <- solution$taylor_pred
   perc_bias_pred <- solution$perc_bias_pred
-  final_extra <- solution$final_extra
   total_switch <- solution$total_switch
   
   ### add column and row names to contingency tables
@@ -100,11 +99,13 @@ tkonfound <- function(a, b, c, d,
   RIR_extra <- 0
 
   
+  RIR_extra <- final_extra <- NA
+  
   if (allnotenough) {
-    # if need two rows, then do not report RIR_pi 
-    ## because denominator is tricky 
-    RIR_pi <- NA
-    final_extra <- solution$final_extra
+      # if need two rows, then do not report RIR_pi 
+      ## because denominator is tricky 
+      RIR_pi <- NA
+      final_extra <- solution$final_extra
     if (switch_trm && dcroddsratio_ob) {
       transferway_extra <- "control failure to control success"
       RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") + 
@@ -206,8 +207,7 @@ tkonfound <- function(a, b, c, d,
   info5 <- "the treatment success cell to the treatment failure cell."
   
   if (to_return == "raw_output") {
-    
-     return(output_list(obs_r = NA, act_r = NA, 
+  return(output_list(obs_r = NA, act_r = NA, 
                      critical_r = NA, r_final = NA,
                      rxcv = NA, rycv = NA, 
                      rxcvGz = NA, rycvGz = NA, 
@@ -218,7 +218,7 @@ tkonfound <- function(a, b, c, d,
                      cor_oster = NA, cor_exact = NA, 
                      beta_threshold = NA,
                      perc_bias_to_change = NA, 
-                    RIR_primary = RIR,
+                     RIR_primary = RIR,
                      RIR_supplemental = RIR_extra, 
                      RIR_perc = RIR_pi,  
                      fragility_primary = final,
@@ -229,7 +229,6 @@ tkonfound <- function(a, b, c, d,
                      analysis_SE = NA, 
                      Fig_ITCV = NA,
                      Fig_RIR = NA))
-      
     result <- list(info1,
                    info2,
                    conclusion1,
@@ -240,7 +239,7 @@ tkonfound <- function(a, b, c, d,
                    conclusion2, 
                    conclusion3,
                    RIR = RIR)
-    
+
     return(result)
     
   } else  if (to_return == "print") {

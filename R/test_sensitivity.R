@@ -42,7 +42,6 @@ test_sensitivity <- function(est_eff,
                              tested_variable) {
   
   ## warning messages for potential confusion 
-  
 if (signsuppression == 1) warning("signsuppression is defined by a threshold of opposite sign of the estimated effect.")
   
  # if (nu != 0) warning("You entered a non-zero null hypothesis about an effect. 
@@ -68,12 +67,11 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
     stop("Did not run! Info regarding sdx, sdy and R2 are all needed to generate unconditional ITCV.")
   }
   
-  
-  # calculating statistics used in every case
-  if (est_eff < 0) {
-    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
+  # calculate critical_t 
+  if (est_eff < nu) {
+     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
   } else {
-    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
+     critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
   }
 
   # create CI centered nu    
@@ -168,7 +166,7 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
   r_con <- round(sqrt(abs(itcv)), 3)
 
   ## calculate the unconditional ITCV if user inputs sdx, sdy and R2
-   if (!is.na(sdx) & !is.na(sdy) & !is.na(R2) & (n_covariates > 0)) {
+  if (!is.na(sdx) & !is.na(sdy) & !is.na(R2) & (n_covariates > 0)) {
     ## pull in the auxiliary function for R2yz and R2xz 
     r2yz <- cal_ryz(obs_r, R2)^2
     uncond_rycv <- r_con * sqrt(1 - r2yz)
@@ -181,7 +179,7 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
       } else {
           r2yz = uncond_rycv = r2xz = uncond_rxcv = NA
           }
-  
+
   uncond_rycv = uncond_rycv * signITCV
   rycvGz = r_con * signITCV
   rxcvGz = r_con
@@ -237,33 +235,28 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
   }
 
   else if (to_return == "raw_output") {
-  # Check if 'bias' and 'sustain' are defined, if not, assign them as NA (should be erased after comparison)
-  if (!exists("bias")) {
-    bias <- NA
-  }
-  if (!exists("sustain")) {
-    sustain <- NA
-  }
-    return(list(obs_r, critical_r, 
+
+    return(output_list(obs_r, 
+                       act_r, 
+                       # act_r only makes sense when nu!=0 
+                       critical_r, r_final = r_final,
                        # rxcv always be positive, rycv goes with itcv
                        rxcv = uncond_rxcv, rycv = uncond_rycv, 
                        rxcvGz = rxcvGz, rycvGz = rycvGz, 
-                       itcvGz = itcvGz, itcv = uncond_rxcv * uncond_rycv,
+                       itcvGz = itcvGz, itcv = uncond_rxcv * uncond_rycv, 
                        r2xz = r2xz, r2yz = r2yz, 
                        delta_star = NA, delta_star_restricted = NA, 
                        delta_exact = NA, delta_pctbias = NA, 
                        cor_oster = NA, cor_exact = NA, 
-                       beta_threshold = beta_threshold, 
+                       beta_threshold = beta_threshold,
                        perc_bias_to_change = perc_to_change, 
-                       RIR = recase, RIR_perc = perc_to_change, 
-                       fragility = NA, starting_table = NA, 
-                       SE = NA, 
-                       ### Check intermediate vars
-                       recase = recase, bias = bias, sustain = sustain, r_con = r_con,
+                       RIR_primary = recase, RIR_supplemental = NA, RIR_perc = perc_to_change, 
+                       fragility_primary = NA, fragility_supplemental = NA, 
+                       starting_table = NA, final_table = NA,
+                       user_SE = NA, analysis_SE = NA,  
                        Fig_ITCV = 
                          plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r),
-                       Fig_RIR = plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff)
-                       ))
+                       Fig_RIR = plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff)))
   } else if (to_return == "thresh_plot") { # this still makes sense for NLMs (just not quite as accurate)
     return(plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff))
   } else if (to_return == "corr_plot") {

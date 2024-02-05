@@ -151,7 +151,6 @@ test_sensitivity_ln <- function(est_eff,
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment success"
     RIR_pi <- RIR / d * 100
-    
     if (replace == "entire"){
       RIRway_phrase <- "success in the entire sample"  
     } else if (replace == "control"){
@@ -163,7 +162,7 @@ test_sensitivity_ln <- function(est_eff,
     RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment failure"
     RIR_pi <- RIR / c * 100
-    
+
     ### added to show RIR calculation
     
     if (replace == "entire"){
@@ -189,6 +188,7 @@ test_sensitivity_ln <- function(est_eff,
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control success"
     RIR_pi <- RIR / b * 100
+
     
     if (replace == "entire"){
       RIRway_phrase <- "success in the entire sample"  
@@ -196,6 +196,8 @@ test_sensitivity_ln <- function(est_eff,
       RIRway_phrase <- "success in the control group"  
     }
   }
+  RIR_extra <- final_extra <- NA
+  
   RIR_extra <- final_extra <- NA
   
   if (final_solution$needtworows) {
@@ -364,7 +366,7 @@ test_sensitivity_ln <- function(est_eff,
   
   # output dispatch
   if (to_return == "raw_output") {
-       return(list(obs_r = NA, act_r = NA, 
+      return(output_list(obs_r = NA, act_r = NA, 
                   critical_r = NA, r_final = NA,
                   rxcv = NA, rycv = NA, 
                   rxcvGz = NA, rycvGz = NA, 
@@ -375,75 +377,65 @@ test_sensitivity_ln <- function(est_eff,
                   cor_oster = NA, cor_exact = NA, 
                   beta_threshold = NA,
                   perc_bias_to_change = NA, 
-                  ## to see intermediate outputs
-                  thr_t = thr_t, t_ob = t_ob,
-                  t_start = final_solution$t_start, t_final = final_solution$t_final,   
-                  p_start = p_start, p_final = p_final,
-                  p_chi_start = p_start_chi, p_chi_final = p_final_chi,
-                  p_fisher_start = p_start_fisher, p_fisher_final = p_final_fisher,
-		  a_1 = a1, b_1 = b1, c_1 = c1, d_1 = d1,
-		  a = a, b = b, c = c, d = d,
-		  table_bstart1 = table_bstart1,
-                  # RIRway_phrase = RIRway_phrase,
-                  final = final, dcroddsratio_ob = dcroddsratio_ob, final_extra = final_extra,
                   RIR_primary = RIR,
                   RIR_supplemental = RIR_extra, 
                   RIR_perc = RIR_pi,  # need to discuss the denominator
-		  prob_replace = prob_replace, needtworows = final_solution$needtworows,
-		  est_eff_start = final_solution$est_eff_start, std_err_start = final_solution$std_err_start, 
-		  est_eff_final = final_solution$est_eff_final, std_err_final = final_solution$std_err_final, 
                   fragility_primary = final,
-                  fragility_supplemental = final_extra,        
+                  fragility_supplemental = final_extra,
+                  ## to see intermediate outputs
+                  # thr_t = thr_t, t_ob = t_ob,
+                  # t_start = final_solution$t_start, t_final = final_solution$t_final,   
+                  # p_start = p_start, p_final = p_final,
+                  # p_chi_start = p_start_chi, p_chi_final = p_final_chi,
+                  # p_fisher_start = p_start_fisher, p_fisher_final = p_final_fisher,
+		              # a_1 = a1, b_1 = b1, c_1 = c1, d_1 = d1,
+		              # a = a, b = b, c = c, d = d,
+		              # table_bstart1 = table_bstart1,
+                  # RIRway_phrase = RIRway_phrase,
+                  # final = final, dcroddsratio_ob = dcroddsratio_ob, final_extra = final_extra,
+                  # RIR_primary = RIR,
+                  # RIR_supplemental = RIR_extra, 
+                  # RIR_perc = RIR_pi,  # need to discuss the denominator
+		              # prob_replace = prob_replace, needtworows = final_solution$needtworows,
+		              # est_eff_start = final_solution$est_eff_start, std_err_start = final_solution$std_err_start, 
+		              # est_eff_final = final_solution$est_eff_final, std_err_final = final_solution$std_err_final, 
+                  # fragility_primary = final,
+                  # fragility_supplemental = final_extra,        
+
                   starting_table = final_solution$table_start,
                   final_table = final_solution$table_final,
                   user_SE = user_std_err,
                   analysis_SE = std_err, 
                   Fig_ITCV = NA,
                   Fig_RIR = NA))
-    
-  #  if (changeSE) {
-  #   result <- list(conclusion1,
-  #                   conclusion1b,
-  #                   conclusion1c,
-  #                   Implied_Table = final_solution$table_start, 
-  #                   notice,
-  #                   Transfer_Table = final_solution$table_final,
-  #                   conclusion2, 
-  #                   conclusion3,
-  #                   RIR = RIR,
-  #                   notice_SE,
-  #                   total_switch,
-                    ### check intermediate vars.
-  #                  thr_t = thr_t, t_ob = t_ob,
-  #                  invalidate_ob = invalidate_ob,
-  #                  final_switch = final_solution$final_switch,
-  #                  total_RIR = total_RIR,
-  #                  total_switch = total_switch,
-  #                  needtworows = final_solution$needtworows,
-  #                  changeSE = changeSE,
-  #                  est_eff = est_eff, std_err = std_err)
-  #  } else {
-  #    result <- list(conclusion1,
-  #                   conclusion1b,
-  #                   conclusion1c,
-  #                   Implied_Table = final_solution$table_start, 
-  #                   notice,
-  #                   Transfer_Table = final_solution$table_final,
-  #                   conclusion2, 
-  #                   conclusion3,
-  #                   RIR = RIR,
-                    ### check intermediate vars.
-  #                  thr_t = thr_t, t_ob = t_ob,
-  #                  invalidate_ob = invalidate_ob,
-  #                  final_switch = final_solution$final_switch,
-  #                  total_RIR = total_RIR,
-  #                  total_switch = total_switch,
-  #                  needtworows = final_solution$needtworows,
-  #                  changeSE = changeSE,
-  #                  est_eff = est_eff, std_err = std_err)
-  #  }
-  
-  #  return(result)
+
+     
+#    if (changeSE) {
+#      result <- list(conclusion1,
+#                     conclusion1b,
+#                     conclusion1c,
+#                     Implied_Table = final_solution$table_start, 
+#                     notice,
+#                     Transfer_Table = final_solution$table_final,
+#                     conclusion2, 
+#                     conclusion3,
+#                     needtworows = final_solution$needtworows, 
+#                     fragility = total_switch,
+#                     RIR = total_RIR,
+#                     notice_SE)
+#    } else {
+#      result <- list(conclusion1,
+#                     conclusion1b,
+#                     conclusion1c,
+#                     Implied_Table = final_solution$table_start, 
+#                     notice,
+#                     Transfer_Table = final_solution$table_final,
+#                     conclusion2, 
+#                     conclusion3,
+#                     needtworows = final_solution$needtworows, 
+#                     fragility = total_switch,
+#                     RIR = total_RIR)
+#    }
     
   } else  if (to_return == "print") {
 
