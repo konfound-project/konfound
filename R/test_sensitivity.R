@@ -42,22 +42,22 @@ test_sensitivity <- function(est_eff,
                              tested_variable) {
   
   ## warning messages for potential confusion 
+if (signsuppression == 1) warning("signsuppression is defined by a threshold of opposite sign of the estimated effect.")
   
-  if (signsuppression == 1) warning("signsuppression is defined by a threshold of opposite sign of the estimated effect.")
+ # if (nu != 0) warning("You entered a non-zero null hypothesis about an effect. 
+                      # ITCV is calculated assuming omitted variable is equally 
+                      # correlated with predictor of interest and outcome. 
+                      # This approach maximizes the impact in the correlation metric 
+                      # and could be applied to standardized variables. 
+                      # An alternative approach is to preserve the original metric 
+                      # and choose the two correlations to preserve the standard error. 
+                      # See index = PSE. ")
 
-  if (nu != 0) warning("You entered a non-zero null hypothesis about an effect. 
-                       ITCV is calculated assuming omitted variable is equally 
-                       correlated with predictor of interest and outcome. 
-                       This approach maximizes the impact in the correlation metric 
-                       and could be applied to standardized variables. 
-                       An alternative approach is to preserve the original metric 
-                       and choose the two correlations to preserve the standard error. 
-                       See index = PSE. ")
-
-  if (!is.na(eff_thr)) warning("The threshold you specified will be used without 
-                                regard for the standard error and statistical significance. 
-                                If you seek to account for the standard error, 
-                                specify a non-zero null hypothesis as in the nu argument.")
+ # if (!is.na(eff_thr)) warning("The threshold you specified will be used without\n",
+ #                            "regard for the standard error and statistical significance\n",
+ #                           "(assuming sdx = sdy = 1 unless otherwise specified).\n",
+ #                            "If you seek to account for the standard error,\n",
+ #                           "specify a non-zero null hypothesis as in the nu argument.")
   
   ## error message if input is inappropriate
   
@@ -226,7 +226,7 @@ test_sensitivity <- function(est_eff,
     )
     konfound_output <- create_konfound_class(konfound_output)
     names(konfound_output) <- to_return
-    output_print(est_eff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, alpha, index)
+    output_print(est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index)
 
     cat("\n")
     message(paste("Print output created by default. Created", length(konfound_output), "other forms of output. Use list indexing or run summary() on the output to see how to access."))
@@ -235,6 +235,7 @@ test_sensitivity <- function(est_eff,
   }
 
   else if (to_return == "raw_output") {
+
     return(output_list(obs_r, 
                        act_r, 
                        # act_r only makes sense when nu!=0 
@@ -261,7 +262,7 @@ test_sensitivity <- function(est_eff,
   } else if (to_return == "corr_plot") {
     return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
   } else if (to_return == "print") {
-    return(output_print(est_eff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, alpha, index))
+    return(output_print(est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index))
   } else if (to_return == "table") {
     return(output_table(model_object, tested_variable))
   } else {

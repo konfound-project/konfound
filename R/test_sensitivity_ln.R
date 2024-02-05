@@ -147,29 +147,56 @@ test_sensitivity_ln <- function(est_eff,
   d <- final_solution$table_start[2,2]
   
   if (switch_trm && dcroddsratio_ob) {
-    transferway <- "treatment success to treatment failure,"
+    transferway <- "treatment success to treatment failure"
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment success"
     RIR_pi <- RIR / d * 100
+    if (replace == "entire"){
+      RIRway_phrase <- "success in the entire sample"  
+    } else if (replace == "control"){
+      RIRway_phrase <- "success in the control group"  
+    }
   }
   if (switch_trm && !dcroddsratio_ob) {
-    transferway <- "treatment failure to treatment success,"
+    transferway <- "treatment failure to treatment success"
     RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment failure"
     RIR_pi <- RIR / c * 100
+
+    ### added to show RIR calculation
+    
+    if (replace == "entire"){
+      RIRway_phrase <- "failure in the entire sample"  
+    } else if (replace == "control"){
+      RIRway_phrase <- "failure in the control group"  
+    }
   }
   if (!switch_trm && dcroddsratio_ob) {
-    transferway <- "control failure to control success,"
+    transferway <- "control failure to control success"
     RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control failure"
     RIR_pi <- RIR / a * 100
+    
+    if (replace == "entire"){
+      RIRway_phrase <- "failure in the entire sample"  
+    } else if (replace == "control"){
+      RIRway_phrase <- "failure in the control group"  
+    }
   }
   if (!switch_trm && !dcroddsratio_ob) {
-    transferway <- "control success to control failure,"
+    transferway <- "control success to control failure"
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control success"
     RIR_pi <- RIR / b * 100
+
+    
+    if (replace == "entire"){
+      RIRway_phrase <- "success in the entire sample"  
+    } else if (replace == "control"){
+      RIRway_phrase <- "success in the control group"  
+    }
   }
+  RIR_extra <- final_extra <- NA
   
   RIR_extra <- final_extra <- NA
   
@@ -179,25 +206,25 @@ test_sensitivity_ln <- function(est_eff,
     RIR_pi <- NA
     final_extra <- final_solution$final_extra
     if (switch_trm && dcroddsratio_ob) {
-      transferway_extra <- "control failure to control success,"
+      transferway_extra <- "control failure to control success"
       RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") + 
         ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
       RIRway_extra <- "control failure"
     }
     if (switch_trm && !dcroddsratio_ob) {
-      transferway_extra <- "control success to control failure,"
+      transferway_extra <- "control success to control failure"
       RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
         ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
       RIRway_extra <- "control success"
     }
     if (!switch_trm && dcroddsratio_ob) {
-      transferway_extra <- "treatment success to treatment failure,"
+      transferway_extra <- "treatment success to treatment failure"
       RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
         ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
       RIRway_extra <- "treatment success"
     }
     if (!switch_trm && !dcroddsratio_ob) {
-      transferway_extra <- "treatment failure to treatment success,"
+      transferway_extra <- "treatment failure to treatment success"
       RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
         ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
       RIRway_extra <- "treatment failure"
@@ -242,7 +269,7 @@ test_sensitivity_ln <- function(est_eff,
     
     conclusion1b <- paste(
       sprintf("This is equivalent to transferring %d", final_solution$final_switch), 
-      c("case from"), transferway)
+      c("cases from"), transferway)
     
     conclusion1c <- "as shown, from the Implied Table to the Transfer Table."
     
@@ -274,7 +301,7 @@ test_sensitivity_ln <- function(est_eff,
   
   if (changeSE) {
     notice_SE <- sprintf(
-      "In order to generate a usable implied contingency table, we increased the standard error to %.3f (the original one is %.3f).",
+      "In order to generate a usable implied contingency table, we increased the standard error to %.3f (the reported standard error is %.3f).",
       std_err, user_std_err)
   }
   
@@ -285,6 +312,51 @@ test_sensitivity_ln <- function(est_eff,
     total_switch <- final_solution$final_switch
     total_RIR <- RIR
   }
+
+ ### Add to calculate p-value
+ if (tails == 2) {
+	 p_start <- 2 * pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
+	 p_final <- 2 * pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
+ } else if (tails == 1) {
+	 p_start = pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
+	 p_final = pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
+ } 
+
+  
+  ### chi-square p
+  p_start_chi <- chisq.test(final_solution$table_start,correct = FALSE)$p.value
+  p_final_chi <- chisq.test(final_solution$table_final,correct = FALSE)$p.value
+
+  ### Fisher's p
+  p_start_fisher <- suppressWarnings(fisher.test(final_solution$table_start)$p.value)
+  p_final_fisher <- suppressWarnings(fisher.test(final_solution$table_final)$p.value)
+  
+  ### Add for some cases with RIR_pi exceeding 100%
+  if (!is.na(RIR_pi) && RIR_pi > 100) {   
+    transfer <- switch(RIRway,
+                       "treatment success" = final_solution$table_start[2,2],
+                       "treatment failure" = final_solution$table_start[2,1],
+                       "control failure" = final_solution$table_start[1,1],
+                       "control success" = final_solution$table_start[1,2],
+                       NA)       
+    if (!is.na(transfer)) {
+        # Calculate the value for the success_failure_Rate
+      success_failure_Rate <- 1 - total_switch / transfer}
+    } else {
+    transfer <- NA
+    success_failure_Rate <- NA
+    }
+    
+  ### Add for indicating calculation of RIR   
+
+
+  ### Add for indicating probability of failure in control/entire group  
+  if (replace == "control") {
+  prob_replace <- final_solution$table_start[1,1]/n_cnt*100
+  } else {
+  prob_replace <- final_solution$table_start[1,1]/n_obs*100
+  }
+
   
   # result <- list(conclusion1,
   #                Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
@@ -310,12 +382,33 @@ test_sensitivity_ln <- function(est_eff,
                   RIR_perc = RIR_pi,  # need to discuss the denominator
                   fragility_primary = final,
                   fragility_supplemental = final_extra,
+                  ## to see intermediate outputs
+                  # thr_t = thr_t, t_ob = t_ob,
+                  # t_start = final_solution$t_start, t_final = final_solution$t_final,   
+                  # p_start = p_start, p_final = p_final,
+                  # p_chi_start = p_start_chi, p_chi_final = p_final_chi,
+                  # p_fisher_start = p_start_fisher, p_fisher_final = p_final_fisher,
+		              # a_1 = a1, b_1 = b1, c_1 = c1, d_1 = d1,
+		              # a = a, b = b, c = c, d = d,
+		              # table_bstart1 = table_bstart1,
+                  # RIRway_phrase = RIRway_phrase,
+                  # final = final, dcroddsratio_ob = dcroddsratio_ob, final_extra = final_extra,
+                  # RIR_primary = RIR,
+                  # RIR_supplemental = RIR_extra, 
+                  # RIR_perc = RIR_pi,  # need to discuss the denominator
+		              # prob_replace = prob_replace, needtworows = final_solution$needtworows,
+		              # est_eff_start = final_solution$est_eff_start, std_err_start = final_solution$std_err_start, 
+		              # est_eff_final = final_solution$est_eff_final, std_err_final = final_solution$std_err_final, 
+                  # fragility_primary = final,
+                  # fragility_supplemental = final_extra,        
+
                   starting_table = final_solution$table_start,
                   final_table = final_solution$table_final,
                   user_SE = user_std_err,
                   analysis_SE = std_err, 
                   Fig_ITCV = NA,
                   Fig_RIR = NA))
+
      
 #    if (changeSE) {
 #      result <- list(conclusion1,
@@ -345,48 +438,429 @@ test_sensitivity_ln <- function(est_eff,
 #    }
     
   } else  if (to_return == "print") {
+
+    result <- list(conclusion1,conclusion1b, conclusion1c,
+                   Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
+                   conclusion2, conclusion3,
+                   total_RIR = total_RIR, total_switch = total_switch)    
+   
+    # Extracting the results into variables for cleaner reference
+    conclusion1 <- result$conclusion1
+    conclusion1b <- result$conclusion1b
+    conclusion1c <- result$conclusion1c
+    Implied_Table <- result$Implied_Table
+    Transfer_Table <- result$Transfer_Table
+    conclusion2 <- result$conclusion2
+    conclusion3 <- result$conclusion3
+    notice <- result$notice
+    RIR_value <- result$RIR
     
-    # cat(crayon::bold("Background Information:"))
-    # cat("\n")
-    # cat(info1)
-    # cat("\n")
-    # cat("\n")
-    cat(crayon::bold("Conclusion:"))
-    cat("\n")
-    cat(crayon::underline("User-entered Table:"))
-    cat("\n")
-    print(final_solution$table_start)
-    cat("\n")
+      
     if (changeSE) {
-      cat(notice_SE)
+
+      ### start from changeSE = T
+      
+      cat(sprintf("RIR = %d\n\n", total_RIR))
+      cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
+      print(Implied_Table)
       cat("\n")
+      cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, p-value = %.3f.",
+                        est_eff, user_std_err, p_start),
+                sprintf("\nThe SE has been adjusted to %.3f to generate real numbers in the", final_solution$std_err_start), 
+                sprintf("\nimplied table for which the p-value would be %.3f. Numbers in ", p_start),
+                sprintf("\nthe table cells have been rounded to integers, which may slightly "), 
+                sprintf("\nalter the estimated effect from the value originally entered.\n\n")
+      ))
+            
+      if (invalidate_ob) {
+#111
+        ### when invalidate = T
+
+        change <- sprintf("To invalidate the inference that the effect is different from 0 \n(alpha = %.3f)", alpha)
+        ### 
+        if (!final_solution$needtworows & final_solution$final_switch > 1) {
+          #conclusion1 <- 
+          cat(paste(
+            change, sprintf("one would need to replace %d (%.2f%%)", total_RIR, RIR_pi), RIRway, "\ncases "))
+          
+          if (replace == "control") {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.2f%%) applies (RIR = %d).", prob_replace, total_RIR))
+          } else {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.2f%%) applies (RIR = %d).", prob_replace, total_RIR))
+          }
+          
+          #conclusion1b <- 
+          cat(paste0(
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             ) 
+                    
+
+          cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+               ) 
+            }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+
+          
+        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+          #conclusion1 <- 222
+          cat(paste(
+            change, sprintf("one would need to replace %d (%.2f%%)", total_RIR, RIR_pi), RIRway, "\ncases"))
+          
+          if (replace == "control") {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.2f%%) applies (RIR = %d).", prob_replace, total_RIR))
+          } else {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.2f%%) applies (RIR = %d).", prob_replace, total_RIR))
+          }
+          
+          #conclusion1b <- 
+          cat(paste0(
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             )  
+          
+          cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+               ) 
+            }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+
+        } else {
+
+          ### when needtworows = T
+          
+          #conclusion1 <- 
+        cat(paste0(
+            sprintf("The inference cannot be invalidated merely by switching cases in"),
+            sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
+            c("\n"), transferway, c(" and from "),
+            transferway_extra, c("."), c("\n"),
+            sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
+            c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
+            )
+              )
+        }
+        ### changed due to consistent linebreak
+      } else {
+
+          ### when invalidate = F (sustain)333
+        
+        if (est_eff >= 0) {
+          change <- sprintf("To reach the threshold that would sustain an inference that the \neffect is different from 0 (alpha = %.3f)", alpha)
+        } else {
+          change <- sprintf("To reach the threshold that would sustain an inference that the \neffect is different from 0 (alpha = %.3f)", alpha)
+        }
+        ###
+        if (!final_solution$needtworows & final_solution$final_switch > 1) {
+          #conclusion1 <- 
+          cat(paste(
+            change, sprintf("one would need to replace %d \n(%.2f%%)", RIR, RIR_pi), RIRway, "cases "))
+          
+          if (replace == "control") {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+          } else {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+          }
+          
+          #conclusion1b <- 
+          cat(paste0(
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
+            c(" cases from "), transferway, 
+            sprintf("\n(Fragility = %d).", total_switch),
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             )  
+          
+     cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+               ) 
+            }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+
+          
+        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+          #conclusion1 <- 444
+          cat(paste(
+            change, sprintf("one would need to replace %d \n(%.2f%%)", RIR, RIR_pi), RIRway, "\ncases"))
+          
+          if (replace == "control") {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+          } else {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+          }
+          
+          #conclusion1b <- 
+          cat(paste0(
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             ) 
+
+          cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+               ) 
+            }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+          
+        } else {
+
+          ### when needtworows = T
+
+          #conclusion1 <- 
+        cat(paste0(
+            sprintf("The inference cannot be sustained merely by switching cases in"),
+            sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
+            c("\n"), transferway, c(" and from "),
+            transferway_extra, c("."), c("\n"),
+            sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
+            c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
+            )
+              )
+        }
+        ###
       }
-    cat(notice)
-    cat(noticeb)
-    cat("\n")
-    cat("\n")
-    cat(conclusion1)
-    cat("\n")
-    cat(conclusion1a)
-    cat("\n")
-    cat(conclusion1b)
-    cat("\n")
-    cat(conclusion1c)
-    cat("\n")
-    cat("\n")
-    cat(crayon::underline("Transfer Table:"))
-    cat("\n")
-    print(final_solution$table_final)
-    cat("\n")
-    cat(conclusion2)
-    cat("\n")
-    cat(conclusion3)
-    cat("\n")
-    cat("\n")
-    cat(crayon::bold("RIR:"))
-    cat("\n")
-    cat("RIR =", RIR)
-    cat("\n")
-    
+
+      cat("\n\n")
+      print(Transfer_Table)
+      cat(sprintf("Effect size = %.3f, SE = %.3f, p-value = %.3f.",
+                  final_solution$est_eff_final, final_solution$std_err_final, p_final),
+                 c("\nThis is based on t = estimated effect/standard error")
+         )
+      
+    } else {
+      
+      ### when changeSE = F
+      
+      cat(sprintf("RIR = %d\n\n", total_RIR))
+      cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
+      print(Implied_Table)
+      cat("\n")
+      cat(paste(sprintf("The reported effect size = %.3f, and SE = %.3f, p-value = %.3f.",
+                        est_eff, user_std_err, p_start),
+                sprintf("\nValues have been rounded to the nearest integer. This may cause"), 
+                sprintf("\na little change to the estimated effect for the table.\n\n"))
+      )
+      
+      ### start here
+      if (invalidate_ob) {
+
+        ### invalidate = T555
+        
+        change <- sprintf("To invalidate the inference that the effect is different from 0 \n(alpha = %.3f)", alpha)
+        ### 
+        if (!final_solution$needtworows & final_solution$final_switch > 1) {
+          #conclusion1 <- 
+          cat(paste(
+            change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases "))
+          
+          if (replace == "control") {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+          } else {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+          }
+          
+          #conclusion1b <- 
+          cat(paste0(
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             ) 
+
+          cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+               ) 
+            }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+          
+        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+          #conclusion1 <- 666
+          cat(paste(
+            change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases"))
+          
+          if (replace == "control") {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+          } else {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+          }
+          
+          #conclusion1b <- 
+          cat(paste0(
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
+            c(" cases from "), transferway, 
+            sprintf(" (Fragility = %d).", total_switch),
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             ) 
+
+          cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+               ) 
+            }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+           
+        } else {
+
+            ### needtworows = T
+          
+          #conclusion1 <- 
+            cat(paste0(
+            sprintf("The inference cannot be invalidated merely by switching cases in"),
+            sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
+            c("\n"), transferway, c(" and from "),
+            transferway_extra, c("."), c("\n"),
+            sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
+            c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
+            )
+              )
+                   }
+        ### changed due to consistent linebreak
+      } else {
+
+        ### invalidate = F (sustain) 777
+        
+        if (est_eff >= 0) {
+          change <- sprintf("To reach the threshold that would sustain an inference that the \neffect is different from 0 (alpha = %.3f)", alpha)
+        } else {
+          change <- sprintf("To reach the threshold that would sustain an inference that the \neffect is different from 0 (alpha = %.3f)", alpha)
+        }
+        ###
+        if (!final_solution$needtworows & final_solution$final_switch > 1) {
+          #conclusion1 <- 
+          cat(paste(
+            change, sprintf("one would need to replace %d \n(%.2f%%)", RIR, RIR_pi), RIRway, "cases "))
+          
+          if (replace == "control") {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+          } else {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+          }
+          
+          #conclusion1b <- 
+          cat(paste0(
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
+            c(" cases from "), transferway, 
+            sprintf("\n(Fragility = %d).", total_switch),
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             )  
+
+          cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+               ) 
+            }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+          
+        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+          #conclusion1 <- 888
+          cat(paste(
+            change, sprintf("one would need to replace %d (%.2f%%)", RIR, RIR_pi), RIRway, "\ncases"))
+          
+          if (replace == "control") {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+          } else {
+            #conclusion1a <- 
+            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.2f%%) applies (RIR = %d).", prob_replace, RIR))
+          }
+          
+          #conclusion1b <- 
+          cat(paste0(
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
+            c(" cases from "), transferway, 
+            sprintf("\n(Fragility = %d).", total_switch),
+            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
+             ) 
+
+          cat("\n")
+
+          ### for RIR_perc larger than 100%
+          if (RIR_pi > 100){
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
+                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+               ) 
+            }
+
+          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+          
+        } else {
+
+            ### needtworows = T
+          
+          #conclusion1 <- 
+            cat(paste0(
+            sprintf("The inference cannot be sustained merely by switching cases in"),
+            sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
+            c("\n"), transferway, c(" and from "),
+            transferway_extra, c("."), c("\n"),
+            sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
+            c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
+            )
+              )
+        }
+        ###
+      }
+
+      cat("\n\n")
+      print(Transfer_Table)
+      cat(sprintf("Effect size = %.3f, SE = %.3f, p-value = %.3f.",
+                  final_solution$est_eff_final, final_solution$std_err_final, p_final),
+                 c("\nThis is based on t = estimated effect/standard error")
+         )
+      
+      
+    }
   }
 }
