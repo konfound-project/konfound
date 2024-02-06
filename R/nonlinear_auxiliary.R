@@ -164,18 +164,19 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
     }
 
     ### calculate predicted switches based on Taylor expansion
+    ### JC: erase round function due to inconsistency with Stata (just trial)
     if (switch_trm) {
       taylor_pred <- abs(taylorexp(a, b, c, d, step * perc_bias_pred, thr_t))
-      a_taylor <- round(a)
-      b_taylor <- round(b)
-      c_taylor <- round(c + taylor_pred * step)
-      d_taylor <- round(d - taylor_pred * step)
+      a_taylor <- round(a, 6)
+      b_taylor <- round(b, 6)
+      c_taylor <- round((c + taylor_pred * step), 6)
+      d_taylor <- round((d - taylor_pred * step), 6)
     } else {
       taylor_pred <- abs(taylorexp(d, c, b, a, step * perc_bias_pred, thr_t))
-      a_taylor <- round(a - taylor_pred * step)
-      b_taylor <- round(b + taylor_pred * step)
-      c_taylor <- round(c)
-      d_taylor <- round(d)
+      a_taylor <- round((a - taylor_pred * step), 6)
+      b_taylor <- round((b + taylor_pred * step), 6)
+      c_taylor <- round(c, 6)
+      d_taylor <- round(d, 6)
     }
 
     ### check whether taylor_pred move too many and causes non-positive odds ratio
