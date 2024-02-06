@@ -94,8 +94,9 @@ get_t_kfnl <- function(a, b, c, d) {
 }
 
 # round a, b, c, d
+# JC: add more precision on round function for alignment with Stata
 get_abcd_kfnl <- function(a1, b1, c1, d1) {
-  x <- c(round(a1), round(b1), round(c1), round(d1))
+  x <- c(round(a1, 6), round(b1, 6), round(c1, 6), round(d1, 6))
   return(x)
 }
 
