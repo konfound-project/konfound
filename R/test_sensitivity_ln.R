@@ -457,8 +457,8 @@ test_sensitivity_ln <- function(est_eff,
     notice <- result$notice
     RIR_value <- result$RIR
     # round up values in 2by2 tables
-    Implied_Table = apply(Implied_Table, c(1,2), function(x) round(x, 1))
-    Transfer_Table = apply(Transfer_Table, c(1,2), function(x) round(x, 1))
+    Implied_Table = apply(Implied_Table, c(1,2), function(x) round(x))
+    Transfer_Table = apply(Transfer_Table, c(1,2), function(x) round(x))
     total_switch = round(total_switch)		   
     
       
