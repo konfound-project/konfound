@@ -459,6 +459,7 @@ test_sensitivity_ln <- function(est_eff,
     # round up values in 2by2 tables
     Implied_Table = apply(Implied_Table, c(1,2), function(x) round(x, 1))
     Transfer_Table = apply(Transfer_Table, c(1,2), function(x) round(x, 1))
+    total_switch = round(total_switch, 1)		   
     
       
     if (changeSE) {
