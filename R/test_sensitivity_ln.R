@@ -459,7 +459,8 @@ test_sensitivity_ln <- function(est_eff,
     # round up values in 2by2 tables
     Implied_Table = apply(Implied_Table, c(1,2), function(x) round(x))
     Transfer_Table = apply(Transfer_Table, c(1,2), function(x) round(x))
-    total_switch = round(total_switch)		   
+    total_switch = round(total_switch)	
+    final_solution$final_switch = as.integer(final_solution$final_switch)
     
       
     if (changeSE) {
@@ -499,7 +500,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent to transferring \n.1%f", final_solution$final_switch), 
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf(" (Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
@@ -533,7 +534,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent to transferring \n.1%f", final_solution$final_switch), 
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf(" (Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
@@ -591,7 +592,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent \nto transferring .1%f", final_solution$final_switch), 
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf("\n(Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
@@ -624,7 +625,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent to transferring \n.1%f", final_solution$final_switch), 
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf(" (Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
@@ -702,7 +703,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent to transferring \n.1%f", final_solution$final_switch), 
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf(" (Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
@@ -734,7 +735,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent to transferring \n.1%f", final_solution$final_switch), 
+            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf(" (Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
@@ -792,7 +793,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent \nto transferring .1%f", final_solution$final_switch), 
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf("\n(Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
@@ -824,7 +825,7 @@ test_sensitivity_ln <- function(est_eff,
           
           #conclusion1b <- 
           cat(paste0(
-            sprintf(" This is equivalent \nto transferring .1%f", final_solution$final_switch), 
+            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch), 
             c(" cases from "), transferway, 
             sprintf("\n(Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
