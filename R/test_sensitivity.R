@@ -236,7 +236,7 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
 
   else if (to_return == "raw_output") {
 
-    return(output_list(obs_r, 
+    return(list(obs_r, 
                        act_r, 
                        # act_r only makes sense when nu!=0 
                        critical_r, r_final = r_final,
