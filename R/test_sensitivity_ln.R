@@ -456,6 +456,9 @@ test_sensitivity_ln <- function(est_eff,
     conclusion3 <- result$conclusion3
     notice <- result$notice
     RIR_value <- result$RIR
+    # round up values in 2by2 tables
+    Implied_Table = apply(Implied_Table, c(1,2), function(x) round(x, 1))
+    Transfer_Table = apply(Transfer_Table, c(1,2), function(x) round(x, 1))
     
       
     if (changeSE) {
