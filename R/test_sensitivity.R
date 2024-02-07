@@ -254,6 +254,7 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
                        fragility_primary = NA, fragility_supplemental = NA, 
                        starting_table = NA, final_table = NA,
                        user_SE = NA, analysis_SE = NA,  
+                       bias = bias, sustain = sustain, beta_threshold = beta_threshold,
                        Fig_ITCV = 
                          plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r),
                        Fig_RIR = plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff)))
