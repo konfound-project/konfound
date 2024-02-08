@@ -63,3 +63,5 @@ VignetteBuilder:
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.1
+Roxygen: list(roclets = c("collate", "rd", "namespace", 
+              "doctest::dt_roclet"), packages = "doctest")
