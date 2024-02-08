@@ -51,3 +51,9 @@ test_that("test_all works for lm and lmer outout", {
   expect_is(output1, "data.frame")
   expect_is(output2, "data.frame")
 })
+
+output1 <- konfound(testmod1, texp, test_all = TRUE, to_return = "raw_output")
+
+test_that("pkonfound creates the correlation plot", {
+    expect_equal(output3$RIR, tolerance = .001, 14)
+})
