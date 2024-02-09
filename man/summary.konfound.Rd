@@ -4,7 +4,7 @@
 \alias{summary.konfound}
 \title{Concise summary of konfound output}
 \usage{
-\method{summary}{konfound}(object, ...)
+summary.konfound(object, ...)
 }
 \arguments{
 \item{object}{A `konfound` object}
