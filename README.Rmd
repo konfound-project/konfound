@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 [![R build status](https://github.com/jrosen48/konfound/workflows/R-CMD-check/badge.svg)](https://github.com/jrosen48/konfound/actions)
+[![R-CMD-check](https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 # konfound
