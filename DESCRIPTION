@@ -52,13 +52,13 @@ Suggests:
     forcats,
     ggrepel,
     knitr,
-    lme4 (>=1.1-35.1),
-    Matrix (>=1.6-2),
     margins,
     pbkrtest,
     rmarkdown,
     roxygen2,
-    testthat
+    testthat,
+    lme4 (>= 1.1-35.1),
+    Matrix (>= 1.6-2)
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
