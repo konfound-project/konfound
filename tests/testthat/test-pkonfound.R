@@ -52,8 +52,16 @@ test_that("test_all works for lm and lmer outout", {
   expect_is(output2, "data.frame")
 })
 
-output1 <- konfound(testmod1, texp, test_all = TRUE, to_return = "raw_output")
+thresh_plot <- pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
+
+test_that("pkonfound creates the threshhold plot", {
+    expect_s3_class(thresh_plot, "ggplot")
+})
+
+corr_plot <- pkonfound(2, .4, 100, 3, to_return = "corr_plot")
 
 test_that("pkonfound creates the correlation plot", {
-    expect_equal(output3$RIR, tolerance = .001, 14)
+    expect_s3_class(corr_plot, "ggplot")
 })
+
+expect_output(pkonfound(2, .4, 100, 3), ".")
