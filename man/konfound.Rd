@@ -39,7 +39,7 @@ konfound(
 
 \item{switch_trm}{whether to switch the treatment and control cases; defaults to FALSE; applicable only when model_type = "logistic"}
 
-\item{replace}{whether using entire sample or the control group to calculate the base rate; default is the entire sample}
+\item{replace}{whether using entire sample or the control group to calculate the base rate; default is the control group}
 }
 \value{
 prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference

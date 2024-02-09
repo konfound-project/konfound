@@ -10,7 +10,7 @@ tkonfound_fig(
   c,
   d,
   thr_p = 0.05,
-  switch_trm = T,
+  switch_trm = TRUE,
   test = "fisher",
   replace = "control"
 )
@@ -30,7 +30,7 @@ tkonfound_fig(
 
 \item{test}{whether using Fisher's Exact Test (default) or chi-square test}
 
-\item{replace}{whether using entire sample or the control group to calculate the base rate, with the default of the entire sample}
+\item{replace}{whether using entire sample or the control group to calculate the base rate, with the default of the control group}
 }
 \value{
 prints 2 figures for how number of hypothetical cases switched changes the effect size
@@ -44,6 +44,6 @@ tkonfound_fig(35, 17, 17, 38)
 tkonfound_fig(35, 17, 17, 38, thr_p = 0.01)
 tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
 tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq")
-tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq", replace = "control")
+tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq", replace = "entire")
 
 }

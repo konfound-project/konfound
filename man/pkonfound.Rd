@@ -67,7 +67,7 @@ pkonfound(
 
 \item{test}{whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test}
 
-\item{replace}{whether using entire sample or the control group to calculate the base rate; default is the entire sample}
+\item{replace}{whether using entire sample or the control group to calculate the base rate; default is the control group}
 
 \item{sdx}{the standard deviation of X}
 
@@ -114,5 +114,7 @@ pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01, switch_trm = FALSE)
 pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
 
 # use pkonfound to calculate delta* and delta_exact 
-
+pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7, eff_thr = 0, FR2max = .8, index = "COP", to_return = "raw_output")
+# use pkonfound to calculate rxcv and rycv when preserving standard error
+pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1, sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
 }
