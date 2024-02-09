@@ -4,7 +4,8 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
-[![R-CMD-check](https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml)
+[![R build
+status](https://github.com/jrosen48/konfound/workflows/R-CMD-check/badge.svg)](https://github.com/jrosen48/konfound/actions)
 <!-- badges: end -->
 
 # konfound
