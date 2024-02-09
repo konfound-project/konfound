@@ -53,6 +53,7 @@ Suggests:
     ggrepel,
     knitr,
     lme4,
+    Matrix (>=1.6-2),
     margins,
     pbkrtest,
     rmarkdown,
