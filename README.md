@@ -6,8 +6,6 @@
 status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 [![R build
 status](https://github.com/jrosen48/konfound/workflows/R-CMD-check/badge.svg)](https://github.com/jrosen48/konfound/actions)
-[![Codecov test
-coverage](https://codecov.io/gh/jrosen48/konfound/branch/master/graph/badge.svg)](https://codecov.io/gh/jrosen48/konfound?branch=master)
 <!-- badges: end -->
 
 # konfound
@@ -58,7 +56,7 @@ pkonfound(est_eff = 2,
           n_obs = 100, 
           n_covariates = 3)
 #> Robustness of Inference to Replacement (RIR):
-#> To invalidate an inference,  60.3 % of the estimate would have to be due to bias. 
+#> To invalidate an inference,  60.29 % of the estimate would have to be due to bias. 
 #> This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
 #> 
 #> To invalidate an inference,  60  observations would have to be replaced with cases
@@ -118,8 +116,8 @@ as follows, specifying the fitted model object:
 ``` r
 konfound(m1, wt)
 #> Robustness of Inference to Replacement (RIR):
-#> To invalidate an inference,  66.629 % of the estimate would have to be due to bias. 
-#> This is based on a threshold of -1.294 for statistical significance (alpha = 0.05).
+#> To invalidate an inference,  66.521 % of the estimate would have to be due to bias. 
+#> This is based on a threshold of -1.298 for statistical significance (alpha = 0.05).
 #> 
 #> To invalidate an inference,  21  observations would have to be replaced with cases
 #> for which the effect is 0 (RIR = 21).
@@ -140,7 +138,7 @@ We can use an existing (and built-in) dataset, such as `mkonfound_ex`.
 
 ``` r
 mkonfound_ex
-#> # A tibble: 30 x 2
+#> # A tibble: 30 × 2
 #>         t    df
 #>     <dbl> <dbl>
 #>  1  7.08    178
@@ -153,22 +151,23 @@ mkonfound_ex
 #>  8  2.55     75
 #>  9 -4.44    137
 #> 10 -2.05    195
-#> # … with 20 more rows
+#> # ℹ 20 more rows
 mkonfound(mkonfound_ex, t, df)
-#> # A tibble: 30 x 7
-#>         t    df action      inference       pct_bias_to_change_inf…   itcv r_con
-#>     <dbl> <dbl> <chr>       <chr>                             <dbl>  <dbl> <dbl>
-#>  1  7.08    178 to_invalid… reject_null                       68.8   0.378 0.614
-#>  2  4.13    193 to_invalid… reject_null                       50.6   0.168 0.41 
-#>  3  1.89     47 to_sustain  fail_to_reject…                    5.47 -0.012 0.11 
-#>  4 -4.17    138 to_invalid… reject_null                       50.3   0.202 0.449
-#>  5 -1.19     97 to_sustain  fail_to_reject…                   39.4  -0.065 0.255
-#>  6  3.59     87 to_invalid… reject_null                       41.9   0.19  0.436
-#>  7  0.282   117 to_sustain  fail_to_reject…                   85.5  -0.131 0.361
-#>  8  2.55     75 to_invalid… reject_null                       20.6   0.075 0.274
-#>  9 -4.44    137 to_invalid… reject_null                       53.0   0.225 0.475
-#> 10 -2.05    195 to_invalid… reject_null                        3.51  0.006 0.077
-#> # … with 20 more rows
+#> # A tibble: 30 × 7
+#>         t    df action        inference      pct_bias_to_change_i…¹   itcv r_con
+#>     <dbl> <dbl> <chr>         <chr>                           <dbl>  <dbl> <dbl>
+#>  1  7.08    178 to_invalidate reject_null                     68.8   0.378 0.614
+#>  2  4.13    193 to_invalidate reject_null                     50.6   0.168 0.41 
+#>  3  1.89     47 to_sustain    fail_to_rejec…                   5.47 -0.012 0.11 
+#>  4 -4.17    138 to_invalidate reject_null                     50.3   0.202 0.449
+#>  5 -1.19     97 to_sustain    fail_to_rejec…                  39.4  -0.065 0.255
+#>  6  3.59     87 to_invalidate reject_null                     41.9   0.19  0.436
+#>  7  0.282   117 to_sustain    fail_to_rejec…                  85.5  -0.131 0.361
+#>  8  2.55     75 to_invalidate reject_null                     20.6   0.075 0.274
+#>  9 -4.44    137 to_invalidate reject_null                     53.0   0.225 0.475
+#> 10 -2.05    195 to_invalidate reject_null                      3.51  0.006 0.077
+#> # ℹ 20 more rows
+#> # ℹ abbreviated name: ¹​pct_bias_to_change_inference
 ```
 
 # Overview of available functionality
@@ -195,15 +194,15 @@ Note that there are additional arguments for each of thes functions; see
 
 To learn more about sensitivity analysis, please visit:
 
--   The [Introduction to konfound
-    vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html),
-    with detailed information about each of the functions
-    (`pkonfound()`, `konfound()`, and `mkounfound()`)
--   The causal inference section of Ken Frank’s website
-    [here](https://msu.edu/~kenfrank/research.htm#causal)
--   The [konfound interactive web
-    application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/),
-    with links to PowerPoints and key publications
+- The [Introduction to konfound
+  vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html),
+  with detailed information about each of the functions (`pkonfound()`,
+  `konfound()`, and `mkounfound()`)
+- The causal inference section of Ken Frank’s website
+  [here](https://msu.edu/~kenfrank/research.htm#causal)
+- The [konfound interactive web
+  application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/),
+  with links to PowerPoints and key publications
 
 ### Feedback, issues, and feature requests
 
@@ -214,6 +213,7 @@ file).
 
 ### Code of Conduct
 
-Please note that this project is released with a Contributor Code of
-Conduct available at
-<https://www.contributor-covenant.org/version/1/0/0/>
+Please note that the konfound project is released with a [Contributor
+Code of
+Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
