@@ -96,7 +96,7 @@ get_t_kfnl <- function(a, b, c, d) {
 # round a, b, c, d
 # JC: add more precision on round function for alignment with Stata
 get_abcd_kfnl <- function(a1, b1, c1, d1) {
-  x <- c(round(a1, 4), round(b1, 4), round(c1, 4), round(d1, 4))
+  x <- c(round(a1), round(b1), round(c1), round(d1))
   return(x)
 }
 
@@ -168,16 +168,16 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
     ### JC: erase round function due to inconsistency with Stata (just trial)
     if (switch_trm) {
       taylor_pred <- abs(taylorexp(a, b, c, d, step * perc_bias_pred, thr_t))
-      a_taylor <- round(a, 4)
-      b_taylor <- round(b, 4)
-      c_taylor <- round((c + taylor_pred * step), 4)
-      d_taylor <- round((d - taylor_pred * step), 4)
+      a_taylor <- round(a)
+      b_taylor <- round(b)
+      c_taylor <- round((c + taylor_pred * step))
+      d_taylor <- round((d - taylor_pred * step))
     } else {
       taylor_pred <- abs(taylorexp(d, c, b, a, step * perc_bias_pred, thr_t))
-      a_taylor <- round((a - taylor_pred * step), 4)
-      b_taylor <- round((b + taylor_pred * step), 4)
-      c_taylor <- round(c, 4)
-      d_taylor <- round(d, 4)
+      a_taylor <- round((a - taylor_pred * step))
+      b_taylor <- round((b + taylor_pred * step))
+      c_taylor <- round(c)
+      d_taylor <- round(d)
     }
 
     ### check whether taylor_pred move too many and causes non-positive odds ratio
