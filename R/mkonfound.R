@@ -84,7 +84,7 @@ core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
   }
   itcv <- (obs_r - critical_r) / (1 + mp * abs(critical_r))
   r_con <- round(sqrt(abs(itcv)), 3)
-
+  
   out <- dplyr::data_frame(t, df, action, inference, pct_bias, itcv, r_con)
   names(out) <- c("t", "df", "action", "inference", "pct_bias_to_change_inference", "itcv", "r_con")
   out$pct_bias_to_change_inference <- round(out$pct_bias_to_change_inference, 3)
