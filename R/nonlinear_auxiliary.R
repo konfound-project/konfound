@@ -20,24 +20,21 @@ isdcroddsratio <- function(thr_t, ob_t) {
 
 # get the a cell (control failure) for given odds_ratio, se and treatment cases - first solution
 get_a1_kfnl <- function(odds_ratio, std_err, n_obs, n_trm) {
-  a1 <- -(1 / round((2 * (1 + odds_ratio^2 + odds_ratio * (-2 + n_trm * std_err^2))), 0.00001)) *
+  a1 <- -(1 / (2 * (1 + odds_ratio^2 + odds_ratio * (-2 + n_trm * std_err^2)))) *
     (2 * n_trm * (-1 + odds_ratio) * odds_ratio + n_trm^2 * odds_ratio * std_err^2 -
       n_obs * odds_ratio * (-2 + 2 * odds_ratio + n_trm * std_err^2) +
-      sqrt(round(n_trm * (-n_obs + n_trm) * odds_ratio * (4 + 4 * odds_ratio^2 +
-        odds_ratio * (-8 + 4 * n_obs * std_err^2 - n_obs * n_trm * std_err^4 + n_trm^2 * std_err^4))), 000001))
+      sqrt(n_trm * (-n_obs + n_trm) * odds_ratio * (4 + 4 * odds_ratio^2 +
+        odds_ratio * (-8 + 4 * n_obs * std_err^2 - n_obs * n_trm * std_err^4 + n_trm^2 * std_err^4))))
   return(a1)
 }
 
 # get the c cell (treatment failure) for given odds_ratio, se and treatment cases - first solution
 get_c1_kfnl <- function(odds_ratio, std_err, n_obs, n_trm) {
-  
-  inside_sqrt_exp_c1 = n_trm * (-n_obs + n_trm) * odds_ratio * (4 + 4 * odds_ratio^2 + odds_ratio * (-8 + 4 * n_obs * std_err^2 - n_obs * n_trm * std_err^4 + n_trm^2 * std_err^4))
-  
-  sqrt_value_c1 = sqrt(round(inside_sqrt_exp_c1, 0.000001))
-  
   c1 <- -((-2 * n_trm + 2 * n_trm * odds_ratio - n_obs * n_trm * odds_ratio * std_err^2 +
-    n_trm^2 * odds_ratio * std_err^2 + sqrt_value_c1) / (2 * (1 + odds_ratio^2 + odds_ratio * (-2 + n_obs * std_err^2 - n_trm * std_err^2))))
-  
+    n_trm^2 * odds_ratio * std_err^2 +
+    sqrt(n_trm * (-n_obs + n_trm) * odds_ratio * (4 + 4 * odds_ratio^2 +
+      odds_ratio * (-8 + 4 * n_obs * std_err^2 - n_obs * n_trm * std_err^4 + n_trm^2 * std_err^4)))) /
+    (2 * (1 + odds_ratio^2 + odds_ratio * (-2 + n_obs * std_err^2 - n_trm * std_err^2))))
   return(c1)
 }
 
@@ -46,21 +43,18 @@ get_a2_kfnl <- function(odds_ratio, std_err, n_obs, n_trm) {
   a2 <- (1 / (2 * (1 + odds_ratio^2 + odds_ratio * (-2 + n_trm * std_err^2)))) *
     (-2 * n_trm * (-1 + odds_ratio) * odds_ratio - n_trm^2 * odds_ratio * std_err^2 +
       n_obs * odds_ratio * (-2 + 2 * odds_ratio + n_trm * std_err^2) +
-      sqrt(round(n_trm * (-n_obs + n_trm) * odds_ratio * (4 + 4 * odds_ratio^2 +
-        odds_ratio * (-8 + 4 * n_obs * std_err^2 - n_obs * n_trm * std_err^4 + n_trm^2 * std_err^4))), 0.000001))
+      sqrt(n_trm * (-n_obs + n_trm) * odds_ratio * (4 + 4 * odds_ratio^2 +
+        odds_ratio * (-8 + 4 * n_obs * std_err^2 - n_obs * n_trm * std_err^4 + n_trm^2 * std_err^4))))
   return(a2)
 }
 
 # get the c cell (treatment failure) for given odds_ratio, se and treatment cases - second solution
 get_c2_kfnl <- function(odds_ratio, std_err, n_obs, n_trm) {
-  
-  inside_sqrt_exp_c2 = n_trm * (-n_obs + n_trm) * odds_ratio * (4 + 4 * odds_ratio^2 + odds_ratio * (-8 + 4 * n_obs * std_err^2 - n_obs * n_trm * std_err^4 + n_trm^2 * std_err^4))
-  
-  sqrt_value_c2 = sqrt(round(inside_sqrt_exp_c2, 0.000001))
-  
   c2 <- (2 * n_trm - 2 * n_trm * odds_ratio + n_obs * n_trm * odds_ratio * std_err^2 -
-    n_trm^2 * odds_ratio * std_err^2 + sqrt_value_c2) / (2 * (1 + odds_ratio^2 + odds_ratio * (-2 + n_obs * std_err^2 - n_trm * std_err^2)))
-  
+    n_trm^2 * odds_ratio * std_err^2 +
+    sqrt(n_trm * (-n_obs + n_trm) * odds_ratio * (4 + 4 * odds_ratio^2 +
+      odds_ratio * (-8 + 4 * n_obs * std_err^2 - n_obs * n_trm * std_err^4 + n_trm^2 * std_err^4)))) /
+    (2 * (1 + odds_ratio^2 + odds_ratio * (-2 + n_obs * std_err^2 - n_trm * std_err^2)))
   return(c2)
 }
 
