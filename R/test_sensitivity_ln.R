@@ -32,7 +32,7 @@ test_sensitivity_ln <- function(est_eff,
     stop("The total sample size should be larger than the number of treatment group cases.")
   }
   
-  odds_ratio <- round(exp(est_eff), 0.000001)
+  odds_ratio <- exp(est_eff)
   
   # updated approach to deal with imaginary
   minse <- sqrt((4 * n_obs + 
