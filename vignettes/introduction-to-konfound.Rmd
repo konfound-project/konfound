@@ -143,12 +143,6 @@ konfound_output$raw_output
 konfound_output$thresh_plot
 ```
 
-We can also test all of the variables as predictors of interest:
-
-```{r}
-konfound(m1, wt, test_all = TRUE)
-```
-
 Whereas this cannot be carried out with `pkonfound()`, with `konfound()` you can also return a table with some key output from the correlation-based approach.
 
 ```{r}
