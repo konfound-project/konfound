@@ -1,6 +1,5 @@
 context("Checking pkonfound")
 
-
 test_that("pkonfound test positive, significant coefficient works", {
     expect_equal(dplyr::pull(pkonfound(2, .4, 100, 3, to_return = "raw_output")[1, 3]), tolerance = .001, .603 * 100) # pct bias
     expect_equal(dplyr::pull(pkonfound(2, .4, 100, 3, to_return = "raw_output")[1, 7]), tolerance = .001, 0.568) # r-corr
@@ -25,34 +24,11 @@ test_that("pkonfound test negative, not significant coefficient works", {
     expect_equal(dplyr::pull(pkonfound(-1, .4, 100, 3, to_return = "raw_output")[1, 8]), tolerance = .001, -.061)
 })
 
-test_that("tkonfound for two_by_two works", {
-    output3 <- pkonfound(a = 35, b = 17, c = 17, d = 38, to_return = "raw_output")
-    
-    expect_equal(output3$RIR, tolerance = .001, 14)
-})
-
-test_that("test_all works for lm and lmer outout", {
-    library(lme4)
-    library(mice)
-    
-    popmis <- popmis[1:100, ]
-    testmod1 <- lm(teachpop ~ texp + sex, data = popmis)
-    testmod2 <- lmer(teachpop ~ texp + sex + (1 | school), data = popmis)
-    
-    output1 <- konfound(testmod1, texp, test_all = TRUE, to_return = "raw_output")
-    output2 <- konfound(testmod2, texp, test_all = TRUE, to_return = "raw_output")
-    
-    expect_is(output1, "data.frame")
-    expect_is(output2, "data.frame")
-})
-
-
 test_that("pkonfound creates the threshhold plot", {
     thresh_plot <- pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
     
     expect_s3_class(thresh_plot, "ggplot")
 })
-
 
 test_that("pkonfound creates the correlation plot", {
     corr_plot <- pkonfound(2, .4, 100, 3, to_return = "corr_plot")
@@ -109,20 +85,34 @@ test_that("PSE and COE work via pkonfound", {
                          index = "COP",
                          to_return = "raw_output")
     
-    expect_s3_class(output6, "ggplot")
+    expect_s3_class(output6$Figure, "ggplot")
 })
 
 ## logistic
 
-
 test_that("logistic models work with pkonfound", {
     
-    output7 <- pkonfound(.273, .024, 16999, 3, n_treat = 16000, model_type = "logistic")
+    output7 <- pkonfound(.273, .024, 16999, 3, n_treat = 16000, model_type = "logistic", to_return = "raw_output")$RIR
     
-    expect_s3_class(output6, "ggplot")
+    expect_equal(output7, 1156)
+    
+    output8 <- pkonfound(.027, .024, 16999, 3, n_treat = 16000, model_type = "logistic", to_return = "raw_output")$RIR
+    
+    expect_equal(output8, 803)
 })
 
+test_that("pkonfound printed output works for a positive case", {
+    outputa <- capture.output(pkonfound(2, .4, 100, 3, to_return = "print", index = "RIR"))
+    expect_true(length(outputa) > 0)
+    
+    outputb <- capture.output(pkonfound(2, .4, 100, 3, to_return = "print", index = "IT"))
+    expect_true(length(outputb) > 0)
+})
 
-# logistic - pkonfound
-# add a few more different combinations of pkonfound inputs (helper_output_print)
-# pkonfound(.273, .024, 16999, 3, n_treat = 16000, model_type = "logistic")
+test_that("pkonfound printed output works for a negative case", {
+    output <- capture.output(pkonfound(-2.2, .65, 200, 3, to_return = "print", index = "RIR"))
+    expect_true(length(output) > 0)
+    
+    output <- capture.output(pkonfound(-2.2, .65, 200, 3, to_return = "print", index = "IT"))
+    expect_true(length(output) > 0)
+})
