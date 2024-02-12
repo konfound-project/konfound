@@ -94,6 +94,7 @@ For published studies, this command calculates (1) how much bias there must be i
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
+
 pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 
 pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
