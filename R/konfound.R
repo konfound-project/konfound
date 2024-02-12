@@ -4,15 +4,13 @@
 #' @param tested_variable Variable associated with the unstandardized beta coefficient to be tested
 #' @inheritParams pkonfound
 #' @param index whether output is RIR or IT (impact threshold); defaults to "RIR"
-#' @param two_by_two whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used; only works for single variables at present (so test_all = TRUE will return an error)
-#' @param test_all whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)
+#' @param two_by_two whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used;
 #' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 #' @importFrom rlang .data
 #' @examples
 #' # using lm() for linear models
 #' m1 <- lm(mpg ~ wt + hp, data = mtcars)
 #' konfound(m1, wt)
-#' konfound(m1, wt, test_all = TRUE)
 #' konfound(m1, wt, to_return = "table")
 #'
 #' # using glm() for non-linear models
@@ -44,7 +42,6 @@ konfound <- function(model_object,
                      tails = 2,
                      index = "RIR",
                      to_return = "print",
-                     test_all = FALSE,
                      two_by_two = FALSE,
                      n_treat = NULL,
                      switch_trm = TRUE,
@@ -55,8 +52,6 @@ konfound <- function(model_object,
     stop("konfound() is currently implemented for models estimated with lm(), glm(), and lme4::lmer(); consider using pkonfound() instead")
   }
   
-  if ("table" %in% to_return & test_all == TRUE) stop("cannot return a table when test_all is set to TRUE")
-  
   # Dealing with non-standard evaluation
   tested_variable_enquo <- rlang::enquo(tested_variable) # dealing with non-standard evaluation (so unquoted names for tested_variable can be used)
   tested_variable_string <- rlang::quo_name(tested_variable_enquo)
@@ -66,7 +61,6 @@ konfound <- function(model_object,
     output <- konfound_lm(
       model_object = model_object,
       tested_variable_string = tested_variable_string,
-      test_all = test_all,
       alpha = alpha,
       tails = tails,
       index = index,
@@ -87,7 +81,6 @@ konfound <- function(model_object,
     output <- konfound_glm(
       model_object = model_object,
       tested_variable_string = tested_variable_string,
-      test_all = test_all,
       alpha = alpha,
       tails = tails,
       to_return = to_return
@@ -99,12 +92,10 @@ konfound <- function(model_object,
   if (inherits(model_object, "glm") & two_by_two == TRUE) {
     
     if(is.null(n_treat)) stop("Please provide a value for n_treat to use this functionality with a dichotomous predictor")
-    if (test_all == TRUE) stop("test_all = TRUE is not supported when two_by_two is specified")
-    
+      
     output <- konfound_glm_dichotomous(
       model_object = model_object,
       tested_variable_string = tested_variable_string,
-      test_all = test_all,
       alpha = alpha,
       tails = tails,
       to_return = to_return,
@@ -121,7 +112,6 @@ konfound <- function(model_object,
     output <- konfound_lmer(
       model_object = model_object,
       tested_variable_string = tested_variable_string,
-      test_all = test_all,
       alpha = alpha,
       tails = tails,
       index = index,
@@ -136,10 +126,5 @@ konfound <- function(model_object,
   if (!("table" %in% to_return)) {
     message("For more detailed output, consider setting `to_return` to table")
   }
-  
-  if (test_all == FALSE) {
-    message("To consider other predictors of interest, consider setting `test_all` to TRUE.")
-  } else {
-    message("Note that presently these predictors of interest are tested independently; future output may use the approach used in mkonfound.")
-  }
+
 }
