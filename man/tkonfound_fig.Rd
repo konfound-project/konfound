@@ -38,11 +38,3 @@ prints 2 figures for how number of hypothetical cases switched changes the effec
 \description{
 This function returns two plots for change in effect size as a function of switching or replacing outcomes, one for all possibilities (switching), another zoomed in the area for positive RIR
 }
-\examples{
-# using tkonfound_fig for a study where 2 by 2 table is (35, 17, 17, 38)
-tkonfound_fig(35, 17, 17, 38)
-tkonfound_fig(35, 17, 17, 38, thr_p = 0.01)
-tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
-tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq")
-tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq", replace = "entire")
-}
