@@ -40,6 +40,9 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/konfound-methods.html</loc>
+  </url>
+  <url>
     <loc>/reference/konfound.html</loc>
   </url>
   <url>
@@ -50,9 +53,6 @@
   </url>
   <url>
     <loc>/reference/pkonfound.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.konfound.html</loc>
   </url>
   <url>
     <loc>/reference/tkonfound_fig.html</loc>
