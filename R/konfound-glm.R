@@ -4,13 +4,7 @@ konfound_glm <- function(model_object, tested_variable_string, alpha, tails, ind
     tidy_output <- broom::tidy(model_object) # tidying output
     glance_output <- broom::glance(model_object)
     
-    if (test_all == FALSE) {
-        coef_df <- tidy_output[tidy_output$term == tested_variable_string, ]
-    } else {
-        coef_df <- tidy_output[-1, ]
-        coef_df$est_eff <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
-    } # to remove intercept
-    
+    coef_df <- tidy_output[tidy_output$term == tested_variable_string, ]
     est_eff <- coef_df$estimate
     est_eff <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
     std_err <- coef_df$std.error

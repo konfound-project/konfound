@@ -146,7 +146,7 @@ konfound_output$thresh_plot
 Whereas this cannot be carried out with `pkonfound()`, with `konfound()` you can also return a table with some key output from the correlation-based approach.
 
 ```{r}
-# konfound(m1, wt, to_return = "table")
+konfound(m1, wt, to_return = "table")
 ```
 
 If the impact threshhold is greater than the impacts of the `Z`s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference. Note that in fields in which there is a lot known about covariates given the outcome of interest, then the omitted ones are likely less important than those that are known an included (i.e., we have a good sense of the factors that matter in terms of educational achievement).
@@ -194,16 +194,15 @@ if (requireNamespace("lme4")) {
 
 We can also use `konfound` to carry out sensitivity analysis as part of meta-analyses. For example, here, `d` represents output from a number (30 in this case) of past studies, read in a CSV file from a website:
 
-```{r, eval = FALSE}
-d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
-head(d)
-mkonfound(d, t, df)
+```{r, eval = TRUE}
+mkonfound_ex
+mkonfound(mkonfound_ex, t, df)
 ```
 
 We can also return a plot summarizing the percent bias needed to sustan or invalidate an inference across all of the past studies:
 
-```{r, eval = FALSE}
-mkonfound(d, t, df, return_plot = T)
+```{r, eval = TRUE}
+mkonfound(mkonfound_ex, t, df, return_plot = T)
 ```
 
 # Other information
