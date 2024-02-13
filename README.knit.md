@@ -1,9 +1,13 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
+
+
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 [![R-CMD-check](https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/konfound-project/konfound/graph/badge.svg?token=ARijYlxn7O)](https://codecov.io/gh/konfound-project/konfound)
 [![status](https://joss.theoj.org/papers/c53ffd4bff0f14c6533e45423d7deb82/status.svg)](https://joss.theoj.org/papers/c53ffd4bff0f14c6533e45423d7deb82)
@@ -11,27 +15,21 @@ status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.o
 
 # konfound
 
-In social science (and educational) research, we often wish to
-understand how robust inferences about effects are to unobserved (or
-controlled for) covariates, possible problems with measurement, and
-other sources of bias. The goal of `konfound` is to carry out
-sensitivity analysis to help analysts to *quantify how robust inferences
-are to potential sources of bias*. This R package provides tools to
-carry out sensitivity analysis as described in Frank, Maroulis, Duong,
-and Kelcey (2013) based on Rubin’s (1974) causal model as well as in
-Frank (2000) based on the impact threshold for a confounding variable.
+In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias.  The goal of `konfound` is to carry out sensitivity analysis to help analysts to *quantify how robust inferences are to potential sources of bias*. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.
 
 # Installation
 
 You can install the CRAN version of konfound with:
 
-``` r
+
+```r
 install.packages("konfound")
 ```
 
 You can install the development version from GitHub with:
 
-``` r
+
+```r
 install.packages("devtools")
 devtools::install_github("jrosen48/konfound")
 ```
@@ -40,18 +38,17 @@ devtools::install_github("jrosen48/konfound")
 
 ## pkonfound() for published studies
 
-`pkonfound()`, for published studies, calculates (1) how much bias there
-must be in an estimate to invalidate/sustain an inference; (2) the
-impact of an omitted variable necessary to invalidate/sustain an
-inference for a regression coefficient:
+`pkonfound()`, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:
 
-``` r
+
+```r
 library(konfound)
 #> Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).
 #> For more information visit http://konfound-it.com.
 ```
 
-``` r
+
+```r
 pkonfound(est_eff = 2, 
           std_err = .4, 
           n_obs = 100, 
@@ -75,11 +72,10 @@ pkonfound(est_eff = 2,
 
 ## konfound() for models fit in R
 
-`konfound()` calculates the same for models fit in R. For example, here
-are the coefficients for a linear model fit with `lm()` using the
-built-in dataset `mtcars`:
+`konfound()` calculates the same for models fit in R. For example, here are the coefficients for a linear model fit with `lm()` using the built-in dataset `mtcars`:
 
-``` r
+
+```r
 m1 <- lm(mpg ~ wt + hp, data = mtcars)
 m1
 #> 
@@ -107,14 +103,14 @@ summary(m1)
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> Residual standard error: 2.593 on 29 degrees of freedom
-#> Multiple R-squared:  0.8268, Adjusted R-squared:  0.8148 
+#> Multiple R-squared:  0.8268,	Adjusted R-squared:  0.8148 
 #> F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
 ```
 
-Sensitivity analysis for the effect for `wt` on `mpg` can be carried out
-as follows, specifying the fitted model object:
+Sensitivity analysis for the effect for `wt` on `mpg` can be carried out as follows, specifying the fitted model object:
 
-``` r
+
+```r
 konfound(m1, wt)
 #> Robustness of Inference to Replacement (RIR):
 #> To invalidate an inference,  66.521 % of the estimate would have to be due to bias. 
@@ -137,7 +133,8 @@ konfound(m1, wt)
 
 We can use an existing (and built-in) dataset, such as `mkonfound_ex`.
 
-``` r
+
+```r
 mkonfound_ex
 #> # A tibble: 30 × 2
 #>         t    df
@@ -171,23 +168,27 @@ mkonfound(mkonfound_ex, t, df)
 #> # ℹ abbreviated name: ¹​pct_bias_to_change_inference
 ```
 
-# Overview of available functionality
+# Overview of available functionality 
 
-The above functions have a number of extensions; the below tables
-represent how `pkonfound()` and `konfound()` can be used:
+The above functions have a number of extensions; the below tables represent how `pkonfound()` and `konfound()` can be used:
 
-| Outcome    | Predictor: Continuous                                                       | Predictor: Binary                                                                                               |
-|:-----------|:----------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------|
-| Continuous | `pkonfound(est_eff, std_err, n_obs, n_covariates)`                          | `pkonfound(est_eff, std_err, n_obs, n_covariates)`                                                              |
-| Logistic   | `pkonfound(est_eff, std_err, n_obs, n_covariates, model_type = 'logistic')` | `pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, model_type = 'logistic')` or `pkonfound(a, b, c, d)` |
 
-| Outcome    | Predictor: Continuous | Predictor: Binary                     |
-|:-----------|:----------------------|:--------------------------------------|
-| Continuous | `konfound(m, var)`    | `konfound(m, var)`                    |
-| Logistic   | `konfound(m, var)`    | `konfound(m, var, two_by_two = TRUE)` |
 
-Note that there are additional arguments for each of thes functions; see
-`?pkonfound()` or `?konfound()` for more details.
+|Outcome    |Predictor: Continuous                                                       |Predictor: Binary                                                                                                |
+|:----------|:---------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------|
+|Continuous |`pkonfound(est_eff, std_err, n_obs, n_covariates)`                          |`pkonfound(est_eff, std_err, n_obs, n_covariates)`                                                               |
+|Logistic   |`pkonfound(est_eff, std_err, n_obs, n_covariates, model_type = 'logistic')` |`pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, model_type = 'logistic')`  or `pkonfound(a, b, c, d)` |
+
+
+
+|Outcome    |Predictor: Continuous |Predictor: Binary                     |
+|:----------|:---------------------|:-------------------------------------|
+|Continuous |`konfound(m, var)`    |`konfound(m, var)`                    |
+|Logistic   |`konfound(m, var)`    |`konfound(m, var, two_by_two = TRUE)` |
+
+
+
+Note that there are additional arguments for each of thes functions; see `?pkonfound()` or `?konfound()` for more details.
 
 # Other information
 
@@ -195,26 +196,14 @@ Note that there are additional arguments for each of thes functions; see
 
 To learn more about sensitivity analysis, please visit:
 
-- The [Introduction to konfound
-  vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html),
-  with detailed information about each of the functions (`pkonfound()`,
-  `konfound()`, and `mkounfound()`)
-- The causal inference section of Ken Frank’s website
-  [here](https://msu.edu/~kenfrank/research.htm#causal)
-- The [konfound interactive web
-  application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/),
-  with links to PowerPoints and key publications
+* The [Introduction to konfound vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
+* The causal inference section of Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm#causal)
+* The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
 
 ### Feedback, issues, and feature requests
 
-We prefer for issues to be filed via GitHub (link to the issues page for
-`konfound` [here](https://github.com/jrosen48/konfound/issues)) though
-we also welcome questions or feedback via email (see the DESCRIPTION
-file).
+We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via email (see the DESCRIPTION file).
 
 ### Code of Conduct
 
-Please note that the konfound project is released with a [Contributor
-Code of
-Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
-By contributing to this project, you agree to abide by its terms.
+Please note that the konfound project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
