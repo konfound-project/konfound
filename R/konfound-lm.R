@@ -11,7 +11,6 @@ konfound_lm <- function(model_object, tested_variable_string, alpha, tails, inde
     n_obs <- glance_output$nobs
     n_covariates <- glance_output$df
     
-    
     out <- test_sensitivity(
         est_eff = est_eff,
         std_err = std_err,

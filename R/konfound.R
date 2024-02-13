@@ -67,11 +67,7 @@ konfound <- function(model_object,
       to_return = to_return
     )
     
-    if (is.null(output)) {
-      
-    } else {
-      return(output)
-    }
+    return(output)
   }
   
   if (inherits(model_object, "glm") & two_by_two == FALSE) {
