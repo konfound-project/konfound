@@ -171,7 +171,7 @@ mkonfound(mkonfound_ex, t, df)
 We can also return a plot summarizing the percent bias needed to sustan or invalidate an inference across all of the past studies:
 
 ```{r, eval = TRUE}
-mkonfound(mkonfound_ex, t, df, return_plot = T)
+mkonfound(mkonfound_ex, t, df, return_plot = TRUE)
 ```
 
 # Other information

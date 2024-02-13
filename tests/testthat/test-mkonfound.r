@@ -7,5 +7,6 @@ test_that("mkonfound produces table", {
 
 test_that("mkonfound produces plot", {
     p <- mkonfound(mkonfound_ex, t, df, return_plot = TRUE)
+    p
     expect_s3_class(p, "ggplot")
 })
