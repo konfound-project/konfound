@@ -87,7 +87,7 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
         }
     )
     #if model can be run to verify true delta, then run it can save results
-    if (class(flag_cov) == "lavaan") {
+    if (inherits(flag_cov, "lavaan")) {
         fit <- lavaan::sem(model,
                       sample.cov = cov.matrix,
                       sample.nobs = n_obs)
@@ -219,7 +219,7 @@ verify_reg_Gz = function(n_obs, sdx, sdy, sdz, rxy, rxz, rzy){
         }
     )
     #if model can be run to verify true delta, then run it can save results
-    if (class(flag_cov) == "lavaan") {
+    if (inherits(flag_cov, "lavaan")) {
         fit <- lavaan::sem(model,
                    sample.cov = cov.matrix,
                    sample.nobs = n_obs)
@@ -231,7 +231,7 @@ verify_reg_Gz = function(n_obs, sdx, sdy, sdz, rxy, rxz, rzy){
         seZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$se
    }
 
-    if (class(flag_cov) == "lavaan") {
+    if (inherits(flag_cov, "lavaan")) {
         result = list(R2, betaX, seX, betaZ, seZ)
         return(result)
     } else {
@@ -266,7 +266,7 @@ verify_reg_uncond = function(n_obs, sdx, sdy, rxy){
         }
     )
     #if model can be run to verify true delta, then run it can save results
-    if (class(flag_cov) == "lavaan") {
+    if (inherits(flag_cov, "lavaan")) {
         fit <- lavaan::sem(model,
                    sample.cov = cov.matrix,
                    sample.nobs = n_obs)
@@ -276,7 +276,7 @@ verify_reg_uncond = function(n_obs, sdx, sdy, rxy){
         seX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$se
     }
     
-    if (class(flag_cov) == "lavaan") {
+    if (inherits(flag_cov, "lavaan")) {
         result = list(R2, betaX, seX)
         return(result)
     } else {
