@@ -107,6 +107,11 @@ test_that("logistic models work with pkonfound", {
     output8 <- pkonfound(.027, .024, 16999, 3, n_treat = 16000, model_type = "logistic", to_return = "raw_output")$RIR
     
     expect_equal(output8, 803)
+    
+    output8_print <- capture.output(pkonfound(.027, .024, 16999, 3, n_treat = 16000, model_type = "logistic", to_return = "print")$RIR)
+    
+    expect_true(length(output8_print) > 0)
+    
 })
 
 test_that("pkonfound printed output works for a positive case", {

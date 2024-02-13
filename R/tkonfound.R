@@ -4,13 +4,6 @@ tkonfound <- function(a, b, c, d,
                       test = "fisher", 
                       replace = "control", 
                       to_return = to_return){
-  # a <- 35
-  # b <- 17
-  # c <- 17
-  # d <- 38
-  # alpha <- 0.05
-  # switch_trm <- T
-  # test <- "fisher"
   
   # stop message
   if (a < 0 || b < 0 || c < 0 || d < 0) {
@@ -253,6 +246,3 @@ tkonfound <- function(a, b, c, d,
   }
   
 }
-
-
-

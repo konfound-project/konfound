@@ -140,23 +140,6 @@
       switch_trm = switch_trm,
       replace = replace
     )
-  } else  if (model_type == "logistic" & is.null(n_treat)) {
-    
-    warning("For a logistic regression, the log-odds coefficients are used for the pkonfound() calculations. To carry out an analysis using average marginal effects, you can use the konfound() function with the results of a model estimated in R.")
-    
-    out <- test_sensitivity_ln(
-      est_eff = est_eff,
-      std_err = std_err,
-      n_obs = n_obs,
-      n_covariates = n_covariates,
-      alpha = alpha,
-      tails = tails,
-      nu = nu,
-      to_return = to_return,
-      n_treat = n_treat,
-      switch_trm = switch_trm,
-      replace = replace
-    )
   } else if(!is.null(a)) {
     # error handling
     if (is.null(a) | is.null(b) | is.null(c) | is.null(d)) {
