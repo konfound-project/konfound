@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">konfound</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -144,17 +144,15 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference?</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Using Rubin's causal model to interpret the robustness of causal inferences.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> For more detailed output, consider setting `to_return` to table</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span><span class="fu">konfound</span><span class="op">(</span><span class="va">m1</span>, <span class="va">wt</span>, to_return <span class="op">=</span> <span class="st">"table"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dependent variable is mpg </span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Unknown or uninitialised column: `itcv`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Unknown or uninitialised column: `impact`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 7</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   term        estimate std.error statistic p.value   itcv impact</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> (Intercept)   37.2       1.60      23.3    0     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> wt            -<span style="color: #BB0000;">3.88</span>      0.633     -<span style="color: #BB0000;">6.13</span>   0      0.625 <span style="color: #BB0000;">NA</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hp            -<span style="color: #BB0000;">0.032</span>     0.009     -<span style="color: #BB0000;">3.52</span>   0.001 <span style="color: #BB0000;">NA</span>      0.511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   term        estimate std.error statistic p.value   itcv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> (Intercept)   37.2       1.60      23.3    0     <span style="color: #BB0000;">NA</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> wt            -<span style="color: #BB0000;">3.88</span>      0.633     -<span style="color: #BB0000;">6.13</span>   0      0.625</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hp            -<span style="color: #BB0000;">0.032</span>     0.009     -<span style="color: #BB0000;">3.52</span>   0.001  0.511</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># using glm() for non-linear models</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"forcats"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>

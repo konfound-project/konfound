@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">konfound</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -286,38 +286,15 @@
 <span class="r-in"><span><span class="va">pkonfound_output</span> <span class="op">&lt;-</span> <span class="fu">pkonfound</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">.4</span>, <span class="fl">200</span>, <span class="fl">3</span>,</span></span>
 <span class="r-in"><span>  to_return <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw_output"</span>, <span class="st">"thresh_plot"</span>, <span class="st">"corr_plot"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  60.555 % of the estimate would have to be due to bias. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This is based on a threshold of 0.789 for statistical significance (alpha = 0.05).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  121  observations would have to be replaced with cases</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> for which the effect is 0 (RIR = 121).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Using Rubin's causal model to interpret the robustness of causal inferences.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Print output created by default. Created 3 other forms of output. Use list indexing or run summary() on the output to see how to access.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (to_return == "raw_output") {    return(output_df(est_eff, beta_threshold, est_eff, bias,         sustain, recase, obs_r, critical_r, r_con, itcv))} else if (to_return == "thresh_plot") {    return(plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff))} else if (to_return == "corr_plot") {    return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))} else if (to_return == "print") {    return(output_print(est_eff, beta_threshold, bias, sustain,         nu, recase, obs_r, critical_r, r_con, itcv, alpha, index))} else if (to_return == "table") {    return(output_table(model_object, tested_variable))} else {    stop("to_return must be set to 'raw_output', 'print', 'table', 'thresh_plot', or 'corr_plot' or some combination thereof")}:</span> the condition has length &gt; 1</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pkonfound_output</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             Length Class  Mode</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> raw_output  8      tbl_df list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> thresh_plot 9      gg     list</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> corr_plot   9      gg     list</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'object' in selecting a method for function 'summary': object 'pkonfound_output' not found</span>
 <span class="r-in"><span><span class="va">pkonfound_output</span><span class="op">$</span><span class="va">raw_output</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   action        inference   percent_bias_to_chan…¹ replace_null_cases unstd_beta</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> to_invalidate reject_null                   60.6                121          2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ abbreviated name: ¹​percent_bias_to_change_inference</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: beta_threshhold &lt;dbl&gt;, omitted_variable_corr &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   itcv &lt;dbl&gt;</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'pkonfound_output' not found</span>
 <span class="r-in"><span><span class="va">pkonfound_output</span><span class="op">$</span><span class="va">thresh_plot</span></span></span>
-<span class="r-plt img"><img src="pkonfound-3.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'pkonfound_output' not found</span>
 <span class="r-in"><span><span class="va">pkonfound_output</span><span class="op">$</span><span class="va">corr_plot</span></span></span>
-<span class="r-plt img"><img src="pkonfound-4.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'pkonfound_output' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># using pkonfound for a 2x2 table</span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>a <span class="op">=</span> <span class="fl">35</span>, b <span class="op">=</span> <span class="fl">17</span>, c <span class="op">=</span> <span class="fl">17</span>, d <span class="op">=</span> <span class="fl">38</span><span class="op">)</span></span></span>
@@ -490,7 +467,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> t_CV              NA        NA           1.204159e+01        12.0415946</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Figure</span>
-<span class="r-plt img"><img src="pkonfound-5.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="pkonfound-3.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR pi (fixed y)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4842727</span>
