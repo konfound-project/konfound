@@ -28,12 +28,20 @@ test_that("pkonfound creates the threshhold plot", {
     thresh_plot <- pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
     
     expect_s3_class(thresh_plot, "ggplot")
+    
+    thresh_plot_null <- pkonfound(.01, .4, 100, 3, to_return = "thresh_plot")
+    
+    expect_s3_class(thresh_plot_null, "ggplot")
 })
 
 test_that("pkonfound creates the correlation plot", {
     corr_plot <- pkonfound(2, .4, 100, 3, to_return = "corr_plot")
     
     expect_s3_class(corr_plot, "ggplot")
+    
+    corr_plot_null <- pkonfound(.01, .4, 100, 3, to_return = "corr_plot")
+    
+    expect_s3_class(corr_plot_null, "ggplot")
 })
 
 expect_output(pkonfound(2, .4, 100, 3), ".")
@@ -107,6 +115,12 @@ test_that("pkonfound printed output works for a positive case", {
     
     outputb <- capture.output(pkonfound(2, .4, 100, 3, to_return = "print", index = "IT"))
     expect_true(length(outputb) > 0)
+    
+    outputc <- capture.output(pkonfound(.01, .4, 100, 3, to_return = "print", index = "RIR"))
+    expect_true(length(outputa) > 0)
+    
+    outputd <- capture.output(pkonfound(.01, .4, 100, 3, to_return = "print", index = "IT"))
+    expect_true(length(outputb) > 0)
 })
 
 test_that("pkonfound printed output works for a negative case", {
@@ -114,5 +128,11 @@ test_that("pkonfound printed output works for a negative case", {
     expect_true(length(output) > 0)
     
     output <- capture.output(pkonfound(-2.2, .65, 200, 3, to_return = "print", index = "IT"))
+    expect_true(length(output) > 0)
+    
+    output <- capture.output(pkonfound(-.01, .65, 200, 3, to_return = "print", index = "RIR"))
+    expect_true(length(output) > 0)
+    
+    output <- capture.output(pkonfound(-.01, .65, 200, 3, to_return = "print", index = "IT"))
     expect_true(length(output) > 0)
 })

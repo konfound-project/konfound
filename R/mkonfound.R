@@ -36,7 +36,7 @@ mkonfound <- function(d, t, df, alpha = .05, tails = 2, return_plot = FALSE) {
       results_df$action == "to_sustain" ~ "To Sustain"
     )
 
-    p <- ggplot2::ggplot(results_df, ggplot2::aes_string(x = "pct_bias_to_change_inference", fill = "action")) +
+    p <- ggplot2::ggplot(results_df, ggplot2::aes(x = results.df$pct_bias_to_change_inference, fill = results.df$action)) +
       ggplot2::geom_histogram() +
       ggplot2::scale_fill_manual("", values = c("#1F78B4", "#A6CEE3")) +
       ggplot2::theme_bw() +

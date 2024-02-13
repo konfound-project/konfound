@@ -27,6 +27,12 @@ test_that("konfound returns a tibble", {
     output5 <- konfound(m5, wt, to_return = "table")
     
     expect_s3_class(output5, "tbl_df")
+    
+    mtcars$my_var <- runif(nrow(mtcars))
+    m5b <- lm(wt ~ my_var, data = mtcars)
+    output5b <- konfound(m5b, my_var, to_return = "table")
+    
+    expect_s3_class(output5b, "tbl_df")
 })
 
 gss_cat$married <- ifelse(gss_cat$marital == "Married", 1, 0)
