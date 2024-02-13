@@ -163,7 +163,7 @@
 
 
 <dt>replace</dt>
-<dd><p>whether using entire sample or the control group to calculate the base rate; default is the entire sample</p></dd>
+<dd><p>whether using entire sample or the control group to calculate the base rate; default is the control group</p></dd>
 
 
 <dt>sdx</dt>
@@ -206,7 +206,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># using pkonfound for linear models</span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">.4</span>, <span class="fl">100</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  60.3 % of the estimate would have to be due to bias. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  60.29 % of the estimate would have to be due to bias. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  60  observations would have to be replaced with cases</span>
@@ -222,7 +222,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="op">-</span><span class="fl">2.2</span>, <span class="fl">.65</span>, <span class="fl">200</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  41.732 % of the estimate would have to be due to bias. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  41.728 % of the estimate would have to be due to bias. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is based on a threshold of -1.282 for statistical significance (alpha = 0.05).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  83  observations would have to be replaced with cases</span>
@@ -239,7 +239,7 @@
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">3</span>, <span class="fl">200</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To sustain an inference,  91.549 % of the estimate would have to be due to bias. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This is based on a threshold of 5.916 for statistical significance (alpha = 0.05).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This is based on a threshold of 5.917 for statistical significance (alpha = 0.05).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To sustain an inference, 183 of the cases with 0 effect would have to be replaced with cases at the threshold of inference (RIR = 183).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
@@ -251,28 +251,27 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.103</span>, <span class="fl">20888</span>, <span class="fl">3</span>, n_treat <span class="op">=</span> <span class="fl">17888</span>, model_type <span class="op">=</span> <span class="st">"logistic"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>2 arguments not used by format 'and a t-ratio of %.3f.'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Conclusion:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">User-entered Table:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Fail Success</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control    2882     118</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Treatment 17308     580</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Note: Values have been rounded to the nearest integer.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This may cause a little change to the estimated effect for the Implied Table.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note: Values have been rounded to the nearest integer.This may cause a little change to the estimated effect for the Implied Table.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To sustain an inference for a negative treatment effect, you would need to replace 2 treatment success cases</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> with cases for which the probability of failure in the control group applies (RIR = 2).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to transferring 1 case from treatment success to treatment failure,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> as shown, from the Implied Table to the Transfer Table.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  as shown, from the Implied Table to the Transfer Table.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Transfer Table:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Fail Success</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control    2882     118</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Treatment 17309     579</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> For the Implied Table, we have an estimate of -0.200, with a SE of 0.103 and a t-ratio of -1.946.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> and a t-ratio of -0.200.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> For the Transfer Table, we have an estimate of -0.202, with a SE of 0.103 and a t-ratio of -1.963.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">RIR:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run ?pkonfound and inspect the to_return argument</span>
@@ -287,7 +286,7 @@
 <span class="r-in"><span>  to_return <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw_output"</span>, <span class="st">"thresh_plot"</span>, <span class="st">"corr_plot"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  60.557 % of the estimate would have to be due to bias. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  60.555 % of the estimate would have to be due to bias. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is based on a threshold of 0.789 for statistical significance (alpha = 0.05).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  121  observations would have to be replaced with cases</span>
@@ -302,18 +301,18 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Print output created by default. Created 3 other forms of output. Use list indexing or run summary() on the output to see how to access.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pkonfound_output</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Created 3 forms of output. To access type: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pkonfound_output$raw_output</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pkonfound_output$thresh_plot</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> pkonfound_output$corr_plot</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Length Class  Mode</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> raw_output  8      tbl_df list</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> thresh_plot 9      gg     list</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> corr_plot   9      gg     list</span>
 <span class="r-in"><span><span class="va">pkonfound_output</span><span class="op">$</span><span class="va">raw_output</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   action        inference   percent_bias…¹ repla…² unstd…³ beta_…⁴ omitt…⁵  itcv</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> to_invalidate reject_null           60.6     121       2   0.789   0.479 0.230</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with abbreviated variable names ¹​percent_bias_to_change_inference,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ²​replace_null_cases, ³​unstd_beta, ⁴​beta_threshhold, ⁵​omitted_variable_corr</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   action        inference   percent_bias_to_chan…¹ replace_null_cases unstd_beta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> to_invalidate reject_null                   60.6                121          2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ abbreviated name: ¹​percent_bias_to_change_inference</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 3 more variables: beta_threshhold &lt;dbl&gt;, omitted_variable_corr &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   itcv &lt;dbl&gt;</span></span>
 <span class="r-in"><span><span class="va">pkonfound_output</span><span class="op">$</span><span class="va">thresh_plot</span></span></span>
 <span class="r-plt img"><img src="pkonfound-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="va">pkonfound_output</span><span class="op">$</span><span class="va">corr_plot</span></span></span>
@@ -322,16 +321,16 @@
 <span class="r-in"><span><span class="co"># using pkonfound for a 2x2 table</span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>a <span class="op">=</span> <span class="fl">35</span>, b <span class="op">=</span> <span class="fl">17</span>, c <span class="op">=</span> <span class="fl">17</span>, d <span class="op">=</span> <span class="fl">38</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Background Information:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of cases that would have to be replaced</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> with no effect cases (RIR) to invalidate an inference made about the association</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> between the rows and columns in a 2x2 table.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> One can also interpret this as switches from one cell to another, such as from</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> the treatment success cell to the treatment failure cell.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of cases that would have to be replaced </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> with no effect cases (RIR) to invalidate an inference made about the association </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> between the rows and columns in a 2x2 table. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> One can also interpret this as switches from one cell to another, such as from </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the treatment success cell to the treatment failure cell. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Conclusion:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference, you would need to replace 14 treatment success</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cases for which the probability of failure in the control group applies (RIR = 14). </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to transferring 9 cases from treatment success to treatment failure.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  cases for which the probability of failure in the control group applies (RIR = 14). </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to transferring 9  cases from treatment success to treatment failure.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> For the User-entered Table, we have an estimated odds ratio of 4.530, with p-value of 0.000:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">User-entered Table:</span></span>
@@ -352,16 +351,16 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>a <span class="op">=</span> <span class="fl">35</span>, b <span class="op">=</span> <span class="fl">17</span>, c <span class="op">=</span> <span class="fl">17</span>, d <span class="op">=</span> <span class="fl">38</span>, alpha <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Background Information:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of cases that would have to be replaced</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> with no effect cases (RIR) to invalidate an inference made about the association</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> between the rows and columns in a 2x2 table.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> One can also interpret this as switches from one cell to another, such as from</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> the treatment success cell to the treatment failure cell.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of cases that would have to be replaced </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> with no effect cases (RIR) to invalidate an inference made about the association </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> between the rows and columns in a 2x2 table. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> One can also interpret this as switches from one cell to another, such as from </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the treatment success cell to the treatment failure cell. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Conclusion:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference, you would need to replace 9 treatment success</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cases for which the probability of failure in the control group applies (RIR = 9). </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to transferring 6 cases from treatment success to treatment failure.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  cases for which the probability of failure in the control group applies (RIR = 9). </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to transferring 6  cases from treatment success to treatment failure.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> For the User-entered Table, we have an estimated odds ratio of 4.530, with p-value of 0.000:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">User-entered Table:</span></span>
@@ -382,16 +381,16 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>a <span class="op">=</span> <span class="fl">35</span>, b <span class="op">=</span> <span class="fl">17</span>, c <span class="op">=</span> <span class="fl">17</span>, d <span class="op">=</span> <span class="fl">38</span>, alpha <span class="op">=</span> <span class="fl">0.01</span>, switch_trm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Background Information:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of cases that would have to be replaced</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> with no effect cases (RIR) to invalidate an inference made about the association</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> between the rows and columns in a 2x2 table.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> One can also interpret this as switches from one cell to another, such as from</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> the treatment success cell to the treatment failure cell.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of cases that would have to be replaced </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> with no effect cases (RIR) to invalidate an inference made about the association </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> between the rows and columns in a 2x2 table. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> One can also interpret this as switches from one cell to another, such as from </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the treatment success cell to the treatment failure cell. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Conclusion:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference, you would need to replace 19 control failure</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cases for which the probability of failure in the control group applies (RIR = 19). </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to transferring 6 cases from control failure to control success.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  cases for which the probability of failure in the control group applies (RIR = 19). </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to transferring 6  cases from control failure to control success.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> For the User-entered Table, we have an estimated odds ratio of 4.530, with p-value of 0.000:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">User-entered Table:</span></span>
@@ -412,16 +411,16 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>a <span class="op">=</span> <span class="fl">35</span>, b <span class="op">=</span> <span class="fl">17</span>, c <span class="op">=</span> <span class="fl">17</span>, d <span class="op">=</span> <span class="fl">38</span>, test <span class="op">=</span> <span class="st">"chisq"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Background Information:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of cases that would have to be replaced</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> with no effect cases (RIR) to invalidate an inference made about the association</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> between the rows and columns in a 2x2 table.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> One can also interpret this as switches from one cell to another, such as from</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> the treatment success cell to the treatment failure cell.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of cases that would have to be replaced </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> with no effect cases (RIR) to invalidate an inference made about the association </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> between the rows and columns in a 2x2 table. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> One can also interpret this as switches from one cell to another, such as from </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the treatment success cell to the treatment failure cell. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Conclusion:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference, you would need to replace 15 treatment success</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cases for which the probability of failure in the control group applies (RIR = 15). </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to transferring 10 cases from treatment success to treatment failure.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  cases for which the probability of failure in the control group applies (RIR = 15). </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to transferring 10  cases from treatment success to treatment failure.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> For the User-entered Table, we have a Pearson's chi square of 14.176, with p-value of 0.000:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">User-entered Table:</span></span>
@@ -442,7 +441,109 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># use pkonfound to calculate delta* and delta_exact </span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">.4</span>, std_err <span class="op">=</span> <span class="fl">.1</span>, n_obs <span class="op">=</span> <span class="fl">290</span>, sdx <span class="op">=</span> <span class="fl">2</span>, sdy <span class="op">=</span> <span class="fl">6</span>, R2 <span class="op">=</span> <span class="fl">.7</span>, eff_thr <span class="op">=</span> <span class="fl">0</span>, FR2max <span class="op">=</span> <span class="fl">.8</span>, index <span class="op">=</span> <span class="st">"COP"</span>, to_return <span class="op">=</span> <span class="st">"raw_output"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`delta*`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.668243</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`delta*restricted`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.085172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $delta_exact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.508536</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $delta_pctbias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 143.1658</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $cor_oster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Y         X         Z        CV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Y  1.0000000 0.3266139 0.8266047 0.2426367</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X  0.3266139 1.0000000 0.2433792 0.8927742</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Z  0.8266047 0.2433792 1.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CV 0.2426367 0.8927742 0.0000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $cor_exact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Y         X         Z        CV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Y  1.0000000 0.3266139 0.8266047 0.3416500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X  0.3266139 1.0000000 0.2433792 0.3671463</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Z  0.8266047 0.2433792 1.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CV 0.3416500 0.3671463 0.0000000 1.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`var(Y)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`var(X)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`var(CV)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Table</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 M1:X    M2:X,Z M3(delta_exact):X,Z,CV M3(delta*):X,Z,CV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> R2         0.1097571 0.7008711           8.006897e-01         0.8006897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> coef_X     0.9798418 0.3980344          -1.114065e-16        -1.9033618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SE_X       0.1665047 0.0995086           8.775619e-02         0.2078153</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> std_coef_X 0.3266139 0.2297940           0.000000e+00        -0.6344539</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t_X        5.8847685 4.0000000          -1.269500e-15        -9.1589120</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> coef_CV           NA        NA           2.049900e+00         4.8543646</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SE_CV             NA        NA           1.702349e-01         0.4031330</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t_CV              NA        NA           1.204159e+01        12.0415946</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Figure</span>
+<span class="r-plt img"><img src="pkonfound-5.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR pi (fixed y)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4842727</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR (fixed y)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 140.4391</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR pi (null)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2818584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR (null)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 81.73894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR pi (rxyGz)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4977821</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR (rxyGz)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 144.3568</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># use pkonfound to calculate rxcv and rycv when preserving standard error</span></span></span>
+<span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">.5</span>, std_err <span class="op">=</span> <span class="fl">.056</span>, n_obs <span class="op">=</span> <span class="fl">6174</span>, eff_thr <span class="op">=</span> <span class="fl">.1</span>, sdx <span class="op">=</span> <span class="fl">0.22</span>, sdy <span class="op">=</span> <span class="fl">1</span>, R2 <span class="op">=</span> <span class="fl">.3</span>, index <span class="op">=</span> <span class="st">"PSE"</span>, to_return <span class="op">=</span> <span class="st">"raw_output"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`correlation between X and CV conditional on Z`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2479732</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`correlation between Y and CV conditional on Z`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3721927</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`correlation between X and CV`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2143186</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`correlation between Y and CV`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.313404</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`covariance matrix`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Y          X         Z         CV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Y  1.00000000 0.07777425 0.5394031 0.31340398</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X  0.07777425 0.04840000 0.1106620 0.04715009</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Z  0.53940306 0.11066202 1.0000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CV 0.31340398 0.04715009 0.0000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Table</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  M1:X     M2:X,Z   M3:X,Z,CV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> R2          0.1251176  0.3001134  0.38959867</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> coef_X      1.6069060  0.5001620  0.09742753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SE_X        0.0541133  0.0560000  0.05398370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> std_coef_X  0.3535193  0.1129410  0.02143406</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t_X        29.6952137  8.9314651  1.80475837</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> coef_Z             NA  0.4840541  0.52862153</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SE_Z               NA  0.0123200  0.01160045</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t_Z                NA 39.2901069 45.56905001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> coef_CV            NA         NA  0.30881026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SE_CV              NA         NA  0.01026456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t_CV               NA         NA 30.08509668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </div>
@@ -457,7 +558,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

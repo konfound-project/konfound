@@ -94,6 +94,7 @@ For published studies, this command calculates (1) how much bias there must be i
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
+
 pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 
 pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
@@ -117,4 +118,5 @@ pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
 pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7, eff_thr = 0, FR2max = .8, index = "COP", to_return = "raw_output")
 # use pkonfound to calculate rxcv and rycv when preserving standard error
 pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1, sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
+
 }

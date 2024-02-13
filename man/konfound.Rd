@@ -11,7 +11,6 @@ konfound(
   tails = 2,
   index = "RIR",
   to_return = "print",
-  test_all = FALSE,
   two_by_two = FALSE,
   n_treat = NULL,
   switch_trm = TRUE,
@@ -31,9 +30,7 @@ konfound(
 
 \item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
 
-\item{test_all}{whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)}
-
-\item{two_by_two}{whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used; only works for single variables at present (so test_all = TRUE will return an error)}
+\item{two_by_two}{whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used;}
 
 \item{n_treat}{the number of cases associated with the treatment condition; applicable only when model_type = "logistic"}
 
@@ -51,7 +48,6 @@ For fitted models, this command calculates (1) how much bias there must be in an
 # using lm() for linear models
 m1 <- lm(mpg ~ wt + hp, data = mtcars)
 konfound(m1, wt)
-konfound(m1, wt, test_all = TRUE)
 konfound(m1, wt, to_return = "table")
 
 # using glm() for non-linear models

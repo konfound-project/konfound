@@ -10,16 +10,6 @@
 #' @param replace whether using entire sample or the control group to calculate the base rate, with the default of the control group  
 #' @importFrom stats chisq.test
 #' @return prints 2 figures for how number of hypothetical cases switched changes the effect size 
-#' @examples
-#' # using tkonfound_fig for a study where 2 by 2 table is (35, 17, 17, 38)
-#' tkonfound_fig(35, 17, 17, 38)
-#' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01)
-#' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
-#' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq")
-#' tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq", replace = "entire")
-#' 
-#' @export
-#' 
 
 tkonfound_fig <- function(a, b, c, d, thr_p = 0.05, switch_trm = TRUE, test = "fisher", replace = "control"){
 
