@@ -41,14 +41,6 @@
 #' pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 #' pkonfound(2, .4, 100, 3, to_return = "corr_plot")
 #' 
-#' pkonfound_output <- pkonfound(2, .4, 200, 3,
-#'   to_return = c("raw_output", "thresh_plot", "corr_plot")
-#' )
-#' summary(pkonfound_output)
-#' pkonfound_output$raw_output
-#' pkonfound_output$thresh_plot
-#' pkonfound_output$corr_plot
-#' 
 #' # using pkonfound for a 2x2 table
 #' pkonfound(a = 35, b = 17, c = 17, d = 38)
 #' pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01)
