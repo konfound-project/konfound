@@ -41,10 +41,8 @@ Imports:
     dplyr,
     ggplot2,
     lavaan,
-    mice,
     purrr,
     rlang,
-    tibble,
     tidyr
 Suggests: 
     covr,
@@ -55,6 +53,8 @@ Suggests:
     margins,
     pbkrtest,
     rmarkdown,
+    mice,
+    tibble,
     roxygen2,
     testthat,
     lme4 (>= 1.1-35.1),

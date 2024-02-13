@@ -5,10 +5,12 @@ create_konfound_class <- function(x) {
 }
 
 #' Concise summary of konfound output
+#' @rdname konfound-methods
 #' @details Prints a concise summary of konfound output with multiple types of data specified in the to_return argument
 #' @param object A `konfound` object
 #' @param ... Additional arguments
-#' @export
+#' @export summary
+#' @usage \method{summary}{konfound}(object, ...)
 
 summary.konfound <- function(object, ...) {
     cat("Created", length(object), "forms of output. To access type: \n")

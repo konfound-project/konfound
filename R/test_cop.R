@@ -228,13 +228,13 @@ test_cop <- function(est_eff, # unstandardized
 
 scale <- 1/(round(max(figTable$coef_X)*10)/10)
 
-fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = ModelLabel)) +
-    ggplot2::geom_point(ggplot2::aes(y = coef_X, group = cat, shape = cat), color = "blue", size = 3) + 
+fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
+    ggplot2::geom_point(ggplot2::aes(y = figTable$coef_X, group = cat, shape = cat), color = "blue", size = 3) + 
     ggplot2::scale_shape_manual(values = c(16, 1)) +
     ggplot2::geom_point(ggplot2::aes(y = R2/scale), color = "#7CAE00", shape = 18, size = 4) + 
     # scale_linetype_manual(values=c("solid", "dotted")) +
     ggplot2::geom_line(ggplot2::aes(y = R2/scale, group = cat), linetype = "solid", color = "#7CAE00") + 
-    ggplot2::geom_line(ggplot2::aes(y = coef_X, group = cat, linetype = cat), color = "blue") + 
+    ggplot2::geom_line(ggplot2::aes(y = figTable$coef_X, group = cat, linetype = cat), color = "blue") + 
     ggplot2::scale_y_continuous(
       # Features of the first axis
       name = "Coeffcient (X)",
