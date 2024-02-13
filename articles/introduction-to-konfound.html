@@ -368,7 +368,6 @@ fit with <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-
 <span>    <span class="va">m3</span> <span class="op">&lt;-</span> <span class="va">fm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="va">sleepstudy</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="../reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m3</span>, <span class="va">Days</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#&gt; Loading required namespace: lme4</span></span>
 <span><span class="co">#&gt; Loading required package: Matrix</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span></span>
 <span><span class="co"><span style="font-weight: bold;">#&gt; </span>To invalidate an inference,  84.825 % of the estimate would have to be due to bias. </span></span>
