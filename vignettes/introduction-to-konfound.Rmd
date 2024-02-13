@@ -72,21 +72,6 @@ pkonfound(.4, 2, 100, 3, to_return = "thresh_plot")
 pkonfound(.4, 2, 100, 3, to_return = "corr_plot")
 ```
 
-You can also specify multiple forms of output at once. 
-
-```{r}
-model_output <- pkonfound(2, .4, 200, 3, to_return = c("raw_output", "corr_plot"))
-summary(model_output)
-```
-
-When we type the name of the object, we see that we created three types of output that we can access as follows:
-
-```{r}
-model_output$raw_output
-model_output$thresh_plot
-model_output$corr_plot
-```
-
 Finally, you can return the raw output, for use in other analyses. 
 
 ```{r}
