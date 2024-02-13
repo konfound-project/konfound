@@ -1,6 +1,33 @@
 # Function to output printed text
 
-output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL, nu, recase, obs_r, critical_r, r_con, itcv, alpha, index) {
+#' Output printed text with formatting
+#'
+#' This function outputs printed text for various indices such as RIR 
+#' (Robustness of Inference to Replacement) 
+#' and IT (Impact Threshold for a Confounding Variable) with specific formatting
+#'  like bold, underline, and italic
+#' using functions from the crayon package. It handles different scenarios based
+#'  on the effect difference, 
+#' beta threshold, and other parameters, providing formatted 
+#' output for each case.
+#'
+#' @param eff_diff The difference in the effect size being evaluated.
+#' @param beta_threshhold The threshold value of beta, used for 
+#' statistical significance determination.
+#' @param bias The percentage of the estimate that could be due to bias (optional).
+#' @param sustain The percentage of the estimate necessary to sustain an inference (optional).
+#' @param nu The hypothesized effect size used in replacement analysis.
+#' @param recase The number of cases that need to be replaced to change the inference.
+#' @param obs_r The observed correlation coefficient in the data.
+#' @param critical_r The critical correlation coefficient for statistical significance.
+#' @param r_con The correlation coefficient of an omitted variable with both the outcome and the predictor.
+#' @param itcv The impact threshold for a confounding variable.
+#' @param alpha The level of statistical significance.
+#' @param index A character string indicating the index for which the output is generated ('RIR' or 'IT').
+#' @importFrom crayon bold underline italic
+output_print <- function(eff_diff, beta_threshhold, bias = NULL, sustain = NULL,
+                         nu, recase, obs_r, critical_r, r_con, itcv, alpha, 
+                         index) {
   if (index == "RIR"){ 
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
     if (abs(eff_diff) > abs(beta_threshhold)) {

@@ -1,13 +1,26 @@
-#' Perform meta-analyses including sensitivity analysis
-#' @description For fitted models, this command carries out sensitivity analysis for a number of models, when their parameters stored in a data.frame.
-#' @param d data.frame or tibble with the t-statistics and associated degrees of freedom
-#' @param t t-statistic or vector of t-statistics
-#' @param df degrees of freedom or vector of degrees of freedom associated with the t-statistics in the t argument
-#' @param return_plot whether to return a plot of the percent bias; defaults to FALSE
-#' @inheritParams pkonfound
-#' @import rlang
-#' @import dplyr
-#' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference for each of the cases in the data.frame
+#' Meta-Analysis and Sensitivity Analysis for Multiple Studies
+#'
+#' Performs sensitivity analysis for multiple models, where parameters 
+#' are stored in a data frame. It calculates the amount of bias required to 
+#' invalidate or sustain an inference for each case in the data frame.
+#'
+#' @param d A data frame or tibble containing t-statistics and associated 
+#' degrees of freedom.
+#' @param t Column name or vector of t-statistics.
+#' @param df Column name or vector of degrees of freedom associated 
+#' with t-statistics.
+#' @param alpha Significance level for hypothesis testing.
+#' @param tails Number of tails for the test (1 or 2).
+#' @param return_plot Whether to return a plot of the percent bias 
+#' (default is `FALSE`).
+#' @return Depending on `return_plot`, either returns a data frame with 
+#' analysis results or a plot.
+#' @importFrom rlang enquo
+#' @importFrom dplyr select pull case_when
+#' @importFrom purrr map2_dfr
+#' @importFrom ggplot2 ggplot aes_string geom_histogram scale_fill_manual 
+#' theme_bw ggtitle facet_grid scale_y_continuous theme ylab xlab
+#' @importFrom stats qt
 #' @examples
 #' \dontrun{
 #' mkonfound_ex
@@ -16,7 +29,6 @@
 #' }
 #' @export
 #'
-
 mkonfound <- function(d, t, df, alpha = .05, tails = 2, return_plot = FALSE) {
   t_enquo <- enquo(t)
   df_enquo <- enquo(df)

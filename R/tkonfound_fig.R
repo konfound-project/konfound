@@ -1,16 +1,29 @@
-#' Draw figures for change in effect size as a function of switching or replacing outcomes 
-#' @description This function returns two plots for change in effect size as a function of switching or replacing outcomes, one for all possibilities (switching), another zoomed in the area for positive RIR  
-#' @param a cell is the number of cases in the control group showing unsuccessful results
-#' @param b cell is the number of cases in the control group showing successful results
-#' @param c cell is the number of cases in the treatment group showing unsuccessful results
-#' @param d cell is the number of cases in the treatment group showing successful results
-#' @param thr_p the p-value threshold used to evaluate statistical significance, with the default of 0.05
-#' @param switch_trm whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row
-#' @param test whether using Fisher's Exact Test (default) or chi-square test
-#' @param replace whether using entire sample or the control group to calculate the base rate, with the default of the control group  
-#' @importFrom stats chisq.test
-#' @return prints 2 figures for how number of hypothetical cases switched changes the effect size 
-
+#' Draw Figures for Change in Effect Size in 2x2 Tables
+#'
+#' This function generates plots illustrating how the change in effect size 
+#' is influenced by switching or replacing outcomes in a 2x2 table. It produces
+#' two plots: one showing all possibilities (switching) and another zoomed in 
+#' the area for positive RIR (Relative Impact Ratio).
+#'
+#' @param a Number of cases in the control group with unsuccessful outcomes.
+#' @param b Number of cases in the control group with successful outcomes.
+#' @param c Number of cases in the treatment group with unsuccessful outcomes.
+#' @param d Number of cases in the treatment group with successful outcomes.
+#' @param thr_p P-value threshold for statistical significance, default is 0.05.
+#' @param switch_trm Whether to switch the two cells in the treatment or 
+#'     control row, default is TRUE (treatment row).
+#' @param test Type of statistical test used, either "Fisher's Exact Test"
+#'  (default) or "Chi-square test".
+#' @param replace Indicates whether to use the entire sample or just the control
+#'  group for calculating the base rate, default is "control".
+#'
+#' @importFrom ggplot2 ggplot aes_string geom_line geom_point scale_fill_manual
+#'            scale_shape_manual geom_hline scale_y_continuous
+#'            scale_x_continuous theme element_blank element_line
+#' @importFrom ggrepel geom_label_repel
+#'
+#' @return Returns two plots showing the effect of hypothetical case switches 
+#'         on the effect size in a 2x2 table.
 tkonfound_fig <- function(a, b, c, d, thr_p = 0.05, switch_trm = TRUE, test = "fisher", replace = "control"){
 
 n_obs <- a + b + c + d

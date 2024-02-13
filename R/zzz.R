@@ -1,4 +1,12 @@
-## quiets concerns (notes) of R CMD check re: the vars that are evaluated using non-standard evaluation
+#' Package Initialization Functions and Utilities
+#'
+#' These functions are used for initializing the package environment and
+#' providing utility functions for the package.
+#'
+#' @name zzz
+#' @aliases zzz
+#' @rdname zzz
+#' @importFrom utils globalVariables
 if (getRversion() >= "2.15.1") utils::globalVariables(c("inference", "key", "replace_null_cases", "percent_bias", "val"))
 
 .onAttach <- function(libname, pkgname) {

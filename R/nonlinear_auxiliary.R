@@ -1,4 +1,6 @@
 # to evaluate whether we are moving cases to invalidate or sustain the inference
+#' @importFrom stats qt
+
 isinvalidate <- function(thr_t, ob_t) {
   if ((0 < thr_t && thr_t < ob_t) || (ob_t < thr_t && thr_t < 0)) {
     x <- TRUE
@@ -314,13 +316,25 @@ get_pi <- function(odds_ratio, std_err, n_obs, n_trm) {
   return(x)
 }
 
-# get p value for chi-square test 
+#' Perform a Chi-Square Test
+#'
+#' @description
+#' `chisq_p` calculates the p-value for a chi-square test given a contingency table.
+#'
+#' @param a Frequency count for row 1, column 1.
+#' @param b Frequency count for row 1, column 2.
+#' @param c Frequency count for row 2, column 1.
+#' @param d Frequency count for row 2, column 2.
+#'
+#' @return P-value from the chi-square test.
+#' @importFrom stats chisq.test
 chisq_p <- function(a, b, c, d){
   table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
   p <- chisq.test(table,correct = FALSE)$p.value
   return(p)
 }
 
+#' @importFrom stats fisher.test
 # get p value for exact fisher p test
 fisher_p <- function(a, b, c, d){
   table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)

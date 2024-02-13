@@ -43,21 +43,21 @@ Imports:
     lavaan,
     purrr,
     rlang,
-    tidyr
+    tidyr,
+    lme4 (>= 1.1-35.1),
+    margins,
+    ggrepel,
+    pbkrtest
 Suggests: 
     covr,
     devtools,
     forcats,
-    ggrepel,
     knitr,
-    margins,
-    pbkrtest,
     rmarkdown,
     mice,
     tibble,
     roxygen2,
     testthat,
-    lme4 (>= 1.1-35.1),
     Matrix (>= 1.6-2)
 VignetteBuilder: 
     knitr

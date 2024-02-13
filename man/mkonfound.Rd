@@ -2,28 +2,34 @@
 % Please edit documentation in R/mkonfound.R
 \name{mkonfound}
 \alias{mkonfound}
-\title{Perform meta-analyses including sensitivity analysis}
+\title{Meta-Analysis and Sensitivity Analysis for Multiple Studies}
 \usage{
 mkonfound(d, t, df, alpha = 0.05, tails = 2, return_plot = FALSE)
 }
 \arguments{
-\item{d}{data.frame or tibble with the t-statistics and associated degrees of freedom}
+\item{d}{A data frame or tibble containing t-statistics and associated 
+degrees of freedom.}
 
-\item{t}{t-statistic or vector of t-statistics}
+\item{t}{Column name or vector of t-statistics.}
 
-\item{df}{degrees of freedom or vector of degrees of freedom associated with the t-statistics in the t argument}
+\item{df}{Column name or vector of degrees of freedom associated 
+with t-statistics.}
 
-\item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
+\item{alpha}{Significance level for hypothesis testing.}
 
-\item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
+\item{tails}{Number of tails for the test (1 or 2).}
 
-\item{return_plot}{whether to return a plot of the percent bias; defaults to FALSE}
+\item{return_plot}{Whether to return a plot of the percent bias 
+(default is `FALSE`).}
 }
 \value{
-prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference for each of the cases in the data.frame
+Depending on `return_plot`, either returns a data frame with 
+analysis results or a plot.
 }
 \description{
-For fitted models, this command carries out sensitivity analysis for a number of models, when their parameters stored in a data.frame.
+Performs sensitivity analysis for multiple models, where parameters 
+are stored in a data frame. It calculates the amount of bias required to 
+invalidate or sustain an inference for each case in the data frame.
 }
 \examples{
 \dontrun{

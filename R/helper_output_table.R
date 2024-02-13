@@ -1,5 +1,21 @@
 # Function to output the data frame
 
+#' Output a Tidy Table from a Model Object
+#'
+#' This function takes a model object and the tested variable, 
+#' tidies the model output using `broom::tidy`, 
+#' calculates the impact threshold for confounding variables (ITCV) and impact 
+#' for each covariate,and returns a rounded, tidy table of model outputs.
+#'
+#' @param model_object A model object from which to generate the output.
+#' @param tested_variable The variable being tested in the model.
+#' @return A tidy data frame containing model outputs, ITCV, 
+#' and impacts for covariates.
+#' @importFrom broom tidy
+#' @importFrom purrr modify_if
+#' @importFrom stats cor
+#' @importFrom dplyr select filter mutate
+#' @importFrom rlang !! enquo
 output_table <- function(model_object, tested_variable) {
   p <- all.vars(model_object$call)[1]
   cat("Dependent variable is", p, "\n")
