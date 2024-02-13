@@ -112,6 +112,33 @@ test_that("logistic models work with pkonfound", {
     
     expect_true(length(output8_print) > 0)
     
+    output9 <- pkonfound(.027, .024, 16999, 3, n_treat = 16000, replace = "entire",
+                         model_type = "logistic", to_return = "raw_output")$RIR
+    
+    expect_equal(output9, 793)
+    
+    output10 <- pkonfound(.027, .024, 16999, 3, n_treat = 16000, switch_trm = FALSE,
+                         model_type = "logistic", to_return = "raw_output")$RIR
+    
+    expect_equal(output10, 52)
+
+})
+
+## two by two table 
+
+test_that("two by two works with pkonfound", {
+    
+    output11 <- pkonfound(a = 18, b = 12, c = 12, d = 17, to_return = "raw_output")$RIR
+    expect_equal(output11, 8)
+    
+    output12 <- pkonfound(a = 18, b = 12, c = 12, d = 17, switch_trm = FALSE, to_return = "raw_output")$RIR
+    expect_equal(output12, 5)
+    
+    output13 <- pkonfound(a = 18, b = 3, c = 12, d = 1, test = "chisq", to_return = "raw_output")$RIR
+    expect_equal(output13, 6)
+    
+    output14 <- pkonfound(a = 18, b = 1, c = 12, d = 1, switch_trm = FALSE, to_return = "raw_output")$RIR
+    expect_equal(output14, 5)
 })
 
 test_that("pkonfound printed output works for a positive case", {
