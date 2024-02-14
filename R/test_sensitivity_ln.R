@@ -18,12 +18,8 @@ test_sensitivity_ln <- function(est_eff,
   if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
   if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
 
-  if (est_eff < 0) {
-    thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3) * -1
-  } else {
-    thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3)
-  }
-  
+  thr_t <- cal_thr_t(est_eff, alpha, tails, n_obs, n_covariates)
+
   # stop message
   if (n_obs <= 0 || n_treat <= 0) {
     stop("Please enter positive integers for sample size and number of treatment group cases.")
@@ -35,11 +31,9 @@ test_sensitivity_ln <- function(est_eff,
   odds_ratio <- exp(est_eff)
   
   # updated approach to deal with imaginary
-  minse <- sqrt((4 * n_obs + 
-                   sqrt(16 * n_obs^2 + 4 * n_treat * (n_obs - n_treat) * 
-                          ((4 + 4 * odds_ratio^2) / odds_ratio - 7.999999)))/
-                  (2 * n_treat * (n_obs - n_treat)))
-  # check if the implied table solution may contain imaginary numbers
+  minse <- cal_minse(n_obs, n_treat, odds_ratio)
+
+    # check if the implied table solution may contain imaginary numbers
   changeSE <- FALSE
   if (std_err < minse) {
     haveimaginary <- TRUE
@@ -98,17 +92,10 @@ test_sensitivity_ln <- function(est_eff,
   ### b1 d1 are large while b2 d2 are small
   ### the goal is to get fewest swithes to invalidate the inference
   ### remove the solution if one cell has fewerer than 5 cases or negative cells or nan cells
-  check1 <- check2 <- TRUE
-  if (!(n_cnt >= a1 && a1 >= 5 && n_cnt >= b1 && b1 >= 5 && n_treat >= c1 && c1 >= 5 && n_treat >= d1 && d1 >= 5)
-      || is.nan(a1) || is.nan(b1) || is.nan(c1) || is.nan(d1)) {
-    check1 <- FALSE
-  }
   
-  if (!(n_cnt >= a2 && a2 >= 5 && n_cnt >= b2 && b2 >= 5 && n_treat >= c2 && c2 >= 5 && n_treat >= d2 && d2 >= 5)
-      || is.nan(a2) || is.nan(b2) || is.nan(c2) || is.nan(d2)) {
-    check2 <- FALSE
-  }
-  
+  check1 <- check_starting_table(n_cnt, n_treat, a1, b1, c1, d1)
+  check2 <- check_starting_table(n_cnt, n_treat, a2, b2, c2, d2)
+
   if (check1) {
     table_bstart1 <- get_abcd_kfnl(a1, b1, c1, d1)
     solution1 <- getswitch(table_bstart1, thr_t, switch_trm, n_obs)
