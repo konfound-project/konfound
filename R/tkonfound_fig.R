@@ -233,12 +233,12 @@ if (!switch_trm && !dcroddsratio_ob) {
 
 meta$xaxis <- paste(meta$RIR,"\n","(", meta$switch, ")", sep = "")
 
-fig1 <- ggplot2::ggplot(meta, ggplot2::aes_string(x="RIR", y="pdif"))+
-  ggplot2::geom_line(ggplot2::aes_string(y="pdif"), size = 1) +
-  ggplot2::geom_point(ggplot2::aes_string(y="pdif", shape = "current",fill = "sigpoint"))+
+fig1 <- ggplot2::ggplot(meta, ggplot2::aes(x=meta$RIR, y=meta$pdif))+
+    ggplot2::geom_line(ggplot2::aes(y=meta$pdif), linewidth = 1) +
+    ggplot2::geom_point(ggplot2::aes(y=meta$pdif, shape = meta$current, fill = meta$sigpoint)) +
   ggplot2::scale_fill_manual(values=fillcol)+
   ggplot2::scale_shape_manual(values=pointshape)+
-  ggrepel::geom_label_repel(ggplot2::aes_string(label="currentlabel"))+
+  ggrepel::geom_label_repel(ggplot2::aes(label=meta$currentlabel))+
   ggplot2::geom_hline(yintercept = pos_thr_pdif, linetype = "dashed", color="green4", size = 1)+
   ggplot2::geom_hline(yintercept = neg_thr_pdif, linetype = "dashed", color="red", size = 1)+
   ggplot2::scale_y_continuous(name="Difference in probability of successful outcome (treatment - control)")+

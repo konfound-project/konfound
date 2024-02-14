@@ -46,8 +46,13 @@ Imports:
     tidyr,
     lme4 (>= 1.1-35.1),
     margins,
+    tibble,
     ggrepel,
-    pbkrtest
+    pbkrtest,
+    lifecycle,
+    cli,
+    glue,
+    withr
 Suggests: 
     covr,
     devtools,
@@ -55,7 +60,6 @@ Suggests:
     knitr,
     rmarkdown,
     mice,
-    tibble,
     roxygen2,
     testthat,
     Matrix (>= 1.6-2)
