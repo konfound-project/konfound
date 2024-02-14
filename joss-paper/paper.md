@@ -5,11 +5,9 @@ tags:
 - Sensitivity analysis
 - Causal inference
 - R
-date: "31 July 2023"
+date: "2024-02-13"
 output:
-  pdf_document: default
-  html_document:
-    df_print: paged
+  pdf_document: defaulted and 
 authors:
 - name: Sarah Narvaiz
   equal-contrib: yes
@@ -26,6 +24,9 @@ authors:
 - name: Joshua M. Rosenberg
   equal-contrib: yes
   corresponding: yes
+  affiliation: 1
+- name: Wei Wang
+  equal-contrib: yes
   affiliation: 1
 - name: Ran Xu
   equal-contrib: yes
@@ -46,9 +47,9 @@ affiliations:
 
 # Quantifying the Robustness of Inferences
 
-Statistical methods which quantify the conditions necessary to alter inferences are important to a variety of disciplines [@razavi2021]. One line of work is rooted in linear models and foregrounds the sensitivity of inferences to the strength of omitted variables [@frank2000; @cinelli2019]. A more recent approach is rooted in the potential outcomes framework for causal inference and foregrounds how hypothetical changes in a sample would alter an inference if such variables or cases were otherwise observed [@frank2007; @frank2008; @frank2013; @xu2019). **It differs from other sensitivity analysis approaches in the variety of dependent variable types it accomodates, its internal logic, and its analytic (rather than simulation-based) approach. [@frank2023].**
+Statistical methods which quantify the conditions necessary to alter inferences are important to a variety of disciplines [@razavi2021]. One line of work is rooted in linear models and foregrounds the sensitivity of inferences to the strength of omitted variables [@frank2000; @cinelli2019]. A more recent approach is rooted in the potential outcomes framework for causal inference and foregrounds how hypothetical changes in a sample would alter an inference if such variables or cases were otherwise observed [@frank2007; @frank2008; @frank2013; @xu2019). It differs from other sensitivity analysis approaches in the variety of dependent variable types it accomodates, its internal logic, and its analytic (rather than simulation-based) approach. [@frank2023].
 
-We have implemented two measures from these lines of work within R via the `konfound` R package. **The audience for this R package is primarily social scientists, as well as interested individuals in other fields**. One measure is the Impact Threshold of a Confounding Variable (ITCV), which generates statements such as "to invalidate an inference of an effect, an omitted variable would have to be correlated at \_\_ with the predictor of interest and with the outcome" [@frank2000]. This sensitivity analysis can be calculated for any linear model. The second measure is the Robustness of an Inference to Replacement (RIR) which generates statements such as "to invalidate the inference, \_\_ % of the cases would have to be replaced with counterfactual cases with zero effect of the treatment" [@frank2013]. The RIR represents a more generally applicable approach not limited to linear models, and is recommended for all cases that use binary outcomes [@frank2021].
+We have implemented two measures from these lines of work within R via the `konfound` R package. The audience for this R package is primarily social scientists, as well as interested individuals in other fields. One measure is the Impact Threshold of a Confounding Variable (ITCV), which generates statements such as "to invalidate an inference of an effect, an omitted variable would have to be correlated at \_\_ with the predictor of interest and with the outcome" [@frank2000]. This sensitivity analysis can be calculated for any linear model. The second measure is the Robustness of an Inference to Replacement (RIR) which generates statements such as "to invalidate the inference, \_\_ % of the cases would have to be replaced with counterfactual cases with zero effect of the treatment" [@frank2013]. The RIR represents a more generally applicable approach not limited to linear models, and is recommended for all cases that use binary outcomes [@frank2021].
 
 # Statement of Need: The Need for an R Package
 
@@ -128,7 +129,7 @@ Now let's examine the robustness of the `peop80` effect by calculating the ITCV.
     ## To consider other predictors of interest, consider setting `test_all` to
     ## TRUE.
 
-The output indicates that in order to invalidate the inference that `peop80` has an effect on `water81` using statistical significance as a threshold (e.g., p=.05), an omitted variable would have to be correlated at 0.52 with `peop80` and 0.52 with `water81`, conditioning on observed covariates. Correspondingly, the impact of an omitted variable as defined in [@frank2000] must be 0.52 X 0.52 = 0.27.
+The output indicates that in order to invalidate the inference that `peop80` has an effect on `water81` using statistical significance as a threshold (e.g., *p* = .05), an omitted variable would have to be correlated at 0.520 with `peop80` and 0.520 with `water81`, conditioning on observed covariates. Correspondingly, the impact of an omitted variable as defined in [@frank2000] must be 0.520 X 0.520 = 0.270.
 
 ## *RIR example for linear models fit with lm()*
 
