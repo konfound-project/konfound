@@ -1047,3 +1047,38 @@ getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
   
   return(result)
 }
+
+# calculate min se possible 
+# updated approach to deal with imaginary
+cal_minse <- function(n_obs, n_treat, odds_ratio) {
+    minse <- sqrt((4 * n_obs + 
+                       sqrt(16 * n_obs^2 + 4 * n_treat * (n_obs - n_treat) * 
+                                ((4 + 4 * odds_ratio^2) / odds_ratio - 7.999999)))/
+                      (2 * n_treat * (n_obs - n_treat)))
+    return(minse)
+}
+
+# calculate thr_t
+cal_thr_t <- function(est_eff, alpha, tails, n_obs, n_covariates) {
+    if (est_eff < 0) {
+        thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3) * -1
+    } else {
+        thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3)
+    }
+    return(thr_t)
+}
+
+# check starting table 
+# see any cell with <5 cases or negative or nan cases
+check_starting_table <- function(n_cnt, n_treat, a, b, c, d){
+    check <- TRUE
+    if (!(n_cnt >= a && a >= 5 && 
+          n_cnt >= b && b >= 5 && 
+          n_treat >= c && c >= 5 && 
+          n_treat >= d && d >= 5)
+        || is.nan(a) || is.nan(b) || is.nan(c) || is.nan(d)) {
+        check <- FALSE
+    } 
+    return(check)
+}
+
