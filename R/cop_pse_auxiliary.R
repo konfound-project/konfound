@@ -137,11 +137,11 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
                         sample.nobs = n_obs)
         },
         error = function(e){
-            flag_cov = F
+            flag_cov = FALSE
             return(flag_cov)
         },
         warning = function(w){
-            flag_cov = F
+            flag_cov = FALSE
             return(flag_cov)
         }
     )
