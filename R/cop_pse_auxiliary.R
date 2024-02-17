@@ -175,11 +175,11 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
                         sample.nobs = n_obs)
         },
         error = function(e){
-            flag_cor = F
+            flag_cor = FALSE
             return(flag_cor)
         },
         warning = function(w){
-            flag_cor = F
+            flag_cor = FALSE
             return(flag_cor)
         }
     )
@@ -269,11 +269,11 @@ verify_reg_Gz = function(n_obs, sdx, sdy, sdz, rxy, rxz, rzy){
                         sample.nobs = n_obs)
         },
         error = function(e){
-            flag_cov = F
+            flag_cov = FALSE
             return(flag_cov)
         },
         warning = function(w){
-            flag_cov = F
+            flag_cov = FALSE
             return(flag_cov)
         }
     )
@@ -324,11 +324,11 @@ verify_reg_uncond = function(n_obs, sdx, sdy, rxy){
                         sample.nobs = n_obs)
         },
         error = function(e){
-            flag_cov = F
+            flag_cov = FALSE
             return(flag_cov)
         },
         warning = function(w){
-            flag_cov = F
+            flag_cov = FALSE
             return(flag_cov)
         }
     )
