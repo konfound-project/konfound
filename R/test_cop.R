@@ -214,7 +214,7 @@ test_cop <- function(est_eff, # unstandardized
                      NA, NA, eff_cv_M3, eff_cv_M3_oster, # reg coef for CV in three reg models
                      NA, NA, se_cv_M3, se_cv_M3_oster, # se for CV in three reg models
                      NA, NA, eff_cv_M3 / se_cv_M3, eff_cv_M3_oster / se_cv_M3_oster), # t for CV in three reg models
-                   nrow = 8, ncol = 4, byrow = T) 
+                   nrow = 8, ncol = 4, byrow = TRUE) 
   
   rownames(fTable) <- c("R2", "coef_X", "SE_X", "std_coef_X", "t_X",
                         # "coef_Z", "SE_Z", "t_Z",
