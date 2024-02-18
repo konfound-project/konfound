@@ -40,7 +40,8 @@ plot_threshold <- function(beta_threshold, est_eff) {
   } else if (est_eff < beta_threshold) { # beta is below threshold
 
     dd <- dplyr::tibble(est_eff = est_eff, beta_threshold = beta_threshold)
-    dd <- dplyr::mutate(dd, `Above Estimated Effect, Below Threshold` = abs(est_eff - beta_threshold))
+    dd <- dplyr::mutate(dd, `Above Estimated Effect, 
+                        Below Threshold` = abs(est_eff - beta_threshold))
     dd <- dplyr::mutate(dd, `Below Threshold` = est_eff)
     dd <- dplyr::select(dd, -beta_threshold)
 
@@ -56,22 +57,26 @@ plot_threshold <- function(beta_threshold, est_eff) {
     y_thresh_text <- y_thresh + sqrt(.005 * abs(y_thresh))
     effect_text <- est_eff + sqrt(.025 * abs(est_eff)) # y-value of text
 
-    cols <- c("lightgray", "#1F78B4") # dark blue and green (green not used right now)
+    cols <- c("lightgray", "#1F78B4") 
+    # dark blue and green (green not used right now)
   }
 
   p <- ggplot2::ggplot(dd, ggplot2::aes(x = inference, y = val, fill = key)) +
     ggplot2::geom_col(position = "stack") +
 
     ggplot2::geom_hline(yintercept = est_eff, color = "black") +
-    ggplot2::annotate("text", x = 1, y = effect_text, label = "Estimated Effect") +
-
+    ggplot2::annotate("text", x = 1, y = effect_text, 
+                      label = "Estimated Effect") +
     ggplot2::geom_hline(yintercept = y_thresh, color = "red") +
-    ggplot2::annotate("text", x = 1, y = y_thresh_text, label = "Threshold") +
-    # ggplot2::geom_text(aes(label = "Effect"), vjust = -.5) + this is discussed here: https://github.com/jrosen48/konfound/issues/5
+    ggplot2::annotate("text", x = 1, y = y_thresh_text, 
+                      label = "Threshold") +
+    # ggplot2::geom_text(aes(label = "Effect"), vjust = -.5) + 
+    #this is discussed here: https://github.com/jrosen48/konfound/issues/5
 
     ggplot2::scale_fill_manual("", values = cols) +
     ggplot2::theme_bw() +
-    ggplot2::theme(axis.text.x = ggplot2::element_blank(), axis.ticks = ggplot2::element_blank()) +
+    ggplot2::theme(axis.text.x = ggplot2::element_blank(), 
+                   axis.ticks = ggplot2::element_blank()) +
     ggplot2::xlab(NULL) +
     ggplot2::ylab("Effect (abs. value)") +
     ggplot2::theme(legend.position = "top")
