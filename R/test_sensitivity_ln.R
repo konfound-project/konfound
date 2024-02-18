@@ -63,8 +63,8 @@ test_sensitivity_ln <- function(est_eff,
     # to record the original treatment cases in case we need to adjust it
     # user_ntrm <- n_treat
     # check if the implied table solution may contain imaginary numbers
-    # haveimaginary <- F
-    # changepi <- F
+    # haveimaginary <- FALSE
+    # changepi <- FALSE
     # set the default value for whether we need and can adjust pi (ratio of treatment cases)
     # to remove the imaginary part
     # keyimagin <- (4 + 4 * odds_ratio^2 + odds_ratio *
@@ -72,9 +72,9 @@ test_sensitivity_ln <- function(est_eff,
     # minimgain <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + n_obs * std_err^2 * (4 - 0.25 * n_obs * std_err^2))
     # keyx1 <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + 4 * n_obs * std_err^2)
     # if (keyimagin > 0) {
-    # haveimaginary <- T
+    # haveimaginary <- TRUE
     # if (minimgain <= 0 && keyx1 > 0) {
-    # changepi <- T
+    # changepi <- TRUE
     # n_treat <- n_obs * get_pi(odds_ratio, std_err, n_obs, n_treat)
     # n_cnt <- n_obs - n_treat
     #  } else {
