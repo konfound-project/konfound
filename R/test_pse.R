@@ -124,7 +124,7 @@ test_pse <- function(est_eff,
                        # se for CV in three reg models
                        NA, NA, eff_cv_M3 / se_cv_M3), 
                      # t for CV in three reg models
-                       nrow = 11, ncol = 3, byrow = T) 
+                       nrow = 11, ncol = 3, byrow = TRUE) 
     
     rownames(fTable) <- c("R2", "coef_X", "SE_X", "std_coef_X", "t_X",
                           "coef_Z", "SE_Z", "t_Z",
