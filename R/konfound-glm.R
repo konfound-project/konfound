@@ -18,7 +18,11 @@
 #' @importFrom dplyr select filter bind_cols
 #' @importFrom stats glm
 #' @importFrom margins margins
-konfound_glm <- function(model_object, tested_variable_string, alpha, tails, index = "RIR", to_return) {
+konfound_glm <- function(model_object, 
+                         tested_variable_string, 
+                         alpha, tails, 
+                         index = "RIR", 
+                         to_return) {
     tidy_output <- broom::tidy(model_object) # tidying output
     glance_output <- broom::glance(model_object)
     
