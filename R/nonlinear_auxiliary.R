@@ -692,7 +692,7 @@ result <- list(final_switch = final, User_enter_value = table_start, Transfer_Ta
 return(result)
 }
 
-getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
+getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = TRUE){
   if (a > 0 & b > 0 & c > 0 & d > 0){
     odds_ratio <- fisher_oddsratio(a, b, c, d)
   } else {
