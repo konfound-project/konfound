@@ -50,7 +50,9 @@ Imports:
     ggrepel,
     pbkrtest,
     lifecycle,
-    glue
+    cli,
+    glue,
+    withr
 Suggests: 
     covr,
     devtools,

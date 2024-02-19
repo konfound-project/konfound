@@ -34,29 +34,19 @@ test_cop <- function(est_eff, # unstandardized
   var_y <- sdy^2
   
   ### if the user specifies R2max directly then we use the specified R2max 
-  if (FR2max == 0){FR2max <- FR2max_multiplier * R2}
+  if (FR2max == 0){FR2max = FR2max_multiplier * R2}
   var_z <- sdz <- 1
   
   ## error message if input is inappropriate
-  if (!(std_err > 0)) {stop("Did not run! Standard error needs to be 
-                            greater than zero.")}
-  if (!(sdx > 0)) {stop("Did not run! Standard deviation of x needs to be 
-                        greater than zero.")}
-  if (!(sdy > 0)) {stop("Did not run! Standard deviation of y needs to be 
-                        greater than zero.")}
-  if (!(n_obs > n_covariates + 3)) {
-    stop("Did not run! There are too few observations relative to the 
-         number of observations and covariates. Please specify a less 
-         complex model to use KonFound-It.")}
+  if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
+  if (!(sdx > 0)) {stop("Did not run! Standard deviation of x needs to be greater than zero.")}
+  if (!(sdy > 0)) {stop("Did not run! Standard deviation of y needs to be greater than zero.")}
+  if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
   if (!(R2 < FR2max)) {stop("Did not run! R2 Max needs to be greater than R2.")}
   if (!(FR2max < 1)) {stop("Did not run! R2 Max needs to be less than 1.")}
-  if (!(1-((sdy^2/sdx^2)*(1-R2)/((df+1) * std_err^2))>0)) {
-    stop("Did not run! Entered values produced Rxz^2 <=0, 
-         consider adding more significant digits to your entered values.")}
+  if (!(1-((sdy^2/sdx^2)*(1-R2)/((df+1) * std_err^2))>0)) {stop("Did not run! Entered values produced Rxz^2 <=0, consider adding more significant digits to your entered values.")}
 
-  # an indicator of whether the use specified est_eff is negative,
-  # 1 is yes negative
-  negest <- 0 
+  negest <- 0 # an indicator of whether the use specified est_eff is negative, 1 is yes negative
   if (est_eff < 0) {
     est_eff <- abs(est_eff)
     negest <- 1
@@ -75,7 +65,7 @@ test_cop <- function(est_eff, # unstandardized
   ## ryxGz_M2 is only for simulation to recover the exact number
   
   ## make sure R2 due to x alone is not larger than overall or observed R2
-  if (ryxGz^2 > R2) {illcnd_ryxGz <- TRUE} else {illcond_ryxGz <- FALSE}
+  if (ryxGz^2 > R2) {illcnd_ryxGz = TRUE} else {illcond_ryxGz = FALSE}
   
   ## calculate ryz, rxz, rxy
   ryz <- rzy <- cal_ryz(ryxGz, R2)
@@ -83,8 +73,7 @@ test_cop <- function(est_eff, # unstandardized
   ## df + 1 because omitted variable is NOT included in M2 
   #### we change the n_obs to df to recover the rxz as in the particular sample
 
-  ## note that in the updated approach rxy is not necessary to calculate 
-  ## rxcv_exact, ryxcv_exact and delta_exact
+  ## note that in the updated approach rxy is not necessary to calculate rxcv_exact, ryxcv_exact and delta_exact
   rxy <- ryx <- cal_rxy(ryxGz, rxz, ryz)
   rxy_M2 <- cal_rxy(ryxGz_M2, rxz, ryz) 
   ## rxy_M2 is only for simulation to recover the exact number
@@ -97,9 +86,8 @@ test_cop <- function(est_eff, # unstandardized
   R2_uncond <- rxy^2
   
   ## calculate delta_star
-  delta_star <- cal_delta_star(FR2max, R2, R2_uncond, est_eff, 
-                               eff_thr, var_x, var_y, eff_uncond, 
-                               rxz, n_obs)
+  delta_star <- cal_delta_star(FR2max, R2, R2_uncond, est_eff, eff_thr, var_x, var_y, eff_uncond, rxz, n_obs)
+  
   ## now introduce cv
   sdcv <- var_cv <- 1
   rcvz <- rzcv <- 0
@@ -120,11 +108,9 @@ test_cop <- function(est_eff, # unstandardized
   
   # prepare some other values in the final Table (long output)
   R2_M3_oster <- as.numeric(verify_oster[1])
-  eff_x_M3_oster <- as.numeric(verify_oster[2]) 
-  # should be equivalent or very close to eff_thr
+  eff_x_M3_oster <- as.numeric(verify_oster[2]) # should be equivalent or very close to eff_thr
   se_x_M3_oster <- as.numeric(verify_oster[3])
-  beta_x_M3_oster <- as.numeric(verify_oster[9]) 
-  # should be equivalent or very close to beta_thr
+  beta_x_M3_oster <- as.numeric(verify_oster[9]) # should be equivalent or very close to beta_thr
   t_x_M3_oster <- eff_x_M3_oster / se_x_M3_oster 
   eff_z_M3_oster <- as.numeric(verify_oster[4])
   se_z_M3_oster <- as.numeric(verify_oster[5])
@@ -133,8 +119,7 @@ test_cop <- function(est_eff, # unstandardized
   cov_oster <- verify_oster[[11]]
   cor_oster <- verify_oster[[12]]
   
-  ## calculate the exact/true rcvx, rcvy, delta 
-  ## (updated version that does not need rxy)
+  ## calculate the exact/true rcvx, rcvy, delta (updated version that does not need rxy)
   ### the idea is to calculate everything conditional on z
   sdxGz <- sdx * sqrt(1 - rxz^2)
   sdyGz <- sdy * sqrt(1 - ryz^2)
@@ -171,11 +156,9 @@ test_cop <- function(est_eff, # unstandardized
   
   # prepare some other values in the final Table (long output)
   R2_M3 <- as.numeric(verify_exact[1])
-  eff_x_M3 <- as.numeric(verify_exact[2]) 
-  # should be equivalent or very close to eff_thr
+  eff_x_M3 <- as.numeric(verify_exact[2]) # should be equivalent or very close to eff_thr
   se_x_M3 <- as.numeric(verify_exact[3])
-  beta_x_M3 <- as.numeric(verify_exact[9]) 
-  # should be equivalent or very close to beta_thr
+  beta_x_M3 <- as.numeric(verify_exact[9]) # should be equivalent or very close to beta_thr
   t_x_M3 <- eff_x_M3 / se_x_M3 
   eff_z_M3 <- as.numeric(verify_exact[4])
   se_z_M3 <- as.numeric(verify_exact[5])
@@ -186,10 +169,8 @@ test_cop <- function(est_eff, # unstandardized
   
   verify_pse_reg_M2 <- verify_reg_Gz(n_obs, sdx, sdy, sdz, rxy_M2, rxz, rzy)
   R2_M2 <- as.numeric(verify_pse_reg_M2[1])
-  eff_x_M2 <- as.numeric(verify_pse_reg_M2[2]) 
-  # should be equivalent or very close to est_eff
-  se_x_M2 <- as.numeric(verify_pse_reg_M2[3]) 
-  # should be equivalent or very close to std_err
+  eff_x_M2 <- as.numeric(verify_pse_reg_M2[2]) # should be equivalent or very close to est_eff
+  se_x_M2 <- as.numeric(verify_pse_reg_M2[3]) # should be equivalent or very close to std_err
   eff_z_M2 <- as.numeric(verify_pse_reg_M2[4]) 
   se_z_M2 <- as.numeric(verify_pse_reg_M2[5]) 
   t_x_M2 <- eff_x_M2 / se_x_M2 
@@ -214,7 +195,7 @@ test_cop <- function(est_eff, # unstandardized
                      NA, NA, eff_cv_M3, eff_cv_M3_oster, # reg coef for CV in three reg models
                      NA, NA, se_cv_M3, se_cv_M3_oster, # se for CV in three reg models
                      NA, NA, eff_cv_M3 / se_cv_M3, eff_cv_M3_oster / se_cv_M3_oster), # t for CV in three reg models
-                   nrow = 8, ncol = 4, byrow = TRUE) 
+                   nrow = 8, ncol = 4, byrow = T) 
   
   rownames(fTable) <- c("R2", "coef_X", "SE_X", "std_coef_X", "t_X",
                         # "coef_Z", "SE_Z", "t_Z",
@@ -229,8 +210,7 @@ test_cop <- function(est_eff, # unstandardized
                              "Intermediate(M2)", eff_x_M2, R2, "exact", 
                              "Final(M3)", eff_x_M3, FR2max, "exact",
                              "Intermediate(M2)", eff_x_M2, R2, "star", 
-                             "Final(M3)", eff_x_M3_oster, FR2max, "star"), 
-                     nrow = 5, ncol = 4, byrow =TRUE)
+                             "Final(M3)", eff_x_M3_oster, FR2max, "star"), nrow = 5, ncol = 4, byrow =TRUE)
   colnames(figTable) <- c("ModelLabel", "coef_X", "R2", "cat")
 
   figTable <- as.data.frame(figTable)
@@ -301,8 +281,7 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
   
   if (to_return == "raw_output") {
     if (negest == 1) {
-      cat("Using the absolute value of the estimated effect, 
-          results can be interpreted by symmetry.")
+      cat("Using the absolute value of the estimated effect, results can be interpreted by symmetry.")
       cat("\n")
     }
     output <- list("delta*" = delta_star,
@@ -332,29 +311,22 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
     cat("This function calculates delta* and the exact value of delta.")
     cat("\n")
     if (negest == 1) {
-      cat("Using the absolute value of the estimated effect, 
-          results can be interpreted by symmetry.")
+      cat("Using the absolute value of the estimated effect, results can be interpreted by symmetry.")
       cat("\n")
     }
-    cat(sprintf("delta* is %.3f (assuming no covariates in the baseline model M1), 
-                the exact delta is %.3f, with a bias of %.3f%%.", 
-                delta_star, delta_exact, delta_pctbias))
+    cat(sprintf("delta* is %.3f (assuming no covariates in the baseline model M1), the exact delta is %.3f, with a bias of %.3f%%.", delta_star, delta_exact, delta_pctbias))
     cat("\n")
-    cat(sprintf("With delta*, the coefficient in the final model will be %.3f. 
-                With the exact delta, the coefficient will be %.3f.",  
+    cat(sprintf("With delta*, the coefficient in the final model will be %.3f. With the exact delta, the coefficient will be %.3f.",  
                 eff_x_M3_oster,eff_x_M3))
     cat("\n")
-    cat("Use to_return = raw_ouput to see more specific results 
-        and graphic presentation of the result.")
+    cat("Use to_return = raw_ouput to see more specific results and graphic presentation of the result.")
     cat("\n")
     cat("\n")
-    cat("This function also calculates conditional RIR that 
-        invalidates the statistical inference.")
+    cat("This function also calculates conditional RIR that invalidates the statistical inference.")
     cat("\n")
     cat("If the replacement cases have a fixed value, then RIR =", cond_RIR_fixedY, ".")
     cat("\n")
-    cat("If the replacement cases follow a null distribution, 
-        then RIR =", cond_RIR_null, ".")
+    cat("If the replacement cases follow a null distribution, then RIR =", cond_RIR_null, ".")
     cat("\n")
     cat("If the replacement cases satisfy rxy|Z = 0, then RIR =", cond_RIR_rxyz, ".")
     cat("\n")

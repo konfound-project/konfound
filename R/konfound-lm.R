@@ -16,12 +16,7 @@
 #' @return The results of the konfound analysis for the specified variable(s).
 #' @importFrom broom tidy glance
 #' @importFrom dplyr select filter bind_cols
-konfound_lm <- function(model_object, 
-                        tested_variable_string, 
-                        alpha, 
-                        tails, 
-                        index, 
-                        to_return) {
+konfound_lm <- function(model_object, tested_variable_string, alpha, tails, index, to_return) {
     tidy_output <- broom::tidy(model_object) # tidying output
     glance_output <- broom::glance(model_object)
     

@@ -89,8 +89,7 @@
                       FR2max,
                       FR2max_multiplier = 1.3,
                       to_return = "print") {
-  if ("table" %in% to_return) stop("a table can only be 
-                                   output when using konfound")
+  if ("table" %in% to_return) stop("a table can only be output when using konfound")
   
    if (index == "COP") {
      
@@ -138,8 +137,7 @@
   } else if(!is.null(a)) {
     # error handling
     if (is.null(a) | is.null(b) | is.null(c) | is.null(d)) {
-      stop("Please enter values for a, b, c, 
-           and d to use the 2 x 2 table functionality")
+      stop("Please enter values for a, b, c, and d to use the 2 x 2 table functionality")
     }
     
     out <- tkonfound(a = a, 
@@ -190,8 +188,7 @@ if (!is.null(out)) { # dealing with a strange print issue
 }
 
 if (to_return == "print") {
-  message("For other forms of output, run 
-          ?pkonfound and inspect the to_return argument")
+  message("For other forms of output, run ?pkonfound and inspect the to_return argument")
 }
 
 message("For models fit in R, consider use of konfound().")

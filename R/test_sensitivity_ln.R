@@ -1,5 +1,4 @@
-# Main function to test sensitivity for non-linear models to be wrapped 
-# with pkonfound(), konfound(), and mkonfound()
+# Main function to test sensitivity for non-linear models to be wrapped with pkonfound(), konfound(), and mkonfound()
 
 test_sensitivity_ln <- function(est_eff,
                                 std_err,
@@ -16,23 +15,17 @@ test_sensitivity_ln <- function(est_eff,
                                 tested_variable) {
     
     ## error message if input is inappropriate
-    if (!(std_err > 0)) {
-      stop("Did not run! Standard error needs to be greater than zero.")}
-    if (!(n_obs > n_covariates + 3)) {
-      stop("Did not run! There are too few observations relative to 
-           the number of observations and covariates. Please specify a 
-           less complex model to use KonFound-It.")}
+    if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
+    if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
     
     thr_t <- cal_thr_t(est_eff, alpha, tails, n_obs, n_covariates)
     
     # stop message
     if (n_obs <= 0 || n_treat <= 0) {
-        stop("Please enter positive integers for sample size 
-             and number of treatment group cases.")
+        stop("Please enter positive integers for sample size and number of treatment group cases.")
     }
     if (n_obs <= n_treat) {
-        stop("The total sample size should be larger than 
-             the number of treatment group cases.")
+        stop("The total sample size should be larger than the number of treatment group cases.")
     }
     
     odds_ratio <- exp(est_eff)
@@ -63,8 +56,8 @@ test_sensitivity_ln <- function(est_eff,
     # to record the original treatment cases in case we need to adjust it
     # user_ntrm <- n_treat
     # check if the implied table solution may contain imaginary numbers
-    # haveimaginary <- FALSE
-    # changepi <- FALSE
+    # haveimaginary <- F
+    # changepi <- F
     # set the default value for whether we need and can adjust pi (ratio of treatment cases)
     # to remove the imaginary part
     # keyimagin <- (4 + 4 * odds_ratio^2 + odds_ratio *
@@ -72,9 +65,9 @@ test_sensitivity_ln <- function(est_eff,
     # minimgain <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + n_obs * std_err^2 * (4 - 0.25 * n_obs * std_err^2))
     # keyx1 <- 4 + 4 * odds_ratio^2 + odds_ratio * (-8 + 4 * n_obs * std_err^2)
     # if (keyimagin > 0) {
-    # haveimaginary <- TRUE
+    # haveimaginary <- T
     # if (minimgain <= 0 && keyx1 > 0) {
-    # changepi <- TRUE
+    # changepi <- T
     # n_treat <- n_obs * get_pi(odds_ratio, std_err, n_obs, n_treat)
     # n_cnt <- n_obs - n_treat
     #  } else {
@@ -204,11 +197,9 @@ test_sensitivity_ln <- function(est_eff,
             change, sprintf("you would need to replace %d", RIR), RIRway, "cases")
         
         if (replace == "control") {
-            conclusion1a <- sprintf("with cases for which the probability of 
-                                    failure in the control group applies (RIR = %d).", RIR)
+            conclusion1a <- sprintf("with cases for which the probability of failure in the control group applies (RIR = %d).", RIR)
         } else {
-            conclusion1a <- sprintf("with cases for which the probability of failure 
-                                    in the entire sample applies (RIR = %d).", RIR)
+            conclusion1a <- sprintf("with cases for which the probability of failure in the entire sample applies (RIR = %d).", RIR)
         }
         
         conclusion1b <- paste(
@@ -222,11 +213,9 @@ test_sensitivity_ln <- function(est_eff,
             change, sprintf("you would need to replace %d", RIR), RIRway, "cases")
         
         if (replace == "control") {
-            conclusion1a <- sprintf("with cases for which the probability of 
-                                    failure in the control group applies (RIR = %d).", RIR)
+            conclusion1a <- sprintf("with cases for which the probability of failure in the control group applies (RIR = %d).", RIR)
         } else {
-            conclusion1a <- sprintf("with cases for which the probability of failure 
-                                    in the entire sample applies (RIR = %d).", RIR)
+            conclusion1a <- sprintf("with cases for which the probability of failure in the entire sample applies (RIR = %d).", RIR)
         }
         
         conclusion1b <- paste(
@@ -239,27 +228,22 @@ test_sensitivity_ln <- function(est_eff,
         conclusion1 <- paste(
             change, c("only transferring cases from"), transferway, "is not enough.")
         
-        conclusion1b <- paste(sprintf("We also need to transfer %d cases from", 
-                                      final_solution$final_extra),
-                              transferway_extra, c("as shown, from the User-entered 
-                                                   Table to the Transfer Table. "))
+        conclusion1b <- paste(sprintf("We also need to transfer %d cases from", final_solution$final_extra),
+                              transferway_extra, c("as shown, from the User-entered Table to the Transfer Table. "))
         
         conclusion1c <- paste(sprintf("This means we need to replace %d of", RIR), RIRway, 
-                              sprintf("with null hypothesis cases; and replace %d", 
-                                      RIR_extra), RIRway_extra, 
+                              sprintf("with null hypothesis cases; and replace %d", RIR_extra), RIRway_extra, 
                               c("with null hypothesis cases to change the inference.")
         )
     }
     
     conclusion2 <- sprintf(
-        "For the Implied Table, we have an estimate of %.3f, 
-      with a SE of %.3f and a t-ratio of %.3f.",
+        "For the Implied Table, we have an estimate of %.3f, with a SE of %.3f and a t-ratio of %.3f.",
         final_solution$est_eff_start, final_solution$std_err_start, final_solution$t_start
     )
     
     conclusion3 <- sprintf(
-        "For the Transfer Table, we have an estimate of %.3f, 
-      with a SE of %.3f and a t-ratio of %.3f.",
+        "For the Transfer Table, we have an estimate of %.3f, with a SE of %.3f and a t-ratio of %.3f.",
         final_solution$est_eff_final, final_solution$std_err_final, final_solution$t_final
     )
     
@@ -268,8 +252,7 @@ test_sensitivity_ln <- function(est_eff,
     
     if (changeSE) {
         notice_SE <- sprintf(
-            "In order to generate a usable implied contingency table, 
-          we increased the standard error to %.3f (the original one is %.3f).",
+            "In order to generate a usable implied contingency table, we increased the standard error to %.3f (the original one is %.3f).",
             std_err, user_std_err)
     }
     
