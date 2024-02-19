@@ -34,7 +34,7 @@ test_cop <- function(est_eff, # unstandardized
   var_y <- sdy^2
   
   ### if the user specifies R2max directly then we use the specified R2max 
-  if (FR2max == 0){FR2max = FR2max_multiplier * R2}
+  if (FR2max == 0){FR2max <- FR2max_multiplier * R2}
   var_z <- sdz <- 1
   
   ## error message if input is inappropriate
@@ -75,7 +75,7 @@ test_cop <- function(est_eff, # unstandardized
   ## ryxGz_M2 is only for simulation to recover the exact number
   
   ## make sure R2 due to x alone is not larger than overall or observed R2
-  if (ryxGz^2 > R2) {illcnd_ryxGz = TRUE} else {illcond_ryxGz = FALSE}
+  if (ryxGz^2 > R2) {illcnd_ryxGz <- TRUE} else {illcond_ryxGz <- FALSE}
   
   ## calculate ryz, rxz, rxy
   ryz <- rzy <- cal_ryz(ryxGz, R2)
