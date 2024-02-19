@@ -17,8 +17,13 @@
 #' @return The results of the konfound analysis.
 #' @importFrom broom tidy glance
 #' @importFrom stats glm
-konfound_glm_dichotomous <- function(model_object, tested_variable_string, alpha, tails,
-                                     to_return, n_treat, switch_trm, replace) {
+konfound_glm_dichotomous <- function(model_object, 
+                                     tested_variable_string, 
+                                     alpha, tails,
+                                     to_return, 
+                                     n_treat, 
+                                     switch_trm, 
+                                     replace) {
   tidy_output <- broom::tidy(model_object) # tidying output
   glance_output <- broom::glance(model_object)
 

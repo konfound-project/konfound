@@ -151,10 +151,12 @@ tkonfound <- function(a, b, c, d,
         
         if (replace == "control") {
             conclusion1b <- paste0(
-                sprintf(" cases for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+                sprintf(" cases for which the probability of failure in 
+                        the control group applies (RIR = %d). ", RIR))
         } else {
             conclusion1b <- paste0(
-                sprintf(" cases for which the probability of failure in the entire group applies (RIR = %d). ", RIR))    
+                sprintf(" cases for which the probability of failure in 
+                        the entire group applies (RIR = %d). ", RIR))    
         }
         
         conclusion1c <- paste0(
@@ -169,10 +171,12 @@ tkonfound <- function(a, b, c, d,
         
         if (replace == "control") {
             conclusion1b <- paste0(
-                sprintf(" cases for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+                sprintf(" cases for which the probability of failure in 
+                        the control group applies (RIR = %d). ", RIR))
         } else {
             conclusion1b <- paste0(
-                sprintf(" cases for which the probability of failure in the entire group applies (RIR = %d). ", RIR))    
+                sprintf(" cases for which the probability of failure in 
+                        the entire group applies (RIR = %d). ", RIR))    
         }
         
         conclusion1c <- paste0(
@@ -183,28 +187,35 @@ tkonfound <- function(a, b, c, d,
     if (allnotenough){
         conclusion1 <- paste(
             change, c("only transferring cases from" ), transferway,
-            sprintf(" is not enough. We also need to transfer %d cases from ", final_extra))
+            sprintf(" is not enough. We also need to 
+                    transfer %d cases from ", final_extra))
         
         conclusion1b <- paste0(
-            transferway_extra, c("as shown, from the User-entered Table to the Transfer Table."))
+            transferway_extra, c("as shown, from the User-entered Table 
+                                 to the Transfer Table."))
         
         conclusion1c <- paste0(sprintf(" This means we need to replace %d of ", RIR), RIRway, 
-                               sprintf( "with null hypothesis cases; and replace %d ", RIR_extra), RIRway_extra, 
+                               sprintf( "with null hypothesis cases; 
+                                       and replace %d ", RIR_extra), RIRway_extra, 
                                c(" with null hypothesis cases to change the inference."))
     }
     
     if (test == "chisq"){
         conclusion2 <- sprintf(
-            "For the User-entered Table, we have a Pearson's chi square of %.3f, with p-value of %.3f:", chisq_ob, p_ob)
+            "For the User-entered Table, we have a Pearson's chi square of %.3f, 
+          with p-value of %.3f:", chisq_ob, p_ob)
         conclusion3 <- sprintf(
-            "For the Transfer Table, we have a Pearson's chi square of %.3f, with p-value of %.3f:", chisq_final, p_final)
+            "For the Transfer Table, we have a Pearson's chi square of %.3f, 
+          with p-value of %.3f:", chisq_final, p_final)
     }
     
     if (test == "fisher"){
         conclusion2 <- sprintf(
-            "For the User-entered Table, we have an estimated odds ratio of %.3f, with p-value of %.3f:", fisher_ob, p_ob)
+            "For the User-entered Table, we have an estimated odds ratio of %.3f, 
+          with p-value of %.3f:", fisher_ob, p_ob)
         conclusion3 <- sprintf(
-            "For the Transfer Table, we have an estimated odds ratio of %.3f, with p-value of %.3f:", fisher_final, p_final)
+            "For the Transfer Table, we have an estimated odds ratio of %.3f, 
+          with p-value of %.3f:", fisher_final, p_final)
     }
     
     info1 <- "This function calculates the number of cases that would have to be replaced "

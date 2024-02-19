@@ -14,17 +14,24 @@ test_pse <- function(est_eff,
     var_x <- sdx^2
     var_y <- sdy^2
     var_z <- sdz <- 1
-    df = n_obs - n_covariates - 3
+    df <- n_obs - n_covariates - 3
     
     ## error message if input is inappropriate
-    if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
-    if (!(sdx > 0)) {stop("Did not run! Standard deviation of x needs to be greater than zero.")}
-    if (!(sdy > 0)) {stop("Did not run! Standard deviation of y needs to be greater than zero.")}
-    if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
+    if (!(std_err > 0)) {stop("Did not run! Standard error needs 
+                              to be greater than zero.")}
+    if (!(sdx > 0)) {stop("Did not run! Standard deviation of 
+                          x needs to be greater than zero.")}
+    if (!(sdy > 0)) {stop("Did not run! Standard deviation of 
+                          y needs to be greater than zero.")}
+    if (!(n_obs > n_covariates + 3)) {
+      stop("Did not run! There are too few observations relative 
+           to the number of observations and covariates. 
+           Please specify a less complex model to use KonFound-It.")}
     if (!(0 < R2)) {stop("Did not run! R2 needs to be greater than zero.")}
     if (!(R2 < 1)) {stop("Did not run! R2 needs to be less than one.")}
-    if (!(1-((sdy^2/sdx^2)*(1-R2)/((df+1) * std_err^2))>0)) {stop("Did not run! Entered values produced Rxz^2 <=0, consider adding more significant digits to your entered values.")}
-    
+    if (!(1-((sdy^2/sdx^2)*(1-R2)/((df+1) * std_err^2))>0)) {
+      stop("Did not run! Entered values produced Rxz^2 <=0, 
+           consider adding more significant digits to your entered values.")}
     
     ## now standardize 
     beta_thr <- eff_thr * sdx / sdy
@@ -51,19 +58,27 @@ test_pse <- function(est_eff,
     rxcvGz <- as.numeric(Gz_pse[1])
     rycvGz <- as.numeric(Gz_pse[2])
     
-    # convert conditional correlations to unconditional correlations to be used in new regression
+    # convert conditional correlations to unconditional correlations
+    # to be used in new regression
     rxcv <- rxcvGz * sqrt((1 - rcvz^2) * (1 - rxz^2)) + rxz * rcvz
     rycv <- rycvGz * sqrt((1 - rcvz^2) * (1 - rzy^2)) + rzy * rcvz
     
-    verify_pse_reg_M3 <- verify_reg_Gzcv(n_obs, sdx, sdy, sdz, sdcv, rxy, rxz, rzy, rycv, rxcv, rcvz)
-    verfiy_pse_manual_thr <- verify_manual(rxy, rxz, rxcv, ryz, rycv, rzcv, sdy, sdx)
+    verify_pse_reg_M3 <- verify_reg_Gzcv(n_obs, sdx, sdy, 
+                                         sdz, sdcv, rxy, 
+                                         rxz, rzy, rycv, 
+                                         rxcv, rcvz)
+    verfiy_pse_manual_thr <- verify_manual(rxy, rxz, rxcv, 
+                                           ryz, rycv, rzcv, 
+                                           sdy, sdx)
     cov_pse <- verify_pse_reg_M3[[11]]
     
     # prepare some other values in the final Table (long output)
     R2_M3 <- as.numeric(verify_pse_reg_M3[1])
-    eff_x_M3 <- as.numeric(verify_pse_reg_M3[2]) # should be equivalent or very close to eff_thr
+    eff_x_M3 <- as.numeric(verify_pse_reg_M3[2]) 
+    # should be equivalent or very close to eff_thr
     se_x_M3 <- as.numeric(verify_pse_reg_M3[3])
-    beta_x_M3 <- as.numeric(verify_pse_reg_M3[9]) # should be equivalent or very close to thr
+    beta_x_M3 <- as.numeric(verify_pse_reg_M3[9]) 
+    # should be equivalent or very close to thr
     t_x_M3 <- eff_x_M3 / se_x_M3 
     eff_z_M3 <- as.numeric(verify_pse_reg_M3[4])
     se_z_M3 <- as.numeric(verify_pse_reg_M3[5])
@@ -72,30 +87,44 @@ test_pse <- function(est_eff,
     
     verify_pse_reg_M2 <- verify_reg_Gz(n_obs, sdx, sdy, sdz, rxy, rxz, rzy)
     R2_M2 <- as.numeric(verify_pse_reg_M2[1])
-    eff_x_M2 <- as.numeric(verify_pse_reg_M2[2]) # should be equivalent or very close to est_eff
-    se_x_M2 <- as.numeric(verify_pse_reg_M2[3]) # should be equivalent or very close to std_err
+    eff_x_M2 <- as.numeric(verify_pse_reg_M2[2]) 
+    # should be equivalent or very close to est_eff
+    se_x_M2 <- as.numeric(verify_pse_reg_M2[3]) 
+    # should be equivalent or very close to std_err
     eff_z_M2 <- as.numeric(verify_pse_reg_M2[4]) 
     se_z_M2 <- as.numeric(verify_pse_reg_M2[5]) 
     t_x_M2 <- eff_x_M2 / se_x_M2 
     
     verify_pse_reg_M1 <- verify_reg_uncond(n_obs, sdx, sdy, rxy)
-    R2_M1 <- as.numeric(verify_pse_reg_M1[1]) # should be equivalent or very close to rxy^2
-    eff_x_M1 <- as.numeric(verify_pse_reg_M1[2]) # should be equivalent or very close to rxy*sdy/sdx
+    R2_M1 <- as.numeric(verify_pse_reg_M1[1]) 
+    # should be equivalent or very close to rxy^2
+    eff_x_M1 <- as.numeric(verify_pse_reg_M1[2]) 
+    # should be equivalent or very close to rxy*sdy/sdx
     se_x_M1 <- as.numeric(verify_pse_reg_M1[3]) 
     t_x_M1 <- eff_x_M1 / se_x_M1 
     
     fTable <- matrix(c(R2_M1, R2_M2, R2_M3, # R2 for three reg models
-                       eff_x_M1, eff_x_M2, eff_x_M3, # unstd reg coef for X in three reg  models
-                       se_x_M1, se_x_M2, se_x_M3, # unstd reg se for X in three reg models
-                       rxy, ryxGz, beta_x_M3, # std reg coef for X in three reg models
-                       t_x_M1, t_x_M2, t_x_M3, # t values for X in three reg models
-                       NA, eff_z_M2, eff_z_M3, # reg coef for Z in three reg models
-                       NA, se_z_M2, se_z_M3, # se for Z in three reg models
-                       NA, eff_z_M2 / se_z_M2, eff_z_M3 / se_z_M3, # t for Z in three reg models,
-                       NA, NA, eff_cv_M3, # reg coef for CV in three reg models
-                       NA, NA, se_cv_M3, # se for CV in three reg models
-                       NA, NA, eff_cv_M3 / se_cv_M3), # t for CV in three reg models
-                       nrow = 11, ncol = 3, byrow = T) 
+                       eff_x_M1, eff_x_M2, eff_x_M3, 
+                       # unstd reg coef for X in three reg  models
+                       se_x_M1, se_x_M2, se_x_M3, 
+                       # unstd reg se for X in three reg models
+                       rxy, ryxGz, beta_x_M3, 
+                       # std reg coef for X in three reg models
+                       t_x_M1, t_x_M2, t_x_M3, 
+                       # t values for X in three reg models
+                       NA, eff_z_M2, eff_z_M3, 
+                       # reg coef for Z in three reg models
+                       NA, se_z_M2, se_z_M3, 
+                       # se for Z in three reg models
+                       NA, eff_z_M2 / se_z_M2, eff_z_M3 / se_z_M3, 
+                       # t for Z in three reg models,
+                       NA, NA, eff_cv_M3, 
+                       # reg coef for CV in three reg models
+                       NA, NA, se_cv_M3, 
+                       # se for CV in three reg models
+                       NA, NA, eff_cv_M3 / se_cv_M3), 
+                     # t for CV in three reg models
+                       nrow = 11, ncol = 3, byrow = TRUE) 
     
     rownames(fTable) <- c("R2", "coef_X", "SE_X", "std_coef_X", "t_X",
                           "coef_Z", "SE_Z", "t_Z",
@@ -114,13 +143,19 @@ test_pse <- function(est_eff,
     }
     
     if (to_return == "print") {
-        cat("This function calculates the conditions that set the estimated effect approximately equal to the threshold while preserving the standard error.")
+        cat("This function calculates the conditions that set the 
+            estimated effect approximately equal to the threshold 
+            while preserving the standard error.")
         cat("\n")
-        cat(sprintf("The correlation between X and CV is %.3f, and the correlation between Y and CV is %.3f.", rxcv, rycv))
+        cat(sprintf("The correlation between X and CV is %.3f, 
+                    and the correlation between Y and CV is %.3f.", rxcv, rycv))
         cat("\n")
-        cat(sprintf("Conditional on the covariates, the correlation between X and CV is %.3f, and the correlation between Y and CV is %.3f.", rxcvGz, rycvGz))
+        cat(sprintf("Conditional on the covariates, the correlation between X 
+                    and CV is %.3f, and the correlation between Y and CV 
+                    is %.3f.", rxcvGz, rycvGz))
         cat("\n")
-        cat(sprintf("Including such CV, the coefficient changes to %.3f, and standard error is %.3f.", eff_x_M3, se_x_M3))
+        cat(sprintf("Including such CV, the coefficient changes to %.3f, 
+                    and standard error is %.3f.", eff_x_M3, se_x_M3))
         cat("\n")
         cat("Use to_return = raw_ouput to see more specific results.")
     }

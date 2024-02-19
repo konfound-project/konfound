@@ -34,11 +34,17 @@ test_sensitivity <- function(est_eff,
                              to_return,
                              model_object,
                              tested_variable) {
-    if (nu != 0) warning("You entered a non-zero null hypothesis about an effect; this is being interpreted in terms of a partial correlation. Sampling variability is not accounted for.")
+    if (nu != 0) warning("You entered a non-zero null hypothesis about an effect; 
+                         this is being interpreted in terms of a partial correlation. 
+                         Sampling variability is not accounted for.")
     
     ## error message if input is inappropriate
-    if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
-    if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
+    if (!(std_err > 0)) {
+        stop("Did not run! Standard error needs to be greater than zero.")}
+    if (!(n_obs > n_covariates + 3)) {
+        stop("Did not run! There are too few observations relative to the number 
+             of observations and covariates. Please specify a less complex model 
+             to use KonFound-It.")}
     
     # calculating statistics used in every case
     if (est_eff < 0) {
@@ -88,16 +94,22 @@ test_sensitivity <- function(est_eff,
     # output dispatch
     
     if (to_return == "raw_output") {
-        return(output_df(est_eff, beta_threshold, est_eff, bias, sustain, recase, obs_r, critical_r, r_con, itcv))
-    } else if (to_return == "thresh_plot") { # this still makes sense for NLMs (just not quite as accurate)
-        return(plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff))
+        return(output_df(est_eff, beta_threshold, est_eff, bias, sustain, 
+                         recase, obs_r, critical_r, r_con, itcv))
+    } else if (to_return == "thresh_plot") { 
+        # this still makes sense for NLMs (just not quite as accurate)
+        return(plot_threshold(beta_threshold = beta_threshold, 
+                              est_eff = est_eff))
     } else if (to_return == "corr_plot") {
-        return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
+        return(plot_correlation(r_con = r_con, obs_r = obs_r, 
+                                critical_r = critical_r))
     } else if (to_return == "print") {
-        return(output_print(est_eff, beta_threshold, bias, sustain, nu, recase, obs_r, critical_r, r_con, itcv, alpha, index))
+        return(output_print(est_eff, beta_threshold, bias, sustain, nu, recase, 
+                            obs_r, critical_r, r_con, itcv, alpha, index))
     } else if (to_return == "table") {
         return(output_table(model_object, tested_variable))
     } else {
-        stop("to_return must be set to 'raw_output', 'print', 'table', 'thresh_plot', or 'corr_plot' or some combination thereof")
+        stop("to_return must be set to 'raw_output', 'print', 'table', 
+             'thresh_plot', or 'corr_plot' or some combination thereof")
     }
 }

@@ -5,9 +5,9 @@
 #' @return R2yz value
 #' @importFrom lavaan parameterEstimates
 cal_ryz <- function(ryxGz, R2){
-    R2yz = (ryxGz^2 - R2)/(ryxGz^2 - 1)
+    R2yz <- (ryxGz^2 - R2)/(ryxGz^2 - 1)
     if (R2yz >= 0) {
-        ryz = sqrt(R2yz)
+        ryz <- sqrt(R2yz)
     } else {
         stop("Error! R2yz < 0!")
     }
@@ -24,10 +24,10 @@ cal_ryz <- function(ryxGz, R2){
 #' @return R2xz value
 #' @importFrom lavaan parameterEstimates
 cal_rxz <- function(var_x, var_y, R2, df, std_err){
-    R2xz = 1 - ((var_y * (1 - R2))/(var_x * df * std_err^2))
+    R2xz <- 1 - ((var_y * (1 - R2))/(var_x * df * std_err^2))
     if (R2xz <= 0) {stop("Error! R2xz < 0!")} 
     ## Note output the number of R2xz
-    rxz = sqrt(R2xz)
+    rxz <- sqrt(R2xz)
     return(rxz)
 }
 
@@ -39,7 +39,7 @@ cal_rxz <- function(var_x, var_y, R2, df, std_err){
 #' @return rxy value
 #' @importFrom lavaan parameterEstimates
 cal_rxy <- function(ryxGz, rxz, ryz){
-    rxy = ryxGz * sqrt((1 - rxz^2)*(1 - ryz^2)) + rxz * ryz
+    rxy <- ryxGz * sqrt((1 - rxz^2)*(1 - ryz^2)) + rxz * ryz
     return(rxy)
 }
 
@@ -66,32 +66,33 @@ cal_delta_star <- function(FR2max,
                            est_uncond, 
                            rxz, 
                            n_obs) {
-    if (FR2max > .99) {FR2max = .99}
-    # if (FR2max < R2 + inci) {FR2max = R2 + inci} check with Ken what this means
-    if (FR2max > R2) {D = sqrt(FR2max - R2)}
+    if (FR2max > .99) {FR2max <- .99}
+    #if (FR2max < R2 + inci) {FR2max = R2 + inci} check with Ken what this means
+    if (FR2max > R2) {D <- sqrt(FR2max - R2)}
     
     #elements for computing Oster's delta_star
-    bt_m_b = est_eff - eff_thr
-    rt_m_ro_t_syy = (R2 - R2_uncond) * var_y
-    b0_m_b1 = est_uncond - est_eff
-    rm_m_rt_t_syy = (FR2max - R2) * var_y
+    bt_m_b <- est_eff - eff_thr
+    rt_m_ro_t_syy <- (R2 - R2_uncond) * var_y
+    b0_m_b1 <- est_uncond - est_eff
+    rm_m_rt_t_syy <- (FR2max - R2) * var_y
     
-    t_x = var_x * (n_obs / (n_obs - 1)) * (1 - rxz^2)
+    t_x <- var_x * (n_obs / (n_obs - 1)) * (1 - rxz^2)
     ## adjust df for var_x 
     ## var_x is population variance, need sample variance from x
-    ## this adjustment is to get closer to what robomit generates as they run regression using the sample data 
-    num1 = bt_m_b * rt_m_ro_t_syy * t_x
-    num2 = bt_m_b * var_x * t_x * b0_m_b1^2
-    num3 = 2 * bt_m_b^2 * (t_x * b0_m_b1 * var_x)
-    num4 = bt_m_b^3 * (t_x * var_x - t_x^2)
-    num = num1 + num2 + num3 + num4
-    den1 = rm_m_rt_t_syy * b0_m_b1 * var_x
-    den2 = bt_m_b * rm_m_rt_t_syy * (var_x - t_x)
-    den3 = bt_m_b^2 * (t_x * b0_m_b1 * var_x)
-    den4 = bt_m_b^3 * (t_x * var_x - t_x^2)
-    den = den1 + den2 + den3 + den4
+    ## this adjustment is to get closer to what robomit generates as they 
+    ## run regression using the sample data 
+    num1 <- bt_m_b * rt_m_ro_t_syy * t_x
+    num2 <- bt_m_b * var_x * t_x * b0_m_b1^2
+    num3 <- 2 * bt_m_b^2 * (t_x * b0_m_b1 * var_x)
+    num4 <- bt_m_b^3 * (t_x * var_x - t_x^2)
+    num <- num1 + num2 + num3 + num4
+    den1 <- rm_m_rt_t_syy * b0_m_b1 * var_x
+    den2 <- bt_m_b * rm_m_rt_t_syy * (var_x - t_x)
+    den3 <- bt_m_b^2 * (t_x * b0_m_b1 * var_x)
+    den4 <- bt_m_b^3 * (t_x * var_x - t_x^2)
+    den <- den1 + den2 + den3 + den4
     #obtain delta_star which is Oster's delta
-    delta_star = num / den
+    delta_star <- num / den
     return(delta_star)
 }
 
@@ -110,17 +111,17 @@ cal_delta_star <- function(FR2max,
 #' @param rcvz correlation coefficient between V and Z
 #' @return list of model parameters
 #' @importFrom lavaan sem parameterEstimates
-verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv, 
+verify_reg_Gzcv <- function(n_obs, sdx, sdy, sdz, sdcv, 
                            rxy, rxz, rzy, rcvy, rcvx, rcvz){
     
     model <- 'Y ~ beta1 * X + beta2 * Z + beta3 * CV'
     
-    ccvy = rcvy * sdcv * sdy # cov(cv, y)
-    ccvx = rcvx * sdcv * sdx # cov(cv, x)
-    ccvz = rcvz * sdcv * sdz
-    cxy = rxy * sdx * sdy
-    czy = rzy * sdz * sdy
-    cxz = rxz * sdx * sdz
+    ccvy <- rcvy * sdcv * sdy # cov(cv, y)
+    ccvx <- rcvx * sdcv * sdx # cov(cv, x)
+    ccvz <- rcvz * sdcv * sdz
+    cxy <- rxy * sdx * sdy
+    czy <- rzy * sdz * sdy
+    cxz <- rxz * sdx * sdz
     
     # set up the covariance matrix
     cov.matrix <- matrix(c(sdy^2, cxy, czy, ccvy,
@@ -137,11 +138,11 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
                         sample.nobs = n_obs)
         },
         error = function(e){
-            flag_cov = F
+            flag_cov <- FALSE
             return(flag_cov)
         },
         warning = function(w){
-            flag_cov = F
+            flag_cov <- FALSE
             return(flag_cov)
         }
     )
@@ -152,12 +153,18 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
                            sample.nobs = n_obs)
         ## the R2 extracted from summary is NOT right, do the calculation below
         R2 <- (sdy^2 - lavaan::parameterEstimates(fit)[4,]$est) / sdy^2
-        betaX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$est
-        seX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$se
-        betaZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$est
-        seZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$se
-        betaCV <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta3',]$est
-        seCV <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta3',]$se
+        betaX <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta1',]$est
+        seX <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta1',]$se
+        betaZ <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta2',]$est
+        seZ <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta2',]$se
+        betaCV <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta3',]$est
+        seCV <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta3',]$se
     }
     
     #get regression based on true delta in terms of standardized coefficent
@@ -175,11 +182,11 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
                         sample.nobs = n_obs)
         },
         error = function(e){
-            flag_cor = F
+            flag_cor <- FALSE
             return(flag_cor)
         },
         warning = function(w){
-            flag_cor = F
+            flag_cor <- FALSE
             return(flag_cor)
         }
     )
@@ -190,16 +197,22 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
                            sample.cov = cor.matrix,
                            sample.nobs = n_obs)
         std_R2 <- 1 - lavaan::parameterEstimates(fit)[4,]$est
-        std_betaX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$est
-        std_seX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$se
-        std_betaZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$est
-        std_seZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$se
-        std_betaCV <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta3',]$est
-        std_seCV <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta3',]$se
+        std_betaX <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta1',]$est
+        std_seX <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta1',]$se
+        std_betaZ <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta2',]$est
+        std_seZ <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta2',]$se
+        std_betaCV <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta3',]$est
+        std_seCV <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta3',]$se
     }
     
     if ((inherits(flag_cor, "lavaan")) && (inherits(flag_cov, "lavaan"))) {
-        result = list(R2, betaX, seX, betaZ, seZ, betaCV, seCV,
+        result <- list(R2, betaX, seX, betaZ, seZ, betaCV, seCV,
                       std_R2, std_betaX, std_seX,
                       cov.matrix, cor.matrix)
         return(result)
@@ -210,7 +223,8 @@ verify_reg_Gzcv = function(n_obs, sdx, sdy, sdz, sdcv,
 
 ## TO DO 
 ## need to code the other solutions for pse as well 
-## then see how the different solutions perform in different scenarios (run the regression)
+## then see how the different solutions perform in 
+## different scenarios (run the regression)
 cal_pse <- function(thr, kryx){
     # calculations for preserving standard error
     i1 <- complex(real = 1, imaginary = -sqrt(3))
@@ -247,13 +261,13 @@ verify_manual <- function(rxy, rxz, rxcv, ryz, rycv, rzcv, sdy, sdx){
     return(beta)
 }
 
-verify_reg_Gz = function(n_obs, sdx, sdy, sdz, rxy, rxz, rzy){
+verify_reg_Gz <- function(n_obs, sdx, sdy, sdz, rxy, rxz, rzy){
     
     model <- 'Y ~ beta1 * X + beta2 * Z'
     
-    cxy = rxy * sdx * sdy
-    czy = rzy * sdz * sdy
-    cxz = rxz * sdx * sdz
+    cxy <- rxy * sdx * sdy
+    czy <- rzy * sdz * sdy
+    cxz <- rxz * sdx * sdz
     
     # set up the covariance matrix
     cov.matrix <- matrix(c(sdy^2, cxy, czy, 
@@ -269,11 +283,11 @@ verify_reg_Gz = function(n_obs, sdx, sdy, sdz, rxy, rxz, rzy){
                         sample.nobs = n_obs)
         },
         error = function(e){
-            flag_cov = F
+            flag_cov <- FALSE
             return(flag_cov)
         },
         warning = function(w){
-            flag_cov = F
+            flag_cov <- FALSE
             return(flag_cov)
         }
     )
@@ -283,15 +297,19 @@ verify_reg_Gz = function(n_obs, sdx, sdy, sdz, rxy, rxz, rzy){
                            sample.cov = cov.matrix,
                            sample.nobs = n_obs)
         ## the R2 extracted from summary is NOT right, do the calculation below
-        R2 <- (sdy^2 - lavaan::parameterEstimates(fit)[3,]$est) / sdy^2
-        betaX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$est
-        seX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$se
-        betaZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$est
-        seZ <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta2',]$se
+          R2 <- (sdy^2 - lavaan::parameterEstimates(fit)[3,]$est) / sdy^2
+        betaX <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta1',]$est
+        seX <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta1',]$se
+        betaZ <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta2',]$est
+        seZ <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta2',]$se
     }
     
     if (inherits(flag_cov, "lavaan")) {
-        result = list(R2, betaX, seX, betaZ, seZ)
+        result <- list(R2, betaX, seX, betaZ, seZ)
         return(result)
     } else {
         stop("Error!")
@@ -306,10 +324,10 @@ verify_reg_Gz = function(n_obs, sdx, sdy, sdz, rxy, rxz, rzy){
 #' @param rxy correlation coefficient between X and Y
 #' @return list of model parameters
 #' @importFrom lavaan sem parameterEstimates
-verify_reg_uncond = function(n_obs, sdx, sdy, rxy){
+verify_reg_uncond <- function(n_obs, sdx, sdy, rxy){
     
     model <- 'Y ~ beta1 * X'
-    cxy = rxy * sdx * sdy
+    cxy <- rxy * sdx * sdy
     
     # set up the covariance matrix
     cov.matrix <- matrix(c(sdy^2, cxy,  
@@ -324,11 +342,11 @@ verify_reg_uncond = function(n_obs, sdx, sdy, rxy){
                         sample.nobs = n_obs)
         },
         error = function(e){
-            flag_cov = F
+            flag_cov <- FALSE
             return(flag_cov)
         },
         warning = function(w){
-            flag_cov = F
+            flag_cov <- FALSE
             return(flag_cov)
         }
     )
@@ -339,12 +357,14 @@ verify_reg_uncond = function(n_obs, sdx, sdy, rxy){
                            sample.nobs = n_obs)
         ## the R2 extracted from summary is NOT right, do the calculation below
         R2 <- (sdy^2 - lavaan::parameterEstimates(fit)[2,]$est) / sdy^2
-        betaX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$est
-        seX <- lavaan::parameterEstimates(fit)[lavaan::parameterEstimates(fit)$label == 'beta1',]$se
+        betaX <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta1',]$est
+        seX <- lavaan::parameterEstimates(fit)[
+            lavaan::parameterEstimates(fit)$label == 'beta1',]$se
     }
     
     if (inherits(flag_cov, "lavaan")) {
-        result = list(R2, betaX, seX)
+        result <- list(R2, betaX, seX)
         return(result)
     } else {
         stop("Error!")
