@@ -13,8 +13,8 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat(sprintf("statistical significance with alpha = %s, %.3f%% of the\n", alpha, bias))
       cat(sprintf("(%.3f) estimate would have to be due to bias. This implies\n", est_eff))
       cat("that to invalidate the inference one would expect to have to\n")
-      cat(sprintf("replace %.3f (%.3f%%) observations with cases for which the\n", recase, bias))
-      cat(sprintf("treatment effect is %s (RIR = %.3f).\n\n", nu, recase))
+      cat(sprintf("replace %.0f (%.3f%%) observations with cases for which the\n", recase, bias))
+      cat(sprintf("treatment effect is %s (RIR = %.0f).\n\n", nu, recase))
     } else if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
       cat("TO INVALIDATE:\n")
       cat("\n")
