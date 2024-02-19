@@ -67,7 +67,7 @@ cal_delta_star <- function(FR2max,
                            rxz, 
                            n_obs) {
     if (FR2max > .99) {FR2max <- .99}
-    # if (FR2max < R2 + inci) {FR2max = R2 + inci} check with Ken what this means
+    #if (FR2max < R2 + inci) {FR2max = R2 + inci} check with Ken what this means
     if (FR2max > R2) {D <- sqrt(FR2max - R2)}
     
     #elements for computing Oster's delta_star
@@ -223,7 +223,8 @@ verify_reg_Gzcv <- function(n_obs, sdx, sdy, sdz, sdcv,
 
 ## TO DO 
 ## need to code the other solutions for pse as well 
-## then see how the different solutions perform in different scenarios (run the regression)
+## then see how the different solutions perform in 
+## different scenarios (run the regression)
 cal_pse <- function(thr, kryx){
     # calculations for preserving standard error
     i1 <- complex(real = 1, imaginary = -sqrt(3))
