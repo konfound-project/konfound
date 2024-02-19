@@ -33,7 +33,8 @@ core_sensitivity_mkonfound <- function(t, df, alpha = .05, tails = 2) {
     out <- tibble::tibble(t, df, action, inference, pct_bias, itcv, r_con)
     names(out) <- c("t", "df", "action", "inference", 
                     "pct_bias_to_change_inference", "itcv", "r_con")
-    out$pct_bias_to_change_inference <- round(out$pct_bias_to_change_inference, 3)
+    out$pct_bias_to_change_inference <- round(out$pct_bias_to_change_inference, 
+                                              3)
     out$itcv <- round(out$itcv, 3)
     out$action <- as.character(out$action)
     out$inference <- as.character(out$inference)
