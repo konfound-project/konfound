@@ -683,11 +683,13 @@ if (allnotenough) {
 
 total_switch <- final + allnotenough*final_extra
 
-result <- list(final_switch = final, User_enter_value = table_start, Transfer_Table = table_final, 
+result <- list(final_switch = final, User_enter_value = table_start, 
+               Transfer_Table = table_final, 
                p_final = p_final, chisq_final = chisq_final,
                needtworows = allnotenough, taylor_pred = taylor_pred,
                perc_bias_pred = perc_bias_pred, final_extra = final_extra, 
-               dcroddsratio_ob = dcroddsratio_ob, total_switch = total_switch, isinvalidate_ob = isinvalidate_ob)
+               dcroddsratio_ob = dcroddsratio_ob, total_switch = total_switch, 
+               isinvalidate_ob = isinvalidate_ob)
 
 return(result)
 }
