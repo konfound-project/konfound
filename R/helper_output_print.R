@@ -126,7 +126,7 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat("of interest (conditioning on all observed covariates in the model;")
       cat("\n")
-      cat(paste0("signs are interchangeable) based on a threshold of ", round(beta_threshhold, 3), " for"))
+      cat(paste0("signs are interchangeable) based on a threshold of ", round(critical_r, 3), " for"))
       cat("\n")
       cat("statistical significance (alpha = ", alpha, ").\n", sep = "")
       cat("\n")
