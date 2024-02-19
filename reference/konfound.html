@@ -155,8 +155,10 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Using Rubin's causal model to interpret the robustness of causal inferences.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Using Rubin's causal model to interpret the </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         robustness of causal inferences.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">                       Policy Analysis, 35</span> 437-460.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span><span class="fu">konfound</span><span class="op">(</span><span class="va">m1</span>, <span class="va">wt</span>, to_return <span class="op">=</span> <span class="st">"table"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dependent variable is mpg </span>
@@ -176,9 +178,14 @@ or a summary table.</p>
 <span class="r-in"><span>  <span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">married</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">d</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">konfound</span><span class="op">(</span><span class="va">m2</span>, <span class="va">age</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note that for a non-linear model, impact threshold should not be interpreted.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note that this is only an approximation. For exact results in terms of the number of cases that must be switched from treatment success to treatment failure to invalidate the inference see: https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> If a dichotomous independent variable is used, consider using the 2X2 table approach enabled with the argument two_by_two = TRUE</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note that for a non-linear model, </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             impact threshold should not be interpreted.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note that this is only an approximation. For exact results </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             in terms of the number of cases that must be switched from treatment </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             success to treatment failure to invalidate the inference see: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> If a dichotomous independent variable is used, consider using </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             the 2X2 table approach enabled with the argument two_by_two = TRUE</span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'object' in selecting a method for function 'summary': object 'd' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># using lme4 for mixed effects (or multi-level) models</span></span></span>
@@ -199,9 +206,19 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Using Rubin's causal model to interpret the robustness of causal inferences.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Note that the Kenward-Roger approximation is used to estimate degrees of freedom for the predictor(s) of interest. We are presently working to add other methods for calculating the degrees of freedom for the predictor(s) of interest. If you wish to use other methods now, consider those detailed here: https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. You can then enter degrees of freedom obtained from another method along with the coefficient, number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Using Rubin's causal model to interpret the </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         robustness of causal inferences.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">                       Policy Analysis, 35</span> 437-460.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Note that the Kenward-Roger approximation is used to </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             estimate degrees of freedom for the predictor(s) of interest. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             We are presently working to add other methods for calculating </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             the degrees of freedom for the predictor(s) of interest. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             If you wish to use other methods now, consider those detailed here: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             #why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             You can then enter degrees of freedom obtained from another method along with the coefficient, </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>             number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">condition</span>, data <span class="op">=</span> <span class="va">binary_dummy_data</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -215,7 +232,8 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note: Values have been rounded to the nearest integer.This may cause a little change to the estimated effect for the Implied Table.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference, you would need to replace 15 treatment success cases</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> with cases for which the probability of failure in the control group applies (RIR = 15).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> with cases for which the probability of </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                     failure in the control group applies (RIR = 15).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to transferring 10 cases from treatment success to treatment failure,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  as shown, from the Implied Table to the Transfer Table.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -224,8 +242,10 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control     36      16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Treatment   28      27</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For the Implied Table, we have an estimate of 1.531, with a SE of 0.416 and a t-ratio of 3.684.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For the Transfer Table, we have an estimate of 0.775, with a SE of 0.404 and a t-ratio of 1.918.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> For the Implied Table, we have an estimate of 1.531, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       with a SE of 0.416 and a t-ratio of 3.684.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> For the Transfer Table, we have an estimate of 0.775, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       with a SE of 0.404 and a t-ratio of 1.918.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">RIR:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 15</span>
