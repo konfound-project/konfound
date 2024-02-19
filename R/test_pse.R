@@ -14,7 +14,7 @@ test_pse <- function(est_eff,
     var_x <- sdx^2
     var_y <- sdy^2
     var_z <- sdz <- 1
-    df = n_obs - n_covariates - 3
+    df <- n_obs - n_covariates - 3
     
     ## error message if input is inappropriate
     if (!(std_err > 0)) {stop("Did not run! Standard error needs 
