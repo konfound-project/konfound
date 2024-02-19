@@ -28,7 +28,9 @@ konfound_glm <- function(model_object,
     
     coef_df <- tidy_output[tidy_output$term == tested_variable_string, ]
     est_eff <- coef_df$estimate
-    est_eff <- suppressWarnings(summary(margins::margins(model_object))$AME[names(summary(margins::margins(model_object))$AME) == tested_variable_string])
+    est_eff <- suppressWarnings(
+      summary(margins::margins(model_object))$AME[names(summary(
+        margins::margins(model_object))$AME) == tested_variable_string])
     std_err <- coef_df$std.error
     n_obs <- glance_output$nobs
     n_covariates <- glance_output$df.null - glance_output$df.residual
