@@ -138,11 +138,13 @@ We can also examine the robustness by calculating the RIR.
     konfound(m, peop80, index = "RIR") 
 
     ## Robustness of Inference to Replacement (RIR):
-    ## To invalidate an inference,  74.955 % of the estimate would have to be due to bias. 
-    ## This is based on a threshold of 56.4 for statistical significance (alpha = 0.05).
-    ## 
-    ## To invalidate an inference,  372  observations would have to be replaced with cases
-    ## for which the effect is 0 (RIR = 372).
+    ## To invalidate an inference,  74.955 % of the 
+    ## estimate would have to be due to bias. 
+    ## This is based on a threshold of 56.4 for statistical 
+    ## significance (alpha = 0.05).
+    ##
+    ## To invalidate an inference,  372  observations would 
+    ## have to be replaced with cases for which the effect is 0 (RIR = 372).
     ## 
     ## See Frank et al. (2013) for a description of the method.
     ## 
@@ -153,7 +155,8 @@ We can also examine the robustness by calculating the RIR.
 
     ## For more detailed output, consider setting `to_return` to table
 
-    ## To consider other predictors of interest, consider setting `test_all` to TRUE.
+    ## To consider other predictors of interest, 
+    ## consider setting `test_all` to TRUE.
 
 The output presents two interpretations of the RIR. First, 74.956% of the estimated effect of `peop80` on `water81` would have to be attributed to bias to invalidate the inference. Equivalently, we would expect to have to replace 372 out of the 486 households (about 76%) with cases for which `peop80` had no effect to invalidate the inference. We have created guidelines on evaluating the RIR relative to the bias accounted for by observed covariates or published norms [@frank2013; @frank2021].
 
@@ -172,13 +175,13 @@ For this example, the following parameters from a regression analysis would be e
     ## on observed covariates) based on a threshold of 0.201 for statistical 
     ## significance (alpha = 0.05).
     ## 
-    ## Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be 
-    ## 0.568 X 0.568 = 0.323 to invalidate an inference for a null hypothesis of 0 effect.
-    ## See Frank (2000) for a description of the method.
+    ## Correspondingly the impact of an omitted variable (as defined in Frank 
+    ## 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null
+    ## hypothesis of 0 effect.See Frank (2000) for a description of the method.
     ## 
     ## Citation:
-    ## Frank, K. (2000). Impact of a confounding variable on the
-    ## inference of a regression coefficient. Sociological Methods and Research, 29 (2), 147-194
+    ## Frank, K. (2000). Impact of a confounding variable on the inference of a 
+    ## regression coefficient. Sociological Methods and Research, 29 (2), 147-194
 
     ## For other forms of output, run ?pkonfound and inspect the to_return argument
 
@@ -191,11 +194,12 @@ The output indicates that in order to invalidate the inference that the predicto
     pkonfound(2, .4, 100, 3, index = "RIR")
 
     ## Robustness of Inference to Replacement (RIR):
-    ## To invalidate an inference,  60.29 % of the estimate would have to be due to bias. 
-    ## This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
+    ## To invalidate an inference,  60.29 % of the estimate would have to be 
+    ## due to bias. This is based on a threshold of 0.794 for statistical 
+    ## significance (alpha = 0.05).
     ## 
-    ## To invalidate an inference,  60  observations would have to be replaced with cases
-    ## for which the effect is 0 (RIR = 60).
+    ## To invalidate an inference,  60  observations would have to be replaced 
+    ## with cases for which the effect is 0 (RIR = 60).
     ## 
     ## See Frank et al. (2013) for a description of the method.
     ## 
