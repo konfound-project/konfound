@@ -4,23 +4,6 @@ create_konfound_class <- function(x) {
     structure(x, class = "konfound")
 }
 
-#' Concise summary of konfound output
-#' @rdname konfound-methods
-#' @details Prints a concise summary of konfound output with multiple types of data specified in the to_return argument
-#' @param object A `konfound` object
-#' @param ... Additional arguments
-#' @export summary
-#' @usage \method{summary}{konfound}(object, ...)
-
-summary.konfound <- function(object, ...) {
-    cat("Created", length(object), "forms of output. To access type: \n")
-    cat("\n")
-    
-    for (name in names(object)) {
-        cat(rlang::expr_text(substitute(object)), "$", name, "\n", sep = "")
-    }
-}
-
 # Main function to test sensitivity to be wrapped with pkonfound(), konfound(), and mkonfound()
 
 test_sensitivity <- function(est_eff,
