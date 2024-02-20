@@ -3,7 +3,6 @@
 export(konfound)
 export(mkonfound)
 export(pkonfound)
-export(summary)
 export(tkonfound)
 importFrom(broom,glance)
 importFrom(broom,tidy)
