@@ -171,24 +171,6 @@ mkonfound(mkonfound_ex, t, df)
 #> # ℹ abbreviated name: ¹​pct_bias_to_change_inference
 ```
 
-# Overview of available functionality
-
-The above functions have a number of extensions; the below tables
-represent how `pkonfound()` and `konfound()` can be used:
-
-| Outcome    | Predictor: Continuous                                                       | Predictor: Binary                                                                                               |
-|:-----------|:----------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------|
-| Continuous | `pkonfound(est_eff, std_err, n_obs, n_covariates)`                          | `pkonfound(est_eff, std_err, n_obs, n_covariates)`                                                              |
-| Logistic   | `pkonfound(est_eff, std_err, n_obs, n_covariates, model_type = 'logistic')` | `pkonfound(est_eff, std_err, n_obs, n_covariates, n_treat, model_type = 'logistic')` or `pkonfound(a, b, c, d)` |
-
-| Outcome    | Predictor: Continuous | Predictor: Binary                     |
-|:-----------|:----------------------|:--------------------------------------|
-| Continuous | `konfound(m, var)`    | `konfound(m, var)`                    |
-| Logistic   | `konfound(m, var)`    | `konfound(m, var, two_by_two = TRUE)` |
-
-Note that there are additional arguments for each of thes functions; see
-`?pkonfound()` or `?konfound()` for more details.
-
 # Other information
 
 ### How to learn more about sensitivity analysis
@@ -196,21 +178,22 @@ Note that there are additional arguments for each of thes functions; see
 To learn more about sensitivity analysis, please visit:
 
 - The [Introduction to konfound
-  vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html),
+  vignette](https://konfound-project.github.io/konfound/articles/introduction-to-konfound.html),
   with detailed information about each of the functions (`pkonfound()`,
   `konfound()`, and `mkounfound()`)
-- The causal inference section of Ken Frank’s website
-  [here](https://msu.edu/~kenfrank/research.htm#causal)
-- The [konfound interactive web
-  application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/),
-  with links to PowerPoints and key publications
+- The [Konfound-It! interactive web
+  application](https://konfound-it.com), with links to PowerPoints and
+  key publications
 
-### Feedback, issues, and feature requests
+### Issues, feature requests, and contributing
 
 We prefer for issues to be filed via GitHub (link to the issues page for
-`konfound` [here](https://github.com/jrosen48/konfound/issues)) though
-we also welcome questions or feedback via email (see the DESCRIPTION
-file).
+`konfound` [here](https://github.com/konfound-project/konfound/issues))
+though we also welcome questions or feedback requests via email (see the
+DESCRIPTION file).
+
+Contributing guidelines are
+[here](https://github.com/konfound-project/konfound/blob/master/.github/CONTRIBUTING.md).
 
 ### Code of Conduct
 
