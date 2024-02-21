@@ -12,24 +12,24 @@ authors:
 - name: Sarah Narvaiz
   equal-contrib: yes
   affiliation: 1
-- name: Kenneth A. Frank
-  equal-contrib: yes
-  affiliation: 2
 - name: Qinyun Lin
   equal-contrib: yes
   affiliation: 3
-- name: Spiro J. Maroulis
-  equal-contrib: yes
-  affiliation: 4
 - name: Joshua M. Rosenberg
   equal-contrib: yes
   corresponding: yes
   affiliation: 1
+- name: Kenneth A. Frank
+  equal-contrib: no
+  affiliation: 2
+- name: Spiro J. Maroulis
+  equal-contrib: no
+  affiliation: 4
 - name: Wei Wang
-  equal-contrib: yes
+  equal-contrib: no
   affiliation: 1
 - name: Ran Xu
-  equal-contrib: yes
+  equal-contrib: no
   affiliation: 5
 bibliography: paper.bib
 affiliations:
@@ -75,45 +75,18 @@ We will model the impact the following variables have on household water consump
 - retirement status of respondent (`retire`)
 - number of individuals in household in 1980 (`peop80`)
 
-    library(konfound)
-
-    ## Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey 
-    ## (2013) and in Frank (2000).
-    ## For more information visit http://konfound-it.com.
-
+Here is the code we use to fit a linear model using these variables:
+    
     m <- lm(water81 ~ water80 + income + educat + retire + peop80, data = concord1)
-    summary(m)
 
-    ## 
-    ## Call:
-    ## lm(formula = water81 ~ water80 + income + educat + retire + peop80, 
-    ##     data = concord1)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -4035.5  -453.4   -62.7   384.2  4995.5 
-    ## 
-    ## Coefficients:
-    ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept) 299.7437   210.0136   1.427  0.15414    
-    ## water80       0.4943     0.0268  18.445  < 2e-16 ***
-    ## income       22.6031     3.5023   6.454 2.62e-10 ***
-    ## educat      -44.2578    13.4381  -3.293  0.00106 ** 
-    ## retire      155.4727    96.3389   1.614  0.10721    
-    ## peop80      225.1984    28.7048   7.845 2.73e-14 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 864.1 on 490 degrees of freedom
-    ## Multiple R-squared:  0.6653, Adjusted R-squared:  0.6619 
-    ## F-statistic: 194.8 on 5 and 490 DF,  p-value: < 2.2e-16
-
-These results indicate that all variables except `retire` have a significant effect on water consumption.
+The results of the model fitting (which can be obtained by running `summary(m)` within R indicate that all of the predictors apart from `retire` have a statistically significant effect on water consumption.
 
 #### *ITCV example for linear models fit with lm()*
 
 Now, let's examine the robustness of the `peop80` effect by calculating the ITCV:
 
+    library(konfound)
+    
     konfound(m, peop80, index = "IT")
 
     ## Impact Threshold for a Confounding Variable:
