@@ -14,14 +14,14 @@ authors:
   affiliation: 1
 - name: Qinyun Lin
   equal-contrib: yes
-  affiliation: 3
+  affiliation: 2
 - name: Joshua M. Rosenberg
   equal-contrib: yes
   corresponding: yes
   affiliation: 1
 - name: Kenneth A. Frank
   equal-contrib: no
-  affiliation: 2
+  affiliation: 3
 - name: Spiro J. Maroulis
   equal-contrib: no
   affiliation: 4
@@ -35,9 +35,9 @@ bibliography: paper.bib
 affiliations:
 - name: University of Tennessee, Knoxville, Knoxville, TN, USA
   index: 1
-- name: Michigan State University, East Lansing, MI, USA
-  index: 2
 - name: University of Gothenburg, Gothenburg, SE
+  index: 2
+- name: Michigan State University, East Lansing, MI, USA
   index: 3
 - name: Arizona State University, Tempe, AZ, USA
   index: 4
@@ -49,13 +49,13 @@ affiliations:
 
 Sensitivity analysis, a statistical method crucial for validating inferences across disciplines, quantifies the conditions that could alter conclusions [@razavi2021]. One line of work is rooted in linear models and foregrounds the sensitivity of inferences to the strength of omitted variables [@frank2000; @cinelli2019]. A more recent approach is rooted in the potential outcomes framework for causal inference and foregrounds how hypothetical changes in a sample would alter an inference if such variables or cases were otherwise observed [@frank2007; @frank2008; @frank2013; @xu2019].
 
-One measure is the Impact Threshold of a Confounding Variable (ITCV), which generates statements such as "to invalidate an inference of an effect, an omitted variable would have to be correlated at \_\_ with the predictor of interest and with the outcome" [@frank2000]. This sensitivity analysis can be calculated for any linear model. The Robustness of an Inference to Replacement (RIR) assesses how replacing a certain percentage of cases with counterfactuals of zero treatment effect could undermine an inference.  The Robustness of an Inference to Replacement (RIR) is more general than the ITCV index. It assesses how replacing a certain percentage of cases with counterfactuals of zero treatment effect could undermine an inference [@frank2013]; it is particularly appropriate for models with binary outcomes [@frank2021].
+One measure is the Impact Threshold of a Confounding Variable (ITCV), which generates statements about the correlation of an omitted, confounding variable with both a predictor of interest and with the outcome [@frank2000]. This sensitivity analysis can be calculated for any linear model. The Robustness of an Inference to Replacement (RIR) assesses how replacing a certain percentage of cases with counterfactuals of zero treatment effect could undermine an inference. The RIR index is more general than the ITCV index. It assesses how replacing a certain percentage of cases with counterfactuals of zero treatment effect could undermine an inference [@frank2013].
 
-The sensitivity analysis technique we describe in this paper and implement in an R package differ from others in several ways. Unlike @linden2020conducting, which focuses on dichotomous outcomes and omitted variable sensitivity, our approach extends to continuous outcomes and evaluates both changes in estimates and standard errors. @oster2019unobservable focuses only on selection into the treatment based on unobservable variables versus observable variables necessary to nullify an estimate. The ITCV index focuses on relationship of the unobservable to the predictor of interest and to the outcome. More generally, many others used simulation based approaches, while our approach uses closed form expressions to generate a single term representing sensitivity. These techniques along with others are reviewed and discussed along with the ITCV and RIR approaches that are implemented in the konfound package in @frank2023. 
+The sensitivity analysis technique we describe in this paper and implement in an R package differ from others in several ways. Unlike @linden2020conducting, whose approach focuses on dichotomous outcomes and omitted variable sensitivity, our approach extends to continuous outcomes and evaluates both changes in estimates and standard errors. @oster2019unobservable focuses only on selection into the treatment based on unobservable variables versus observable variables necessary to nullify an estimate. The ITCV index focuses on relationship of the unobservable to the predictor of interest and to the outcome. More generally, many others used simulation based approaches, while our approach uses closed form expressions to generate a single term representing sensitivity. These techniques along with others are reviewed and discussed along with the ITCV and RIR approaches that are implemented in the konfound package in @frank2023. 
 
-We have implemented the calculation of both the ITCV and RIR indices in the konfound R package. This package is intended to provide a principled, accessible set of sensitivity analysis techniques that are suitable for a range of model and dependent variable types. Its audience is broad: primarily social scientists, but also interested individuals in other disciplines (e.g., the health sciences). This paper provides an overview of two core functions within the `konfound` package, each of which can calculate the ITCV and RIR indices: `konfound()` and `pkonfound()`. These functions allow users to calculate the robustness of inferences using a model estimated in R in or using information about a model from a published study, respectively. 
+We have implemented the calculation of both the ITCV and RIR indices in the konfound R package. This package is intended to provide an easy-to-use and principled set of sensitivity techniques that are suitable for a range of model and dependent variable types and use cases. Its audience is broad: primarily social scientists, but also interested individuals in other disciplines (e.g., the health sciences). This paper provides an overview of two core functions within the `konfound` package, each of which can calculate the ITCV and RIR indices: `konfound()` and `pkonfound()`. These functions allow users to calculate the robustness of inferences using a model estimated in R in or using information about a model from a published study, respectively. 
 
-The konfound package is available from the Comprehensive R Archive Network (CRAN) at [https://CRAN.R-project.org/package=konfound](https://CRAN.R-project.org/package=konfound); it can be installed via the `r install.packages(“konfound”)` function within R.
+The konfound package is available from the Comprehensive R Archive Network (CRAN) at [https://CRAN.R-project.org/package=konfound](https://CRAN.R-project.org/package=konfound); it can be installed via the `install.packages(“konfound”)` function within R.
 
 ## Functionality
 
