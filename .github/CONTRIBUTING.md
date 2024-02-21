@@ -29,10 +29,11 @@ You may also wish to contact the development team for bigger changes. Please see
 
 *   Ensure that all checks are passing. You can see this information within your PR. If a check is not passing, correct the issue or contact a package maintainer for help.
 
+*   Please run `goodpractice::gp()` to ensure code quality compliance. Some markers from this can justifiably be ignored, whereas others must be addressed. See a discussion [here](https://github.com/konfound-project/konfound/issues/50)
+
 *   Make your changes, commit to git, and then create a PR by running `usethis::pr_push()`, and following the prompts in your browser.
     The title of your PR should briefly describe the change.
     The body of your PR should contain `Fixes #issue-number`.
-
 *   A member of the team will then review your PR.
 
 *  For user-facing changes, add a bullet to the top of `NEWS.md` (i.e. just below the first header). Follow the style described in <https://style.tidyverse.org/news.html>.
