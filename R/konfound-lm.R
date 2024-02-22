@@ -19,7 +19,7 @@ konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, t
   sdy <- unname(sqrt(diag(var(model_object$model)))[1])
   R2 <- summary(model_object)$r.squared
 
-  if (test_all == FALSE) {
+  if (test_all == FALSE | n_covariates == 1) {
     out <- test_sensitivity(
       est_eff = est_eff,
       std_err = std_err,
