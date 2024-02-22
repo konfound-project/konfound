@@ -226,7 +226,7 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
     )
     konfound_output <- create_konfound_class(konfound_output)
     names(konfound_output) <- to_return
-    output_print(est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index)
+    output_print_knf(est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index)
 
     cat("\n")
     message(paste("Print output created by default. Created", length(konfound_output), "other forms of output. Use list indexing or run summary() on the output to see how to access."))
