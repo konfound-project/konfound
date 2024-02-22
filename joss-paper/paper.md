@@ -49,11 +49,11 @@ affiliations:
 
 Sensitivity analysis, a statistical method crucial for validating inferences across disciplines, quantifies the conditions that could alter conclusions [@razavi2021]. One line of work is rooted in linear models and foregrounds the sensitivity of inferences to the strength of omitted variables [@frank2000; @cinelli2019]. A more recent approach is rooted in the potential outcomes framework for causal inference and foregrounds how hypothetical changes in a sample would alter an inference if such variables or cases were otherwise observed [@frank2007; @frank2008; @frank2013; @xu2019].
 
-One sensitivity measure is the *Impact Threshold of a Confounding Variable*, or ITCV, which generates statements about the correlation of an omitted, confounding variable with both a predictor of interest and the outcome [@frank2000]. The ITCV index can be calculated for any linear model. The *Robustness of an Inference to Replacement*, RIR, assesses how replacing a certain percentage of cases with counterfactuals of zero treatment effect could undermine an inference [@frank2013]. The RIR index is more general than the ITCV index.
+One sensitivity measure is the *Impact Threshold of a Confounding Variable*, or ITCV, which generates statements about the correlation of an omitted, confounding variable with both a predictor of interest and the outcome [@frank2000]. The ITCV index can be calculated for any linear model. The *Robustness of an Inference to Replacement*, RIR, assesses how replacing a certain percentage of cases with counterfactuals of zero treatment effect could nullify an inference [@frank2013]. The RIR index is more general than the ITCV index.
 
 The sensitivity analysis techniques we describe in this paper and implement in an R package differ from others in several ways. Unlike @linden2020conducting, whose approach focuses on dichotomous outcomes and omitted variable sensitivity, our approach extends to continuous outcomes and evaluates both changes in estimates and standard errors. @oster2019unobservable focuses only on selection into the treatment based on unobservable variables versus observable variables necessary to nullify an estimate. The ITCV index focuses on the relationship of the unobservable to the predictor of interest and to the outcome. More generally, many others used simulation-based approaches, while our approach uses closed-form expressions to generate a single term representing sensitivity. These techniques, along with others, are reviewed and discussed along with the ITCV and RIR approaches that are implemented in the `konfound` package in @frank2023.
 
-We have implemented the calculation of both the ITCV and RIR indices in the `konfound` R package. This package is intended to provide an easy-to-use and principled set of sensitivity techniques that are suitable for a range of model and dependent variable types and use cases. Its audience is broad: primarily social scientists, but also interested individuals in other disciplines (e.g., the health sciences). This paper provides an overview of two core functions within the `konfound` package, each of which can calculate the ITCV and RIR indices: `konfound()` and `pkonfound()`. These functions allow users to calculate the robustness of inferences using a model estimated (with R) in or using information about a model from a published study, respectively. 
+We have implemented the calculation of both the ITCV and RIR indices in the `konfound` R package. This package is intended to provide an easy-to-use and principled set of sensitivity techniques that are suitable for a range of model and dependent variable types and use cases. Its audience is broad: primarily social scientists, but also interested individuals in other disciplines (e.g., the health sciences). This paper provides an overview of two core functions within the `konfound` package, each of which can calculate the ITCV and RIR indices: `konfound()` and `pkonfound()`. These functions allow users to calculate the robustness of inferences using a model estimated (with R) or using information about a model from a published study, respectively. 
 
 The `konfound` package is available from the Comprehensive R Archive Network (CRAN) at [https://CRAN.R-project.org/package=konfound](https://CRAN.R-project.org/package=konfound); it can be installed via the `install.packages(“konfound”)` function within R.
 
@@ -61,13 +61,13 @@ The `konfound` package is available from the Comprehensive R Archive Network (CR
 
 ### **konfound**
 
-This function calculates the ITCV and RIR for models fitted in R. This function currently works for linear models fitted with `lm()`, `glm()`, and `lmer()`. The output printed in the R console is the bias that must be present and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference.
+This function calculates the ITCV and RIR for models fitted in R. This function currently works for linear models fitted with `lm()`, `glm()`, and `lmer()`. The output printed in the R console is the bias that must be present and the number of cases that would have to be replaced with cases for which there is no effect to nullify the inference.
 
 #### *Example for linear models fit with lm()*
 
 For this example, we will use the `concord1` dataset built into the `konfound` package. This dataset comes from a study that examines the causal mechanism behind household water conservation in a U.S. city.
 
-We will model the impact the following variables have on household water consumption in 1981:
+We will model estimate the effect of the following variables on household water consumption in 1981:
 
 - household water consumption in 1980 (`water80`) 
 - household income (`income`)
@@ -79,7 +79,7 @@ Here is the code we use to fit a linear model using these variables:
     
     m <- lm(water81 ~ water80 + income + educat + retire + peop80, data = concord1)
 
-The results of the model fitting (which can be obtained by running `summary(m)` within R indicate that all of the predictors apart from `retire` have a statistically significant effect on water consumption. In the example, we focus on the coefficient for `peop80` (&beta = 225.198, *SE* = 28.704, *t* = 7.845, *p* < .001).
+The results of the model fitting (which can be obtained by running `summary(m)` within R) indicate that all of the predictors apart from `retire` have a statistically significant effect on water consumption. In the example, we focus on the coefficient for `peop80` (&beta = 225.198, *SE* = 28.704, *t* = 7.845, *p* < .001).
 
 #### *ITCV example for linear models fit with lm()*
 
@@ -143,11 +143,11 @@ The output presents two interpretations of the RIR. First, 74.956% of the estima
 
 ### **pkonfound**
 
-This function quantifies the sensitivity for analyses which have already been conducted, such as in an already-published study or from analysis carried out using other software. This function calculates how much bias there must be in an estimate to invalidate/sustain an inference, which can be interpreted as the percentage of cases that would have to be replaced (with cases for which the predictor had no effect on the outcome) to invalidate the inference. It also calculates the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient, where impact is defined as the correlation between omitted variable and focal predictor x correlation between omitted variable and outcome.
+This function quantifies the sensitivity for analyses which have already been conducted, such as in an already-published study or from analysis carried out using other software. This function calculates how much bias there must be in an estimate to invalidate/sustain an inference, which can be interpreted as the percentage of cases that would have to be replaced (e.g., with cases for which the predictor had no effect on the outcome) to invalidate the inference. It also calculates the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient, where impact is defined as the correlation between omitted variable and focal predictor x correlation between omitted variable and outcome.
 
 #### *ITCV example for a regression analysis*
 
-For this example, the following parameters from a regression analysis would be entered into the `pkonfound` function: unstandardized beta coefficient for the predictor of interest (`est_eff` = 2), estimated standard error (`std_err` = .4), sample size (`n_obs` = 100), and the number of covariates (`n_covariates` = 3), as follows:
+For this example, the following estimated quantities from an estimated regression model would be entered into the `pkonfound` function: unstandardized beta coefficient for the predictor of interest (`est_eff` = 2), estimated standard error (`std_err` = .4), sample size (`n_obs` = 100), and the number of covariates (`n_covariates` = 3), as follows:
 
     pkonfound(2, .4, 100, 3, index = "IT")
 
@@ -197,7 +197,7 @@ We can also use the same inputs to calculate output for the RIR index:
 
 ## Doing and Learning More
 
-We have created a website including a Shiny interactive web application at [http://konfound-it.com](http://konfound-it.com) that can be applied to linear models, 2x2 tables resulting corresponding to treatment and control by success and failure conditions, and logistic regression models. We are also developing extensions of the sensitivity analysis techniques described in this paper, including preserving the standard error [@frank2023] and calculating the coefficient of proportionality [@frank2022] for ITCV analyses. Functionality for designs including mediation, differences in difference, and regression discontinuity are also presently under development. Additional documentation on the R package and its future extensions are available at the [http://konfound-it.com](http://konfound-it.com) website.
+We have created a website including a Shiny interactive web application at [http://konfound-it.com](http://konfound-it.com) that can be applied to linear models, 2x2 tables resulting corresponding to treatment and control by success and failure conditions, and logistic regression models. We are also developing extensions of the sensitivity analysis techniques described in this paper, including preserving the standard error [@frank2023] and calculating the coefficient of proportionality [@frank2022] for ITCV analyses. Functionality for designs including mediation, hazard functions, differences in difference, and regression discontinuity are also presently under development. Additional documentation on the R package and its future extensions are available at the [http://konfound-it.com](http://konfound-it.com) website.
 
 ## Acknowledgements
 
