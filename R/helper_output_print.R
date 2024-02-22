@@ -141,8 +141,9 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     } else if (obs_r == critical_r) {
       warning("The correlation is exactly equal to the threshold.\n")
     }
-
+    cat("\n")
     cat("For calculation of unconditional ITCV, include the R2, sdx and sdy as input and request raw output.")
+    cat("\n")
     cat("See Frank (2000) for a description of the method.")
     cat("\n")
     cat("\n")
@@ -313,8 +314,9 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     } else if (obs_r == critical_r) {
       warning("The correlation is exactly equal to the threshold.\n")
     }
-
+    cat("\n")
     cat("For calculation of unconditional ITCV, request raw output.")
+    cat("\n")    
     cat("See Frank (2000) for a description of the method.")
     cat("\n")
     cat("\n")
