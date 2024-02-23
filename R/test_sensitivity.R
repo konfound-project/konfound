@@ -263,7 +263,11 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
   } else if (to_return == "corr_plot") {
     return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
   } else if (to_return == "print") {
-    return(output_print(est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index))
+    if (caller = "pkonfound"){
+      return(output_print(est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index))
+      } else {
+      return(output_print_knf(est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index))
+      }
   } else if (to_return == "table") {
     return(output_table(model_object, tested_variable))
   } else {
