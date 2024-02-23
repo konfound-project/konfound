@@ -167,7 +167,9 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       warning("The correlation is exactly equal to the threshold.\n")
     }
     cat("\n")
-    cat("For calculation of unconditional ITCV, request raw output. When using pkonfound(), additionally include the R2, sdx, and sdy as input.")
+    cat("For calculation of unconditional ITCV, request raw output. When using pkonfound(),")
+    cat("additionally include the R2, sdx, and sdy as input.")
+    cat("\n")   
     cat("\n")   
     cat("See Frank (2000) for a description of the method.")
     cat("\n")
