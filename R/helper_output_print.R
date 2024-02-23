@@ -168,6 +168,7 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     }
     cat("\n")
     cat("For calculation of unconditional ITCV, request raw output. When using pkonfound(),")
+    cat("\n")
     cat("additionally include the R2, sdx, and sdy as input.")
     cat("\n")   
     cat("\n")   
