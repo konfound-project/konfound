@@ -112,10 +112,10 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   std_err_start <- sqrt(1 / a + 1 / b + 1 / c + 1 / d)
   t_start <- get_t_kfnl(a, b, c, d)
 
-  if(t_start == 0) {
-    cat("t_start is 0, exiting the function.\n")
-    return(NULL) # Exit the function early
-  }
+  #if(t_start == 0) {
+  #  cat("t_start is 0, exiting the function.\n")
+  #  return(NULL) # Exit the function early
+  #}
   
   #if(t_start >= 0 & t_start <= .0000001) {
   #  t_start <- .0000001
