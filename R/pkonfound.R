@@ -207,7 +207,6 @@
     signsuppression = signsuppression,
     eff_thr = eff_thr,
     to_return = to_return
-    caller = "pkonfound"
   )
 } 
       
