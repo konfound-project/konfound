@@ -14,7 +14,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat("\n")
       cat(paste0("with alpha = ", alpha, ", ", round(bias, 3), "% of the (", round(est_eff, 3), ") estimate would"))
       cat("\n")
-      cat(paste0("have to be due to bias. This implies that to invalidate the inference "))
+      cat("have to be due to bias. This implies that to invalidate the inference")
       cat("\n")
       cat(paste0("one would expect to have to replace ", round(recase, 3), " (", round(bias, 3), "%) observations"\n"))
       cat(paste0("with cases for which thetreatment effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
