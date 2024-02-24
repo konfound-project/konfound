@@ -117,10 +117,10 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   #  return(NULL) # Exit the function early
   #}
   
-  if(t_start >= 0 & t_start <= .0000001) {
-    t_start <- .0000001
-  } else if(t_start <= 0 & t_start >= -.0000001) {
-    t_start <- -.0000001
+  if(t_start >= 0 & t_start <= .00001) {
+    t_start <- .00001
+  } else if(t_start <= 0 & t_start >= -.00001) {
+    t_start <- -.00001
   } 
 
   invalidate_start <- isinvalidate(thr_t, t_start)
