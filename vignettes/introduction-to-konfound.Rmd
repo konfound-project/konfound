@@ -176,17 +176,9 @@ mkonfound(mkonfound_ex, t, df, return_plot = TRUE)
 
 # Other information
 
-### How to learn more about sensitivity analysis
-
-To learn more about sensitivity analysis, please visit:
-'/
-?˘* The [Introduction to konfound vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
-* The causal inference section of Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm#causal)
-* The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
-
 ### Feedback, issues, and feature requests
 
-`konfound` is actively under development as of January, 2018. We welcome feedback and requests for improvement. We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via email (see the DESCRIPTION file).
+`konfound` is actively under development as of January, 2018. We welcome feedback and requests for improvement. We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/konfound-project/konfound/issues)) though we also welcome questions or feedback via email (see the DESCRIPTION file).
 
 ### Code of Conduct
 

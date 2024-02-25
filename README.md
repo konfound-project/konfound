@@ -5,7 +5,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 [![R-CMD-check](https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/konfound-project/konfound/graph/badge.svg?token=ARijYlxn7O)](https://codecov.io/gh/konfound-project/konfound)
+[![codecov](https://codecov.io/gh/konfound-project/konfound/graph/badge.svg?token=ARijYlxn7O)](https://app.codecov.io/gh/konfound-project/konfound)
 [![status](https://joss.theoj.org/papers/c53ffd4bff0f14c6533e45423d7deb82/status.svg)](https://joss.theoj.org/papers/c53ffd4bff0f14c6533e45423d7deb82)
 <!-- badges: end -->
 
@@ -33,7 +33,7 @@ You can install the development version from GitHub with:
 
 ``` r
 install.packages("devtools")
-devtools::install_github("jrosen48/konfound")
+devtools::install_github("konfound-project/konfound")
 ```
 
 # Use of konfound
