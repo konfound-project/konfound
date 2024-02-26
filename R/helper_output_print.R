@@ -26,7 +26,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat("\n")
       cat(paste0("RIR = ", round(recase, 3), "\n"))
       cat("\n")
-      cat(paste0("The estimated effect is ", round(est_eff, 3), ", and specified threshold for inference "))
+      cat(paste0("The estimated effect is ", round(est_eff, 3), ", and specified threshold for inference"))
       cat("\n")
       cat(paste0("is ", round(eff_thr, 3), ". To invalidate the inference based on your estimate,", round(bias, 3), "%"))
       cat("\n")
