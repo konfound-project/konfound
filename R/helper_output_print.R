@@ -103,8 +103,7 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat("on all observed covariates in the model; signs are interchangeable)")
       cat("\n")
-      cat(paste0("based on a threshold of ", round(critical_r, 3), " for statistical significance (alpha = ", alpha, ").\n",
-          sep = ""))
+      cat(paste0("based on a threshold of ", round(critical_r, 3), " for statistical significance (alpha = ", alpha, ").\n"))
       cat("\n")
       cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ") 
       cat("\n")
@@ -150,7 +149,7 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat("on all observed covariates in the model; signs are interchageable)")
       cat("\n")
-      cat(paste0("based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = ""))
+      cat(paste0("based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n"))
       cat("\n")
       cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ")
       cat("\n")
