@@ -862,5 +862,15 @@ test_sensitivity_ln <- function(est_eff,
       
       
     }
+cat("\n")
+cat("See Frank et al. (2013) for a description of the method.\n")
+cat("\n")
+cat("Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).\n")
+cat("What would it take to change an inference?\n")
+cat("Using Rubin's causal model to interpret the robustness of causal inferences.\n")
+cat("Education, Evaluation and Policy Analysis, 35 437-460.\n")
+cat("\n")
+cat("Accuracy of results increases with the number of decimals reported.\n")
+	  
   }
 }
