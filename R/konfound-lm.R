@@ -40,10 +40,10 @@ konfound_lm <- function(model_object, tested_variable_string, test_all, alpha, t
     )
     return(out)
   } else {
-    cat("The mkonfound command is used which evaluates RIR in terms of a correlation-based approach\n",
-        "to support comparison among the robustness of the inferences across the covariates. ITCV is for\n",
-        "conditional correlations. To generate unconditional ITCV, use the pkonfound command for each\n",
-        "predictor separately.\n", sep="")
+    message("The mkonfound command is used which evaluates RIR in terms of a correlation-based approach
+    to support comparison among the robustness of the inferences across the covariates. 
+    ITCV is for conditional correlations. To generate unconditional ITCV, use the pkonfound 
+    command for each predictor separately.")
     d <- data.frame(t = est_eff / std_err, df = (n_obs - n_covariates - 1))
     o <- mkonfound(d, .data$t, .data$df)
     term_names <- dplyr::select(tidy_output, var_name = .data$term) # remove the first row for intercept
