@@ -34,7 +34,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat("\n")
       cat(paste0("to invalidate the inference one would expect to have to replace"))
       cat("\n")
-      cat(paste0("round(recase, 3), " (", round(bias, 3), "%) observations with cases for which the treatment"))
+      cat(paste0(round(recase, 3), " (", round(bias, 3), "%) observations with cases for which the treatment"))
       cat("\n")
       cat(paste0("effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
       cat("\n") 
