@@ -67,7 +67,7 @@ This function calculates the ITCV and RIR for models fitted in R. This function 
 
 For this example, we will use the `concord1` dataset built into the `konfound` package. This dataset comes from a study that examines the causal mechanism behind household water conservation in a U.S. city.
 
-We will model estimate the effect of the following variables on household water consumption in 1981:
+We will estimate the effect of the following variables on household water consumption in 1981:
 
 - household water consumption in 1980 (`water80`) 
 - household income (`income`)
@@ -139,11 +139,11 @@ We can also examine the robustness by calculating the RIR:
     ## To consider other predictors of interest, 
     ## consider setting `test_all` to TRUE.
 
-The output presents two interpretations of the RIR. First, 74.956% of the estimated effect of `peop80` on `water81` would have to be attributed to bias to invalidate the inference. Equivalently, we would expect to have to replace 372 out of the 486 households (about 76%) with cases for which `peop80` had no effect to invalidate the inference. We have created guidelines on evaluating the RIR relative to the bias accounted for by observed covariates or published norms [@frank2013; @frank2021].
+The output presents two interpretations of the RIR. First, 74.956% of the estimated effect of `peop80` on `water81` would have to be attributed to bias to invalidate the inference. Equivalently, we would expect to have to replace 372 out of the 486 households (about 76%) with cases for which `peop80` had no effect to invalidate the inference. We have created guidelines for evaluating the RIR relative to the bias accounted for by observed covariates or published norms [@frank2013; @frank2021].
 
 ### **pkonfound**
 
-This function quantifies the sensitivity for analyses which have already been conducted, such as in an already-published study or from analysis carried out using other software. This function calculates how much bias there must be in an estimate to invalidate/sustain an inference, which can be interpreted as the percentage of cases that would have to be replaced (e.g., with cases for which the predictor had no effect on the outcome) to invalidate the inference. It also calculates the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient, where impact is defined as the correlation between omitted variable and focal predictor x correlation between omitted variable and outcome.
+This function quantifies the sensitivity for analyses that have already been conducted, such as in an already-published study or from analysis carried out using other software. This function calculates how much bias there must be in an estimate to invalidate/sustain an inference, which can be interpreted as the percentage of cases that would have to be replaced (e.g., with cases for which the predictor had no effect on the outcome) to invalidate the inference. It also calculates the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient, where impact is defined as the correlation between the omitted variable and the focal predictor multiplied with the correlation between the omitted variable and the outcome.
 
 #### *ITCV example for a regression analysis*
 
@@ -160,7 +160,7 @@ For this example, the following estimated quantities from an estimated regressio
     ## 
     ## Correspondingly the impact of an omitted variable (as defined in Frank 
     ## 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null
-    ## hypothesis of 0 effect.See Frank (2000) for a description of the method.
+    ## hypothesis of 0 effect. See Frank (2000) for a description of the method.
     ## 
     ## Citation:
     ## Frank, K. (2000). Impact of a confounding variable on the inference of a 
