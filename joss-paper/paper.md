@@ -79,7 +79,7 @@ Here is the code we use to fit a linear model using these variables:
     
     m <- lm(water81 ~ water80 + income + educat + retire + peop80, data = concord1)
 
-The results of the model fitting (which can be obtained by running `summary(m)` within R) indicate that all of the predictors apart from `retire` have a statistically significant effect on water consumption. In the example, we focus on the coefficient for `peop80` (&beta = 225.198, *SE* = 28.704, *t* = 7.845, *p* < .001).
+The results of the model fitting (which can be obtained by running `summary(m)` within R) indicate that all of the predictors apart from `retire` have a statistically significant effect on water consumption. In the example, we focus on the coefficient for `peop80` (β = 225.198, *SE* = 28.704, *t* = 7.845, *p* < .001).
 
 #### *ITCV example for linear models fit with lm()*
 
