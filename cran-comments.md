@@ -4,4 +4,4 @@
 
 * This is a new release.
 
-This addresses some automated check failures - thx!
+This addressess an issue with a URL not resolving correctly.

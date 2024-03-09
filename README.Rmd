@@ -87,7 +87,7 @@ mkonfound(mkonfound_ex, t, df)
 To learn more about sensitivity analysis, please visit:
 
 * The [Introduction to konfound vignette](https://konfound-project.github.io/konfound/articles/introduction-to-konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
-* The [Konfound-It! interactive web application](https://konfound-it.com), with links to PowerPoints and key publications
+* The [Konfound-It! interactive web application](https://konfound-project.shinyapps.io/konfound-it/), with links to PowerPoints and key publications
 
 ### Issues, feature requests, and contributing
 
