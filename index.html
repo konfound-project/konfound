@@ -122,7 +122,9 @@
 <p><code><a href="reference/pkonfound.html">pkonfound()</a></code>, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/konfound-project/konfound" class="external-link">konfound</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).</span></span>
+<span><span class="co">#&gt; Sensitivity analysis as described in Frank, </span></span>
+<span><span class="co">#&gt; Maroulis, Duong, and Kelcey (2013) and in </span></span>
+<span><span class="co">#&gt; Frank (2000).</span></span>
 <span><span class="co">#&gt; For more information visit http://konfound-it.com.</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/pkonfound.html">pkonfound</a></span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">2</span>, </span>
@@ -140,9 +142,12 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span></span>
 <span><span class="co">#&gt; What would it take to change an inference?</span></span>
-<span><span class="co">#&gt; Using Rubin's causal model to interpret the robustness of causal inferences.</span></span>
-<span><span class="co">#&gt; Education, Evaluation and Policy Analysis, 35 437-460.</span></span>
-<span><span class="co">#&gt; For other forms of output, run ?pkonfound and inspect the to_return argument</span></span>
+<span><span class="co">#&gt; Using Rubin's causal model to interpret the </span></span>
+<span><span class="co">#&gt;         robustness of causal inferences.</span></span>
+<span><span class="co">#&gt; Education, Evaluation and </span></span>
+<span><span class="co">#&gt;                        Policy Analysis, 35 437-460.</span></span>
+<span><span class="co">#&gt; For other forms of output, run </span></span>
+<span><span class="co">#&gt;           ?pkonfound and inspect the to_return argument</span></span>
 <span><span class="co">#&gt; For models fit in R, consider use of konfound().</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -193,10 +198,11 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span></span>
 <span><span class="co">#&gt; What would it take to change an inference?</span></span>
-<span><span class="co">#&gt; Using Rubin's causal model to interpret the robustness of causal inferences.</span></span>
-<span><span class="co">#&gt; Education, Evaluation and Policy Analysis, 35 437-460.</span></span>
-<span><span class="co">#&gt; For more detailed output, consider setting `to_return` to table</span></span>
-<span><span class="co">#&gt; To consider other predictors of interest, consider setting `test_all` to TRUE.</span></span></code></pre></div>
+<span><span class="co">#&gt; Using Rubin's causal model to interpret the </span></span>
+<span><span class="co">#&gt;         robustness of causal inferences.</span></span>
+<span><span class="co">#&gt; Education, Evaluation and </span></span>
+<span><span class="co">#&gt;                        Policy Analysis, 35 437-460.</span></span>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="mkonfound-for-meta-analyses-including-sensitivity-analysis">mkonfound for meta-analyses including sensitivity analysis<a class="anchor" aria-label="anchor" href="#mkonfound-for-meta-analyses-including-sensitivity-analysis"></a>
@@ -244,8 +250,8 @@
 </h3>
 <p>To learn more about sensitivity analysis, please visit:</p>
 <ul>
-<li>The <a href="https://konfound-project.github.io/konfound/articles/introduction-to-konfound.html" class="external-link">Introduction to konfound vignette</a>, with detailed information about each of the functions (<code><a href="reference/pkonfound.html">pkonfound()</a></code>, <code><a href="reference/konfound.html">konfound()</a></code>, and <code>mkounfound()</code>)</li>
-<li>The <a href="https://konfound-it.com" class="external-link">Konfound-It! interactive web application</a>, with links to PowerPoints and key publications</li>
+<li>The <a href="https://konfound-it.org/konfound/articles/introduction-to-konfound.html" class="external-link">Introduction to konfound vignette</a>, with detailed information about each of the functions (<code><a href="reference/pkonfound.html">pkonfound()</a></code>, <code><a href="reference/konfound.html">konfound()</a></code>, and <code>mkounfound()</code>)</li>
+<li>The <a href="https://konfound-project.shinyapps.io/konfound-it/" class="external-link">Konfound-It! interactive web application</a>, with links to PowerPoints and key publications</li>
 </ul>
 </div>
 <div class="section level3">
@@ -311,7 +317,7 @@
 <li><a href="https://cran.r-project.org/package=konfound" class="external-link"><img src="https://www.r-pkg.org/badges/version/konfound" alt="CRAN status"></a></li>
 <li><a href="https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/konfound-project/konfound" class="external-link"><img src="https://codecov.io/gh/konfound-project/konfound/graph/badge.svg?token=ARijYlxn7O" alt="codecov"></a></li>
-<li><a href="https://joss.theoj.org/papers/c53ffd4bff0f14c6533e45423d7deb82" class="external-link"><img src="https://joss.theoj.org/papers/c53ffd4bff0f14c6533e45423d7deb82/status.svg" alt="status"></a></li>
+<li><a href="https://doi.org/10.21105/joss.05779" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.05779/status.svg" alt="DOI"></a></li>
 </ul>
 </div>
 
