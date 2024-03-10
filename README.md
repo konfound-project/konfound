@@ -6,7 +6,7 @@
 status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 [![R-CMD-check](https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/konfound-project/konfound/graph/badge.svg?token=ARijYlxn7O)](https://app.codecov.io/gh/konfound-project/konfound)
-[![status](https://joss.theoj.org/papers/c53ffd4bff0f14c6533e45423d7deb82/status.svg)](https://joss.theoj.org/papers/c53ffd4bff0f14c6533e45423d7deb82)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.05779/status.svg)](https://doi.org/10.21105/joss.05779)
 <!-- badges: end -->
 
 # konfound
@@ -47,7 +47,9 @@ inference for a regression coefficient:
 
 ``` r
 library(konfound)
-#> Sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) and in Frank (2000).
+#> Sensitivity analysis as described in Frank, 
+#> Maroulis, Duong, and Kelcey (2013) and in 
+#> Frank (2000).
 #> For more information visit http://konfound-it.com.
 ```
 
@@ -67,9 +69,12 @@ pkonfound(est_eff = 2,
 #> 
 #> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
 #> What would it take to change an inference?
-#> Using Rubin's causal model to interpret the robustness of causal inferences.
-#> Education, Evaluation and Policy Analysis, 35 437-460.
-#> For other forms of output, run ?pkonfound and inspect the to_return argument
+#> Using Rubin's causal model to interpret the 
+#>         robustness of causal inferences.
+#> Education, Evaluation and 
+#>                        Policy Analysis, 35 437-460.
+#> For other forms of output, run 
+#>           ?pkonfound and inspect the to_return argument
 #> For models fit in R, consider use of konfound().
 ```
 
@@ -127,10 +132,11 @@ konfound(m1, wt)
 #> 
 #> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
 #> What would it take to change an inference?
-#> Using Rubin's causal model to interpret the robustness of causal inferences.
-#> Education, Evaluation and Policy Analysis, 35 437-460.
-#> For more detailed output, consider setting `to_return` to table
-#> To consider other predictors of interest, consider setting `test_all` to TRUE.
+#> Using Rubin's causal model to interpret the 
+#>         robustness of causal inferences.
+#> Education, Evaluation and 
+#>                        Policy Analysis, 35 437-460.
+#> NULL
 ```
 
 ## mkonfound for meta-analyses including sensitivity analysis
@@ -178,12 +184,12 @@ mkonfound(mkonfound_ex, t, df)
 To learn more about sensitivity analysis, please visit:
 
 - The [Introduction to konfound
-  vignette](https://konfound-project.github.io/konfound/articles/introduction-to-konfound.html),
+  vignette](https://konfound-it.org/konfound/articles/introduction-to-konfound.html),
   with detailed information about each of the functions (`pkonfound()`,
   `konfound()`, and `mkounfound()`)
 - The [Konfound-It! interactive web
-  application](https://konfound-it.com), with links to PowerPoints and
-  key publications
+  application](https://konfound-project.shinyapps.io/konfound-it/), with
+  links to PowerPoints and key publications
 
 ### Issues, feature requests, and contributing
 

@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.org/package=konfound)
 [![R-CMD-check](https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/konfound-project/konfound/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/konfound-project/konfound/graph/badge.svg?token=ARijYlxn7O)](https://app.codecov.io/gh/konfound-project/konfound)
-[![status](https://joss.theoj.org/papers/c53ffd4bff0f14c6533e45423d7deb82/status.svg)](https://joss.theoj.org/papers/c53ffd4bff0f14c6533e45423d7deb82)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.05779/status.svg)](https://doi.org/10.21105/joss.05779)
 <!-- badges: end -->
 
 # konfound
@@ -86,7 +86,7 @@ mkonfound(mkonfound_ex, t, df)
 
 To learn more about sensitivity analysis, please visit:
 
-* The [Introduction to konfound vignette](https://konfound-project.github.io/konfound/articles/introduction-to-konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
+* The [Introduction to konfound vignette](https://konfound-it.org/konfound/articles/introduction-to-konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
 * The [Konfound-It! interactive web application](https://konfound-project.shinyapps.io/konfound-it/), with links to PowerPoints and key publications
 
 ### Issues, feature requests, and contributing

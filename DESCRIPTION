@@ -31,7 +31,7 @@ Description: Statistical methods that quantify the conditions necessary to
     inferences for a user's own model, a single published study and
     multiple studies respectively.
 License: MIT + file LICENSE
-URL: https://github.com/konfound-project/konfound, https://konfound-project.github.io/konfound/
+URL: https://github.com/konfound-project/konfound
 BugReports: https://github.com/konfound-project/konfound/issues
 Depends: 
     R (>= 2.10)
