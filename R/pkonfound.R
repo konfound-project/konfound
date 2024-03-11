@@ -63,6 +63,7 @@
 #' @export
 
  pkonfound <- function(est_eff,
+                      ci = NULL,
                       std_err,
                       n_obs,
                       n_covariates = 1,
@@ -90,6 +91,10 @@
   if ("table" %in% to_return) stop("a table can only be 
                                    output when using konfound")
   
+   if (!is.null(ci)) {
+       print("yay")
+   }
+     
    if (index == "COP") {
      
      out <- test_cop(
