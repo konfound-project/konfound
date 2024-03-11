@@ -1,7 +1,6 @@
 #' Perform sensitivity analysis for published studies
 #' @description For published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient.
 #' @param est_eff the estimated effect (such as an unstandardized beta coefficient or a group mean difference)
-#' @param ci the confidence interval
 #' @param std_err the standard error of the estimate of the unstandardized regression coefficient
 #' @param n_obs the number of observations in the sample
 #' @param n_covariates the number of covariates in the regression model
@@ -64,7 +63,6 @@
 #' @export
 
  pkonfound <- function(est_eff,
-                      ci = NULL,
                       std_err,
                       n_obs,
                       n_covariates = 1,
@@ -91,10 +89,6 @@
                       to_return = "print") {
   if ("table" %in% to_return) stop("a table can only be 
                                    output when using konfound")
-  
-   if (!is.null(ci)) {
-       print("yay")
-   }
      
    if (index == "COP") {
      
