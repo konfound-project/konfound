@@ -81,7 +81,7 @@ konfound <- function(model_object,
   }
   
   if (inherits(model_object, "glm") & two_by_two == FALSE) {
-    message("Note that for a non-linear model, impact threshold should not be interpreted.")
+    message("Note that if your model is a logistic regression, we recommend using the pkonfound command for logistic regression with manually entered parameter estimates and other quantities.")
     message("Note that this is only an approximation. For exact results in terms of the number of cases that must be switched from treatment success to treatment failure to invalidate the inference see: https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm")
     message("If a dichotomous independent variable is used, consider using the 2X2 table approach enabled with the argument two_by_two = TRUE")
     output <- konfound_glm(
