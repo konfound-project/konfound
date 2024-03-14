@@ -69,7 +69,7 @@
 <span>  <span class="va">c</span>,</span>
 <span>  <span class="va">d</span>,</span>
 <span>  thr_p <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  switch_trm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  switch_trm <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>  test <span class="op">=</span> <span class="st">"fisher"</span>,</span>
 <span>  replace <span class="op">=</span> <span class="st">"control"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -106,7 +106,7 @@
 
 
 <dt>replace</dt>
-<dd><p>whether using entire sample or the control group to calculate the base rate, with the default of the control group</p></dd>
+<dd><p>whether using entire sample or the control group to calculate the base rate, with the default of the entire sample</p></dd>
 
 </dl></div>
     <div id="value">
@@ -121,62 +121,62 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># using tkonfound_fig for a study where 2 by 2 table is (35, 17, 17, 38)</span></span></span>
 <span class="r-in"><span><span class="fu">tkonfound_fig</span><span class="op">(</span><span class="fl">35</span>, <span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">38</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 103 rows containing missing values (`geom_label_repel()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 103 rows containing missing values (geom_label_repel).</span>
 <span class="r-plt img"><img src="tkonfound_fig-1.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A bend in line indicates switches from the control row because the treatment row was exhausted."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 18 rows containing missing values (`geom_label_repel()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 18 rows containing missing values (geom_label_repel).</span>
 <span class="r-plt img"><img src="tkonfound_fig-2.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">tkonfound_fig</span><span class="op">(</span><span class="fl">35</span>, <span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">38</span>, thr_p <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 103 rows containing missing values (`geom_label_repel()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 103 rows containing missing values (geom_label_repel).</span>
 <span class="r-plt img"><img src="tkonfound_fig-3.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A bend in line indicates switches from the control row because the treatment row was exhausted."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 21 rows containing missing values (`geom_label_repel()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 21 rows containing missing values (geom_label_repel).</span>
 <span class="r-plt img"><img src="tkonfound_fig-4.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">tkonfound_fig</span><span class="op">(</span><span class="fl">35</span>, <span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">38</span>, thr_p <span class="op">=</span> <span class="fl">0.01</span>, switch_trm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 103 rows containing missing values (`geom_label_repel()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 103 rows containing missing values (geom_label_repel).</span>
 <span class="r-plt img"><img src="tkonfound_fig-5.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A bend in line indicates switches from the treatment row because the control row was exhausted."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 7 rows containing missing values (`geom_label_repel()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 7 rows containing missing values (geom_label_repel).</span>
 <span class="r-plt img"><img src="tkonfound_fig-6.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">tkonfound_fig</span><span class="op">(</span><span class="fl">35</span>, <span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">38</span>, thr_p <span class="op">=</span> <span class="fl">0.01</span>, switch_trm <span class="op">=</span> <span class="cn">TRUE</span>, test <span class="op">=</span> <span class="st">"chisq"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 103 rows containing missing values (`geom_label_repel()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 103 rows containing missing values (geom_label_repel).</span>
 <span class="r-plt img"><img src="tkonfound_fig-7.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A bend in line indicates switches from the control row because the treatment row was exhausted."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 20 rows containing missing values (`geom_label_repel()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 20 rows containing missing values (geom_label_repel).</span>
 <span class="r-plt img"><img src="tkonfound_fig-8.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">tkonfound_fig</span><span class="op">(</span><span class="fl">35</span>, <span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">38</span>, thr_p <span class="op">=</span> <span class="fl">0.01</span>, switch_trm <span class="op">=</span> <span class="cn">TRUE</span>, test <span class="op">=</span> <span class="st">"chisq"</span>, replace <span class="op">=</span> <span class="st">"entire"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">tkonfound_fig</span><span class="op">(</span><span class="fl">35</span>, <span class="fl">17</span>, <span class="fl">17</span>, <span class="fl">38</span>, thr_p <span class="op">=</span> <span class="fl">0.01</span>, switch_trm <span class="op">=</span> <span class="cn">TRUE</span>, test <span class="op">=</span> <span class="st">"chisq"</span>, replace <span class="op">=</span> <span class="st">"control"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 103 rows containing missing values (`geom_label_repel()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 103 rows containing missing values (geom_label_repel).</span>
 <span class="r-plt img"><img src="tkonfound_fig-9.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A bend in line indicates switches from the control row because the treatment row was exhausted."</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 13 rows containing missing values (`geom_label_repel()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 20 rows containing missing values (geom_label_repel).</span>
 <span class="r-plt img"><img src="tkonfound_fig-10.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
@@ -194,7 +194,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

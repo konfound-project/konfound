@@ -1,0 +1,273 @@
+---
+title: konfound
+author:
+  - name: Joshua M. Rosenberg
+    affiliation: University of Tennessee, Knoxville
+    address:
+    - line 1
+    - line 2
+    email:  jmrosenberg@utk.edu
+  - name: Ran Xu
+    affiliation: Virginia Tech
+    address:
+    - line 1
+    - line 2
+    email:  ranxu@msu.edu
+  - name: Kenneth A. Frank
+    affiliation: Michigan State University
+    address:
+    - line 1
+    - line 2
+    email:  kenfrank@msu.edu
+abstract: >
+  An abstract of less than 150 words.
+output:
+  rticles::rjournal_article:
+    includes:
+      in_header: preamble.tex
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE,
+comment = "#>",
+out.width="70%",
+fig.align="center",
+tidy=TRUE
+)
+
+library(knitr)
+hook_output = knit_hooks$get('output')
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+
+```
+
+## Introduction
+
+In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias.  The goal of `konfound` is to carry out sensitivity analysis to help analysts to quantify how robust inferences are to potential sources of bias. This package provides functions based on developments in sensitivity analysis by Frank and colleagues, which previously have been implemented in `Stata` and through an Excel spreadsheet, in `R` through the `konfound` package. 
+
+# Background on sensitivity analysis
+
+Often times, inferences about effects are critiqued because of *biases*, or factors that contribute to an estimated effect being different from its ground truth value. These biases come from many sources, such as not including possibly important control variables or covariates and sample (i.e., selection bias) and measurement-related (i.e., not measuring the complete nature of a psychological construct) biases.
+
+Because of the prevalence of this problem, a number of strategies to address it have emerged. These strategies can broadly be considered as approach for carrying out sensitivity analysis. These past approaches have done XXX but YYY. Frank and colleauges (2000, 2004, 2007, 2013) have extended this past research by doing ZZZ through two frameworks for approaching sensitivity analysis. 
+
+The first approach, termed the replacement of cases approach, uses Rubin’s causal model to interpret how much bias there must be to invalidate an inference in terms of replacing observed cases with counterfactual cases. The second quantifies the robustness of causal inferences in terms of correlations associated with unobserved variables in a regression framework.
+
+In the remainder of this paper, we first describe these two approaches in detail. Then, we introduce the **konfound** package in R, which provides a unified interface to carrying out sensitivity analysis using either approach, using either the results from fitted models or values provided by the user. We show examples from linear and non-linear as well as mixed effects (or multi-level) models. We also discuss how the approach can be used to carry out sensitivity analysis for multiple studies. Finally, we describe a web-based application as an easy interface for those newer to sensitivity analysis that can serve as a gateway to more involved uses. 
+
+## Replacement of cases approach to sensitivity analysis
+
+This approach to sensitivity analysis focuses upon quantifying how much of an effect would need to be due to bias to invalidate the inference about it. In particular, Frank et al. (2013) use Rubin's causal model [cite] to characterize how one could invalidate inferences by replacing observed cases with unobserved cases in which there was no effect. This framework enables researchers to identify the *switch point* (Behn & Vaupel, 1982) whereby the bias is large enough to change one’s belief (one's inferenece) about an effect.
+
+Technically, the approach compares the estimated effect with a given threshold. The threshold defines the point at which evidence from a study would make one indifferent to the choices. The threshold is commonly defined on the basis of statistical significance but can take other values (i.e., it can be based upon the effect size; Frank et al, 2013). (need some more technical details here; and to provide an example)
+
+## Correlation-based approach to sensitivty analysis 
+
+In many non-experimental studies, there is a concern that a variable not considered or included in the analysis is related to both the outcome and predictor of interest. In these cases, not considering the omitted, confounding variable may mean that estimates are biased--they are over-confident. In this approach to sensitivity analysis, the strength of the correlation between a hypothetical omitted variable and the outcome and predictor of interest is quantified. 
+
+(need to edit this and provide an example)
+Specifically, Frank (2000) defined the impact of a confounding variable as rx cvr ycv, where rx cv  is the correlation between the unobserved confound and the predictor of interest and r ycv, is the correlation between the unobserved confound and the outcome. Frank (2000) shows how to assess how strong the confounding variable (cv) has to correlate with the predictor (X) as well as the outcome (Y) to invalidate an inference of an effect of X on Y.
+
+# Tutorial
+
+In this section, we provide a tutorial of the use of **konfound** to carry out sensitivity analysis through both the replacement of cases and correlation-based approach.
+
+First, you can install `konfound` with the following:
+
+```{r, installation, eval = FALSE}
+install.packages("konfound")
+```
+
+You can then load konfound with the `library()` function:
+
+```{r, eval = TRUE}
+library(konfound)
+```
+
+## Example 1: Use of pkonfound() for values from an already-conducted analysis
+
+`pkonfound()` is used when we have values from an already-conducted analysis (like a regression analysis), such as one in an already-published study or from an analysis carried out using other software. 
+
+In the case of a regression analysis, values from the analysis would simply be used as the inputs to the `pkonfound()` function. For example, in the use below, we simply enter the values for the estimated effect (an unstandardardized beta coefficient) (`2`), its standard error (`.4`), the sample size (`100`), and the number of covariates (`3`):
+
+```{r, linewidth = 80}
+pkonfound(2, .4, 100, 3)
+```
+
+For this set of values, around 60% would need to be false due to a source of bias for the inference to be invalidated (based on statistical significance and a p-value (or alpha) of .05), possible a very robust effect. An omitted, confounding variable (sometimes referred to as a covariate) would need to have an impact (defined as the product of the confounding variable's correlation with both the predictor of interest and the outcome) of 0.323, presenting a different interpretation of how robust this (hypothetical) effect is to a variable which is important but not included in the analysis. 
+
+Here is another example, but one in which the unstandardized beta coefficient is smaller than its standard error:
+
+```{r, linewidth = 80}
+pkonfound(.4, 2, 100, 3)
+```
+
+Note that this use of `pkonfound()` is equivalent to naming the arguments, i.e. for a different set of values:
+
+```{r, linewidth = 80}
+pkonfound(est_eff = -2.2,
+          std_err = .65, 
+          n_obs = 200,
+          n_covariates = 3)
+```
+
+We notice that the output includes a message that says we can view other forms of output by changing the `to_return` argument. Here are the two plots - for the bias necessary to alter an inference (`thresh_plot`) and for the robustness of an inference in terms of the impact of a confounding variable (`corr_plot`) that can be returned:
+
+```{r, linewidth = 80}
+pkonfound(.4, 2, 100, 3, to_return = "thresh_plot")
+```
+
+```{r, linewidth = 80}
+pkonfound(.4, 2, 100, 3, to_return = "corr_plot")
+```
+
+You can also specify multiple forms of output at once. 
+
+```{r, linewidth = 80}
+model_output <- pkonfound(2, .4, 200, 3, to_return = c("raw_output", "thresh_plot", "corr_plot"))
+summary(model_output)
+```
+
+When we type the name of the object, we see that we created three types of output that we can access as follows:
+
+```{r}
+model_output$raw_output
+model_output$thresh_plot
+model_output$corr_plot
+```
+
+Finally, you can return the raw output, for use in other analyses. 
+
+```{r, linewidth = 80}
+pkonfound(.4, 2, 100, 3, to_return = "raw_output")
+```
+
+## Use of konfound() for models fit in R
+
+Where `pkonfound()` can be used with values from already-conducted analyses, `konfound()` can be used with models (`lm()`, `glm()`, and `lme4::lmer()`) fit in R.
+
+### Example 2A: For linear models fit with lm()
+
+```{r}
+m1 <- lm(mpg ~ wt + hp + qsec, data = mtcars)
+m1
+
+konfound(m1, hp)
+```
+
+Like with `pkonfound()`, we can also output multiple forms of output at once with `konfound()`:
+
+```{r}
+konfound_output <- konfound(m1, hp, to_return = c("raw_output", "thresh_plot", "corr_plot"))
+summary(konfound_output)
+```
+
+Again, we can type each of those, i.e.:
+
+```{r}
+konfound_output$raw_output
+konfound_output$thresh_plot
+```
+
+We can also test all of the variables as predictors of interest:
+
+```{r}
+konfound(m1, wt, test_all = TRUE)
+```
+
+Whereas this cannot be carried out with `pkonfound()`, with `konfound()` you can also return a table with some key output from the correlation-based approach.
+
+```{r}
+konfound(m1, wt, to_return = "table")
+```
+
+If the impact threshhold is greater than the impacts of the `Z`s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference. Note that in fields in which there is a lot known about covariates given the outcome of interest, then the omitted ones are likely less important than those that are known an included (i.e., we have a good sense of the factors that matter in terms of educational achievement).
+
+### Example 2B: For generalized linear models fit with glm()
+
+Effects for these models are interpreted on the basis of average partial (or marginal) effects (calculated using the `margins` package).
+
+```{r, message = F}
+# if forcats is not installed, this install it first using install.packages("forcats") for this to run
+if (requireNamespace("forcats")) {
+    d <- forcats::gss_cat
+    
+    d$married <- ifelse(d$marital == "Married", 1, 0)
+    
+    m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
+    konfound(m2, age)
+}
+```
+
+As with models fit with `lm()` (and use of `pkonfound()`), multiple forms of output can be specified with the `to_return` argument to `konfound()`, i.e. `konfound(m2, age, to_return = c("raw_output", "corr_plot", "thresh_plot"))`.
+
+### Example 2C: For mixed effects (or multi-level) models fit with the lmer() function from the lme4 package
+
+`konfound` also works with models fit with the `lmer()` function from the package `lme4`, for mixed-effects or multi-level models. One challenge with carrying out sensitivity analysis for fixed effects in mixed effects models is calculating the correct denominator degrees of freedom for the t-test associated with the coefficients. This is not unique to sensitivity analysis, as, for example, `lmer()` does not report degrees of freedom (or p-values) for fixed effects predictors (see this information in the `lme4` FAQ [here](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have)). While it may be possible to determine the correct degrees of freedom for some models (i.e., models with relatively simple random effects structures), it is difficult to generalize this approach, and so in this package the Kenward-Roger approximation for the denominator degrees of freedom as implemented in the `pbkrtest` package (described in [Halekoh and Højsgaard, 2014](https://www.jstatsoft.org/htaccess.php?volume=59&type=i&issue=09&paper=true)).
+
+Here is an example of the use of `konfound()` with a model fit with `lmer()`:
+
+```{r}
+if (requireNamespace("lme4")) {
+    library(lme4)
+    m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+    konfound(m3, Days)
+}
+```
+
+### Example 2D: Use of mkonfound() for meta-analyses that include sensitivity analysis
+
+We can also use `konfound` to carry out sensitivity analysis as part of meta-analyses. For example, here, `d` represents output from a number (30 in this case) of past studies, read in a CSV file from a website:
+
+```{r}
+d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
+head(d)
+mkonfound(d, t, df)
+```
+
+We can also return a plot summarizing the percent bias needed to sustan or invalidate an inference across all of the past studies:
+
+```{r}
+mkonfound(d, t, df, return_plot = T)
+```
+
+# Examples of publishable write-ups
+
+(from Beymer)
+(for correlation-based approach)
+(ref appendix)
+
+# References
+
+Behn, R.D. and Vaupel, J.W., 1982. Quick analysis for busy decision makers (p. 3). New York: Basic Books.
+Cohen, J., Cohen, P., West, S.G. and Aiken, L.S., 1983. Applied multiple regression for the behavioral sciences. Laurence Erlbaum, Hillsdale, NJ.
+DiPrete, T.A. and Gangl, M., 2004. Assessing bias in the estimation of causal effects: Rosenbaum bounds on matching estimators and instrumental variables estimation with imperfect instruments. Sociological methodology, 34(1), pp.271-310.
+Frank, K. A. and Min, K. 2007. Indices of Robustness for Sample Representation. Sociological Methodology.  Vol 37, 349-392. 
+Frank, K.A. 2000. Impact of a Confounding Variable on the Inference of a Regression Coefficient. Sociological Methods and Research, 29(2), 147-194
+Frank, K.A., Gary Sykes, Dorothea Anagnostopoulos, Marisa Cannata, Linda Chard, Ann Krause, Raven McCrory. 2008. Extended Influence: National Board Certified Teachers as Help Providers.  Education, Evaluation, and Policy Analysis.  Vol 30(1): 3-3
+Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013.  What would it take to Change an Inference?: Using Rubin’s Causal Model to Interpret the Robustness of Causal Inferences.  Education, Evaluation and Policy Analysis.  Vol 35: 437-460.
+Gill, R.D. and Robins, J.M., 2001. Causal inference for complex longitudinal data: the continuous case. Annals of Statistics, pp.1785-1811.
+Hamilton, L.C., 1983. Saving water: a causal model of household conservation. Sociological Perspectives, 26(4), pp.355-374.
+Hamilton, L.C., 1985. Concern about toxic wastes: Three demographic predictors. Sociological Perspectives, 28(4), pp.463-486.
+Hamilton, L.C., 1992. Regression with graphics: A second course in applied statistics.
+Pan, W., and Frank, K.A. 2004. An Approximation to the Distribution of the Product of Two Dependent Correlation Coefficients. Journal of Statistical Computation and Simulation, 74, 419-443
+Pan, W., and Frank, K.A., 2004. A probability index of the robustness of a causal inference. Journal of Educational and Behavioral Statistics, 28, 315-337.
+Robins, J. 1987. “A Graphical Approach to the Identification and Estimation of Causal Parameters inMortality Studies with Sustained Exposure Periods.” Journal of Chronic Diseases 40(2):1395–1615.
+Robins, J., A. Rotnisky, and D. Scharfstein. 2000. “Sensitivity Analysis for Selection Bias and Unmeasured Confounding in Missing Data and Causal Inference Models.” Pp. 1–95 in Statistical Models in Epidemiology,the Environment and Clinical Trials (The IMA Volumes in Mathematics and Its Applications), edited by E. Halloran and D. Berry. New York: Springer-Verlag.
+Rosenbaum, P. R. 1986. “Dropping Out of High School in the United States: An Observational Study.” Journal of Educational Statistics 11(3):207–24. 
+Rosembaum, P. R. 2002. “AttributionEffects to Treatment inMatched Observational Studies.” Journal of the American Statistical Association 97:183–92.
+Rubin, D. B. 1974. “Estimating Causal Effects of Treatments in Randomized and Nonrandomized Studies.” Journal of Educational Psychology 66:688–701.
+Saw, G., Schneider, B., Frank, K., Chen, I.C., Keesler, V. and Martineau, J., 2017. The Impact of Being Labeled as a Persistently Lowest Achieving School: Regression Discontinuity Evidence on Consequential School Labeling. American Journal of Education, 123(4), pp.585-613.
+Scharfstein, D. A. I. 2002. “Generalized Additive Selection Models for the Analysis of Studies with Potentially Nonignorable Missing Data.” Biometrics 59:601–13.
+VanderWeele, T.J. and Arah, O.A., 2011. Bias formulas for sensitivity analysis of unmeasured confounding for general outcomes, treatments, and confounders. Epidemiology (Cambridge, Mass.), 22(1), pp.42-52.
+VanderWeele, T.J., 2010. Bias formulas for sensitivity analysis for direct and indirect effects. Epidemiology (Cambridge, Mass.), 21(4), p.540.
+Wooldridge, J.M., 2010. Econometric analysis of cross section and panel data. MIT press.

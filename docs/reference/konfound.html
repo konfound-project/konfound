@@ -121,7 +121,7 @@
 
 
 <dt>replace</dt>
-<dd><p>whether using entire sample or the control group to calculate the base rate; default is the control group</p></dd>
+<dd><p>whether using entire sample or the control group to calculate the base rate; default is the entire sample</p></dd>
 
 </dl></div>
     <div id="value">
@@ -137,8 +137,8 @@
 <span class="r-in"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">hp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">konfound</span><span class="op">(</span><span class="va">m1</span>, <span class="va">wt</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  66.521 % of the estimate would have to be due to bias. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This is based on a threshold of -1.298 for statistical significance (alpha = 0.05).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  66.629 % of the estimate would have to be due to bias. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This is based on a threshold of -1.294 for statistical significance (alpha = 0.05).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  21  observations would have to be replaced with cases</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> for which the effect is 0 (RIR = 21).</span>
@@ -155,11 +155,11 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note that this output is calculated based on the correlation-based approach used in mkonfound()</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>row names were found from a short variable and have been discarded</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   var_name     t    df action       inference pct_bias_to_change_i…¹  itcv r_con</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> wt       -<span style="color: #BB0000;">6.13</span>    29 to_invalida… reject_n…                   52.7 0.614 0.784</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hp       -<span style="color: #BB0000;">3.52</span>    29 to_invalida… reject_n…                   35.1 0.298 0.546</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ abbreviated name: ¹​pct_bias_to_change_inference</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   var_name     t    df action        inference   pct_bias_to_chang…¹  itcv r_con</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> wt       -<span style="color: #BB0000;">6.13</span>    29 to_invalidate reject_null                52.7 0.614 0.784</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hp       -<span style="color: #BB0000;">3.52</span>    29 to_invalidate reject_null                35.1 0.298 0.546</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with abbreviated variable name ¹​pct_bias_to_change_inference</span></span>
 <span class="r-in"><span><span class="fu">konfound</span><span class="op">(</span><span class="va">m1</span>, <span class="va">wt</span>, to_return <span class="op">=</span> <span class="st">"table"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dependent variable is mpg </span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Unknown or uninitialised column: `itcv`.</span>
@@ -168,7 +168,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   term        estimate std.error statistic p.value   itcv impact</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> (Intercept)   37.2       1.60      23.3    0     <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> wt            -<span style="color: #BB0000;">3.88</span>      0.633     -<span style="color: #BB0000;">6.13</span>   0      0.625 <span style="color: #BB0000;">NA</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> wt            -<span style="color: #BB0000;">3.88</span>      0.633     -<span style="color: #BB0000;">6.13</span>   0      0.626 <span style="color: #BB0000;">NA</span>    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hp            -<span style="color: #BB0000;">0.032</span>     0.009     -<span style="color: #BB0000;">3.52</span>   0.001 <span style="color: #BB0000;">NA</span>      0.511</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># using glm() for non-linear models</span></span></span>
@@ -184,7 +184,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note that for a non-linear model, impact threshold should not be interpreted.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Note that this is only an approximation. For exact results in terms of the number of cases that must be switched from treatment success to treatment failure to invalidate the inference see: https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> If a dichotomous independent variable is used, consider using the 2X2 table approach enabled with the argument two_by_two = TRUE</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'object' in selecting a method for function 'summary': object 'd' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(model[["call"]][["data"]], env):</span> object 'd' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># using lme4 for mixed effects (or multi-level) models</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"lme4"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -195,7 +195,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: lme4</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Matrix</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  84.825 % of the estimate would have to be due to bias. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  84.826 % of the estimate would have to be due to bias. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is based on a threshold of 1.588 for statistical significance (alpha = 0.05).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate an inference,  137  observations would have to be replaced with cases</span>
@@ -212,27 +212,28 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">condition</span>, data <span class="op">=</span> <span class="va">binary_dummy_data</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">konfound</span><span class="op">(</span><span class="va">m4</span>, <span class="va">condition</span>, two_by_two <span class="op">=</span> <span class="cn">TRUE</span>, n_treat <span class="op">=</span> <span class="fl">55</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>2 arguments not used by format 'and a t-ratio of %.3f.'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Conclusion:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">User-entered Table:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Fail Success</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control     36      16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Treatment   18      37</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Note: Values have been rounded to the nearest integer.This may cause a little change to the estimated effect for the Implied Table.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note: Values have been rounded to the nearest integer.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This may cause a little change to the estimated effect for the Implied Table.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference, you would need to replace 15 treatment success cases</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> with cases for which the probability of failure in the control group applies (RIR = 15).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to transferring 10 cases from treatment success to treatment failure,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  as shown, from the Implied Table to the Transfer Table.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> as shown, from the Implied Table to the Transfer Table.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Transfer Table:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Fail Success</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control     36      16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Treatment   28      27</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> For the Implied Table, we have an estimate of 1.531, with a SE of 0.416 and a t-ratio of 3.684.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> For the Transfer Table, we have an estimate of 0.775, with a SE of 0.404 and a t-ratio of 1.918.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> and a t-ratio of 1.531.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">RIR:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
@@ -251,7 +252,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

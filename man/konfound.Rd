@@ -2,7 +2,7 @@
 % Please edit documentation in R/konfound.R
 \name{konfound}
 \alias{konfound}
-\title{Konfound Analysis for Various Model Types}
+\title{Perform sensitivity analysis on fitted models}
 \usage{
 konfound(
   model_object,
@@ -11,6 +11,7 @@ konfound(
   tails = 2,
   index = "RIR",
   to_return = "print",
+  test_all = FALSE,
   two_by_two = FALSE,
   n_treat = NULL,
   switch_trm = TRUE,
@@ -18,44 +19,39 @@ konfound(
 )
 }
 \arguments{
-\item{model_object}{A model object produced by `lm`, `glm`, or `lme4::lmer`.}
+\item{model_object}{output from a model (currently works for: lm)}
 
-\item{tested_variable}{Variable associated with the coefficient to be tested.}
+\item{tested_variable}{Variable associated with the unstandardized beta coefficient to be tested}
 
-\item{alpha}{Significance level for hypothesis testing.}
+\item{alpha}{probability of rejecting the null hypothesis (defaults to 0.05)}
 
-\item{tails}{Number of tails for the test (1 or 2).}
+\item{tails}{integer whether hypothesis testing is one-tailed (1) or two-tailed (2; defaults to 2)}
 
-\item{index}{Type of sensitivity analysis ('RIR' by default).}
+\item{index}{whether output is RIR or IT (impact threshold); defaults to "RIR"}
 
-\item{to_return}{Type of output to return ('print', 'raw_output', 'table').}
+\item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
 
-\item{two_by_two}{Boolean; if `TRUE`, uses a 2x2 table approach 
-for `glm` dichotomous variables.}
+\item{test_all}{whether to carry out the sensitivity test for all of the coefficients (defaults to FALSE)}
 
-\item{n_treat}{Number of treatment cases 
-(used only if `two_by_two` is `TRUE`).}
+\item{two_by_two}{whether or not the tested variable is a dichotomous variable in a GLM; if so, the 2X2 table approach is used; only works for single variables at present (so test_all = TRUE will return an error)}
 
-\item{switch_trm}{Boolean; switch treatment and control in the analysis.}
+\item{n_treat}{the number of cases associated with the treatment condition; applicable only when model_type = "logistic"}
 
-\item{replace}{Replacement method for treatment cases ('control' by default).}
+\item{switch_trm}{whether to switch the treatment and control cases; defaults to FALSE; applicable only when model_type = "logistic"}
+
+\item{replace}{whether using entire sample or the control group to calculate the base rate; default is the entire sample}
 }
 \value{
-Depending on `to_return`, prints the result, returns a raw output, 
-or a summary table.
+prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
 }
 \description{
-Performs sensitivity analysis on fitted models including 
-linear models (`lm`), generalized linear models (`glm`), 
-and linear mixed-effects models (`lmerMod`).
-It calculates the amount of bias required to invalidate or 
-sustain an inference,and the impact of an omitted variable 
-necessary to affect the inference.
+For fitted models, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient. Currently works for: models created with lm() (linear models).
 }
 \examples{
 # using lm() for linear models
 m1 <- lm(mpg ~ wt + hp, data = mtcars)
 konfound(m1, wt)
+konfound(m1, wt, test_all = TRUE)
 konfound(m1, wt, to_return = "table")
 
 # using glm() for non-linear models

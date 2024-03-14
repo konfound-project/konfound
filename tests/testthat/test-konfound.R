@@ -19,7 +19,7 @@ test_that("konfound works for glm, 2x2 model", {
     m4 <- glm(outcome ~ condition, data = binary_dummy_data, family = binomial(link = "logit"))
     output4 <- konfound(m4, condition, two_by_two = TRUE, n_treat = 55, to_return = "raw_output")
     expect_equal(output4$RIR_primary, 15)
-
+    
     m4 <- glm(outcome ~ condition, data = binary_dummy_data, family = binomial(link = "logit"))
     output4_print <- capture.output(konfound(m4, condition, two_by_two = TRUE, n_treat = 55, to_return = "print"))
     expect_true(length(output4_print) > 0)

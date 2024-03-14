@@ -2,7 +2,7 @@
 % Please edit documentation in R/tkonfound_fig.R
 \name{tkonfound_fig}
 \alias{tkonfound_fig}
-\title{Draw Figures for Change in Effect Size in 2x2 Tables}
+\title{Draw figures for change in effect size as a function of switching or replacing outcomes}
 \usage{
 tkonfound_fig(
   a,
@@ -10,38 +10,40 @@ tkonfound_fig(
   c,
   d,
   thr_p = 0.05,
-  switch_trm = TRUE,
+  switch_trm = T,
   test = "fisher",
   replace = "control"
 )
 }
 \arguments{
-\item{a}{Number of cases in the control group with unsuccessful outcomes.}
+\item{a}{cell is the number of cases in the control group showing unsuccessful results}
 
-\item{b}{Number of cases in the control group with successful outcomes.}
+\item{b}{cell is the number of cases in the control group showing successful results}
 
-\item{c}{Number of cases in the treatment group with unsuccessful outcomes.}
+\item{c}{cell is the number of cases in the treatment group showing unsuccessful results}
 
-\item{d}{Number of cases in the treatment group with successful outcomes.}
+\item{d}{cell is the number of cases in the treatment group showing successful results}
 
-\item{thr_p}{P-value threshold for statistical significance, default is 0.05.}
+\item{thr_p}{the p-value threshold used to evaluate statistical significance, with the default of 0.05}
 
-\item{switch_trm}{Whether to switch the two cells in the treatment or 
-control row, default is TRUE (treatment row).}
+\item{switch_trm}{whether switching the two cells in the treatment row or the two cells in the control row, with the default of the treatment row}
 
-\item{test}{Type of statistical test used, either "Fisher's Exact Test"
-(default) or "Chi-square test".}
+\item{test}{whether using Fisher's Exact Test (default) or chi-square test}
 
-\item{replace}{Indicates whether to use the entire sample or just the control
-group for calculating the base rate, default is "control".}
+\item{replace}{whether using entire sample or the control group to calculate the base rate, with the default of the entire sample}
 }
 \value{
-Returns two plots showing the effect of hypothetical case switches 
-        on the effect size in a 2x2 table.
+prints 2 figures for how number of hypothetical cases switched changes the effect size
 }
 \description{
-This function generates plots illustrating how the change in effect size 
-is influenced by switching or replacing outcomes in a 2x2 table. It produces
-two plots: one showing all possibilities (switching) and another zoomed in 
-the area for positive RIR (Relative Impact Ratio).
+This function returns two plots for change in effect size as a function of switching or replacing outcomes, one for all possibilities (switching), another zoomed in the area for positive RIR
+}
+\examples{
+# using tkonfound_fig for a study where 2 by 2 table is (35, 17, 17, 38)
+tkonfound_fig(35, 17, 17, 38)
+tkonfound_fig(35, 17, 17, 38, thr_p = 0.01)
+tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = FALSE)
+tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq")
+tkonfound_fig(35, 17, 17, 38, thr_p = 0.01, switch_trm = TRUE, test = "chisq", replace = "control")
+
 }

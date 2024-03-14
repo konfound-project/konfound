@@ -1,6 +1,4 @@
 # to evaluate whether we are moving cases to invalidate or sustain the inference
-#' @importFrom stats qt
-
 isinvalidate <- function(thr_t, ob_t) {
   if ((0 < thr_t && thr_t < ob_t) || (ob_t < thr_t && thr_t < 0)) {
     x <- TRUE
@@ -13,9 +11,9 @@ isinvalidate <- function(thr_t, ob_t) {
 # to evaluate what kind of switches we need - increase or decrease the odds ratio
 isdcroddsratio <- function(thr_t, ob_t) {
   if (thr_t < ob_t) {
-    x <- TRUE
+    x <- T
   } else {
-    x <- FALSE
+    x <- F
   }
   return(x)
 }
@@ -317,25 +315,13 @@ get_pi <- function(odds_ratio, std_err, n_obs, n_trm) {
   return(x)
 }
 
-#' Perform a Chi-Square Test
-#'
-#' @description
-#' `chisq_p` calculates the p-value for a chi-square test given a contingency table.
-#'
-#' @param a Frequency count for row 1, column 1.
-#' @param b Frequency count for row 1, column 2.
-#' @param c Frequency count for row 2, column 1.
-#' @param d Frequency count for row 2, column 2.
-#'
-#' @return P-value from the chi-square test.
-#' @importFrom stats chisq.test
+# get p value for chi-square test 
 chisq_p <- function(a, b, c, d){
   table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
   p <- chisq.test(table,correct = FALSE)$p.value
   return(p)
 }
 
-#' @importFrom stats fisher.test
 # get p value for exact fisher p test
 fisher_p <- function(a, b, c, d){
   table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
@@ -357,7 +343,7 @@ fisher_oddsratio <- function(a, b, c, d){
   return(value)
 }
 
-getswitch_chisq <- function(a, b, c, d, thr_p = 0.05, switch_trm = TRUE){
+getswitch_chisq <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
 odds_ratio <- a*d/(b*c)
 n_cnt <- a+b
 n_trm <- c+d
@@ -684,18 +670,16 @@ if (allnotenough) {
 
 total_switch <- final + allnotenough*final_extra
 
-result <- list(final_switch = final, User_enter_value = table_start, 
-               Transfer_Table = table_final, 
+result <- list(final_switch = final, User_enter_value = table_start, Transfer_Table = table_final, 
                p_final = p_final, chisq_final = chisq_final,
-               needtworows = allnotenough, taylor_pred = taylor_pred,
+               needtworows=allnotenough, taylor_pred = taylor_pred,
                perc_bias_pred = perc_bias_pred, final_extra = final_extra, 
-               dcroddsratio_ob = dcroddsratio_ob, total_switch = total_switch, 
-               isinvalidate_ob = isinvalidate_ob)
+               dcroddsratio_ob = dcroddsratio_ob, total_switch = total_switch, isinvalidate_ob = isinvalidate_ob)
 
 return(result)
 }
 
-getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = TRUE){
+getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = T){
   if (a > 0 & b > 0 & c > 0 & d > 0){
     odds_ratio <- fisher_oddsratio(a, b, c, d)
   } else {
@@ -1044,44 +1028,9 @@ getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = TRUE){
   
   result <- list(final_switch = final, User_enter_value = table_start, Transfer_Table = table_final, 
                  p_final = p_final, fisher_final = fisher_final,
-                 needtworows = allnotenough, taylor_pred = taylor_pred,
+                 needtworows=allnotenough, taylor_pred = taylor_pred,
                  perc_bias_pred = perc_bias_pred, final_extra = final_extra, 
                  dcroddsratio_ob = dcroddsratio_ob, total_switch = total_switch, isinvalidate_ob = isinvalidate_ob)
   
   return(result)
 }
-
-# calculate min se possible 
-# updated approach to deal with imaginary
-cal_minse <- function(n_obs, n_treat, odds_ratio) {
-    minse <- sqrt((4 * n_obs + 
-                       sqrt(16 * n_obs^2 + 4 * n_treat * (n_obs - n_treat) * 
-                                ((4 + 4 * odds_ratio^2) / odds_ratio - 7.999999)))/
-                      (2 * n_treat * (n_obs - n_treat)))
-    return(minse)
-}
-
-# calculate thr_t
-cal_thr_t <- function(est_eff, alpha, tails, n_obs, n_covariates) {
-    if (est_eff < 0) {
-        thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3) * -1
-    } else {
-        thr_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 3)
-    }
-    return(thr_t)
-}
-
-# check starting table 
-# see any cell with <5 cases or negative or nan cases
-check_starting_table <- function(n_cnt, n_treat, a, b, c, d){
-    check <- TRUE
-    if (!(n_cnt >= a && a >= 5 && 
-          n_cnt >= b && b >= 5 && 
-          n_treat >= c && c >= 5 && 
-          n_treat >= d && d >= 5)
-        || is.nan(a) || is.nan(b) || is.nan(c) || is.nan(d)) {
-        check <- FALSE
-    } 
-    return(check)
-}
-
