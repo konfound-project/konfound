@@ -1,7 +1,8 @@
 #' Example data for the mkonfound function
 #'
 #' A dataset containing t and df values from example studies from Educational Evaluation
-#' and Policy Analysis (as detailed in Frank et al., 2013): https://drive.google.com/file/d/1aGhxGjvMvEPVAgOA8rrxvA97uUO5TTMe/view
+#' and Policy Analysis (as detailed in Frank et al., 2013): 
+#' https://drive.google.com/file/d/1aGhxGjvMvEPVAgOA8rrxvA97uUO5TTMe/view
 #'
 #' @format A data frame with 30 rows and 2 variables:
 #' \describe{

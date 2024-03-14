@@ -1,3 +1,10 @@
+# konfound 0.5.0
+
+* edits in response to JOSS feedback, specifically:
+    * improved testing suite
+    * removal of test_all = TRUE to deal with high cyclomatic complexity
+    * improvement of coding style to be consistent and in accordance with good practice
+
 # konfound 0.4.0
 
 * major updates in advance of initial submission to the R Journal

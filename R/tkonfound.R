@@ -1,9 +1,38 @@
+#' Perform Sensitivity Analysis on 2x2 Tables
+#'
+#' This function performs a sensitivity analysis on a 2x2 contingency table.
+#' It calculates the number of cases that need to be replaced to invalidate
+#' or sustain the statistical inference. The function also allows switching
+#' between treatment success and failure or control success and failure
+#' based on the provided parameters.
+#'
+#' @param a Number of unsuccessful cases in the control group.
+#' @param b Number of successful cases in the control group.
+#' @param c Number of unsuccessful cases in the treatment group.
+#' @param d Number of successful cases in the treatment group.
+#' @param alpha Significance level for the statistical test, default is 0.05.
+#' @param switch_trm Boolean indicating whether to switch treatment row cells,
+#'        default is TRUE.
+#' @param test Type of statistical test to use, either "fisher" 
+#' (default) or "chisq".
+#' @param replace Indicates whether to use the entire sample or the control 
+#' group for base rate calculation, default is "control".
+#' @param to_return Type of output to return, either "raw_output" or "print".
+#'
+#' @importFrom crayon bold underline
+#'
+#' @return Returns detailed information about the sensitivity analysis,
+#'         including the number of cases to be replaced (RIR), user-entered
+#'         table, transfer table, and conclusions.
+#'
+#' @export
 tkonfound <- function(a, b, c, d, 
                       alpha = 0.05, 
-                      switch_trm = T, 
+                      switch_trm = TRUE, 
                       test = "fisher", 
                       replace = "control", 
                       to_return = to_return){
+
   # a <- 35
   # b <- 17
   # c <- 17
@@ -106,29 +135,26 @@ tkonfound <- function(a, b, c, d,
       ## because denominator is tricky 
       RIR_pi <- NA
       final_extra <- solution$final_extra
+
     if (switch_trm && dcroddsratio_ob) {
-      transferway_extra <- "control failure to control success"
-      RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") + 
-        ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
-      RIRway_extra <- "control failure"
+        transferway <- "treatment success to treatment failure"
+        RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
+        RIRway <- "treatment success"
     }
     if (switch_trm && !dcroddsratio_ob) {
-      transferway_extra <- "control success to control failure"
-      RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
-      RIRway_extra <- "control success"
+        transferway <- "treatment failure to treatment success"
+        RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
+        RIRway <- "treatment failure"
     }
     if (!switch_trm && dcroddsratio_ob) {
-      transferway_extra <- "treatment success to treatment failure"
-      RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
-      RIRway_extra <- "treatment success"
+        transferway <- "control failure to control success"
+        RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
+        RIRway <- "control failure"
     }
     if (!switch_trm && !dcroddsratio_ob) {
-      transferway_extra <- "treatment failure to treatment success"
-      RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
-      RIRway_extra <- "treatment failure"
+        transferway <- "control success to control failure"
+        RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
+        RIRway <- "control success"
     }
   }
   
@@ -142,14 +168,34 @@ tkonfound <- function(a, b, c, d,
     conclusion1 <- paste0(
       change, sprintf("one would need to replace %d ", RIR), RIRway)
     
-    if (replace == "control") {
-      conclusion1b <- paste0(
-        sprintf("cases for which the probability of failure in the control group applies (RIR = %d). ", RIR))
-    } else {
-      conclusion1b <- paste0(
-        sprintf("cases for which the probability of failure in the entire group applies (RIR = %d). ", RIR))    
+    if (allnotenough) {
+        if (switch_trm && dcroddsratio_ob) {
+            transferway_extra <- "control failure to control success"
+            RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") + 
+                ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
+            RIRway_extra <- "control failure"
+        }
+        if (switch_trm && !dcroddsratio_ob) {
+            transferway_extra <- "control success to control failure"
+            RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
+                ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
+            RIRway_extra <- "control success"
+        }
+        if (!switch_trm && dcroddsratio_ob) {
+            transferway_extra <- "treatment success to treatment failure"
+            RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
+                ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
+            RIRway_extra <- "treatment success"
+        }
+        if (!switch_trm && !dcroddsratio_ob) {
+            transferway_extra <- "treatment failure to treatment success"
+            RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
+                ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
+            RIRway_extra <- "treatment failure"
+        }
     }
     
+
     conclusion1c <- paste0(
       sprintf("This is equivalent to transferring %d", final), 
       " cases from ", transferway, "."
@@ -164,22 +210,47 @@ tkonfound <- function(a, b, c, d,
       conclusion1b <- paste0(
         sprintf("cases for which the probability of failure in the control group applies (RIR = %d). ", RIR))
     } else {
-      conclusion1b <- paste0(
-        sprintf("cases for which the probability of failure in the entire group applies (RIR = %d). ", RIR))    
-      }
+        change <- "To sustain an inference, "
+    } 
     
-    conclusion1c <- paste0(
-      sprintf("This is equivalent to transferring %d", final), 
-      " case from ", transferway, ".")
-  }
-  
-  if (allnotenough){
-    conclusion1 <- paste(
-      change, c("only transferring cases from" ), transferway,
-      sprintf(" is not enough. We also need to transfer %d cases from ", final_extra))
+    if (!allnotenough & final > 1) {
+        conclusion1 <- paste0(
+            change, sprintf("you would need to replace %d ", RIR), RIRway)
+        
+        if (replace == "control") {
+            conclusion1b <- paste0(
+                sprintf(" cases for which the probability of failure in 
+                        the control group applies (RIR = %d). ", RIR))
+        } else {
+            conclusion1b <- paste0(
+                sprintf(" cases for which the probability of failure in 
+                        the entire group applies (RIR = %d). ", RIR))    
+        }
+        
+        conclusion1c <- paste0(
+            sprintf("This is equivalent to transferring %d ", final), 
+            " cases from ", transferway, "."
+        )
+    }
     
-    conclusion1b <- paste0(
-      transferway_extra, c("as shown, from the User-entered Table to the Transfer Table."))
+    if (!allnotenough & final == 1) {
+        conclusion1 <- paste0(
+            change, sprintf("you would need to replace %d ", RIR), RIRway)
+        
+        if (replace == "control") {
+            conclusion1b <- paste0(
+                sprintf(" cases for which the probability of failure in 
+                        the control group applies (RIR = %d). ", RIR))
+        } else {
+            conclusion1b <- paste0(
+                sprintf(" cases for which the probability of failure in 
+                        the entire group applies (RIR = %d). ", RIR))    
+        }
+        
+        conclusion1c <- paste0(
+            sprintf("This is equivalent to transferring %d", final), 
+            " case from ", transferway, ".")
+    }
     
     conclusion1c <- paste0(sprintf(" This means we need to replace %d of ", RIR), RIRway, 
     sprintf( "with null hypothesis cases; and replace %d ", RIR_extra), RIRway_extra, 
@@ -242,51 +313,70 @@ tkonfound <- function(a, b, c, d,
 
     return(result)
     
-  } else  if (to_return == "print") {
+    info1 <- "This function calculates the number of cases that would have to be replaced "
+    info2 <- "with no effect cases (RIR) to invalidate an inference made about the association "
+    info3 <- "between the rows and columns in a 2x2 table. "
+    info4 <- "One can also interpret this as switches from one cell to another, such as from "
+    info5 <- "the treatment success cell to the treatment failure cell. "
     
-    cat(crayon::bold("Background Information:"))
-    cat("\n")
-    cat(info1)
-    cat("\n")
-    cat(info2)
-    cat("\n")
-    cat(info3)
-    cat("\n")
-    cat(info4)
-    cat("\n")
-    cat(info5)
-    cat("\n")
-    cat("\n")
-    cat(crayon::bold("Conclusion:"))
-    cat("\n")
-    cat(conclusion1)
-    cat("\n")
-    cat(conclusion1b)
-    cat("\n")
-    cat(conclusion1c)
-    cat("\n")
-    cat(conclusion2)
-    cat("\n")
-    cat("\n")
-    cat(crayon::underline("User-entered Table:"))
-    cat("\n")
-    print(table_start)
-    cat("\n")
-    cat("\n")
-    cat(conclusion3)
-    cat("\n")
-    cat(crayon::underline("Transfer Table:"))
-    cat("\n")
-    print(table_final)
-    cat("\n")
-    cat(crayon::bold("RIR:"))
-    cat("\n")
-    cat("RIR =", RIR)
-    cat("\n")
+    if (to_return == "raw_output") {
+        
+        result <- list(info1,
+                       info2,
+                       info3,
+                       conclusion1,
+                       conclusion1b,
+                       conclusion1c,
+                       User_enter_value = table_start, 
+                       Transfer_Table = table_final,
+                       conclusion2, 
+                       conclusion3,
+                       RIR = RIR)
+        
+        return(result)
+        
+    } else  if (to_return == "print") {
+        
+        cat(crayon::bold("Background Information:"))
+        cat("\n")
+        cat(info1)
+        cat("\n")
+        cat(info2)
+        cat("\n")
+        cat(info3)
+        cat("\n")
+        cat(info4)
+        cat("\n")
+        cat(info5)
+        cat("\n")
+        cat("\n")
+        cat(crayon::bold("Conclusion:"))
+        cat("\n")
+        cat(conclusion1)
+        cat("\n")
+        cat(conclusion1b)
+        cat("\n")
+        cat(conclusion1c)
+        cat("\n")
+        cat(conclusion2)
+        cat("\n")
+        cat("\n")
+        cat(crayon::underline("User-entered Table:"))
+        cat("\n")
+        print(table_start)
+        cat("\n")
+        cat("\n")
+        cat(conclusion3)
+        cat("\n")
+        cat(crayon::underline("Transfer Table:"))
+        cat("\n")
+        print(table_final)
+        cat("\n")
+        cat(crayon::bold("RIR:"))
+        cat("\n")
+        cat("RIR =", RIR)
+        cat("\n")
+        
+    }
     
-  }
-  
 }
-
-
-

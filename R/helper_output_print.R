@@ -64,19 +64,23 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat(paste0("of ", round(beta_threshhold, 3), " (RIR = ", round(recase, 3), ").\n"))
       cat("\n")
     } else if (est_eff == beta_threshhold) {
+
       warning("The coefficient is exactly equal to the threshold.\n")
     }
  
    cat("See Frank et al. (2013) for a description of the method.")
     cat("\n")
     cat("\n")
-    cat(crayon::underline("Citation:"), "Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).")
+    cat(crayon::underline("Citation:"), 
+        "Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).")
     cat("\n")
     cat("What would it take to change an inference?")
     cat("\n")
-    cat("Using Rubin's causal model to interpret the robustness of causal inferences.")
+    cat("Using Rubin's causal model to interpret the 
+        robustness of causal inferences.")
     cat("\n")
-    cat(crayon::italic("Education, Evaluation and Policy Analysis, 35"), "437-460.")
+    cat(crayon::italic("Education, Evaluation and 
+                       Policy Analysis, 35"), "437-460.")
     cat("\n")
     cat("\n")
     cat("Accuracy of results increases with the number of decimals reported.")
@@ -105,7 +109,8 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat(paste0("based on a threshold of ", round(critical_r, 3), " for statistical significance (alpha = ", alpha, ").\n"))
       cat("\n")
-      cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ") 
+      cat("Correspondingly the impact of an omitted variable
+          (as defined in Frank 2000) must be ") 
       cat("\n")
       cat(round(r_con, 3), " X ", round(r_con, 3), " = ", round(r_con^2, 3), " to invalidate an inference for a null hypothesis of 0 effect.\n", sep = "")
     } else if (abs(obs_r) > abs(critical_r) & obs_r < 0) {
@@ -121,7 +126,8 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat("statistical significance (alpha = ", alpha, ").\n", sep = "")
       cat("\n")
-      cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ") 
+      cat("Correspondingly the impact of an omitted variable 
+          (as defined in Frank 2000) must be ") 
       cat("\n")
       cat(-round(r_con, 3), " X ", round(r_con, 3), " = ", -round(r_con^2, 3), " to invalidate an inference for a null hypothesis of 0 effect.\n", sep = "")
     } else if (abs(obs_r) < abs(critical_r) & obs_r > 0) {
@@ -137,7 +143,8 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat("statistical significance (alpha = ", alpha, ").\n", sep = "")
       cat("\n")
-      cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ")
+      cat("Correspondingly the impact of an omitted variable 
+          (as defined in Frank 2000) must be ")
       cat("\n")
       cat(-round(r_con, 3), " X ", round(r_con, 3), " = ", -round(r_con^2, 3), " to sustain an inference for a null hypothesis of 0 effect.\n", sep = "")
     } else if (abs(obs_r) < abs(critical_r) & obs_r < 0) {
@@ -151,7 +158,8 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat(paste0("based on a threshold of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n"))
       cat("\n")
-      cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ")
+      cat("Correspondingly the impact of an omitted variable 
+          (as defined in Frank 2000) must be ")
       cat("\n")
       cat(round(r_con, 3), " X ", round(r_con, 3), " = ", round(r_con^2, 3), " to sustain an inference for a null hypothesis of 0 effect.\n", sep = "")
     } else if (obs_r == critical_r) {
@@ -190,4 +198,3 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
   }
     
 }
-

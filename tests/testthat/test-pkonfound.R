@@ -74,6 +74,7 @@ test_that("PSE and COE work via pkonfound", {
     expect_equal(output4$delta_exact, tolerance = .001, 1.309) # COP - delta exact
     
     expect_equal(output5$`correlation between X and CV conditional on Z`, tolerance = .001, 0.248) # PSE
+
     expect_equal(output5$`correlation between Y and CV conditional on Z`, tolerance = .001, 0.372) # PSE
     expect_equal(output5$`correlation between X and CV`, tolerance = .001, 0.214) # PSE
     expect_equal(output5$`correlation between Y and CV`, tolerance = .001, 0.313) # PSE

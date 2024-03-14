@@ -1,22 +1,7 @@
 # helpers for the core sensitivity analysis function
 
 create_konfound_class <- function(x) {
-  structure(x, class = "konfound")
-}
-
-#' Concise summary of konfound output
-#' @details Prints a concise summary of konfound output with multiple types of data specified in the to_return argument
-#' @param object A `konfound` object
-#' @param ... Additional arguments
-#' @export
-
-summary.konfound <- function(object, ...) {
-  cat("Created", length(object), "forms of output. To access type: \n")
-  cat("\n")
-
-  for (name in names(object)) {
-    cat(rlang::expr_text(substitute(object)), "$", name, "\n", sep = "")
-  }
+    structure(x, class = "konfound")
 }
 
 # Main function to test sensitivity to be wrapped with pkonfound(), konfound(), and mkonfound()
@@ -268,4 +253,5 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
   } else {
     stop("to_return must be set to 'raw_output', 'print', 'table', 'thresh_plot', or 'corr_plot' or some combination thereof")
   }
+
 }
