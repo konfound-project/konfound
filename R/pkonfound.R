@@ -89,7 +89,7 @@
                       to_return = "print") {
   if ("table" %in% to_return) stop("a table can only be 
                                    output when using konfound")
-  
+     
    if (index == "COP") {
      
      out <- test_cop(
