@@ -163,7 +163,7 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
   itcv <- signITCV * abs(act_r - critical_r) / (1 + mp * abs(critical_r))
   
   # finding correlation of confound to invalidate / sustain inference
-  r_con <- round(sqrt(abs(itcv)), 3)
+  r_con <- sqrt(abs(itcv))
 
   ## calculate the unconditional ITCV if user inputs sdx, sdy and R2
   if (!is.na(sdx) & !is.na(sdy) & !is.na(R2) & (n_covariates > 0)) {
