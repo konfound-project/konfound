@@ -1,7 +1,45 @@
 # Function to output printed text
 
-output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index) {
-  if (index == "RIR"){ 
+#' Output printed text with formatting
+#'
+#' This function outputs printed text for various indices such as RIR
+#' (Robustness of Inference to Replacement)
+#' and IT (Impact Threshold for a Confounding Variable) with specific formatting
+#'  like bold, underline, and italic
+#' using functions from the crayon package. It handles different scenarios based
+#'  on the effect difference,
+#' beta threshold, and other parameters, providing formatted
+#' output for each case.
+#'
+#' @param eff_diff The difference in the effect size being evaluated.
+#' @param beta_threshhold The threshold value of beta, used for
+#' statistical significance determination.
+#' @param bias The percentage of the estimate that could be due to bias (optional).
+#' @param sustain The percentage of the estimate necessary to sustain an inference (optional).
+#' @param nu The hypothesized effect size used in replacement analysis.
+#' @param eff_thr TODO
+#' @param recase The number of cases that need to be replaced to change the inference.
+#' @param obs_r The observed correlation coefficient in the data.
+#' @param critical_r The critical correlation coefficient for statistical significance.
+#' @param r_con The correlation coefficient of an omitted variable with both the outcome and the predictor.
+#' @param itcv The impact threshold for a confounding variable.
+#' @param alpha The level of statistical significance.
+#' @param index A character string indicating the index for which the output is generated ('RIR' or 'IT').
+#' @importFrom crayon bold underline italic
+output_print <- function(est_eff,
+                         beta_threshhold,
+                         bias = NULL,
+                         sustain = NULL,
+                         nu,
+                         eff_thr,
+                         recase,
+                         obs_r,
+                         critical_r,
+                         r_con,
+                         itcv,
+                         alpha,
+                         index) {
+  if (index == "RIR"){
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
     if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
       cat("TO INVALIDATE:\n")
@@ -17,7 +55,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat(paste0("the inference one would expect to have to replace ", round(recase, 3), " (", round(bias, 3), "%) observations"))
       cat("\n")
       cat(paste0("with cases for which the treatment effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
-      cat("\n")    
+      cat("\n")
     } else if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
       cat("TO INVALIDATE:\n")
       cat("\n")
@@ -32,7 +70,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
       cat(paste0("the inference one would expect to have to replace ", round(recase, 3), " (", round(bias, 3), "%) observation"))
       cat("\n")
       cat(paste0("with cases for which the treatment effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
-      cat("\n") 
+      cat("\n")
     } else if ((abs(est_eff) < abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
       cat("TO SUSTAIN:\n", sep = "")
       cat("\n")
@@ -66,8 +104,7 @@ output_print <- function(est_eff, beta_threshhold, bias = NULL, sustain = NULL, 
     } else if (est_eff == beta_threshhold) {
       warning("The coefficient is exactly equal to the threshold.\n")
     }
- 
-   cat("See Frank et al. (2013) for a description of the method.")
+    cat("See Frank et al. (2013) for a description of the method.")
     cat("\n")
     cat("\n")
     cat(crayon::underline("Citation:"), "Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).")
@@ -89,8 +126,8 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
 } else {
     message("htmltools package is required")
 }
-   
-  } 
+
+  }
   if (index == "IT") { 
     cat(crayon::bold("Impact Threshold for a Confounding Variable:\n"))
     cat("\n")
@@ -125,7 +162,7 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
       cat("\n")
       cat(-round(r_con, 3), " X ", round(r_con, 3), " = ", -round(r_con^2, 3), " to invalidate an inference for a null hypothesis of 0 effect.\n", sep = "")
     } else if (abs(obs_r) < abs(critical_r) & obs_r > 0) {
-      cat("The maximum impact (in absolute value) of an omitted variable to") 
+      cat("The maximum impact (in absolute value) of an omitted variable to")
       cat("\n")
       cat("sustain an inference for a null hypothesis of 0 effect is based on")
       cat("\n")
@@ -161,8 +198,8 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     cat("For calculation of unconditional ITCV, request raw output. When using pkonfound(),")
     cat("\n")
     cat("additionally include the R2, sdx, and sdy as input.")
-    cat("\n")   
-    cat("\n")   
+    cat("\n")
+    cat("\n")
     cat("See Frank (2000) for a description of the method.")
     cat("\n")
     cat("\n")

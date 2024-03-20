@@ -4,7 +4,7 @@ author: "Joshua Rosenberg, Ran Xu, Qinyun Lin, and Ken Frank"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to Konfound}
+  %\VignetteIndexEntry{Introduction to konfound}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -72,21 +72,6 @@ pkonfound(.4, 2, 100, 3, to_return = "thresh_plot")
 pkonfound(.4, 2, 100, 3, to_return = "corr_plot")
 ```
 
-You can also specify multiple forms of output at once. 
-
-```{r}
-model_output <- pkonfound(2, .4, 200, 3, to_return = c("raw_output", "thresh_plot", "corr_plot"))
-summary(model_output)
-```
-
-When we type the name of the object, we see that we created three types of output that we can access as follows:
-
-```{r}
-model_output$raw_output
-model_output$thresh_plot
-model_output$corr_plot
-```
-
 Finally, you can return the raw output, for use in other analyses. 
 
 ```{r}
@@ -101,19 +86,19 @@ This function can be used with the values from a two-by-two table associated wit
 - `d` represents a successful treatment group outcome
 
 ```{r}
-pkonfound(a = 35, b = 17, c = 17, d = 38)
+# pkonfound(a = 35, b = 17, c = 17, d = 38)
 ```
 
 A table can also be passed to this function: 
 
 ```{r}
-my_table <- tibble::tribble(
-~unsuccess, ~success,
-35,         17,
-17,         38,
-)
-
-pkonfound(two_by_two_table = my_table)
+# my_table <- tibble::tribble(
+# ~unsuccess, ~success,
+# 35,         17,
+# 17,         38,
+# )
+# 
+# pkonfound(two_by_two_table = my_table)
 ```
 
 ## Use of konfound() for models fit in R
@@ -127,26 +112,6 @@ m1 <- lm(mpg ~ wt + hp + qsec, data = mtcars)
 m1
 
 konfound(m1, hp)
-```
-
-Like with `pkonfound()`, we can also output multiple forms of output at once with `konfound()`:
-
-```{r}
-konfound_output <- konfound(m1, hp, to_return = c("raw_output", "thresh_plot", "corr_plot"))
-summary(konfound_output)
-```
-
-Again, we can type each of those, i.e.:
-
-```{r}
-konfound_output$raw_output
-konfound_output$thresh_plot
-```
-
-We can also test all of the variables as predictors of interest:
-
-```{r}
-konfound(m1, wt, test_all = TRUE)
 ```
 
 Whereas this cannot be carried out with `pkonfound()`, with `konfound()` you can also return a table with some key output from the correlation-based approach.
@@ -180,8 +145,6 @@ m4 <- glm(outcome ~ condition, data = binary_dummy_data)
 konfound(m4, condition, two_by_two = TRUE)
 ```
 
-As with models fit with `lm()` (and use of `pkonfound()`), multiple forms of output can be specified with the `to_return` argument to `konfound()`, i.e. `konfound(m2, age, to_return = c("raw_output", "corr_plot", "thresh_plot"))`.
-
 **For mixed effects (or multi-level) models fit with the lmer() function from the lme4 package**
 
 `konfound` also works with models fit with the `lmer()` function from the package `lme4`, for mixed-effects or multi-level models. One challenge with carrying out sensitivity analysis for fixed effects in mixed effects models is calculating the correct denominator degrees of freedom for the t-test associated with the coefficients. This is not unique to sensitivity analysis, as, for example, `lmer()` does not report degrees of freedom (or p-values) for fixed effects predictors (see this information in the `lme4` FAQ [here](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have)). While it may be possible to determine the correct degrees of freedom for some models (i.e., models with relatively simple random effects structures), it is difficult to generalize this approach, and so in this package the Kenward-Roger approximation for the denominator degrees of freedom as implemented in the `pbkrtest` package (described in [Halekoh and Højsgaard, 2014](https://www.jstatsoft.org/htaccess.php?volume=59&type=i&issue=09&paper=true)).
@@ -200,31 +163,22 @@ if (requireNamespace("lme4")) {
 
 We can also use `konfound` to carry out sensitivity analysis as part of meta-analyses. For example, here, `d` represents output from a number (30 in this case) of past studies, read in a CSV file from a website:
 
-```{r, eval = FALSE}
-d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
-head(d)
-mkonfound(d, t, df)
+```{r, eval = TRUE}
+mkonfound_ex
+mkonfound(mkonfound_ex, t, df)
 ```
 
 We can also return a plot summarizing the percent bias needed to sustan or invalidate an inference across all of the past studies:
 
-```{r, eval = FALSE}
-mkonfound(d, t, df, return_plot = T)
+```{r, eval = TRUE}
+mkonfound(mkonfound_ex, t, df, return_plot = TRUE)
 ```
 
 # Other information
 
-### How to learn more about sensitivity analysis
-
-To learn more about sensitivity analysis, please visit:
-'/
-?˘* The [Introduction to konfound vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
-* The causal inference section of Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm#causal)
-* The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
-
 ### Feedback, issues, and feature requests
 
-`konfound` is actively under development as of January, 2018. We welcome feedback and requests for improvement. We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via email (see the DESCRIPTION file).
+`konfound` is actively under development as of January, 2018. We welcome feedback and requests for improvement. We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/konfound-project/konfound/issues)) though we also welcome questions or feedback via email (see the DESCRIPTION file).
 
 ### Code of Conduct
 

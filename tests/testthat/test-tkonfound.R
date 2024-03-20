@@ -39,9 +39,9 @@ test_that("tkonfound for two_by_two works for raw output", {
     output3 <- pkonfound(a = 35, b = 17, c = 17, d = 38, to_return = "raw_output")
     
     expect_equal(output3$RIR_primary, tolerance = .001, 14)
-    
+
     output3_null <- pkonfound(a = 5, b = 17, c = 17, d = 10, to_return = "raw_output")
-    
+
     expect_equal(output3_null$RIR_primary, tolerance = .001, 6)
     
     pkonfound_two_by_two <- capture.output(pkonfound(a = 35, b = 17, c = 17, d = 38, to_return = "print")) # printed output works

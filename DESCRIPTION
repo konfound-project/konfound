@@ -1,60 +1,69 @@
 Type: Package
 Package: konfound
 Title: Quantify the Robustness of Causal Inferences
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: c(
-    person(c("Joshua", "M"), "Rosenberg", role = c("aut", "cre"), email = "jmichaelrosenberg@gmail.com"),
-    person(c("Ran"), "Xu", role = "ctb", email = "ranxu@msu.edu"),
-    person(c("Qinyun"), "Lin", role = "ctb", email = "linqinyun1001@gmail.com"),
-    person(c("Spiro"), "Maroulis", role = "ctb", email = "Spiro.Maroulis@asu.edu"),
-    person(c("Kenneth", "A"), "Frank", role = "ctb", email = "kenfrank@msu.edu")
-    )
-Description: Statistical methods that quantify the conditions necessary to alter
-    inferences, also known as sensitivity analysis, are becoming increasingly
-    important to a variety of quantitative sciences. A series of recent works,
-    including Frank (2000) <doi:10.1177/0049124100029002001> and Frank et al.
-    (2013) <doi:10.3102/0162373713493129> extend previous sensitivity analyses
-    by considering the characteristics of omitted variables or unobserved cases
-    that would change an inference if such variables or cases were observed. These
-    analyses generate statements such as "an omitted variable would have to be
-    correlated at xx with the predictor of interest (e.g., treatment) and outcome
-    to invalidate an inference of a treatment effect". Or "one would have to replace
-    pp percent of the observed data with null hypothesis cases to invalidate the
-    inference". We implement these recent developments of sensitivity analysis and
-    provide modules to calculate these two robustness indices and generate such
-    statements in R. In particular, the functions konfound(), pkonfound() and 
-    mkonfound() allow users to calculate the robustness of inferences for a user's 
-    own model, a single published study and multiple studies respectively.
+    person(c("Joshua", "M"), "Rosenberg", , "jmrosen48@gmail.com", role = c("aut", "cre")),
+    person("Ran", "Xu", , "ranxu@msu.edu", role = "ctb"),
+    person("Qinyun", "Lin", , "linqinyun1001@gmail.com", role = "ctb"),
+    person("Spiro", "Maroulis", , "Spiro.Maroulis@asu.edu", role = "ctb"),
+    person("Sarah", "Narvaiz", , "snarvaiz@alum.utk.edu", role = "ctb"),
+    person(c("Kenneth", "A"), "Frank", , "kenfrank@msu.edu", role = "ctb"),
+    person("Wei", "Wang", , "wwang93@vols.utk.edu", role = "ctb")
+  )
+Description: Statistical methods that quantify the conditions necessary to
+    alter inferences, also known as sensitivity analysis, are becoming
+    increasingly important to a variety of quantitative sciences. A series
+    of recent works, including Frank (2000)
+    <doi:10.1177/0049124100029002001> and Frank et al.  (2013)
+    <doi:10.3102/0162373713493129> extend previous sensitivity analyses by
+    considering the characteristics of omitted variables or unobserved
+    cases that would change an inference if such variables or cases were
+    observed. These analyses generate statements such as "an omitted
+    variable would have to be correlated at xx with the predictor of
+    interest (e.g., treatment) and outcome to invalidate an inference of a
+    treatment effect". Or "one would have to replace pp percent of the
+    observed data with null hypothesis cases to invalidate the inference".
+    We implement these recent developments of sensitivity analysis and
+    provide modules to calculate these two robustness indices and generate
+    such statements in R. In particular, the functions konfound(),
+    pkonfound() and mkonfound() allow users to calculate the robustness of
+    inferences for a user's own model, a single published study and
+    multiple studies respectively.
 License: MIT + file LICENSE
+URL: https://github.com/konfound-project/konfound
+BugReports: https://github.com/konfound-project/konfound/issues
+Depends: 
+    R (>= 2.10)
 Imports: 
     broom,
     broom.mixed,
     crayon,
     dplyr,
     ggplot2,
-    mice,
+    lavaan,
     purrr,
     rlang,
     tidyr,
-    tibble,
-    lavaan
-Suggests: 
+    lme4 (>= 1.1-35.1),
     margins,
-    pbkrtest,
+    tibble,
+    ggrepel,
+    pbkrtest
+Suggests: 
+    covr,
     devtools,
     forcats,
     knitr,
-    lme4,
     rmarkdown,
+    mice,
     roxygen2,
     testthat,
-    ggrepel,
-    covr
-VignetteBuilder: knitr
+    Matrix (>= 1.6-2)
+VignetteBuilder: 
+    knitr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.1
-URL: https://github.com/jrosen48/konfound
-BugReports: https://github.com/jrosen48/konfound/issues
-Depends: 
-    R (>= 2.10)
+RoxygenNote: 7.2.3
+Roxygen: list(roclets = c("collate", "rd", "namespace", 
+              "doctest::dt_roclet"), packages = "doctest")
