@@ -11,13 +11,13 @@
 #' beta threshold, and other parameters, providing formatted
 #' output for each case.
 #'
-#' @param eff_diff The difference in the effect size being evaluated.
+#' @param est_eff The estimated effect.
 #' @param beta_threshhold The threshold value of beta, used for
 #' statistical significance determination.
 #' @param bias The percentage of the estimate that could be due to bias (optional).
 #' @param sustain The percentage of the estimate necessary to sustain an inference (optional).
 #' @param nu The hypothesized effect size used in replacement analysis.
-#' @param eff_thr TODO
+#' @param eff_thr Threshold for estimated effect. 
 #' @param recase The number of cases that need to be replaced to change the inference.
 #' @param obs_r The observed correlation coefficient in the data.
 #' @param critical_r The critical correlation coefficient for statistical significance.

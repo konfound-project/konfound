@@ -23,10 +23,11 @@ pkonfound(
   two_by_two_table = NULL,
   test = "fisher",
   replace = "control",
-  sdx,
-  sdy,
-  R2,
-  eff_thr = 0,
+  sdx = NA,
+  sdy = NA,
+  R2 = NA,
+  signsuppression = 0,
+  eff_thr = NA,
   FR2max,
   FR2max_multiplier = 1.3,
   to_return = "print"
@@ -67,13 +68,15 @@ pkonfound(
 
 \item{test}{whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test}
 
-\item{replace}{whether using entire sample or the control group to calculate the base rate; default is the control group}
+\item{replace}{whether using entire sample or the control group to calculate the base rate; default is the entire sample}
 
 \item{sdx}{the standard deviation of X}
 
 \item{sdy}{the standard deviation of Y}
 
 \item{R2}{the unadjusted,original R2 in the observed function}
+
+\item{signsuppression}{whether the threshold has the same sign of the estimated effect; default is same direction (0); specify 1 to be opposite}
 
 \item{eff_thr}{unstandardized coefficient threshold to change an inference}
 
@@ -94,7 +97,6 @@ For published studies, this command calculates (1) how much bias there must be i
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
-
 pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 
 pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
@@ -110,7 +112,7 @@ pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
 pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
  eff_thr = 0, FR2max = .8, index = "COP", to_return = "raw_output")
 # use pkonfound to calculate rxcv and rycv when preserving standard error
-pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1, 
+pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
 sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
 
 }

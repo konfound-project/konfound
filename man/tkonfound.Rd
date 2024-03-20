@@ -30,10 +30,10 @@ tkonfound(
 \item{switch_trm}{Boolean indicating whether to switch treatment row cells,
 default is TRUE.}
 
-\item{test}{Type of statistical test to use, either "fisher" 
+\item{test}{Type of statistical test to use, either "fisher"
 (default) or "chisq".}
 
-\item{replace}{Indicates whether to use the entire sample or the control 
+\item{replace}{Indicates whether to use the entire sample or the control
 group for base rate calculation, default is "control".}
 
 \item{to_return}{Type of output to return, either "raw_output" or "print".}

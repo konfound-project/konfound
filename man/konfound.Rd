@@ -30,10 +30,10 @@ konfound(
 
 \item{to_return}{Type of output to return ('print', 'raw_output', 'table').}
 
-\item{two_by_two}{Boolean; if `TRUE`, uses a 2x2 table approach 
+\item{two_by_two}{Boolean; if `TRUE`, uses a 2x2 table approach
 for `glm` dichotomous variables.}
 
-\item{n_treat}{Number of treatment cases 
+\item{n_treat}{Number of treatment cases
 (used only if `two_by_two` is `TRUE`).}
 
 \item{switch_trm}{Boolean; switch treatment and control in the analysis.}
@@ -41,15 +41,15 @@ for `glm` dichotomous variables.}
 \item{replace}{Replacement method for treatment cases ('control' by default).}
 }
 \value{
-Depending on `to_return`, prints the result, returns a raw output, 
+Depending on `to_return`, prints the result, returns a raw output,
 or a summary table.
 }
 \description{
-Performs sensitivity analysis on fitted models including 
-linear models (`lm`), generalized linear models (`glm`), 
+Performs sensitivity analysis on fitted models including
+linear models (`lm`), generalized linear models (`glm`),
 and linear mixed-effects models (`lmerMod`).
-It calculates the amount of bias required to invalidate or 
-sustain an inference,and the impact of an omitted variable 
+It calculates the amount of bias required to invalidate or
+sustain an inference,and the impact of an omitted variable
 necessary to affect the inference.
 }
 \examples{
