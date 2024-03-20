@@ -48,7 +48,7 @@ expect_output(pkonfound(2, .4, 100, 3), ".")
 
 ## PSE and COP
 
-test_that("PSE and COE work via pkonfound", {
+test_that("PSE and COP work via pkonfound", {
 
     output4 <- pkonfound(est_eff = -.125,
                          std_err = .050,
@@ -77,7 +77,8 @@ test_that("PSE and COE work via pkonfound", {
     expect_equal(output5$`correlation between Y and CV conditional on Z`, tolerance = .001, 0.372) # PSE
     expect_equal(output5$`correlation between X and CV`, tolerance = .001, 0.214) # PSE
     expect_equal(output5$`correlation between Y and CV`, tolerance = .001, 0.313) # PSE
-
+})
+    
 test_that("pkonfound creates the threshhold plot", {
     thresh_plot <- pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 
