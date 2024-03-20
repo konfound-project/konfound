@@ -204,10 +204,10 @@ test_that("pkonfound printed output works for a positive case", {
     expect_true(length(outputb) > 0)
 
     outputc <- capture.output(pkonfound(.01, .4, 100, 3, to_return = "print", index = "RIR"))
-    expect_true(length(outputa) > 0)
+    expect_true(length(outputc) > 0)
 
     outputd <- capture.output(pkonfound(.01, .4, 100, 3, to_return = "print", index = "IT"))
-    expect_true(length(outputb) > 0)
+    expect_true(length(outputd) > 0)
 })
 
 test_that("pkonfound printed output works for a negative case", {
