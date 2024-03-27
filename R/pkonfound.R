@@ -87,13 +87,16 @@
                       ## by default is zero
                       ## alternative is one
                       eff_thr = NA,
-                      FR2max,
+                      FR2max = 0,
                       FR2max_multiplier = 1.3,
                       to_return = "print") {
   if ("table" %in% to_return) stop("a table can only be
                                    output when using konfound")
   
    if (index == "COP") {
+     
+     # if user does not specify eff_thr then set default as 0 
+     if (is.na(eff_thr)) {eff_thr = 0}  
      
      out <- test_cop(
        est_eff = est_eff, # unstandardized
@@ -106,8 +109,10 @@
        eff_thr = eff_thr, # this is the unstandardized version
        FR2max_multiplier = FR2max_multiplier,
        FR2max = FR2max, # NOT the adjusted R2, should be the original R2
+       alpha = alpha, 
+       tails = tails, 
        to_return = to_return)
-     
+  
    } else if (index == "PSE") {
      
      out <- test_pse(
