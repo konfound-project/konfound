@@ -5,11 +5,12 @@
 \title{Output printed text with formatting}
 \usage{
 output_print(
-  eff_diff,
+  est_eff,
   beta_threshhold,
   bias = NULL,
   sustain = NULL,
   nu,
+  eff_thr,
   recase,
   obs_r,
   critical_r,
@@ -20,9 +21,9 @@ output_print(
 )
 }
 \arguments{
-\item{eff_diff}{The difference in the effect size being evaluated.}
+\item{est_eff}{The estimated effect.}
 
-\item{beta_threshhold}{The threshold value of beta, used for 
+\item{beta_threshhold}{The threshold value of beta, used for
 statistical significance determination.}
 
 \item{bias}{The percentage of the estimate that could be due to bias (optional).}
@@ -30,6 +31,8 @@ statistical significance determination.}
 \item{sustain}{The percentage of the estimate necessary to sustain an inference (optional).}
 
 \item{nu}{The hypothesized effect size used in replacement analysis.}
+
+\item{eff_thr}{Threshold for estimated effect.}
 
 \item{recase}{The number of cases that need to be replaced to change the inference.}
 
@@ -46,12 +49,12 @@ statistical significance determination.}
 \item{index}{A character string indicating the index for which the output is generated ('RIR' or 'IT').}
 }
 \description{
-This function outputs printed text for various indices such as RIR 
-(Robustness of Inference to Replacement) 
+This function outputs printed text for various indices such as RIR
+(Robustness of Inference to Replacement)
 and IT (Impact Threshold for a Confounding Variable) with specific formatting
  like bold, underline, and italic
 using functions from the crayon package. It handles different scenarios based
- on the effect difference, 
-beta threshold, and other parameters, providing formatted 
+ on the effect difference,
+beta threshold, and other parameters, providing formatted
 output for each case.
 }

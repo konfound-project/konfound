@@ -59,21 +59,25 @@ pkonfound(est_eff = 2,
           n_obs = 100, 
           n_covariates = 3)
 #> Robustness of Inference to Replacement (RIR):
-#> To invalidate an inference,  60.29 % of the estimate would have to be due to bias. 
-#> This is based on a threshold of 0.794 for statistical significance (alpha = 0.05).
+#> TO INVALIDATE:
 #> 
-#> To invalidate an inference,  60  observations would have to be replaced with cases
-#> for which the effect is 0 (RIR = 60).
+#> RIR = 60
+#> 
+#> The estimated effect is 2. To invalidate the inference of an effect using
+#> the threshold of 0.794 for statistical significance with alpha = 0.05, 60.295% of
+#> the (2) estimate would have to be due to bias. This implies that to invalidate
+#> the inference one would expect to have to replace 60 (60.295%) observations
+#> with cases for which the treatment effect is 0 (RIR = 60).
 #> 
 #> See Frank et al. (2013) for a description of the method.
 #> 
 #> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
 #> What would it take to change an inference?
-#> Using Rubin's causal model to interpret the 
-#>         robustness of causal inferences.
-#> Education, Evaluation and 
-#>                        Policy Analysis, 35 437-460.
-#> For other forms of output, run 
+#> Using Rubin's causal model to interpret the robustness of causal inferences.
+#> Education, Evaluation and Policy Analysis, 35 437-460.
+#> 
+#> Accuracy of results increases with the number of decimals reported.
+#> For other forms of output, run
 #>           ?pkonfound and inspect the to_return argument
 #> For models fit in R, consider use of konfound().
 ```
@@ -85,35 +89,35 @@ are the coefficients for a linear model fit with `lm()` using the
 built-in dataset `mtcars`:
 
 ``` r
-m1 <- lm(mpg ~ wt + hp, data = mtcars)
+m1 <- lm(mpg ~ wt + disp, data = mtcars)
 m1
 #> 
 #> Call:
-#> lm(formula = mpg ~ wt + hp, data = mtcars)
+#> lm(formula = mpg ~ wt + disp, data = mtcars)
 #> 
 #> Coefficients:
-#> (Intercept)           wt           hp  
-#>    37.22727     -3.87783     -0.03177
+#> (Intercept)           wt         disp  
+#>    34.96055     -3.35083     -0.01772
 summary(m1)
 #> 
 #> Call:
-#> lm(formula = mpg ~ wt + hp, data = mtcars)
+#> lm(formula = mpg ~ wt + disp, data = mtcars)
 #> 
 #> Residuals:
-#>    Min     1Q Median     3Q    Max 
-#> -3.941 -1.600 -0.182  1.050  5.854 
+#>     Min      1Q  Median      3Q     Max 
+#> -3.4087 -2.3243 -0.7683  1.7721  6.3484 
 #> 
 #> Coefficients:
 #>             Estimate Std. Error t value Pr(>|t|)    
-#> (Intercept) 37.22727    1.59879  23.285  < 2e-16 ***
-#> wt          -3.87783    0.63273  -6.129 1.12e-06 ***
-#> hp          -0.03177    0.00903  -3.519  0.00145 ** 
+#> (Intercept) 34.96055    2.16454  16.151 4.91e-16 ***
+#> wt          -3.35082    1.16413  -2.878  0.00743 ** 
+#> disp        -0.01773    0.00919  -1.929  0.06362 .  
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
-#> Residual standard error: 2.593 on 29 degrees of freedom
-#> Multiple R-squared:  0.8268, Adjusted R-squared:  0.8148 
-#> F-statistic: 69.21 on 2 and 29 DF,  p-value: 9.109e-12
+#> Residual standard error: 2.917 on 29 degrees of freedom
+#> Multiple R-squared:  0.7809, Adjusted R-squared:  0.7658 
+#> F-statistic: 51.69 on 2 and 29 DF,  p-value: 2.744e-10
 ```
 
 Sensitivity analysis for the effect for `wt` on `mpg` can be carried out
@@ -122,20 +126,24 @@ as follows, specifying the fitted model object:
 ``` r
 konfound(m1, wt)
 #> Robustness of Inference to Replacement (RIR):
-#> To invalidate an inference,  66.521 % of the estimate would have to be due to bias. 
-#> This is based on a threshold of -1.298 for statistical significance (alpha = 0.05).
+#> TO INVALIDATE:
 #> 
-#> To invalidate an inference,  21  observations would have to be replaced with cases
-#> for which the effect is 0 (RIR = 21).
+#> RIR = 9
+#> 
+#> The estimated effect is -3.351. To invalidate the inference of an effect using
+#> the threshold of -2.381 for statistical significance with alpha = 0.05, 28.946% of
+#> the (-3.351) estimate would have to be due to bias. This implies that to invalidate
+#> the inference one would expect to have to replace 9 (28.946%) observations
+#> with cases for which the treatment effect is 0 (RIR = 9).
 #> 
 #> See Frank et al. (2013) for a description of the method.
 #> 
 #> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
 #> What would it take to change an inference?
-#> Using Rubin's causal model to interpret the 
-#>         robustness of causal inferences.
-#> Education, Evaluation and 
-#>                        Policy Analysis, 35 437-460.
+#> Using Rubin's causal model to interpret the robustness of causal inferences.
+#> Education, Evaluation and Policy Analysis, 35 437-460.
+#> 
+#> Accuracy of results increases with the number of decimals reported.
 #> NULL
 ```
 

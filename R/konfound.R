@@ -1,10 +1,10 @@
 #' Konfound Analysis for Various Model Types
 #'
-#' Performs sensitivity analysis on fitted models including 
-#' linear models (`lm`), generalized linear models (`glm`), 
+#' Performs sensitivity analysis on fitted models including
+#' linear models (`lm`), generalized linear models (`glm`),
 #' and linear mixed-effects models (`lmerMod`).
-#' It calculates the amount of bias required to invalidate or 
-#' sustain an inference,and the impact of an omitted variable 
+#' It calculates the amount of bias required to invalidate or
+#' sustain an inference,and the impact of an omitted variable
 #' necessary to affect the inference.
 #'
 #' @param model_object A model object produced by `lm`, `glm`, or `lme4::lmer`.
@@ -13,13 +13,13 @@
 #' @param tails Number of tails for the test (1 or 2).
 #' @param index Type of sensitivity analysis ('RIR' by default).
 #' @param to_return Type of output to return ('print', 'raw_output', 'table').
-#' @param two_by_two Boolean; if `TRUE`, uses a 2x2 table approach 
+#' @param two_by_two Boolean; if `TRUE`, uses a 2x2 table approach
 #' for `glm` dichotomous variables.
-#' @param n_treat Number of treatment cases 
+#' @param n_treat Number of treatment cases
 #' (used only if `two_by_two` is `TRUE`).
 #' @param switch_trm Boolean; switch treatment and control in the analysis.
 #' @param replace Replacement method for treatment cases ('control' by default).
-#' @return Depending on `to_return`, prints the result, returns a raw output, 
+#' @return Depending on `to_return`, prints the result, returns a raw output,
 #' or a summary table.
 #' @importFrom rlang enquo quo_name
 #' @importFrom lme4 fixef lmer
@@ -69,13 +69,13 @@ konfound <- function(model_object,
   
   # Stop messages
   if (!(class(model_object)[1] %in% c("lm", "glm", "lmerMod"))) {
-    stop("konfound() is currently implemented for models estimated with 
+    stop("konfound() is currently implemented for models estimated with
          lm(), glm(), and lme4::lmer(); consider using pkonfound() instead")
   }
   
   # Dealing with non-standard evaluation
-  tested_variable_enquo <- rlang::enquo(tested_variable) 
-  # dealing with non-standard evaluation 
+  tested_variable_enquo <- rlang::enquo(tested_variable)
+  # dealing with non-standard evaluation
   #(so unquoted names for tested_variable can be used)
   tested_variable_string <- rlang::quo_name(tested_variable_enquo)
   
@@ -94,14 +94,9 @@ konfound <- function(model_object,
   }
   
   if (inherits(model_object, "glm") & two_by_two == FALSE) {
-    message("Note that for a non-linear model, 
-            impact threshold should not be interpreted.")
-    message("Note that this is only an approximation. For exact results 
-            in terms of the number of cases that must be switched from treatment 
-            success to treatment failure to invalidate the inference see: 
-            https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm")
-    message("If a dichotomous independent variable is used, consider using 
-            the 2X2 table approach enabled with the argument two_by_two = TRUE")
+    message("Note that if your model is a logistic regression, we recommend using the pkonfound command for logistic regression with manually entered parameter estimates and other quantities.")
+    message("Note that this is only an approximation. For exact results in terms of the number of cases that must be switched from treatment success to treatment failure to invalidate the inference see: https://msu.edu/~kenfrank/non%20linear%20replacement%20treatment.xlsm")
+    message("If a dichotomous independent variable is used, consider using the 2X2 table approach enabled with the argument two_by_two = TRUE")
     output <- konfound_glm(
       model_object = model_object,
       tested_variable_string = tested_variable_string,
@@ -115,9 +110,9 @@ konfound <- function(model_object,
   
   if (inherits(model_object, "glm") & two_by_two == TRUE) {
     
-    if(is.null(n_treat)) stop("Please provide a value for n_treat to use 
+    if(is.null(n_treat)) stop("Please provide a value for n_treat to use
                               this functionality with a dichotomous predictor")
-      
+
     output <- konfound_glm_dichotomous(
       model_object = model_object,
       tested_variable_string = tested_variable_string,
@@ -143,14 +138,14 @@ konfound <- function(model_object,
       to_return = to_return
     )
     
-    message("Note that the Kenward-Roger approximation is used to 
-            estimate degrees of freedom for the predictor(s) of interest. 
-            We are presently working to add other methods for calculating 
-            the degrees of freedom for the predictor(s) of interest. 
-            If you wish to use other methods now, consider those detailed here: 
+    message("Note that the Kenward-Roger approximation is used to
+            estimate degrees of freedom for the predictor(s) of interest.
+            We are presently working to add other methods for calculating
+            the degrees of freedom for the predictor(s) of interest.
+            If you wish to use other methods now, consider those detailed here:
             https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html
-            #why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have. 
-            You can then enter degrees of freedom obtained from another method along with the coefficient, 
+            #why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have.
+            You can then enter degrees of freedom obtained from another method along with the coefficient,
             number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.")
     
     return(output)

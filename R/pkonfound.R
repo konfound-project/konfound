@@ -17,10 +17,11 @@
 #' @param d cell is the number of cases in the treatment group showing successful results
 #' @param two_by_two_table table that is a matrix or can be coerced to one (data.frame, tibble, tribble) from which the a, b, c, and d arguments can be extracted
 #' @param test whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test
-#' @param replace whether using entire sample or the control group to calculate the base rate; default is the control group
+#' @param replace whether using entire sample or the control group to calculate the base rate; default is the entire sample
 #' @param sdx the standard deviation of X
 #' @param sdy the standard deviation of Y
 #' @param R2 the unadjusted,original R2 in the observed function
+#' @param signsuppression whether the threshold has the same sign of the estimated effect; default is same direction (0); specify 1 to be opposite
 #' @param eff_thr unstandardized coefficient threshold to change an inference
 #' @param FR2max the largest R2, or R2max, in the final model with unobserved confounder 
 #' @param FR2max_multiplier the multiplier of R2 to get R2max, default is set to 1.3
@@ -33,12 +34,11 @@
 #' pkonfound(2, .4, 100, 3)
 #' pkonfound(-2.2, .65, 200, 3)
 #' pkonfound(.5, 3, 200, 3)
-#' 
 #' pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 #'
 #' pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 #' pkonfound(2, .4, 100, 3, to_return = "corr_plot")
-#' 
+#'
 #' # using pkonfound for a 2x2 table
 #' pkonfound(a = 35, b = 17, c = 17, d = 38)
 #' pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01)
@@ -57,9 +57,9 @@
 #' pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
 #'  eff_thr = 0, FR2max = .8, index = "COP", to_return = "raw_output")
 #' # use pkonfound to calculate rxcv and rycv when preserving standard error
-#' pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1, 
+#' pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
 #' sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
-#' 
+#'
 #' @export
 
  pkonfound <- function(est_eff,
@@ -80,17 +80,23 @@
                       two_by_two_table = NULL,
                       test = "fisher",
                       replace = "control",
-                      sdx,
-                      sdy,
-                      R2,
-                      eff_thr = 0,
-                      FR2max,
+                      sdx = NA,
+                      sdy = NA,
+                      R2 = NA,
+                      signsuppression = 0,
+                      ## by default is zero
+                      ## alternative is one
+                      eff_thr = NA,
+                      FR2max = 0,
                       FR2max_multiplier = 1.3,
                       to_return = "print") {
-  if ("table" %in% to_return) stop("a table can only be 
+  if ("table" %in% to_return) stop("a table can only be
                                    output when using konfound")
   
    if (index == "COP") {
+     
+     # if user does not specify eff_thr then set default as 0 
+     if (is.na(eff_thr)) {eff_thr = 0}  
      
      out <- test_cop(
        est_eff = est_eff, # unstandardized
@@ -103,8 +109,10 @@
        eff_thr = eff_thr, # this is the unstandardized version
        FR2max_multiplier = FR2max_multiplier,
        FR2max = FR2max, # NOT the adjusted R2, should be the original R2
+       alpha = alpha, 
+       tails = tails, 
        to_return = to_return)
-     
+  
    } else if (index == "PSE") {
      
      out <- test_pse(
@@ -136,7 +144,7 @@
   } else if(!is.null(a)) {
     # error handling
     if (is.null(a) | is.null(b) | is.null(c) | is.null(d)) {
-      stop("Please enter values for a, b, c, 
+      stop("Please enter values for a, b, c,
            and d to use the 2 x 2 table functionality")
     }
     
@@ -174,12 +182,16 @@
     std_err = std_err,
     n_obs = n_obs,
     n_covariates = n_covariates,
+    sdx = sdx,
+    sdy = sdy,
+    R2 = R2,
     alpha = alpha,
     tails = tails,
     index = index,
     nu = nu,
+    signsuppression = signsuppression,
+    eff_thr = eff_thr,
     to_return = to_return
-    
   )
 } 
       
@@ -188,7 +200,8 @@ if (!is.null(out)) { # dealing with a strange print issue
 }
 
 if (to_return == "print") {
-  message("For other forms of output, run 
+  cat("\n")
+  message("For other forms of output, run
           ?pkonfound and inspect the to_return argument")
 }
 

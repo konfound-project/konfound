@@ -8,11 +8,11 @@ test_cop <- function(est_eff, # unstandardized
                      sdx,
                      sdy,
                      R2, # NOT the adjusted R2, should be the original R2
-                     eff_thr = 0, # this is the unstandardized version
-                     FR2max_multiplier = 1.3,
-                     FR2max = 0, # NOT the adjusted R2, should be the original R2
-                     alpha = 0.05,
-                     tails = 2, 
+                     eff_thr, # this is the unstandardized version
+                     FR2max_multiplier,
+                     FR2max, # NOT the adjusted R2, should be the original R2
+                     alpha,
+                     tails, 
                      to_return = to_return){
   
   ## test example
