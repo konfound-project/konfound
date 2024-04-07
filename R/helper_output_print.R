@@ -212,9 +212,11 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     cat("\n")
     cat("Accuracy of results increases with the number of decimals reported.")
     cat("\n")
-    cat("The ITCV analysis was originally derived for OLS standard errors. If the standard errors reported")
-    cat("in the table were not based on OLS, some caution should be used to interpret the ITCV.")
-
+    cat("\n")
+    cat("The ITCV analysis was originally derived for OLS standard errors. If the")
+    cat("\n")
+    cat("standard errors reported in the table were not based on OLS, some caution")
+    cat("should be used to interpret the ITCV.")
 
   }
     
