@@ -216,6 +216,7 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     cat("The ITCV analysis was originally derived for OLS standard errors. If the")
     cat("\n")
     cat("standard errors reported in the table were not based on OLS, some caution")
+    cat("\n")
     cat("should be used to interpret the ITCV.")
 
   }
