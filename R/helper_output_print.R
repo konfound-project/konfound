@@ -218,8 +218,5 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     cat("standard errors reported in the table were not based on OLS, some caution")
     cat("\n")
     cat("should be used to interpret the ITCV.")
-
   }
-    
 }
-
