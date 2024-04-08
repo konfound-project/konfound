@@ -111,27 +111,28 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   c <- table_bstart[3]
   d <- table_bstart[4]
   
-print(paste("Value of a:", a, "- Type:", class(a)))
-print(paste("Value of b:", b, "- Type:", class(b)))
-print(paste("Value of c:", c, "- Type:", class(c)))
-print(paste("Value of d:", d, "- Type:", class(d)))
-  
-# Calculate success percentages
-success_percent_control <- b / (a + b) * 100
-success_percent_treatment <- d / (c + d) * 100
+  control_fail <- table_bstart[1]
+  control_success <- table_bstart[2]
+  treatment_fail <- table_bstart[3]
+  treatment_success <- table_bstart[4]
 
-# Calculate totals
-total_fail <- a + c
-total_success <- b + d
-total_percentage <- total_success / (total_fail + total_success) * 100
 
-# Create a data frame to display the counts, success percentages, and totals
-table_start <- data.frame(
-  Group = c("Control", "Treatment", "Total"),
-  Fail = c(a, c, total_fail),
-  Success = c(b, d, total_success),
-  Success_Percentage = c(sprintf("%.2f%%", success_percent_control), sprintf("%.2f%%", success_percent_treatment), sprintf("%.2f%%", total_percentage))
-)
+  # Calculate success percentages
+  success_percent_control <- control_success / (control_fail + control_success) * 100
+  success_percent_treatment <- treatment_success / (treatment_fail + treatment_success) * 100
+
+  # Calculate totals
+  total_fail <- control_fail + treatment_fail
+  total_success <- control_success + treatment_success
+  total_percentage <- total_success / (total_fail + total_success) * 100
+
+  # Create a data frame to display the counts, success percentages, and totals
+  table_start <- data.frame(
+    Group = c("Control", "Treatment", "Total"),
+    Fail = c(control_fail, treatment_fail, total_fail),
+    Success = c(control_success, treatment_success, total_success),
+    Success_Percentage = c(sprintf("%.2f%%", success_percent_control), sprintf("%.2f%%", success_percent_treatment), sprintf("%.2f%%", total_percentage))
+  )
   
   #table_start <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
   est_eff_start <- log(a * d / b / c)
