@@ -111,30 +111,7 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   c <- table_bstart[3]
   d <- table_bstart[4]
   
-  control_fail <- table_bstart[1]
-  control_success <- table_bstart[2]
-  treatment_fail <- table_bstart[3]
-  treatment_success <- table_bstart[4]
-
-
-  # Calculate success percentages
-  success_percent_control <- control_success / (control_fail + control_success) * 100
-  success_percent_treatment <- treatment_success / (treatment_fail + treatment_success) * 100
-
-  # Calculate totals
-  total_fail <- control_fail + treatment_fail
-  total_success <- control_success + treatment_success
-  total_percentage <- total_success / (total_fail + total_success) * 100
-
-  # Create a data frame to display the counts, success percentages, and totals
-  table_start <- data.frame(
-    Group = c("Control", "Treatment", "Total"),
-    Fail = c(control_fail, treatment_fail, total_fail),
-    Success = c(control_success, treatment_success, total_success),
-    Success_Percentage = c(sprintf("%.2f%%", success_percent_control), sprintf("%.2f%%", success_percent_treatment), sprintf("%.2f%%", total_percentage))
-  )
-  
-  #table_start <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
+  table_start <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
   est_eff_start <- log(a * d / b / c)
   std_err_start <- sqrt(1 / a + 1 / b + 1 / c + 1 / d)
   t_start <- get_t_kfnl(a, b, c, d)
@@ -292,25 +269,7 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   est_eff_final <- log(a_final * d_final / (b_final * c_final))
   std_err_final <- sqrt(1 / a_final + 1 / b_final + 1 / c_final + 1 / d_final)
   t_final <- est_eff_final / std_err_final
-
-  # Calculate success percentages
-  success_percent_control_final <- b_final / (a_final + b_final) * 100
-  success_percent_treatment_final <- d_final / (c_final + d_final) * 100
-
-  # Calculate totals for table_final
-  total_fail_final <- a_final + c_final
-  total_success_final <- b_final + d_final
-  total_percentage_final <- total_success_final / (total_fail_final + total_success_final) * 100
-
-  # Create a data frame to display the counts, success percentages, and totals for table_final
-  table_final <- data.frame(
-    Group = c("Control", "Treatment", "Total"),
-    Fail = c(a_final, c_final, total_fail_final),
-    Success = c(b_final, d_final, total_success_final),
-    Success_Percentage = c(sprintf("%.2f%%", success_percent_control_final), sprintf("%.2f%%", success_percent_treatment_final), sprintf("%.2f%%", total_percentage_final))
-  )
-
-  #table_final <- matrix(c(a_final, b_final, c_final, d_final), byrow = TRUE, 2, 2)
+  table_final <- matrix(c(a_final, b_final, c_final, d_final), byrow = TRUE, 2, 2)
   
   if (switch_trm == allnotenough) {
     final <- abs(a - a_final) + as.numeric(allnotenough) * abs(c - c_final)
