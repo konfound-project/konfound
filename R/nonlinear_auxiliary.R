@@ -383,9 +383,13 @@ chisq_p <- function(a, b, c, d){
 #' @importFrom stats fisher.test
 # get p value for exact fisher p test
 # Modified function to include workspace parameter
-fisher_p <- function(a, b, c, d, workspace = 2e8){
-  table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
-  p <- suppressWarnings(fisher.test(table, workspace = workspace)$p.value)
+fisher_p <- function(a, b, c, d, workspace = 2e8, useSimulation = FALSE, B = 2000){
+  table <- matrix(c(a, b, c, d), byrow = TRUE, ncol = 2)
+  if(useSimulation){
+    p <- suppressWarnings(fisher.test(table, simulate.p.value = TRUE, B = B)$p.value)
+  } else {
+    p <- suppressWarnings(fisher.test(table, workspace = workspace)$p.value)
+  }
   return(p)
 }
 
