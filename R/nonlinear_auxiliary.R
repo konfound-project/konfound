@@ -108,7 +108,25 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   b <- table_bstart[2]
   c <- table_bstart[3]
   d <- table_bstart[4]
-  table_start <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
+
+# Calculate success percentages
+success_percent_control <- b / (a + b) * 100
+success_percent_treatment <- d / (c + d) * 100
+
+# Calculate totals
+total_fail <- a + c
+total_success <- b + d
+total_percentage <- total_success / (total_fail + total_success) * 100
+
+# Create a data frame to display the counts, success percentages, and totals
+table_start <- data.frame(
+  Group = c("Control", "Treatment", "Total"),
+  Fail = c(a, c, total_fail),
+  Success = c(b, d, total_success),
+  Success_Percentage = c(sprintf("%.2f%%", success_percent_control), sprintf("%.2f%%", success_percent_treatment), sprintf("%.2f%%", total_percentage))
+)
+  
+  #table_start <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
   est_eff_start <- log(a * d / b / c)
   std_err_start <- sqrt(1 / a + 1 / b + 1 / c + 1 / d)
   t_start <- get_t_kfnl(a, b, c, d)
@@ -266,7 +284,26 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   est_eff_final <- log(a_final * d_final / (b_final * c_final))
   std_err_final <- sqrt(1 / a_final + 1 / b_final + 1 / c_final + 1 / d_final)
   t_final <- est_eff_final / std_err_final
-  table_final <- matrix(c(a_final, b_final, c_final, d_final), byrow = TRUE, 2, 2)
+
+  # Calculate success percentages
+  success_percent_control_final <- b_final / (a_final + b_final) * 100
+  success_percent_treatment_final <- d_final / (c_final + d_final) * 100
+
+  # Calculate totals for table_final
+  total_fail_final <- a_final + c_final
+  total_success_final <- b_final + d_final
+  total_percentage_final <- total_success_final / (total_fail_final + total_success_final) * 100
+
+  # Create a data frame to display the counts, success percentages, and totals for table_final
+  table_final <- data.frame(
+    Group = c("Control", "Treatment", "Total"),
+    Fail = c(a_final, c_final, total_fail_final),
+    Success = c(b_final, d_final, total_success_final),
+    Success_Percentage = c(sprintf("%.2f%%", success_percent_control_final), sprintf("%.2f%%", success_percent_treatment_final), sprintf("%.2f%%", total_percentage_final))
+  )
+
+  #table_final <- matrix(c(a_final, b_final, c_final, d_final), byrow = TRUE, 2, 2)
+  
   if (switch_trm == allnotenough) {
     final <- abs(a - a_final) + as.numeric(allnotenough) * abs(c - c_final)
   } else {
@@ -287,8 +324,8 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   }
 
   ### add column and row names to contingency tables
-  rownames(table_start) <- rownames(table_final) <- c("Control", "Treatment")
-  colnames(table_start) <- colnames(table_final) <- c("Fail", "Success")
+  #rownames(table_start) <- rownames(table_final) <- c("Control", "Treatment")
+  #colnames(table_start) <- colnames(table_final) <- c("Fail", "Success")
 
   ### return result
   result <- list(
