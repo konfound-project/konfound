@@ -113,7 +113,9 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   
 print(paste("Value of a:", a, "- Type:", class(a)))
 print(paste("Value of b:", b, "- Type:", class(b)))
-
+print(paste("Value of c:", c, "- Type:", class(c)))
+print(paste("Value of d:", d, "- Type:", class(d)))
+  
 # Calculate success percentages
 success_percent_control <- b / (a + b) * 100
 success_percent_treatment <- d / (c + d) * 100
