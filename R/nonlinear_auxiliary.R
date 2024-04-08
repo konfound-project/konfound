@@ -111,26 +111,24 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   c <- table_bstart[3]
   d <- table_bstart[4]
 
-  # Assuming a, b, c, d are already defined and are numeric
-success_percent_control <- b / (a + b) * 100
-success_percent_treatment <- d / (c + d) * 100
+  # success percent for control and treatment
+  success_percent_control <- b / (a + b) * 100
+  success_percent_treatment <- d / (c + d) * 100
 
-total_fail <- a + c
-total_success <- b + d
-total_percentage <- total_success / (total_fail + total_success) * 100
+  total_fail <- a + c
+  total_success <- b + d
+  total_percentage <- total_success / (total_fail + total_success) * 100
 
-# Prepare numeric values for the matrix
-# Note: For a matrix, all elements need to be of the same type. Here, they're all numeric.
-matrix_values <- c(
-  a, b, success_percent_control,  # Control row
-  c, d, success_percent_treatment, # Treatment row
-  total_fail, total_success, total_percentage # Total row
-)
+  # Prepare numeric values for the matrix
+  matrix_values <- c(
+    a, b, success_percent_control,  # Control row
+    c, d, success_percent_treatment, # Treatment row
+    total_fail, total_success, total_percentage # Total row
+  )
 
-# Create a 3x3 numeric matrix
-table_start <- matrix(matrix_values, nrow = 3, byrow = TRUE)
+  # Create a 3x3 numeric matrix
+  table_start <- matrix(matrix_values, nrow = 3, byrow = TRUE)
 
-  
   #table_start <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
   est_eff_start <- log(a * d / b / c)
   std_err_start <- sqrt(1 / a + 1 / b + 1 / c + 1 / d)
@@ -290,24 +288,23 @@ table_start <- matrix(matrix_values, nrow = 3, byrow = TRUE)
   std_err_final <- sqrt(1 / a_final + 1 / b_final + 1 / c_final + 1 / d_final)
   t_final <- est_eff_final / std_err_final
 
-  # Assuming a, b, c, d are already defined and are numeric
-success_percent_control_final <- b_final / (a_final + b_final) * 100
-success_percent_treatment_final <- d_final / (c_final + d_final) * 100
+  # success percent for both control/treatment final
+  success_percent_control_final <- b_final / (a_final + b_final) * 100
+  success_percent_treatment_final <- d_final / (c_final + d_final) * 100
 
-total_fail_final <- a_final + c_final
-total_success_final <- b_final + d_final
-total_percentage_final <- total_success_final / (total_fail_final + total_success_final) * 100
+  total_fail_final <- a_final + c_final
+  total_success_final <- b_final + d_final
+  total_percentage_final <- total_success_final / (total_fail_final + total_success_final) * 100
 
-# Prepare numeric values for the matrix
-# Note: For a matrix, all elements need to be of the same type. Here, they're all numeric.
-matrix_values_final <- c(
-  a_final, b_final, success_percent_control_final,  # Control row
-  c_final, d_final, success_percent_treatment_final, # Treatment row
-  total_fail_final, total_success_final, total_percentage_final # Total row
-)
+  # Prepare numeric values for the matrix
+  matrix_values_final <- c(
+    a_final, b_final, success_percent_control_final,  # Control row
+    c_final, d_final, success_percent_treatment_final, # Treatment row
+    total_fail_final, total_success_final, total_percentage_final # Total row
+  )
 
-# Create a 3x3 numeric matrix
-table_final <- matrix(matrix_values_final, nrow = 3, byrow = TRUE)
+  # Create a 3x3 numeric matrix
+  table_final <- matrix(matrix_values_final, nrow = 3, byrow = TRUE)
 
   
   #table_final <- matrix(c(a_final, b_final, c_final, d_final), byrow = TRUE, 2, 2)
@@ -333,7 +330,7 @@ table_final <- matrix(matrix_values_final, nrow = 3, byrow = TRUE)
 
   ### add column and row names to contingency tables
   rownames(table_start) <- rownames(table_final) <- c("Control", "Treatment", "Total")
-  colnames(table_start) <- colnames(table_final) <- c("Fail", "Success", "Success_Percentage")
+  colnames(table_start) <- colnames(table_final) <- c("Fail", "Success", "Success %")
 
 
 
