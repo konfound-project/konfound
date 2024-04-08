@@ -357,12 +357,52 @@ test_sensitivity_ln <- function(est_eff,
   prob_replace <- final_solution$table_start[1,1]/n_obs*100
   }
 
+# Components from final_solution$table_start
+treatment_success_start <- final_solution$table_start[2,2]
+treatment_failure_start <- final_solution$table_start[2,1]
+control_failure_start <- final_solution$table_start[1,1]
+control_success_start <- final_solution$table_start[1,2]
 
-  # result <- list(conclusion1,
-  #                Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
-  #                conclusion2, conclusion3,
-  #                total_RIR = total_RIR, total_switch = total_switch
-  # )
+# Calculating success percentages and totals for the start table
+success_percent_control_start <- control_success_start / (control_failure_start + control_success_start) * 100
+success_percent_treatment_start <- treatment_success_start / (treatment_failure_start + treatment_success_start) * 100
+total_fail_start <- control_failure_start + treatment_failure_start
+total_success_start <- control_success_start + treatment_success_start
+total_percentage_start <- total_success_start / (total_fail_start + total_success_start) * 100
+
+# Creating the 3x3 start table with added Success_% and Total row
+table_start_3x3 <- rbind(
+  c(control_failure_start, control_success_start, success_percent_control_start),
+  c(treatment_failure_start, treatment_success_start, success_percent_treatment_start),
+  c(total_fail_start, total_success_start, total_percentage_start)
+)
+colnames(table_start_3x3) <- c("Fail", "Success", "Success_%")
+rownames(table_start_3x3) <- c("Control", "Treatment", "Total")
+
+# Repeat the process for final_solution$table_final for the transferred table
+# Assuming you have table_final similarly structured
+treatment_success_final <- final_solution$table_final[2,2]
+treatment_failure_final <- final_solution$table_final[2,1]
+control_failure_final <- final_solution$table_final[1,1]
+control_success_final <- final_solution$table_final[1,2]
+
+# Calculating success percentages and totals for the final table
+success_percent_control_final <- control_success_final / (control_failure_final + control_success_final) * 100
+success_percent_treatment_final <- treatment_success_final / (treatment_failure_final + treatment_success_final) * 100
+total_fail_final <- control_failure_final + treatment_failure_final
+total_success_final <- control_success_final + treatment_success_final
+total_percentage_final <- total_success_final / (total_fail_final + total_success_final) * 100
+
+# Creating the 3x3 final table with added Success_% and Total row
+table_final_3x3 <- rbind(
+  c(control_failure_final, control_success_final, success_percent_control_final),
+  c(treatment_failure_final, treatment_success_final, success_percent_treatment_final),
+  c(total_fail_final, total_success_final, total_percentage_final)
+)
+colnames(table_final_3x3) <- c("Fail", "Success", "Success_%")
+rownames(table_final_3x3) <- c("Control", "Treatment", "Total")
+	
+
 
   # output dispatch
   if (to_return == "raw_output") {
@@ -409,38 +449,10 @@ test_sensitivity_ln <- function(est_eff,
                   Fig_ITCV = NA,
                   Fig_RIR = NA))
 
-
-#    if (changeSE) {
-#      result <- list(conclusion1,
-#                     conclusion1b,
-#                     conclusion1c,
-#                     Implied_Table = final_solution$table_start,
-#                     notice,
-#                     Transfer_Table = final_solution$table_final,
-#                     conclusion2,
-#                     conclusion3,
-#                     needtworows = final_solution$needtworows,
-#                     fragility = total_switch,
-#                     RIR = total_RIR,
-#                     notice_SE)
-#    } else {
-#      result <- list(conclusion1,
-#                     conclusion1b,
-#                     conclusion1c,
-#                     Implied_Table = final_solution$table_start,
-#                     notice,
-#                     Transfer_Table = final_solution$table_final,
-#                     conclusion2,
-#                     conclusion3,
-#                     needtworows = final_solution$needtworows,
-#                     fragility = total_switch,
-#                     RIR = total_RIR)
-#    }
-
   } else  if (to_return == "print") {
 
     result <- list(conclusion1,conclusion1b, conclusion1c,
-                   Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
+                   Implied_Table = table_start_3x3, notice, Transfer_Table = table_final_3x3,
                    conclusion2, conclusion3,
                    total_RIR = total_RIR, total_switch = total_switch)
 
