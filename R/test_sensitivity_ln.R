@@ -667,6 +667,7 @@ rownames(table_final_3x3) <- c("Control", "Treatment", "Total")
 
       cat("\n\n")
       print(Transfer_Table)
+      cat("\n")
       cat(sprintf("Effect size = %.3f, SE = %.3f, p-value = %.3f.",
                   final_solution$est_eff_final, final_solution$std_err_final, p_final),
                  c("\nThis is based on t = estimated effect/standard error")
