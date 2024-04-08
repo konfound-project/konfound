@@ -382,9 +382,10 @@ chisq_p <- function(a, b, c, d){
 
 #' @importFrom stats fisher.test
 # get p value for exact fisher p test
-fisher_p <- function(a, b, c, d){
+# Modified function to include workspace parameter
+fisher_p <- function(a, b, c, d, workspace = 2e8){
   table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
-  p <- suppressWarnings(fisher.test(table)$p.value)
+  p <- suppressWarnings(fisher.test(table, workspace = workspace)$p.value)
   return(p)
 }
 
@@ -396,9 +397,10 @@ chisq_value <- function(a, b, c, d){
 }
 
 # get odds ratio for exact fisher p test 
-fisher_oddsratio <- function(a, b, c, d){
+# Modified function to include workspace parameter
+fisher_oddsratio <- function(a, b, c, d, workspace = 2e8){
   table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
-  value <- suppressWarnings(fisher.test(table)$estimate)
+  value <- suppressWarnings(fisher.test(table, workspace = workspace)$estimate)
   return(value)
 }
 
