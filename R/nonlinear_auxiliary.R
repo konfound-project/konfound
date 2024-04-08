@@ -101,6 +101,10 @@ get_abcd_kfnl <- function(a1, b1, c1, d1) {
   return(x)
 }
 
+print(paste("Value of a:", a, "- Type:", class(a)))
+print(paste("Value of b:", b, "- Type:", class(b)))
+
+
 # get the number of switches
 getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   ### calculate the est and se after rounding (before any switches)
