@@ -289,7 +289,28 @@ table_start <- matrix(matrix_values, nrow = 3, byrow = TRUE)
   est_eff_final <- log(a_final * d_final / (b_final * c_final))
   std_err_final <- sqrt(1 / a_final + 1 / b_final + 1 / c_final + 1 / d_final)
   t_final <- est_eff_final / std_err_final
-  table_final <- matrix(c(a_final, b_final, c_final, d_final), byrow = TRUE, 2, 2)
+
+  # Assuming a, b, c, d are already defined and are numeric
+success_percent_control_final <- b_final / (a_final + b_final) * 100
+success_percent_treatment_final <- d_final / (c_final + d_final) * 100
+
+total_fail_final <- a_final + c_final
+total_success_final <- b_final + d_final
+total_percentage_final <- total_success_final / (total_fail_final + total_success_final) * 100
+
+# Prepare numeric values for the matrix
+# Note: For a matrix, all elements need to be of the same type. Here, they're all numeric.
+matrix_values_final <- c(
+  a_final, b_final, success_percent_control_final,  # Control row
+  c_final, d_final, success_percent_treatment_final, # Treatment row
+  total_fail_final, total_success_final, total_percentage_final # Total row
+)
+
+# Create a 3x3 numeric matrix
+table_final <- matrix(matrix_values_final, nrow = 3, byrow = TRUE)
+
+  
+  #table_final <- matrix(c(a_final, b_final, c_final, d_final), byrow = TRUE, 2, 2)
   
   if (switch_trm == allnotenough) {
     final <- abs(a - a_final) + as.numeric(allnotenough) * abs(c - c_final)
@@ -311,9 +332,12 @@ table_start <- matrix(matrix_values, nrow = 3, byrow = TRUE)
   }
 
   ### add column and row names to contingency tables
-  #rownames(table_start) <- rownames(table_final) <- c("Control", "Treatment")
-  #colnames(table_start) <- colnames(table_final) <- c("Fail", "Success")
+  rownames(table_start) <- rownames(table_final) <- c("Control", "Treatment", "Total")
+  colnames(table_start) <- colnames(table_final) <- c("Fail", "Success", "Success_Percentage")
 
+
+
+  
   ### return result
   result <- list(
     final_switch = final, table_start = table_start, table_final = table_final, est_eff_start = est_eff_start,
