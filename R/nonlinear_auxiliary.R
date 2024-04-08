@@ -110,8 +110,28 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   b <- table_bstart[2]
   c <- table_bstart[3]
   d <- table_bstart[4]
+
+  # Assuming a, b, c, d are already defined and are numeric
+success_percent_control <- b / (a + b) * 100
+success_percent_treatment <- d / (c + d) * 100
+
+total_fail <- a + c
+total_success <- b + d
+total_percentage <- total_success / (total_fail + total_success) * 100
+
+# Prepare numeric values for the matrix
+# Note: For a matrix, all elements need to be of the same type. Here, they're all numeric.
+matrix_values <- c(
+  a, b, success_percent_control,  # Control row
+  c, d, success_percent_treatment, # Treatment row
+  total_fail, total_success, total_percentage # Total row
+)
+
+# Create a 3x3 numeric matrix
+table_start <- matrix(matrix_values, nrow = 3, byrow = TRUE)
+
   
-  table_start <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
+  #table_start <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
   est_eff_start <- log(a * d / b / c)
   std_err_start <- sqrt(1 / a + 1 / b + 1 / c + 1 / d)
   t_start <- get_t_kfnl(a, b, c, d)
