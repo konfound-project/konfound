@@ -101,8 +101,6 @@ get_abcd_kfnl <- function(a1, b1, c1, d1) {
   return(x)
 }
 
-
-
 # get the number of switches
 getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   ### calculate the est and se after rounding (before any switches)
@@ -110,26 +108,7 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   b <- table_bstart[2]
   c <- table_bstart[3]
   d <- table_bstart[4]
-
-  # success percent for control and treatment
-  success_percent_control <- b / (a + b) * 100
-  success_percent_treatment <- d / (c + d) * 100
-
-  total_fail <- a + c
-  total_success <- b + d
-  total_percentage <- total_success / (total_fail + total_success) * 100
-
-  # Prepare numeric values for the matrix
-  matrix_values <- c(
-    a, b, success_percent_control,  # Control row
-    c, d, success_percent_treatment, # Treatment row
-    total_fail, total_success, total_percentage # Total row
-  )
-
-  # Create a 3x3 numeric matrix
-  table_start <- matrix(matrix_values, nrow = 3, byrow = TRUE)
-
-  #table_start <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
+  table_start <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
   est_eff_start <- log(a * d / b / c)
   std_err_start <- sqrt(1 / a + 1 / b + 1 / c + 1 / d)
   t_start <- get_t_kfnl(a, b, c, d)
@@ -287,28 +266,7 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   est_eff_final <- log(a_final * d_final / (b_final * c_final))
   std_err_final <- sqrt(1 / a_final + 1 / b_final + 1 / c_final + 1 / d_final)
   t_final <- est_eff_final / std_err_final
-
-  # success percent for both control/treatment final
-  success_percent_control_final <- b_final / (a_final + b_final) * 100
-  success_percent_treatment_final <- d_final / (c_final + d_final) * 100
-
-  total_fail_final <- a_final + c_final
-  total_success_final <- b_final + d_final
-  total_percentage_final <- total_success_final / (total_fail_final + total_success_final) * 100
-
-  # Prepare numeric values for the matrix
-  matrix_values_final <- c(
-    a_final, b_final, success_percent_control_final,  # Control row
-    c_final, d_final, success_percent_treatment_final, # Treatment row
-    total_fail_final, total_success_final, total_percentage_final # Total row
-  )
-
-  # Create a 3x3 numeric matrix
-  table_final <- matrix(matrix_values_final, nrow = 3, byrow = TRUE)
-
-  
-  #table_final <- matrix(c(a_final, b_final, c_final, d_final), byrow = TRUE, 2, 2)
-  
+  table_final <- matrix(c(a_final, b_final, c_final, d_final), byrow = TRUE, 2, 2)
   if (switch_trm == allnotenough) {
     final <- abs(a - a_final) + as.numeric(allnotenough) * abs(c - c_final)
   } else {
@@ -329,12 +287,9 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   }
 
   ### add column and row names to contingency tables
-  rownames(table_start) <- rownames(table_final) <- c("Control", "Treatment", "Total")
-  colnames(table_start) <- colnames(table_final) <- c("Fail", "Success", "Success %")
+  rownames(table_start) <- rownames(table_final) <- c("Control", "Treatment")
+  colnames(table_start) <- colnames(table_final) <- c("Fail", "Success")
 
-
-
-  
   ### return result
   result <- list(
     final_switch = final, table_start = table_start, table_final = table_final, est_eff_start = est_eff_start,
@@ -382,14 +337,9 @@ chisq_p <- function(a, b, c, d){
 
 #' @importFrom stats fisher.test
 # get p value for exact fisher p test
-# Modified function to include workspace parameter
-fisher_p <- function(a, b, c, d, workspace = 2e8, useSimulation = FALSE, B = 2000){
-  table <- matrix(c(a, b, c, d), byrow = TRUE, ncol = 2)
-  if(useSimulation){
-    p <- suppressWarnings(fisher.test(table, simulate.p.value = TRUE, B = B)$p.value)
-  } else {
-    p <- suppressWarnings(fisher.test(table, workspace = workspace)$p.value)
-  }
+fisher_p <- function(a, b, c, d){
+  table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
+  p <- suppressWarnings(fisher.test(table)$p.value)
   return(p)
 }
 
@@ -401,10 +351,9 @@ chisq_value <- function(a, b, c, d){
 }
 
 # get odds ratio for exact fisher p test 
-# Modified function to include workspace parameter
-fisher_oddsratio <- function(a, b, c, d, workspace = 2e8){
+fisher_oddsratio <- function(a, b, c, d){
   table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
-  value <- suppressWarnings(fisher.test(table, workspace = workspace)$estimate)
+  value <- suppressWarnings(fisher.test(table)$estimate)
   return(value)
 }
 
