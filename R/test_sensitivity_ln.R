@@ -363,45 +363,33 @@ treatment_failure_start <- final_solution$table_start[2,1]
 control_failure_start <- final_solution$table_start[1,1]
 control_success_start <- final_solution$table_start[1,2]
 
-# Calculating success percentages and totals for the start table
-success_percent_control_start <- control_success_start / (control_failure_start + control_success_start) * 100
-success_percent_treatment_start <- treatment_success_start / (treatment_failure_start + treatment_success_start) * 100
-total_fail_start <- control_failure_start + treatment_failure_start
-total_success_start <- control_success_start + treatment_success_start
-total_percentage_start <- total_success_start / (total_fail_start + total_success_start) * 100
+# Formatting success rates with "%" symbol
+success_rate_control_start <- paste0(sprintf("%.2f", success_percent_control_start), "%")
+success_rate_treatment_start <- paste0(sprintf("%.2f", success_percent_treatment_start), "%")
+total_rate_start <- paste0(sprintf("%.2f", total_percentage_start), "%")
 
-# Creating the 3x3 start table with added Success_% and Total row
+# Adjusting the 3x3 start table to include Success Rate with "%" and updated column name
 table_start_3x3 <- rbind(
-  c(control_failure_start, control_success_start, success_percent_control_start),
-  c(treatment_failure_start, treatment_success_start, success_percent_treatment_start),
-  c(total_fail_start, total_success_start, total_percentage_start)
+  c(control_failure_start, control_success_start, success_rate_control_start),
+  c(treatment_failure_start, treatment_success_start, success_rate_treatment_start),
+  c(total_fail_start, total_success_start, total_rate_start)
 )
-colnames(table_start_3x3) <- c("Fail", "Success", "Success_%")
+colnames(table_start_3x3) <- c("Fail", "Success", "Success Rate")
 rownames(table_start_3x3) <- c("Control", "Treatment", "Total")
 
-# Repeat the process for final_solution$table_final for the transferred table
-# Assuming you have table_final similarly structured
-treatment_success_final <- final_solution$table_final[2,2]
-treatment_failure_final <- final_solution$table_final[2,1]
-control_failure_final <- final_solution$table_final[1,1]
-control_success_final <- final_solution$table_final[1,2]
+# Formatting success rates for the final table
+success_rate_control_final <- paste0(sprintf("%.2f", success_percent_control_final), "%")
+success_rate_treatment_final <- paste0(sprintf("%.2f", success_percent_treatment_final), "%")
+total_rate_final <- paste0(sprintf("%.2f", total_percentage_final), "%")
 
-# Calculating success percentages and totals for the final table
-success_percent_control_final <- control_success_final / (control_failure_final + control_success_final) * 100
-success_percent_treatment_final <- treatment_success_final / (treatment_failure_final + treatment_success_final) * 100
-total_fail_final <- control_failure_final + treatment_failure_final
-total_success_final <- control_success_final + treatment_success_final
-total_percentage_final <- total_success_final / (total_fail_final + total_success_final) * 100
-
-# Creating the 3x3 final table with added Success_% and Total row
+# Adjusting the 3x3 final table to include Success Rate with "%" and updated column name
 table_final_3x3 <- rbind(
-  c(control_failure_final, control_success_final, success_percent_control_final),
-  c(treatment_failure_final, treatment_success_final, success_percent_treatment_final),
-  c(total_fail_final, total_success_final, total_percentage_final)
+  c(control_failure_final, control_success_final, success_rate_control_final),
+  c(treatment_failure_final, treatment_success_final, success_rate_treatment_final),
+  c(total_fail_final, total_success_final, total_rate_final)
 )
-colnames(table_final_3x3) <- c("Fail", "Success", "Success_%")
+colnames(table_final_3x3) <- c("Fail", "Success", "Success Rate")
 rownames(table_final_3x3) <- c("Control", "Treatment", "Total")
-	
 
 
   # output dispatch
