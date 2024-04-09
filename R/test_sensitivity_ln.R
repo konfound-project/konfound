@@ -376,13 +376,12 @@ success_rate_treatment_start <- paste0(sprintf("%.2f", success_percent_treatment
 total_rate_start <- paste0(sprintf("%.2f", total_percentage_start), "%")
 
 # Adjusting the 3x3 start table to include Success Rate with "%" and updated column name
-table_start_3x3 <- rbind(
-  c(control_failure_start, control_success_start, success_rate_control_start),
-  c(treatment_failure_start, treatment_success_start, success_rate_treatment_start),
-  c(total_fail_start, total_success_start, total_rate_start)
+table_start_3x3 <- data.frame(
+  Fail = c(control_failure_start, treatment_failure_start, total_fail_start),
+  Success = c(control_success_start, treatment_success_start, total_success_start),
+  `Success Rate` = c(success_rate_control_start, success_rate_treatment_start, total_rate_start),
+  row.names = c("Control", "Treatment", "Total")
 )
-colnames(table_start_3x3) <- c("Fail", "Success", "Success Rate")
-rownames(table_start_3x3) <- c("Control", "Treatment", "Total")
 
 	
 # Repeat the process for final_solution$table_final for the transferred table
@@ -404,13 +403,12 @@ success_rate_treatment_final <- paste0(sprintf("%.2f", success_percent_treatment
 total_rate_final <- paste0(sprintf("%.2f", total_percentage_final), "%")
 
 # Adjusting the 3x3 final table to include Success Rate with "%" and updated column name
-table_final_3x3 <- rbind(
-  c(control_failure_final, control_success_final, success_rate_control_final),
-  c(treatment_failure_final, treatment_success_final, success_rate_treatment_final),
-  c(total_fail_final, total_success_final, total_rate_final)
+table_final_3x3 <- data.frame(
+  Fail = c(control_failure_final, treatment_failure_final, total_fail_final),
+  Success = c(control_success_final, treatment_success_final, total_success_final),
+  `Success Rate` = c(success_rate_control_final, success_rate_treatment_final, total_rate_final),
+  row.names = c("Control", "Treatment", "Total")
 )
-colnames(table_final_3x3) <- c("Fail", "Success", "Success Rate")
-rownames(table_final_3x3) <- c("Control", "Treatment", "Total")
 
 
   # output dispatch
@@ -876,7 +874,9 @@ rownames(table_final_3x3) <- c("Control", "Treatment", "Total")
       }
 
       cat("\n\n")
+      
       print(Transfer_Table)
+      cat("\n")    
       cat(sprintf("Effect size = %.3f, SE = %.3f, p-value = %.3f.",
                   final_solution$est_eff_final, final_solution$std_err_final, p_final),
                  c("\nThis is based on t = estimated effect/standard error")
