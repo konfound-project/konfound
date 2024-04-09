@@ -89,10 +89,10 @@ tkonfound <- function(a, b, c, d,
   rownames(table_start) <- rownames(table_final) <- c("Control", "Treatment")
   colnames(table_start) <- colnames(table_final) <- c("Fail", "Success")
 
-a_start <- table_ob[2,2]
-b_start <- table_ob[2,1]
-c_start <- table_ob[1,1]
-d_start <- table_ob[1,2]
+a_start <- table_ob[1,1]
+b_start <- table_ob[1,2]
+c_start <- table_ob[2,1]
+d_start <- table_ob[2,2]
 
   success_rate_control_start <- b_start / (a_start + b_start) * 100
 success_rate_treatment_start <- d_start / (c_start + d_start) * 100
@@ -111,10 +111,10 @@ total_rate_start <- total_success_start / (total_fail_start + total_success_star
   
   rownames(table_start_revised) <- c("Control", "Treatment", "Total")
 
-a_final <- solution$Transfer_Table[2,2]
-b_final <- solution$Transfer_Table[2,1]
-c_final <- solution$Transfer_Table[1,1]
-d_final <- solution$Transfer_Table[1,2]
+a_final <- solution$Transfer_Table[1,1]
+b_final <- solution$Transfer_Table[1,2]
+c_final <- solution$Transfer_Table[2,1]
+d_final <- solution$Transfer_Table[2,2]
 
 
   success_rate_control_final <- b_final / (a_final + b_final) * 100
