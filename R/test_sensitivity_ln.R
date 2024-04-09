@@ -379,7 +379,7 @@ total_rate_start <- paste0(sprintf("%.2f", total_percentage_start), "%")
 table_start_3x3 <- data.frame(
   Fail = c(control_failure_start, treatment_failure_start, total_fail_start),
   Success = c(control_success_start, treatment_success_start, total_success_start),
-  `Success Rate` = c(success_rate_control_start, success_rate_treatment_start, total_rate_start),
+  `Success_Rate` = c(success_rate_control_start, success_rate_treatment_start, total_rate_start),
   row.names = c("Control", "Treatment", "Total")
 )
 
@@ -406,7 +406,7 @@ total_rate_final <- paste0(sprintf("%.2f", total_percentage_final), "%")
 table_final_3x3 <- data.frame(
   Fail = c(control_failure_final, treatment_failure_final, total_fail_final),
   Success = c(control_success_final, treatment_success_final, total_success_final),
-  `Success Rate` = c(success_rate_control_final, success_rate_treatment_final, total_rate_final),
+  `Success_Rate` = c(success_rate_control_final, success_rate_treatment_final, total_rate_final),
   row.names = c("Control", "Treatment", "Total")
 )
 
