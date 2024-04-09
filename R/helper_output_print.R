@@ -120,12 +120,12 @@ output_print <- function(est_eff,
     cat("\n")
 
 
-link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.3102/0162373713493129">Click here for the article</a></body></html>'
-if (requireNamespace("htmltools", quietly = TRUE)) {
-    htmltools::html_print(htmltools::HTML(link_html))
-} else {
-    message("htmltools package is required")
-}
+#link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.3102/0162373713493129">Click here for the article</a></body></html>'
+#if (requireNamespace("htmltools", quietly = TRUE)) {
+#    htmltools::html_print(htmltools::HTML(link_html))
+#} else {
+#    message("htmltools package is required")
+#}
 
   }
   if (index == "IT") { 
