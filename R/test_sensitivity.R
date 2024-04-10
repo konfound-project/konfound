@@ -37,7 +37,7 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
     stop("Did not run! Info regarding sdx, sdy and R2 are all needed to generate unconditional ITCV.")
   }
   if ((!is.na(sdx)) & (!is.na(sdy)) & (!is.na(R2)) & (n_covariates == 0)){
-    warning("sdx and sdy and R2 are only used to calculate the unconditional ITCV when there are covariates included (number of covariates > 0).")  
+    warning("sdx and sdy and R2 are only used to calculate the unconditional ITCV\nwhen there are covariates included (number of covariates > 0).")  
   }
   
   # calculate critical_t
