@@ -36,7 +36,10 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
   if ((!is.na(sdx) | !is.na(sdy) | !is.na(R2)) & (!((!is.na(sdx) & !is.na(sdy) & !is.na(R2))))) {
     stop("Did not run! Info regarding sdx, sdy and R2 are all needed to generate unconditional ITCV.")
   }
-
+  if ((sdx != NA) & (sdy != NA) & (R2 != NA) & (n_covariates == 0)){
+    print("sdx and sdy and R2 are only used to calculate the unconditional ITCV when there are covariates included (number of covariates > 0).")  
+  }
+  
   # calculate critical_t
   if (est_eff < nu) {
      critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
