@@ -3,14 +3,18 @@
 
 test_cop <- function(est_eff, # unstandardized
                      std_err, # unstandardized
-                     n_obs,
-                     n_covariates, # the number of z 
-                     sdx,
+                     n_obs, # sample size
+                     n_covariates, # the number of observed covariates 
+                     sdx, 
                      sdy,
-                     R2, # NOT the adjusted R2, should be the original R2
-                     eff_thr, # this is the unstandardized version
-                     FR2max_multiplier,
+                     R2, # NOT the adjusted R2, should be the original R2 in the estimated model with covariates
+                     eff_thr, # this is the threshold for unstandardized effect 
+                     FR2max_multiplier, 
+                     # the FR2max = FR2max_multiplier * R2
+                     # use only when FR2max is NOT specified
+                     # if FR2max is not specified, FR2max_multiplier is set as 1.3
                      FR2max, # NOT the adjusted R2, should be the original R2
+                     # the R2 in the final model with the unobserved confounder(s)
                      alpha,
                      tails, 
                      to_return = to_return){
