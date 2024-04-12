@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Introduction to konfound • konfound</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -82,7 +82,7 @@
                         <h4 data-toc-skip class="author">Joshua
 Rosenberg, Ran Xu, Qinyun Lin, and Ken Frank</h4>
             
-            <h4 data-toc-skip class="date">2024-03-18</h4>
+            <h4 data-toc-skip class="date">2024-04-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/konfound-project/konfound/blob/HEAD/vignettes/introduction-to-konfound.Rmd" class="external-link"><code>vignettes/introduction-to-konfound.Rmd</code></a></small>
       <div class="hidden name"><code>introduction-to-konfound.Rmd</code></div>
@@ -320,9 +320,12 @@ are likely less important than those that are known an included (i.e.,
 we have a good sense of the factors that matter in terms of educational
 achievement).</p>
 <p><strong>For logistic regression models fit with glm()</strong></p>
-<p>Effects for these models are interpreted on the basis of average
-partial (or marginal) effects (calculated using the <code>margins</code>
-package).</p>
+<p>Effects for these models are typically interpreted on the basis of
+average partial (or marginal) effects (calculated using the
+<code>margins</code> package).</p>
+<p>Due to an issue with the margins and predictions package, these are
+the raw coefficients, not the average marginal effects; we will address
+this in future patches.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># if forcats is not installed, this install it first using install.packages("forcats") for this to run</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"forcats"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -333,12 +336,16 @@ package).</p>
 <span>    <span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">married</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">d</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="../reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m2</span>, <span class="va">age</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
+<span><span class="co">#&gt; Warning in konfound_glm(model_object = model_object, tested_variable_string =</span></span>
+<span><span class="co">#&gt; tested_variable_string, : Due to an issue with the margins and predictions</span></span>
+<span><span class="co">#&gt; package, these are the raw coefficients, not the average marginal effects; we</span></span>
+<span><span class="co">#&gt; will address this in future patches</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span></span>
-<span><span class="co"><span style="font-weight: bold;">#&gt; </span>To invalidate an inference,  35.357 % of the estimate would have to be due to bias. </span></span>
+<span><span class="co"><span style="font-weight: bold;">#&gt; </span>To invalidate an inference,  84.006 % of the estimate would have to be due to bias. </span></span>
 <span><span class="co">#&gt; This is based on a threshold of 0.002 for statistical significance (alpha = 0.05).</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; To invalidate an inference,  7569  observations would have to be replaced with cases</span></span>
-<span><span class="co">#&gt; for which the effect is 0 (RIR = 7569).</span></span>
+<span><span class="co">#&gt; To invalidate an inference,  17983  observations would have to be replaced with cases</span></span>
+<span><span class="co">#&gt; for which the effect is 0 (RIR = 17983).</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; See Frank et al. (2013) for a description of the method.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -518,7 +525,7 @@ Research</em>, 29(2), 147-194 <a href="https://msu.edu/~kenfrank/papers/impact%2
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
       </footer>
