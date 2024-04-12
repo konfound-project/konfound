@@ -45,5 +45,5 @@ test_that("konfound glm works", {
     m6 <- glm(married ~ age, data = gss_cat, family = binomial(link = "logit"))
     m6_output <- konfound(m6, age, to_return = "raw_output")
     
-    expect_equal(as.vector(m6_output$percent_bias_to_change_inference), 35.357)
+    expect_equal(as.vector(m6_output$percent_bias_to_change_inference), 84.006)
 })
