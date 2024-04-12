@@ -46,7 +46,6 @@ Imports:
     rlang,
     tidyr,
     lme4 (>= 1.1-35.1),
-    margins,
     tibble,
     ggrepel,
     pbkrtest
