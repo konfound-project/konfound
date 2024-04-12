@@ -17,7 +17,6 @@
 #' @importFrom broom tidy glance
 #' @importFrom dplyr select filter bind_cols
 #' @importFrom stats glm
-#' @importFrom margins margins
 konfound_glm <- function(model_object, 
                          tested_variable_string, 
                          alpha, tails, 
