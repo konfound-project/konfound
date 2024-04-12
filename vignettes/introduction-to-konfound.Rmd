@@ -124,7 +124,9 @@ If the impact threshhold is greater than the impacts of the `Z`s (the other cova
 
 **For logistic regression models fit with glm()**
 
-Effects for these models are interpreted on the basis of average partial (or marginal) effects (calculated using the `margins` package).
+Effects for these models are typically interpreted on the basis of average partial (or marginal) effects (calculated using the `margins` package).
+
+Due to an issue with the margins and predictions package, these are the raw coefficients, not the average marginal effects; we will address this in future patches.
 
 ```{r, message = F}
 # if forcats is not installed, this install it first using install.packages("forcats") for this to run
