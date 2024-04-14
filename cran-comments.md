@@ -4,4 +4,4 @@
 
 * This is a new release.
 
-This addressess an issue with a URL not resolving correctly.
+This is a patch due to the margins package being removed from CRAN.
