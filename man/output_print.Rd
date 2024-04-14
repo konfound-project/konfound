@@ -5,6 +5,7 @@
 \title{Output printed text with formatting}
 \usage{
 output_print(
+  n_covariates,
   est_eff,
   beta_threshhold,
   bias = NULL,
