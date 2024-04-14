@@ -26,7 +26,8 @@
 #' @param alpha The level of statistical significance.
 #' @param index A character string indicating the index for which the output is generated ('RIR' or 'IT').
 #' @importFrom crayon bold underline italic
-output_print <- function(est_eff,
+output_print <- function(n_covariates,
+                         est_eff,
                          beta_threshhold,
                          bias = NULL,
                          sustain = NULL,
@@ -120,12 +121,12 @@ output_print <- function(est_eff,
     cat("\n")
 
 
-link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.3102/0162373713493129">Click here for the article</a></body></html>'
-if (requireNamespace("htmltools", quietly = TRUE)) {
-    htmltools::html_print(htmltools::HTML(link_html))
-} else {
-    message("htmltools package is required")
-}
+#link_html <- '<html><body><a href="https://journals.sagepub.com/doi/10.3102/0162373713493129">Click here for the article</a></body></html>'
+#if (requireNamespace("htmltools", quietly = TRUE)) {
+#    htmltools::html_print(htmltools::HTML(link_html))
+#} else {
+#    message("htmltools package is required")
+#}
 
   }
   if (index == "IT") { 
@@ -200,6 +201,13 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     cat("additionally include the R2, sdx, and sdy as input.")
     cat("\n")
     cat("\n")
+    if (n_covariates == 0) {
+        cat("Note that sdx and sdy and R2 are only used to calculate the unconditional ITCV when")
+        cat("\n")
+        cat("there are covariates included (number of covariates > 0).")
+        cat("\n")
+        cat("\n")
+    }
     cat("See Frank (2000) for a description of the method.")
     cat("\n")
     cat("\n")
@@ -212,8 +220,11 @@ if (requireNamespace("htmltools", quietly = TRUE)) {
     cat("\n")
     cat("Accuracy of results increases with the number of decimals reported.")
     cat("\n")
-
+    cat("\n")
+    cat("The ITCV analysis was originally derived for OLS standard errors. If the")
+    cat("\n")
+    cat("standard errors reported in the table were not based on OLS, some caution")
+    cat("\n")
+    cat("should be used to interpret the ITCV.")
   }
-    
 }
-

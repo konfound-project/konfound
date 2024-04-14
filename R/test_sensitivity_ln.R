@@ -357,12 +357,59 @@ test_sensitivity_ln <- function(est_eff,
   prob_replace <- final_solution$table_start[1,1]/n_obs*100
   }
 
+# Components from final_solution$table_start
+treatment_success_start <- final_solution$table_start[2,2]
+treatment_failure_start <- final_solution$table_start[2,1]
+control_failure_start <- final_solution$table_start[1,1]
+control_success_start <- final_solution$table_start[1,2]
 
-  # result <- list(conclusion1,
-  #                Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
-  #                conclusion2, conclusion3,
-  #                total_RIR = total_RIR, total_switch = total_switch
-  # )
+# Calculating success percentages and totals for the start table
+success_percent_control_start <- control_success_start / (control_failure_start + control_success_start) * 100
+success_percent_treatment_start <- treatment_success_start / (treatment_failure_start + treatment_success_start) * 100
+total_fail_start <- control_failure_start + treatment_failure_start
+total_success_start <- control_success_start + treatment_success_start
+total_percentage_start <- total_success_start / (total_fail_start + total_success_start) * 100
+	
+# Formatting success rates with "%" symbol
+success_rate_control_start <- paste0(sprintf("%.2f", success_percent_control_start), "%")
+success_rate_treatment_start <- paste0(sprintf("%.2f", success_percent_treatment_start), "%")
+total_rate_start <- paste0(sprintf("%.2f", total_percentage_start), "%")
+
+# Adjusting the 3x3 start table to include Success Rate with "%" and updated column name
+table_start_3x3 <- data.frame(
+  Fail = c(control_failure_start, treatment_failure_start, total_fail_start),
+  Success = c(control_success_start, treatment_success_start, total_success_start),
+  `Success_Rate` = c(success_rate_control_start, success_rate_treatment_start, total_rate_start),
+  row.names = c("Control", "Treatment", "Total")
+)
+
+	
+# Repeat the process for final_solution$table_final for the transferred table
+treatment_success_final <- final_solution$table_final[2,2]
+treatment_failure_final <- final_solution$table_final[2,1]
+control_failure_final <- final_solution$table_final[1,1]
+control_success_final <- final_solution$table_final[1,2]
+
+# Calculating success percentages and totals for the final table
+success_percent_control_final <- control_success_final / (control_failure_final + control_success_final) * 100
+success_percent_treatment_final <- treatment_success_final / (treatment_failure_final + treatment_success_final) * 100
+total_fail_final <- control_failure_final + treatment_failure_final
+total_success_final <- control_success_final + treatment_success_final
+total_percentage_final <- total_success_final / (total_fail_final + total_success_final) * 100
+	
+# Formatting success rates for the final table
+success_rate_control_final <- paste0(sprintf("%.2f", success_percent_control_final), "%")
+success_rate_treatment_final <- paste0(sprintf("%.2f", success_percent_treatment_final), "%")
+total_rate_final <- paste0(sprintf("%.2f", total_percentage_final), "%")
+
+# Adjusting the 3x3 final table to include Success Rate with "%" and updated column name
+table_final_3x3 <- data.frame(
+  Fail = c(control_failure_final, treatment_failure_final, total_fail_final),
+  Success = c(control_success_final, treatment_success_final, total_success_final),
+  `Success_Rate` = c(success_rate_control_final, success_rate_treatment_final, total_rate_final),
+  row.names = c("Control", "Treatment", "Total")
+)
+
 
   # output dispatch
   if (to_return == "raw_output") {
@@ -409,38 +456,10 @@ test_sensitivity_ln <- function(est_eff,
                   Fig_ITCV = NA,
                   Fig_RIR = NA))
 
-
-#    if (changeSE) {
-#      result <- list(conclusion1,
-#                     conclusion1b,
-#                     conclusion1c,
-#                     Implied_Table = final_solution$table_start,
-#                     notice,
-#                     Transfer_Table = final_solution$table_final,
-#                     conclusion2,
-#                     conclusion3,
-#                     needtworows = final_solution$needtworows,
-#                     fragility = total_switch,
-#                     RIR = total_RIR,
-#                     notice_SE)
-#    } else {
-#      result <- list(conclusion1,
-#                     conclusion1b,
-#                     conclusion1c,
-#                     Implied_Table = final_solution$table_start,
-#                     notice,
-#                     Transfer_Table = final_solution$table_final,
-#                     conclusion2,
-#                     conclusion3,
-#                     needtworows = final_solution$needtworows,
-#                     fragility = total_switch,
-#                     RIR = total_RIR)
-#    }
-
   } else  if (to_return == "print") {
 
     result <- list(conclusion1,conclusion1b, conclusion1c,
-                   Implied_Table = final_solution$table_start, notice, Transfer_Table = final_solution$table_final,
+                   Implied_Table = table_start_3x3, notice, Transfer_Table = table_final_3x3,
                    conclusion2, conclusion3,
                    total_RIR = total_RIR, total_switch = total_switch)
 
@@ -655,6 +674,7 @@ test_sensitivity_ln <- function(est_eff,
 
       cat("\n\n")
       print(Transfer_Table)
+      cat("\n")
       cat(sprintf("Effect size = %.3f, SE = %.3f, p-value = %.3f.",
                   final_solution$est_eff_final, final_solution$std_err_final, p_final),
                  c("\nThis is based on t = estimated effect/standard error")
@@ -854,7 +874,9 @@ test_sensitivity_ln <- function(est_eff,
       }
 
       cat("\n\n")
+      
       print(Transfer_Table)
+      cat("\n")    
       cat(sprintf("Effect size = %.3f, SE = %.3f, p-value = %.3f.",
                   final_solution$est_eff_final, final_solution$std_err_final, p_final),
                  c("\nThis is based on t = estimated effect/standard error")

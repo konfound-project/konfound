@@ -89,6 +89,51 @@ tkonfound <- function(a, b, c, d,
   rownames(table_start) <- rownames(table_final) <- c("Control", "Treatment")
   colnames(table_start) <- colnames(table_final) <- c("Fail", "Success")
 
+a_start <- table_ob[1,1]
+b_start <- table_ob[1,2]
+c_start <- table_ob[2,1]
+d_start <- table_ob[2,2]
+
+  success_rate_control_start <- b_start / (a_start + b_start) * 100
+success_rate_treatment_start <- d_start / (c_start + d_start) * 100
+total_fail_start <- a_start + c_start
+total_success_start <- b_start + d_start
+total_rate_start <- total_success_start / (total_fail_start + total_success_start) * 100
+  
+  # Adjust table_start to a data.frame for revised 3x3 format
+  table_start_revised <- data.frame(
+    Fail = c(a_start, c_start, total_fail_start),
+    Success = c(b_start, d_start, total_success_start),
+    `Success_Rate` = c(sprintf("%.2f%%", success_rate_control_start), 
+                       sprintf("%.2f%%", success_rate_treatment_start), 
+                       sprintf("%.2f%%", total_rate_start))
+  )
+  
+  rownames(table_start_revised) <- c("Control", "Treatment", "Total")
+
+a_final <- solution$Transfer_Table[1,1]
+b_final <- solution$Transfer_Table[1,2]
+c_final <- solution$Transfer_Table[2,1]
+d_final <- solution$Transfer_Table[2,2]
+
+
+  success_rate_control_final <- b_final / (a_final + b_final) * 100
+success_rate_treatment_final <- d_final / (c_final + d_final) * 100
+total_fail_final <- a_final + c_final
+total_success_final <- b_final + d_final
+total_rate_final <- total_success_final / (total_fail_final + total_success_final) * 100
+  
+  # Adjust table_final to a data.frame for revised 3x3 format
+  table_final_revised <- data.frame(
+    Fail = c(a_final, c_final, total_fail_final),
+    Success = c(b_final, d_final, total_success_final),
+    `Success_Rate` = c(sprintf("%.2f%%", success_rate_control_final), 
+                       sprintf("%.2f%%", success_rate_treatment_final), 
+                       sprintf("%.2f%%", total_rate_final))
+  )
+  
+  rownames(table_final_revised) <- c("Control", "Treatment", "Total")
+  
   if (switch_trm && dcroddsratio_ob) {
     transferway <- "treatment success to treatment failure"
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
@@ -287,14 +332,13 @@ tkonfound <- function(a, b, c, d,
     cat("\n")
     cat(crayon::underline("User-entered Table:"))
     cat("\n")
-    print(table_start)
-    cat("\n")
+    print(table_start_revised)
     cat("\n")
     cat(conclusion3)
     cat("\n")
     cat(crayon::underline("Transfer Table:"))
     cat("\n")
-    print(table_final)
+    print(table_final_revised)
     cat("\n")
     cat(crayon::bold("RIR:"))
     cat("\n")
