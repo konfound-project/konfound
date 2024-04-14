@@ -1,6 +1,7 @@
 # Main function to test sensitivity for non-linear models to be wrapped
 # with pkonfound(), konfound(), and mkonfound()
 
+#' @importFrom stats pt
 test_sensitivity_ln <- function(est_eff,
                                 std_err,
                                 n_obs,
@@ -315,8 +316,8 @@ test_sensitivity_ln <- function(est_eff,
 
  ### Add to calculate p-value
  if (tails == 2) {
-	 p_start <- 2 * pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
-	 p_final <- 2 * pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
+	 p_start <- 2 * stats::pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
+	 p_final <- 2 * stats::pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
  } else if (tails == 1) {
 	 p_start = pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
 	 p_final = pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)

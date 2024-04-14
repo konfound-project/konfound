@@ -16,6 +16,7 @@
 #' @return The results of the konfound analysis for the specified variable(s).
 #' @importFrom broom tidy glance
 #' @importFrom dplyr select filter bind_cols
+#' @importFrom stats var
 konfound_lm <- function(model_object,
                         tested_variable_string,
                         alpha,
@@ -26,7 +27,7 @@ konfound_lm <- function(model_object,
     glance_output <- broom::glance(model_object)
 
     coef_df <- tidy_output[tidy_output$term == tested_variable_string, ]
-    sdx = unname(sqrt(diag(var(model_object$model)))[tested_variable_string])
+    sdx = unname(sqrt(diag(stats::var(model_object$model)))[tested_variable_string])
 
   est_eff <- coef_df$estimate
   std_err <- coef_df$std.error
