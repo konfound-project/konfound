@@ -96,7 +96,7 @@
    if (index == "COP") {
      
      # if user does not specify eff_thr then set default as 0 
-     if (is.na(eff_thr)) {eff_thr = 0}  
+     if (is.na(eff_thr)) {eff_thr <- 0}  
      
      out <- test_cop(
        est_eff = est_eff, # unstandardized

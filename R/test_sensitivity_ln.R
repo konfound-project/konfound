@@ -48,11 +48,11 @@ test_sensitivity_ln <- function(est_eff,
                           ((4 + 4 * odds_ratio^2) / odds_ratio - 7.999999)))/
                   (2 * n_treat * (n_obs - n_treat)))
   # check if the implied table solution may contain imaginary numbers
-  changeSE <- F
+  changeSE <- FALSE
   user_std_err <- std_err
   if (std_err < minse) {
-    haveimaginary <- T
-    changeSE <- T
+    haveimaginary <- TRUE
+    changeSE <- TRUE
     std_err <- minse
   }
     
@@ -319,8 +319,8 @@ test_sensitivity_ln <- function(est_eff,
 	 p_start <- 2 * stats::pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
 	 p_final <- 2 * stats::pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
  } else if (tails == 1) {
-	 p_start = pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
-	 p_final = pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
+	 p_start <- pt(abs(final_solution$t_start), n_obs - n_covariates - 2, lower.tail = FALSE)
+	 p_final <- pt(abs(final_solution$t_final), n_obs - n_covariates - 2, lower.tail = FALSE)
  }
 
 

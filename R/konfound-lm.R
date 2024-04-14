@@ -27,7 +27,7 @@ konfound_lm <- function(model_object,
     glance_output <- broom::glance(model_object)
 
     coef_df <- tidy_output[tidy_output$term == tested_variable_string, ]
-    sdx = unname(sqrt(diag(stats::var(model_object$model)))[tested_variable_string])
+    sdx <- unname(sqrt(diag(stats::var(model_object$model)))[tested_variable_string])
 
   est_eff <- coef_df$estimate
   std_err <- coef_df$std.error
