@@ -60,7 +60,7 @@ pkonfound(est_eff = 2,
 `konfound()` calculates the same for models fit in R. For example, here are the coefficients for a linear model fit with `lm()` using the built-in dataset `mtcars`:
 
 ```{r}
-m1 <- lm(mpg ~ wt + hp, data = mtcars)
+m1 <- lm(mpg ~ wt + disp, data = mtcars)
 m1
 summary(m1)
 ```

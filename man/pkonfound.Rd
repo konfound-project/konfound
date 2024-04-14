@@ -28,7 +28,7 @@ pkonfound(
   R2 = NA,
   signsuppression = 0,
   eff_thr = NA,
-  FR2max,
+  FR2max = 0,
   FR2max_multiplier = 1.3,
   to_return = "print"
 )
