@@ -48,8 +48,7 @@ Imports:
     lme4 (>= 1.1-35.1),
     tibble,
     ggrepel,
-    pbkrtest,
-    htmltools
+    pbkrtest
 Suggests: 
     covr,
     devtools,

@@ -11,6 +11,7 @@
 #' beta threshold, and other parameters, providing formatted
 #' output for each case.
 #'
+#' @param n_covariates number of covariates. 
 #' @param est_eff The estimated effect.
 #' @param beta_threshhold The threshold value of beta, used for
 #' statistical significance determination.

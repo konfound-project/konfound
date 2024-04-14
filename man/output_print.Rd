@@ -22,6 +22,8 @@ output_print(
 )
 }
 \arguments{
+\item{n_covariates}{number of covariates.}
+
 \item{est_eff}{The estimated effect.}
 
 \item{beta_threshhold}{The threshold value of beta, used for
