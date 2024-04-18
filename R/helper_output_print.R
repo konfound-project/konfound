@@ -56,7 +56,7 @@ output_print <- function(n_covariates,
       cat("\n")
       cat(paste0("the inference one would expect to have to replace ", round(recase, 3), " (", round(bias, 3), "%) observations"))
       cat("\n")
-      cat(paste0("with cases for which the treatment effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
+      cat(paste0("with cases for which the effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
       cat("\n")
     } else if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
       cat("TO INVALIDATE:\n")
@@ -71,7 +71,7 @@ output_print <- function(n_covariates,
       cat("\n")
       cat(paste0("the inference one would expect to have to replace ", round(recase, 3), " (", round(bias, 3), "%) observation"))
       cat("\n")
-      cat(paste0("with cases for which the treatment effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
+      cat(paste0("with cases for which the effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
       cat("\n")
     } else if ((abs(est_eff) < abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
       cat("TO SUSTAIN:\n", sep = "")
