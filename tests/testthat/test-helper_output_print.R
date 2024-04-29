@@ -1,8 +1,5 @@
 context("Checking helper_output_print")
 
-source("~/konfound_newitcv_testcoverage/R/helper_output_print.R")
-#source("~/newitcv_testcoverage/R/helper_output_print.R")
-
 test_that("output_print produces the correct language when index is 'RIR' with eff_thr specified", {
     # Define mock values for parameters
     n_covariates <- 3
@@ -31,7 +28,7 @@ test_that("output_print produces the correct language when index is 'RIR' with e
         "To invalidate the inference based on your estimate, 30% of the (0.6)",
         "estimate would have to be due to bias. This implies that to invalidate",
         "the inference one would expect to have to replace 5 (30%) observation",
-        "with cases for which the treatment effect is 0.1 (RIR = 5).",
+        "with cases for which the effect is 0.1 (RIR = 5).",
         "",
         "See Frank et al. (2013) for a description of the method.",
         "",

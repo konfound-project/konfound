@@ -1,8 +1,5 @@
 context("Checking test_pse")
 
-source("~/konfound_newitcv_testcoverage/R/test_pse.R")
-#source("~/konfound_newitcv_testcoverage/R/test_pse.R")
-
 test_that("test_pse handles non-positive standard error correctly", {
     # Expect an error to be thrown with the specific message when std_err is zero or negative
     expect_error(

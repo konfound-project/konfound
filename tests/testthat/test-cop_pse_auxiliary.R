@@ -1,9 +1,5 @@
 context("Checking auxiliary")
 
-source("~/konfound_newitcv_testcoverage/R/cop_pse_auxiliary.R")
-#source("~/newitcv_testcoverage/R/cop_pse_auxiliary.R")
-
-
 test_that("cal_ryz works", {
     expect_equal(cal_ryz(0.1, 0.6), tolerance = .001, 0.7719842) 
     expect_equal(cal_ryz(0.2, 0.6), tolerance = .001, 0.7637626) 

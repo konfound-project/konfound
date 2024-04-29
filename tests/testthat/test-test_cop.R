@@ -1,8 +1,5 @@
 context("Testing test_cop.R")
 
-source("~/konfound_newitcv_testcoverage/R/test_cop.R")
-#source("~/newitcv_testcoverage/R/test_cop.R")
-
 # Error Case 1: Standard error is zero or negative
 test_that("Standard error check", {
     expect_error(test_cop(est_eff = 0.4, std_err = 0, n_obs = 300, n_covariates = 5,

@@ -1,8 +1,5 @@
 context("Testing Output DataFrame Creation")
 
-source("~/konfound_newitcv_testcoverage/R/helper_output_dataframe.R")
-#source("~/newitcv_testcoverage/R/helper_output_dataframe.R")
-
 # Test for est_eff greater than beta_threshhold
 test_that("output dataframe is correct when est_eff is greater than beta_threshhold", {
     est_eff <- 0.5

@@ -1,8 +1,5 @@
 context("Testing Nonlinear_auxiliary.R")
 
-source("~/konfound_newitcv_testcoverage/R/nonlinear_auxiliary.R")
-#source("~/newitcv_testcoverage/R/nonlinear_auxiliary.R")
-
 test_that("get_t_kfnl adjusts zero cells correctly", {
     # Check adjustment when 'a' is 0
     expect_equal(get_t_kfnl(0, 1, 1, 1), get_t_kfnl(0.5, 1, 1, 1))

@@ -1,10 +1,5 @@
 context("Checking test_sensitivity_ln")
 
-source("~/konfound_newitcv_testcoverage/R/test_sensitivity_ln.R")
-source("~/konfound_newitcv_testcoverage/R/nonlinear_auxiliary.R")
-#source("~/newitcv_testcoverage/R/test_sensitivity_ln.R")
-#source("~/newitcv_testcoverage/R/nonlinear_auxiliary.R")
-
 # Test for standard error condition
 test_that("test_sensitivity_ln handles standard error validation", {
     expect_error(
