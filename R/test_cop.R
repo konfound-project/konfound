@@ -342,6 +342,7 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
     cat("\n")
     cat(sprintf("Delta* is %.3f (assuming no covariates in the baseline model M1),\nthe correlation-based delta is %.3f, with a bias of %.3f%%.\n", 
               delta_star, delta_exact, delta_pctbias))
+    cat("Note that %bias = (delta* - delta) / delta.\n")
     cat("\n")
     cat(sprintf("With delta*, the coefficient in the final model will be %.3f.\nWith the correlation-based delta, the coefficient will be %.3f.\n",  
               eff_x_M3_oster, eff_x_M3))

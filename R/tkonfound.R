@@ -202,7 +202,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
 
   if (!allnotenough & final > 1) {
     conclusion1 <- paste0(
-      change, sprintf("one would need to replace %d ", RIR), RIRway, "data points")
+      change, sprintf("one would need to replace %d ", RIR), RIRway, " data points with data points")
 
     if (replace == "control") {
       conclusion1b <- paste0(
@@ -214,13 +214,13 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
 
     conclusion1c <- paste0(
       sprintf("This is equivalent to transferring %d", final),
-      " data points from ", transferway, "."
-    )
+      " data points from ", transferway, " (Fragility = ", final, ")."
+      )
   }
 
   if (!allnotenough & final == 1) {
     conclusion1 <- paste0(
-      change, sprintf("one would need to replace %d ", RIR), RIRway, "data points")
+      change, sprintf("one would need to replace %d ", RIR), RIRway, " data points with data points")
 
     if (replace == "control") {
       conclusion1b <- paste0(
@@ -232,7 +232,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
 
     conclusion1c <- paste0(
       sprintf("This is equivalent to transferring %d", final),
-      " data points from ", transferway, ".")
+      " data points from ", transferway, " (Fragility = ", final, ").")
   }
 
   if (allnotenough){
@@ -265,7 +265,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   info1 <- "This function calculates the number of data points that would have to be replaced with"
   info2 <- "zero effect data points (RIR) to invalidate an inference made about the association"
   info3 <- "between the rows and columns in a 2x2 table."
-  info4 <- "One can also interpret this as switches from one cell to another, such as from the"
+  info4 <- "One can also interpret this as switches (Fragility) from one cell to another, such as from the"
   info5 <- "treatment success cell to the treatment failure cell."
 
   if (to_return == "raw_output") {
