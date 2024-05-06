@@ -475,6 +475,7 @@ table_final_3x3 <- data.frame(
     notice <- result$notice
     RIR_value <- result$RIR
     
+    cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
 
     if (changeSE) {
 
@@ -501,20 +502,20 @@ table_final_3x3 <- data.frame(
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <-
           cat(paste(
-            change, sprintf("one would need to replace %d (%.3f%%)", total_RIR, RIR_pi), RIRway, "\ncases "))
+            change, sprintf("one would need to replace %d (%.3f%%)", total_RIR, RIR_pi), RIRway, "\ndata points "))
 
           if (replace == "control") {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR))
+            cat(sprintf("with data points for which the probability of failure in the control \ngroup (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR))
           } else {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR))
+            cat(sprintf("with data points for which the probability of failure in the entire \nsample (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR))
           }
 
           #conclusion1b <-
           cat(paste0(
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch),
-            c(" cases from "), transferway,
+            c(" data points from "), transferway,
             sprintf(" (Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )
@@ -524,31 +525,31 @@ table_final_3x3 <- data.frame(
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
+                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
                )
             }
 
-          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
 
 
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 222
           cat(paste(
-            change, sprintf("one would need to replace %d (%.3f%%)", total_RIR, RIR_pi), RIRway, "\ncases"))
+            change, sprintf("one would need to replace %d (%.3f%%)", total_RIR, RIR_pi), RIRway, "\ndata points"))
 
           if (replace == "control") {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR))
+            cat(sprintf("with data points for which the probability of failure in the control \ngroup (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR))
           } else {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR))
+            cat(sprintf("with data points for which the probability of failure in the entire \nsample (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR))
           }
 
           #conclusion1b <-
           cat(paste0(
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch),
-            c(" cases from "), transferway,
+            c(" data points from "), transferway,
             sprintf(" (Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )
@@ -557,12 +558,12 @@ table_final_3x3 <- data.frame(
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
+                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
                )
             }
 
-          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
 
         } else {
 
@@ -570,8 +571,8 @@ table_final_3x3 <- data.frame(
 
           #conclusion1 <-
         cat(paste0(
-            sprintf("The inference cannot be invalidated merely by switching cases in"),
-            sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
+            sprintf("The inference cannot be invalidated merely by switching data points in"),
+            sprintf("\nonly one treatment condition. Therefore, data points have been switched from"),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
@@ -593,20 +594,20 @@ table_final_3x3 <- data.frame(
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <-
           cat(paste(
-            change, sprintf("one would need to replace %d \n(%.3f%%)", RIR, RIR_pi), RIRway, "cases "))
+            change, sprintf("one would need to replace %d \n(%.3f%%)", RIR, RIR_pi), RIRway, "data points "))
 
           if (replace == "control") {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with data points for which the probability of \nfailure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with data points for which the probability of \nfailure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
           }
 
           #conclusion1b <-
           cat(paste0(
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch),
-            c(" cases from "), transferway,
+            c(" data points from "), transferway,
             sprintf("\n(Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )
@@ -615,31 +616,31 @@ table_final_3x3 <- data.frame(
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
+                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
                )
             }
 
-          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
 
 
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 444
           cat(paste(
-            change, sprintf("one would need to replace %d \n(%.3f%%)", RIR, RIR_pi), RIRway, "\ncases"))
+            change, sprintf("one would need to replace %d \n(%.3f%%)", RIR, RIR_pi), RIRway, "\ndata points"))
 
           if (replace == "control") {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with data points for which the probability of \nfailure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with data points for which the probability of \nfailure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
           }
 
           #conclusion1b <-
           cat(paste0(
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch),
-            c(" cases from "), transferway,
+            c(" data points from "), transferway,
             sprintf(" (Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )
@@ -648,12 +649,12 @@ table_final_3x3 <- data.frame(
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
+                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
                )
             }
 
-          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
 
         } else {
 
@@ -661,8 +662,8 @@ table_final_3x3 <- data.frame(
 
           #conclusion1 <-
         cat(paste0(
-            sprintf("The inference cannot be sustained merely by switching cases in"),
-            sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
+            sprintf("The inference cannot be sustained merely by switching data points in"),
+            sprintf("\nonly one treatment condition. Therefore, data points have been switched from"),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
@@ -705,20 +706,20 @@ table_final_3x3 <- data.frame(
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <-
           cat(paste(
-            change, sprintf("one would need to replace %d (%.3f%%)", RIR, RIR_pi), RIRway, "\ncases "))
+            change, sprintf("one would need to replace %d (%.3f%%)", RIR, RIR_pi), RIRway, "\ndata points "))
 
           if (replace == "control") {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with data points for which the probability of failure in the control \ngroup (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with data points for which the probability of failure in the entire \nsample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
           }
 
           #conclusion1b <-
           cat(paste0(
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch),
-            c(" cases from "), transferway,
+            c(" data points from "), transferway,
             sprintf(" (Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )
@@ -727,30 +728,30 @@ table_final_3x3 <- data.frame(
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
+                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
                )
             }
 
-          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
 
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 666
           cat(paste(
-            change, sprintf("one would need to replace %d (%.3f%%)", RIR, RIR_pi), RIRway, "\ncases"))
+            change, sprintf("one would need to replace %d (%.3f%%)", RIR, RIR_pi), RIRway, "\ndata points"))
 
           if (replace == "control") {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of failure in the control \ngroup (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with data points for which the probability of failure in the control \ngroup (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of failure in the entire \nsample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with data points for which the probability of failure in the entire \nsample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
           }
 
           #conclusion1b <-
           cat(paste0(
             sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch),
-            c(" cases from "), transferway,
+            c(" data points from "), transferway,
             sprintf(" (Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )
@@ -759,12 +760,12 @@ table_final_3x3 <- data.frame(
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
+                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
                )
             }
 
-          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
 
         } else {
 
@@ -772,8 +773,8 @@ table_final_3x3 <- data.frame(
 
           #conclusion1 <-
             cat(paste0(
-            sprintf("The inference cannot be invalidated merely by switching cases in"),
-            sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
+            sprintf("The inference cannot be invalidated merely by switching data points in"),
+            sprintf("\nonly one treatment condition. Therefore, data points have been switched from"),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
@@ -795,20 +796,20 @@ table_final_3x3 <- data.frame(
         if (!final_solution$needtworows & final_solution$final_switch > 1) {
           #conclusion1 <-
           cat(paste(
-            change, sprintf("one would need to replace %d \n(%.3f%%)", RIR, RIR_pi), RIRway, "cases "))
+            change, sprintf("one would need to replace %d \n(%.3f%%)", RIR, RIR_pi), RIRway, "data points "))
 
           if (replace == "control") {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with data points for which the probability of \nfailure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with data points for which the probability of \nfailure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
           }
 
           #conclusion1b <-
           cat(paste0(
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch),
-            c(" cases from "), transferway,
+            c(" data points from "), transferway,
             sprintf("\n(Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )
@@ -817,30 +818,30 @@ table_final_3x3 <- data.frame(
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
+                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
                )
             }
 
-          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
 
         } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
           #conclusion1 <- 888
           cat(paste(
-            change, sprintf("one would need to replace %d \n(%.3f%%)", RIR, RIR_pi), RIRway, "cases "))
+            change, sprintf("one would need to replace %d \n(%.3f%%)", RIR, RIR_pi), RIRway, "data points "))
 
           if (replace == "control") {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of \nfailure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with data points for which the probability of \nfailure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
           } else {
             #conclusion1a <-
-            cat(sprintf("with cases for which the probability of \nfailure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
+            cat(sprintf("with data points for which the probability of \nfailure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
           }
 
           #conclusion1b <-
           cat(paste0(
             sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch),
-            c(" cases from "), transferway,
+            c(" data points from "), transferway,
             sprintf("\n(Fragility = %d).", total_switch),
             c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
              )
@@ -849,12 +850,12 @@ table_final_3x3 <- data.frame(
 
           ### for RIR_perc larger than 100%
           if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d cases would", total_switch),
-                c("\nrequire replacing more cases than are in the "), RIRway, c(" condition.\n"))
+            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
+                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
                )
             }
 
-          cat(sprintf("\nThe transfer of %d cases yields the following table:", total_switch))
+          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
 
         } else {
 
@@ -862,8 +863,8 @@ table_final_3x3 <- data.frame(
 
           #conclusion1 <-
             cat(paste0(
-            sprintf("The inference cannot be sustained merely by switching cases in"),
-            sprintf("\nonly one treatment condition. Therefore, cases have been switched from"),
+            sprintf("The inference cannot be sustained merely by switching data points in"),
+            sprintf("\nonly one treatment condition. Therefore, data points have been switched from"),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
