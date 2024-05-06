@@ -305,7 +305,6 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     return(result)
     
   } else  if (to_return == "print") {
-    cat("\n")
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):"))
     cat("\n")
     cat("\n")
@@ -329,8 +328,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     cat("\n")
     cat(conclusion1c)
     cat("\n")
-    cat(conclusion2)
     cat("\n")
+    cat(conclusion2)
     cat("\n")
     cat(crayon::underline("User-entered Table:"))
     cat("\n")
@@ -341,8 +340,6 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     cat(crayon::underline("Transfer Table:"))
     cat("\n")
     print(table_final_revised)
-    cat("\n")
-    cat("\n")
     
   }
   
