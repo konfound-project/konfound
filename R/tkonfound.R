@@ -202,19 +202,19 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
 
   if (!allnotenough & final > 1) {
     conclusion1 <- paste0(
-      change, sprintf("one would need to replace %d ", RIR), RIRway)
+      change, sprintf("one would need to replace %d ", RIR), RIRway, "data")
 
     if (replace == "control") {
       conclusion1b <- paste0(
-        sprintf("cases for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+        sprintf("points for which the probability of failure in the control group applies (RIR = %d). ", RIR))
     } else {
       conclusion1b <- paste0(
-        sprintf("cases for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
+        sprintf("points for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
     }
 
     conclusion1c <- paste0(
       sprintf("This is equivalent to transferring %d", final),
-      " cases from ", transferway, "."
+      " data points from ", transferway, "."
     )
   }
 
@@ -224,28 +224,28 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
 
     if (replace == "control") {
       conclusion1b <- paste0(
-        sprintf("cases for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+        sprintf("data points for which the probability of failure in the control group applies (RIR = %d). ", RIR))
     } else {
       conclusion1b <- paste0(
-        sprintf("cases for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
+        sprintf("data points for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
       }
 
     conclusion1c <- paste0(
       sprintf("This is equivalent to transferring %d", final),
-      " case from ", transferway, ".")
+      " data points from ", transferway, ".")
   }
 
   if (allnotenough){
     conclusion1 <- paste(
-      change, c("only transferring cases from" ), transferway,
-      sprintf(" is not enough. We also need to transfer %d cases from ", final_extra))
+      change, c("only transferring data points from" ), transferway,
+      sprintf(" is not enough. We also need to transfer %d data points from ", final_extra))
 
     conclusion1b <- paste0(
       transferway_extra, c("as shown, from the User-entered Table to the Transfer Table."))
 
     conclusion1c <- paste0(sprintf(" This means we need to replace %d of ", RIR), RIRway,
-    sprintf( "with null hypothesis cases; and replace %d ", RIR_extra), RIRway_extra,
-    c(" with null hypothesis cases to change the inference."))
+    sprintf( "with null hypothesis data points; and replace %d ", RIR_extra), RIRway_extra,
+    c(" with null hypothesis data points to change the inference."))
   }
 
   if (test == "chisq"){
@@ -262,9 +262,9 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       "For the Transfer Table, the estimated odds ratio is %.3f, with p-value of %.3f:", fisher_final, p_final)
   }
 
-  info1 <- "This function calculates the number of cases that would have to be replaced"
-  info2 <- "with zero effect cases (RIR) to invalidate an inference made about the association"
-  info3 <- "between the rows and columns in a 2x2 table."
+  info1 <- "This function calculates the number of data points that would have to be replaced"
+  info2 <- "with zero effect data points (RIR) to invalidate an inference made about the"
+  info3 <- "association between the rows and columns in a 2x2 table."
   info4 <- "One can also interpret this as switches from one cell to another, such as from"
   info5 <- "the treatment success cell to the treatment failure cell."
 
@@ -306,7 +306,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     
   } else  if (to_return == "print") {
     
-    cat(crayon::bold("Background Information:"))
+    cat(crayon::bold("Robustness of Inference to Replacement (RIR):"))
     cat("\n")
     cat(info1)
     cat("\n")
@@ -318,8 +318,6 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     cat("\n")
     cat(info5)
     cat("\n")
-    cat("\n")
-    cat(crayon::bold("Conclusion:"))
     cat("\n")
     cat(conclusion1)
     cat("\n")
