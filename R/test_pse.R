@@ -143,14 +143,10 @@ test_pse <- function(est_eff,
     }
     
     if (to_return == "print") {
-        cat("This function calculates the conditions that set the\nestimated effect approximately equal to the threshold\nwhile preserving the standard error.\n")
-        cat("\n")
-        cat(sprintf("The correlation between X and CV is %.3f,\nand the correlation between Y and CV is %.3f.\n", rxcv, rycv))
-        cat("\n")
-        cat(sprintf("Conditional on the covariates, the correlation between X\nand CV is %.3f, and the correlation between Y and CV\nis %.3f.\n", rxcvGz, rycvGz))
-        cat("\n")
-        cat(sprintf("Including such CV, the coefficient changes to %.3f,\nand standard error is %.3f.\n", eff_x_M3, se_x_M3))
-        cat("\n")
+        cat("This function calculates the conditions that set the estimated effect\napproximately equal to the threshold while preserving the standard error.\n\n")
+        cat(sprintf("The correlation between X and CV is %.3f, and the correlation between\nY and CV is %.3f.\n\n", rxcv, rycv))
+        cat(sprintf("Conditional on the covariates, the correlation between X and CV is %.3f,\nand the correlation between Y and CV\nis %.3f.\n\n", rxcvGz, rycvGz))
+        cat(sprintf("Including such CV, the coefficient changes to %.3f, and standard error\nis %.3f.\n\n", eff_x_M3, se_x_M3))
         cat("Use to_return = \"raw_ouput\" to see more specific results.")
     }
         
