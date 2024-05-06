@@ -44,8 +44,6 @@ output_print <- function(n_covariates,
   if (index == "RIR"){
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
     if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
-      cat("TO INVALIDATE:\n")
-      cat("\n")
       cat(paste0("RIR = ", round(recase, 3), "\n"))
       cat("\n")
       cat(paste0("The estimated effect is ", round(est_eff, 3), ". To invalidate the inference of an effect using"))
@@ -59,8 +57,6 @@ output_print <- function(n_covariates,
       cat(paste0("with data points for which the effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
       cat("\n")
     } else if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
-      cat("TO INVALIDATE:\n")
-      cat("\n")
       cat(paste0("RIR = ", round(recase, 3), "\n"))
       cat("\n")
       cat(paste0("The estimated effect is ", round(est_eff, 3), ", and specified threshold for inference is ", round(eff_thr, 3), "."))
@@ -74,8 +70,6 @@ output_print <- function(n_covariates,
       cat(paste0("with data points for which the effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
       cat("\n")
     } else if ((abs(est_eff) < abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
-      cat("TO SUSTAIN:\n", sep = "")
-      cat("\n")
       cat(paste0("RIR = ", round(recase, 3), "\n"))
       cat("\n")
       cat(paste0("The estimated effect is ", round(est_eff, 3), ". The threshold value for statistical significance"))
@@ -89,8 +83,6 @@ output_print <- function(n_covariates,
       cat(paste0("points with effect of ", round(beta_threshhold, 3), " (RIR = ", round(recase, 3), ").\n"))
       cat("\n")
     } else if ((abs(est_eff) < abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
-      cat("TO SUSTAIN:\n", sep = "")
-      cat("\n")
       cat(paste0("RIR = ", round(recase, 3), "\n"))
       cat("\n")
       cat(paste0("The estimated effect is ", round(est_eff, 3), ", and specified threshold for inference is ", round(eff_thr, 3), "."))
