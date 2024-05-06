@@ -202,14 +202,14 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
 
   if (!allnotenough & final > 1) {
     conclusion1 <- paste0(
-      change, sprintf("one would need to replace %d ", RIR), RIRway, "data")
+      change, sprintf("one would need to replace %d ", RIR), RIRway, "data points")
 
     if (replace == "control") {
       conclusion1b <- paste0(
-        sprintf("points for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+        sprintf("for which the probability of failure in the control group applies (RIR = %d). ", RIR))
     } else {
       conclusion1b <- paste0(
-        sprintf("points for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
+        sprintf("for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
     }
 
     conclusion1c <- paste0(
@@ -220,14 +220,14 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
 
   if (!allnotenough & final == 1) {
     conclusion1 <- paste0(
-      change, sprintf("one would need to replace %d ", RIR), RIRway)
+      change, sprintf("one would need to replace %d ", RIR), RIRway, "data points")
 
     if (replace == "control") {
       conclusion1b <- paste0(
-        sprintf("data points for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+        sprintf("for which the probability of failure in the control group applies (RIR = %d). ", RIR))
     } else {
       conclusion1b <- paste0(
-        sprintf("data points for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
+        sprintf("for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
       }
 
     conclusion1c <- paste0(
@@ -262,11 +262,11 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       "For the Transfer Table, the estimated odds ratio is %.3f, with p-value of %.3f:", fisher_final, p_final)
   }
 
-  info1 <- "This function calculates the number of data points that would have to be replaced"
-  info2 <- "with zero effect data points (RIR) to invalidate an inference made about the"
-  info3 <- "association between the rows and columns in a 2x2 table."
-  info4 <- "One can also interpret this as switches from one cell to another, such as from"
-  info5 <- "the treatment success cell to the treatment failure cell."
+  info1 <- "This function calculates the number of data points that would have to be replaced with"
+  info2 <- "zero effect data points (RIR) to invalidate an inference made about the association"
+  info3 <- "between the rows and columns in a 2x2 table."
+  info4 <- "One can also interpret this as switches from one cell to another, such as from the"
+  info5 <- "treatment success cell to the treatment failure cell."
 
   if (to_return == "raw_output") {
   return(output_list(obs_r = NA, act_r = NA,
@@ -305,8 +305,12 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     return(result)
     
   } else  if (to_return == "print") {
-    
+    cat("\n")
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):"))
+    cat("\n")
+    cat("\n")
+    cat("RIR =", RIR)
+    cat("\n")
     cat("\n")
     cat(info1)
     cat("\n")
@@ -338,9 +342,6 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     cat("\n")
     print(table_final_revised)
     cat("\n")
-    cat(crayon::bold("RIR:"))
-    cat("\n")
-    cat("RIR =", RIR)
     cat("\n")
     
   }
