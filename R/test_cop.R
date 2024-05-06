@@ -336,9 +336,9 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
     cat("This function calculates (Oster's) delta* and the exact value of delta.")
     cat("\n")
     if (negest == 1) {
-      cat("Using the absolute value of the estimated effect, result can be interpreted by symmetry.\n")
+      cat("Using the absolute value of the estimated effect, result can be interpreted\nby symmetry.\n")
     }
-    cat(sprintf("delta* is %.3f (assuming no covariates in the baseline model M1),\nthe exact delta is %.3f, with a bias of %.3f%%.\n", 
+    cat(sprintf("Delta* is %.3f (assuming no covariates in the baseline model M1),\nthe exact delta is %.3f, with a bias of %.3f%%.\n", 
               delta_star, delta_exact, delta_pctbias))
     cat("\n")
     cat(sprintf("With delta*, the coefficient in the final model will be %.3f.\nWith the exact delta, the coefficient will be %.3f.\n",  
