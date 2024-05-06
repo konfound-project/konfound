@@ -151,14 +151,16 @@ konfound(m4, condition, two_by_two = TRUE)
 
 `konfound` also works with models fit with the `lmer()` function from the package `lme4`, for mixed-effects or multi-level models. One challenge with carrying out sensitivity analysis for fixed effects in mixed effects models is calculating the correct denominator degrees of freedom for the t-test associated with the coefficients. This is not unique to sensitivity analysis, as, for example, `lmer()` does not report degrees of freedom (or p-values) for fixed effects predictors (see this information in the `lme4` FAQ [here](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have)). While it may be possible to determine the correct degrees of freedom for some models (i.e., models with relatively simple random effects structures), it is difficult to generalize this approach, and so in this package the Kenward-Roger approximation for the denominator degrees of freedom as implemented in the `pbkrtest` package (described in [Halekoh and Højsgaard, 2014](https://www.jstatsoft.org/htaccess.php?volume=59&type=i&issue=09&paper=true)).
 
+
 Here is an example of the use of `konfound()` with a model fit with `lmer()`:
 
 ```{r}
-if (requireNamespace("lme4")) {
-    library(lme4)
-    m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
-    konfound(m3, Days)
-}
+### below is commented out because of the issue for matrix 
+# if (requireNamespace("lme4")) {
+#    library(lme4)
+#    m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+#    konfound(m3, Days)
+# }
 ```
 
 ## Use of mkonfound() for meta-analyses that include sensitivity analysis
