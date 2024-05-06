@@ -344,13 +344,13 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
     cat(sprintf("With delta*, the coefficient in the final model will be %.3f.\nWith the exact delta, the coefficient will be %.3f.\n",  
               eff_x_M3_oster, eff_x_M3))
     cat("\n")
-    cat("Use to_return = \"raw_output\" to see more specific results and graphic presentation of the result.\n")
+    cat("Use to_return = \"raw_output\" to see more specific results and graphic\npresentation of the result.\n")
     cat("\n")
-    cat("This function calculates a correlation-based based coefficient of proportionality (delta) as well as Oster's delta*.\n")
+    cat("This function calculates a correlation-based based coefficient of\nproportionality (delta) as well as Oster's delta*.\n")
     cat("\n")
-    cat(paste0("If the replacement cases have a fixed value, then RIR = ", format(cond_RIR_fixedY, digits = 3), ".\n"))
-    cat(paste0("If the replacement cases follow a null distribution, then RIR = ", format(cond_RIR_null, digits = 3), ".\n"))
-    cat(paste0("If the replacement cases satisfy rxy|Z = 0, then RIR = ", format(cond_RIR_rxyz, digits = 3), ".\n"))
+    cat(sprintf("If the replacement cases have a fixed value, then RIR = %.3f.\n", cond_RIR_fixedY))
+    cat(sprintf("If the replacement cases follow a null distribution, then RIR = %.3f.\n", cond_RIR_null))
+    cat(sprintf("If the replacement cases satisfy rxy|Z = 0, then RIR = %.3f.\n", cond_RIR_rxyz))
   }
   
 }
