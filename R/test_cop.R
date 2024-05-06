@@ -333,6 +333,7 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
   }
   
   if (to_return == "print") {
+    cat(crayon::bold("Coefficient of Proportionality (COP):\n\n"))
     cat("This function calculates (Oster's) delta* and the exact value of delta.")
     cat("\n")
     if (negest == 1) {
