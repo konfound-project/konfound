@@ -155,12 +155,11 @@ konfound(m4, condition, two_by_two = TRUE)
 Here is an example of the use of `konfound()` with a model fit with `lmer()`:
 
 ```{r}
-### below is commented out because of the issue for matrix 
-# if (requireNamespace("lme4")) {
-#    library(lme4)
-#    m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
-#    konfound(m3, Days)
-# }
+if (requireNamespace("lme4")) {
+    library(lme4)
+    m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+    konfound(m3, Days)
+}
 ```
 
 ## Use of mkonfound() for meta-analyses that include sensitivity analysis
