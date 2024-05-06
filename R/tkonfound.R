@@ -307,7 +307,6 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   } else  if (to_return == "print") {
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):"))
     cat("\n")
-    cat("\n")
     cat("RIR =", RIR)
     cat("\n")
     cat("\n")
