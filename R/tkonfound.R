@@ -340,6 +340,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     cat(crayon::underline("Transfer Table:"))
     cat("\n")
     print(table_final_revised)
+    cat("\n")
+
     
   }
   
