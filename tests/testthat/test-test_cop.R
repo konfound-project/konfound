@@ -82,21 +82,25 @@ test_that("test_cop outputs the correct language and values when to_return is 'p
 
     # Define expected lines
     expected_lines <- c(
-        "This function calculates delta* and the exact value of delta.",       
-        "delta* is 0.387 (assuming no covariates in the baseline model M1), ", 
-        "                the exact delta is 1.172, with a bias of -66.980%.",  
-        "With delta*, the coefficient in the final model will be 0.447. ",     
-        "                With the exact delta, the coefficient will be 0.300.",
-        "Use to_return = raw_ouput to see more specific results ",             
-        "        and graphic presentation of the result.",                     
+        "Coefficient of Proportionality (COP):",
+        "",
+        "This function calculates a correlation-based coefficient of",
+        "proportionality (delta) as well as Oster's delta*.",
+        "",
+        "Delta* is 0.387 (assuming no covariates in the baseline model M1),", 
+        "the correlation-based delta is 1.172, with a bias of -66.980%.",  
+        "",
+        "With delta*, the coefficient in the final model will be 0.447.",     
+        "With the correlation-based delta, the coefficient will be 0.300.",
+        "",
+        "Use to_return = \"raw_output\" to see more specific results and graphic",             
+        "presentation of the result.",                     
         "",                                                                    
-        "This function also calculates conditional RIR that ",                 
-        "        invalidates the statistical inference.",                      
-        "If the replacement cases have a fixed value, then RIR = 80.03469 .",  
-        "If the replacement cases follow a null distribution, ",               
-        "        then RIR = 55.31744 .",                                       
-        "If the replacement cases satisfy rxy|Z = 0, then RIR = 56.31727 .",   
-        "" 
+        "This function also calculates conditional RIR that invalidates the statistical inference.",  
+        "",                                                                    
+        "If the replacement data points have a fixed value, then RIR = 80.035.",  
+        "If the replacement data points follow a null distribution, then RIR = 55.317.",                                       
+        "If the replacement data points satisfy rxy|Z = 0, then RIR = 56.317."
     )
     
     # Check each line against expected

@@ -147,7 +147,7 @@ test_pse <- function(est_eff,
         cat(sprintf("The correlation between X and CV is %.3f, and the correlation between\nY and CV is %.3f.\n\n", rxcv, rycv))
         cat(sprintf("Conditional on the covariates, the correlation between X and CV is %.3f,\nand the correlation between Y and CV is %.3f.\n\n", rxcvGz, rycvGz))
         cat(sprintf("Including such CV, the coefficient changes to %.3f, and standard error\nis %.3f.\n\n", eff_x_M3, se_x_M3))
-        cat("Use to_return = \"raw_ouput\" to see more specific results.")
+        cat("Use to_return = \"raw_output\" to see more specific results.")
     }
         
     

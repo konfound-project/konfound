@@ -77,9 +77,20 @@ test_that("test_pse print output is correct", {
     to_return <- "print"
     
     # Expected string
-    expected_output <- paste(
-        "This function calculates the conditions that set the\n            estimated effect approximately equal to the threshold\n            while preserving the standard error.\nThe correlation between X and CV is 0.214,\n                    and the correlation between Y and CV is 0.313.\nConditional on the covariates, the correlation between X\n                    and CV is 0.248, and the correlation between Y and CV\n                    is 0.372.\nIncluding such CV, the coefficient changes to 0.097,\n                    and standard error is 0.054.\nUse to_return = raw_ouput to see more specific results.",
-        sep = ""
+    expected_output <- c(
+        "This function calculates the conditions that set the estimated effect",
+        "approximately equal to the threshold while preserving the standard error.",
+        "",
+        "The correlation between X and CV is 0.214, and the correlation between",
+        "Y and CV is 0.313.",
+        "",
+        "Conditional on the covariates, the correlation between X and CV is 0.248,",
+        "and the correlation between Y and CV is 0.372.",
+        "",
+        "Including such CV, the coefficient changes to 0.097, and standard error",
+        "is 0.054.",
+        "",
+        "Use to_return = \"raw_output\" to see more specific results."
     )
     
     # Capture the output of the print statement
@@ -88,9 +99,9 @@ test_that("test_pse print output is correct", {
     )
     
     # Convert output array into a single string for easier grepl checking
-    output_string <- paste(output, collapse = "\n")
+    # output_string <- paste(output, collapse = "\n")
     
     # Check if the output is as expected
-    expect_equal(output_string, expected_output)
+    expect_equal(output, expected_output)
 })
 
