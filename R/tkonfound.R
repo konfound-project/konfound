@@ -244,7 +244,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       transferway_extra, c("as shown, from the User-entered Table to the Transfer Table."))
 
     conclusion1c <- paste0(sprintf(" This means we need to replace %d of ", RIR), RIRway,
-    sprintf( "with null hypothesis data points; and replace %d ", RIR_extra), RIRway_extra,
+    sprintf( " with null hypothesis data points; and replace %d ", RIR_extra), RIRway_extra,
     c(" with null hypothesis data points to change the inference."))
   }
 
