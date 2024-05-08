@@ -11,10 +11,11 @@ test_that("output_print produces the correct language when index is 'RIR' with e
     recase <- 5
     alpha <- 0.05
     index <- "RIR"
+    signsuppression <- 0
     
     # Capture the output
     output <- capture.output(
-        output_print(n_covariates, est_eff, beta_threshhold, bias=bias, nu=nu, eff_thr=eff_thr, recase=recase, obs_r=NA, critical_r=NA, r_con=NA, itcv=NA, alpha=alpha, index=index)
+        output_print(n_covariates, est_eff, beta_threshhold, bias=bias, nu=nu, eff_thr=eff_thr, recase=recase, obs_r=NA, critical_r=NA, r_con=NA, itcv=NA, alpha=alpha, index=index, signsuppression=signsuppression)
     )
     
     # Define expected lines
@@ -23,6 +24,7 @@ test_that("output_print produces the correct language when index is 'RIR' with e
         "RIR = 5",
         "",
         "The estimated effect is 0.6, and specified threshold for inference is 0.5.",
+        "The threshold used takes the same sign as the estimated effect. See comment above.",
         "To invalidate the inference based on your estimate, 30% of the (0.6)",
         "estimate would have to be due to bias. This implies that to invalidate",
         "the inference one would expect to have to replace 5 (30%) observation",
@@ -53,10 +55,11 @@ test_that("output_print produces the correct language for 'TO SUSTAIN' when inde
     recase <- 10
     alpha <- 0.05
     index <- "RIR"
+    signsuppression <- 0
     
     # Capture the output
     output <- capture.output(
-        output_print(n_covariates, est_eff, beta_threshhold, bias=NA, sustain=sustain, eff_thr=eff_thr, nu=nu, recase=recase, obs_r=NA, critical_r=NA, r_con=NA, itcv=NA, alpha=alpha, index=index)
+        output_print(n_covariates, est_eff, beta_threshhold, bias=NA, sustain=sustain, eff_thr=eff_thr, nu=nu, recase=recase, obs_r=NA, critical_r=NA, r_con=NA, itcv=NA, alpha=alpha, index=index, signsuppression=signsuppression)
     )
     
     # Define expected lines
@@ -65,6 +68,7 @@ test_that("output_print produces the correct language for 'TO SUSTAIN' when inde
         "RIR = 10",
         "",
         "The estimated effect is 0.3, and specified threshold for inference is 0.4.",
+        "The threshold used takes the same sign as the estimated effect. See comment above.",
         "To reach that threshold, 20% of the (0.3) estimate would have to be due",
         "to bias. This implies that to sustain an inference one would expect to have",
         "to replace 10 (20%) observations with effect of 0.2 with data points with",

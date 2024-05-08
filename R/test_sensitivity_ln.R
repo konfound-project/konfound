@@ -298,7 +298,7 @@ test_sensitivity_ln <- function(est_eff,
   )
 
   notice <- "Note: Values have been rounded to the nearest integer."
-  noticeb <- "This may cause a little change to the estimated effect for the Implied Table."
+  noticeb <- "This may cause a small change to the estimated effect for the Implied Table."
 
   if (changeSE) {
     notice_SE <- sprintf(
@@ -485,7 +485,7 @@ table_final_3x3 <- data.frame(
       cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, p-value = %.3f.",
+      cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, and p-value = %.3f.",
                         est_eff, user_std_err, p_start),
                 sprintf("\nThe SE has been adjusted to %.3f to generate real numbers in the", final_solution$std_err_start),
                 sprintf("\nimplied table for which the p-value would be %.3f. Numbers in ", p_start),
@@ -690,10 +690,10 @@ table_final_3x3 <- data.frame(
       cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("The reported effect size = %.3f, and SE = %.3f, p-value = %.3f.",
+      cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, and p-value = %.3f.",
                         est_eff, user_std_err, p_start),
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"),
-                sprintf("\na little change to the estimated effect for the table.\n\n"))
+                sprintf("\na small change to the estimated effect for the table.\n\n"))
       )
 
       ### start here
