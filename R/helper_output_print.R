@@ -69,8 +69,10 @@ output_print <- function(n_covariates,
       }
       cat(paste0("The estimated effect is ", round(est_eff, 3), ", and specified threshold for inference is ", round(eff_thr, 3), "."))
       cat("\n")
-      cat("The threshold used takes the same sign as the estimated effect. See comment above.")
-      cat("\n")
+      if ((signsuppression == 0) & (est_eff * eff_thr < 0)) {
+          cat("The threshold used takes the same sign as the estimated effect. See comment above.")
+          cat("\n")
+      }
       cat(paste0("To invalidate the inference based on your estimate, ", round(bias, 3), "% of the (", round(est_eff, 3), ")"))
       cat("\n")
       cat(paste0("estimate would have to be due to bias. This implies that to invalidate"))
@@ -103,8 +105,10 @@ output_print <- function(n_covariates,
       }
       cat(paste0("The estimated effect is ", round(est_eff, 3), ", and specified threshold for inference is ", round(eff_thr, 3), "."))
       cat("\n")
-      cat("The threshold used takes the same sign as the estimated effect. See comment above.")
-      cat("\n")
+      if ((signsuppression == 0) & (est_eff * eff_thr < 0)) {
+          cat("The threshold used takes the same sign as the estimated effect. See comment above.")
+          cat("\n")
+      }
       cat(paste0("To reach that threshold, ", round(sustain, 3), "% of the (", round(est_eff, 3), ") estimate would have to be due"))
       cat("\n")
       cat(paste0("to bias. This implies that to sustain an inference one would expect to have"))
