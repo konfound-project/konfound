@@ -424,6 +424,7 @@ table_final_3x3 <- data.frame(
                   delta_exact = NA, delta_pctbias = NA,
                   cor_oster = NA, cor_exact = NA,
                   beta_threshold = NA,
+                  beta_threshold_verify = NA,
                   perc_bias_to_change = NA,
                   RIR_primary = RIR,
                   RIR_supplemental = RIR_extra,

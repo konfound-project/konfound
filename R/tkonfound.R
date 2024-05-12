@@ -279,6 +279,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
                      delta_exact = NA, delta_pctbias = NA,
                      cor_oster = NA, cor_exact = NA,
                      beta_threshold = NA,
+                     beta_threshold_verify = NA,
                      perc_bias_to_change = NA,
                      RIR_primary = RIR,
                      RIR_supplemental = RIR_extra,
