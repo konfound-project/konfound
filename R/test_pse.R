@@ -137,7 +137,15 @@ test_pse <- function(est_eff,
                        "correlation between Y and CV conditional on Z" = rycvGz, 
                        "correlation between X and CV" = rxcv, 
                        "correlation between Y and CV" = rycv,
-                       "covariance matrix" = cov_pse, 
+                       "covariance matrix" = cov_pse,
+                       "txyGz" = tyxGz,
+                       "ryxGz" = ryxGz,
+                       "ryz and rzy" = ryz,
+                       "rxz and rzx" = rxz,
+                       "rxy and ryx" = rxy,
+                       "thr" = thr,
+                       "sdz" = sdz,
+                       "rcvz" = rcvz,
                        "Table" = fTable)
         return(output)
     }
