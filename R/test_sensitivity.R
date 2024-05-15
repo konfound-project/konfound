@@ -34,6 +34,15 @@ test_sensitivity <- function(est_eff,
       warning("Cannot test statistical significance from nu and evaluate relative to a specific threshold. Using the specified threshold for calculations and ignoring nu.")
   }
     
+    if (!is.na(eff_thr) & index == "RIR") {
+        warning("Interpreting the metric of the threshold in the metric of the estimated effect because you specified RIR.")
+    } 
+
+    if (!is.na(eff_thr) & index == "IT") {
+        warning("Interpreting the effect threshold as a correlation because you specified ITCV. Future work will allow for thresholds in raw metric.")
+    } 
+
+    
   ## error message if input is inappropriate
   if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
   if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
@@ -116,7 +125,12 @@ test_sensitivity <- function(est_eff,
   }
   
   ## verify results 
-  beta_threshold_verify = perc_to_change / 100 * 0 + (1 - perc_to_change / 100) * est_eff
+  if (abs(est_eff) > abs(beta_threshold)) {
+      beta_threshold_verify = perc_to_change / 100 * 0 + (1 - perc_to_change / 100) * est_eff
+  } 
+  if (abs(est_eff) < abs(beta_threshold)) {
+        beta_threshold_verify = est_eff / (1 - perc_to_change / 100)
+  }
   ## compare beta_threshold_verify with beta_threshold
 
   ## later when we introduce non-zero replacement 
@@ -154,10 +168,6 @@ test_sensitivity <- function(est_eff,
         if (signsuppression == 1) {
         critical_r <- critical_r * (-1)
     }
-  } 
-
-  if (!is.na(eff_thr) & index == "IT") {
-      warning("Interpreting the effect threshold as a correlation because you specified ITCV. Future work will allow for thresholds in raw metric.")
   } 
 
   if (!is.na(eff_thr)) {
