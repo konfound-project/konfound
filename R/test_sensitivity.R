@@ -52,20 +52,8 @@ test_sensitivity <- function(est_eff,
   if (is.na(eff_thr)) {
       UPbound <- nu + abs(critical_t * std_err)
       LWbound <- nu - abs(critical_t * std_err)
-      # determine mp
-      # user specified suppression argument should NOT impact this
-      ##### qqqq when mp == 1, actually mp may be affected need to try both ways
-      if ((est_eff > LWbound) & (est_eff < UPbound)) {mp <- 1}
-      if (est_eff < LWbound | est_eff > UPbound) {mp <- -1}
   }
   
-    if (!is.na(eff_thr)) {
-        # determine mp
-        # user specified suppression argument should NOT impact this
-        ##### qqqq when mp == 1, actually mp may be affected need to try both ways
-        if (abs(est_eff) < abs(eff_thr)) {mp <- 1}
-        if (abs(est_eff) > abs(eff_thr)) {mp <- -1}
-    }    
   # determine beta_threshold
     ## if user does not specify eff_thr   
   if (is.na(eff_thr)) {
@@ -92,10 +80,6 @@ test_sensitivity <- function(est_eff,
       }
   }
 
-  # determine signITCV
-  if (est_eff < beta_threshold) {signITCV <- -1}
-  if (est_eff > beta_threshold) {signITCV <- 1}
-  if (est_eff == beta_threshold) {signITCV <- 0}
 
   # I. for RIR
   # right now calculation in terms of effect size (not correlation)
@@ -186,7 +170,36 @@ test_sensitivity <- function(est_eff,
   # calculating actual t and r (to account for non-zero nu)
   act_t <- (est_eff - nu)/std_err
   act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
-
+  
+  # determine mp
+  if (is.na(eff_thr)) {
+      # user specified suppression argument should NOT impact this
+      ##### qqqq when mp == 1, actually mp may be affected need to try both ways
+      if ((est_eff > LWbound) & (est_eff < UPbound)) {mp <- 1}
+      if (est_eff < LWbound | est_eff > UPbound) {mp <- -1}
+  }
+  
+  if (!is.na(eff_thr)) {
+      # determine mp
+      # user specified suppression argument should NOT impact this
+      ##### qqqq when mp == 1, actually mp may be affected need to try both ways
+      if (abs(act_r) < abs(eff_thr)) {mp <- 1}
+      if (abs(act_r) > abs(eff_thr)) {mp <- -1}
+  }    
+  
+  # determine signITCV
+  if (is.na(eff_thr)){
+      if (est_eff < beta_threshold) {signITCV <- -1}
+      if (est_eff > beta_threshold) {signITCV <- 1}
+      if (est_eff == beta_threshold) {signITCV <- 0}
+  }
+  
+  if (!is.na(eff_thr)) {
+      if (act_r < eff_thr) {signITCV <- -1}
+      if (act_r > eff_thr) {signITCV <- 1}
+      if (act_r == eff_thr) {signITCV <- 0}
+  }
+  
   # calculating impact of the confounding variable
   itcv <- signITCV * abs(act_r - critical_r) / (1 + mp * abs(critical_r))
 
