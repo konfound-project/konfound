@@ -21,8 +21,8 @@
 #' @param sdx the standard deviation of X
 #' @param sdy the standard deviation of Y
 #' @param R2 the unadjusted,original R2 in the observed function
-#' @param signsuppression whether the threshold has the same sign of the estimated effect; default is same direction (0); specify 1 to be opposite
-#' @param eff_thr unstandardized coefficient threshold to change an inference
+#' @param signsuppression whether the estimated effect is moved to the boundary closer (default 0) to further away (1);
+#' @param eff_thr for RIR: unstandardized coefficient threshold to change an inference; for IT: correlation defining the threshold for inference 
 #' @param FR2max the largest R2, or R2max, in the final model with unobserved confounder 
 #' @param FR2max_multiplier the multiplier of R2 to get R2max, default is set to 1.3
 #' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return
