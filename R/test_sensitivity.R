@@ -116,7 +116,7 @@ test_sensitivity <- function(est_eff,
 
   ## error message when eff_thr == 0 
   if (beta_threshold == 0 & index == "RIR") {
-      stop("The condition you specified implies a threshold of 0. Therefore, 100% of the data points would have to be replaced with data points with an effect of 0 to reduce the estimate to 0. If you would like to use a threshold based on statistical significance for a null hypothesis of 0 then do not specify an eff_thr value but instead specify nu value.")
+      stop("The condition you specified implies a threshold of 0. Therefore, 100% of the\n data points would have to be replaced with data points with an effect of 0\n to reduce the estimate to 0. If you would like to use a threshold based on\n statistical significance for a null hypothesis of 0 then do not specify an\n eff_thr value but instead specify nu value.")
   }
   
   ## error message when est_eff == 0
