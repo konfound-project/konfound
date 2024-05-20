@@ -110,7 +110,7 @@ test_sensitivity <- function(est_eff,
   
   ## error message when eff_thr and beta_threshold are at two sides of zero
   if (est_eff * beta_threshold < 0 & index == "RIR") {
-      stop(sprintf("The condition you specified implies a threshold of %.3f. Cannot calculate RIR because replacement values would need to be arbitrarily more extreme than the threshold (%.3f) to achieve the threshold value. Consider using ITCV.", 
+      stop(sprintf("The condition you specified implies a threshold of %.3f. Cannot calculate RIR\n because replacement values would need to be arbitrarily more extreme than the\n threshold (%.3f) to achieve the threshold value. Consider using ITCV.", 
                    beta_threshold, beta_threshold))
   }
 
