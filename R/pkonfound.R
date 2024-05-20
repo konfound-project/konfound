@@ -17,7 +17,7 @@
 #' @param d cell is the number of cases in the treatment group showing successful results
 #' @param two_by_two_table table that is a matrix or can be coerced to one (data.frame, tibble, tribble) from which the a, b, c, and d arguments can be extracted
 #' @param test whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test
-#' @param replace whether using entire sample or the control group to calculate the base rate; default is the entire sample
+#' @param replace whether using entire sample or the control group to calculate the base rate; default is control
 #' @param sdx the standard deviation of X
 #' @param sdy the standard deviation of Y
 #' @param R2 the unadjusted,original R2 in the observed function
