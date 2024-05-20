@@ -26,7 +26,7 @@ pkonfound(
   sdx = NA,
   sdy = NA,
   R2 = NA,
-  signsuppression = 0,
+  far_bound = 0,
   eff_thr = NA,
   FR2max = 0,
   FR2max_multiplier = 1.3,
@@ -76,9 +76,9 @@ pkonfound(
 
 \item{R2}{the unadjusted,original R2 in the observed function}
 
-\item{signsuppression}{whether the threshold has the same sign of the estimated effect; default is same direction (0); specify 1 to be opposite}
+\item{far_bound}{whether the estimated effect is moved to the boundary closer (default 0) to further away (1);}
 
-\item{eff_thr}{unstandardized coefficient threshold to change an inference}
+\item{eff_thr}{for RIR: unstandardized coefficient threshold to change an inference; for IT: correlation defining the threshold for inference}
 
 \item{FR2max}{the largest R2, or R2max, in the final model with unobserved confounder}
 

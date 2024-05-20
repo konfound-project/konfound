@@ -19,7 +19,7 @@ output_print(
   itcv,
   alpha,
   index,
-  signsuppression
+  far_bound
 )
 }
 \arguments{
@@ -52,7 +52,7 @@ statistical significance determination.}
 
 \item{index}{A character string indicating the index for which the output is generated ('RIR' or 'IT').}
 
-\item{signsuppression}{Indicator whether the threshold is towards the other side of nu or 0, by default is zero (same side), alternative is one (the other side).}
+\item{far_bound}{Indicator whether the threshold is towards the other side of nu or 0, by default is zero (same side), alternative is one (the other side).}
 }
 \description{
 This function outputs printed text for various indices such as RIR

@@ -17,8 +17,8 @@ test_sensitivity <- function(est_eff,
                              tails = 2,
                              index,
                              nu = 0, # null hypothesis
-                             signsuppression = 0,
-                             ## signsuprresion  means towards the other side of nu
+                             far_bound = 0,
+                             ## far_bound means towards the further side
                              ## by default is zero
                              ## alternative is one
                              eff_thr = NA, # another non-zero and arbitrary threshold in terms of beta
@@ -27,7 +27,7 @@ test_sensitivity <- function(est_eff,
                              tested_variable) {
 
   ## warning messages for potential confusion
-  if (signsuppression == 1) warning("signsuppression is defined by a threshold of opposite sign of the estimated effect.")
+  if (far_bound == 1) warning("far_bound is defined by a threshold of opposite sign of the estimated effect.")
  
   if (!is.na(eff_thr) & nu != 0) {
       nu <- 0
@@ -66,33 +66,33 @@ test_sensitivity <- function(est_eff,
   # determine beta_threshold
     ## if user does not specify eff_thr   
   if (is.na(eff_thr)) {
-      # if signsuppression == 1, then the opposite
+      # if far_bound == 1, then the opposite
       if (est_eff < nu) {
-          beta_threshold <- (signsuppression == 0) * LWbound +
-              (signsuppression == 1) * UPbound
+          beta_threshold <- (far_bound == 0) * LWbound +
+              (far_bound == 1) * UPbound
       }
       if (est_eff >= nu) {
-          beta_threshold <- (signsuppression == 1) * LWbound +
-              (signsuppression == 0) * UPbound
+          beta_threshold <- (far_bound == 1) * LWbound +
+              (far_bound == 0) * UPbound
       }
   } 
 
     ## if user specifies eff_thr    
   if (!is.na(eff_thr)) {
       if (est_eff < 0) {
-          beta_threshold <- (signsuppression == 0) * (-1) * abs(eff_thr) +
-              (signsuppression == 1) * abs(eff_thr)
+          beta_threshold <- (far_bound == 0) * (-1) * abs(eff_thr) +
+              (far_bound == 1) * abs(eff_thr)
       }
       if (est_eff >= 0) {
-          beta_threshold <- (signsuppression == 1) * (-1) * abs(eff_thr) +
-              (signsuppression == 0) * abs(eff_thr)
+          beta_threshold <- (far_bound == 1) * (-1) * abs(eff_thr) +
+              (far_bound == 0) * abs(eff_thr)
       }
   }
 
 
   # I. for RIR
   # right now calculation in terms of effect size (not correlation)
-  # later if switch to correlation could do A D for signsuppression as well
+  # later if switch to correlation could do A D for far_bound as well
   ## using -1 and +1 in the replacement
 
   # calculating percentage of effect and number of observations to sustain or invalidate inference
@@ -134,8 +134,8 @@ test_sensitivity <- function(est_eff,
   ## compare beta_threshold_verify with beta_threshold
 
   ## later when we introduce non-zero replacement 
-  ## signsuppression == 1 and user specifies nu (statistical significance)
-  ## if (signsuppression == 1 & is.na(eff_thr)) {
+  ## far_bound == 1 and user specifies nu (statistical significance)
+  ## if (far_bound == 1 & is.na(eff_thr)) {
   ##  if ((est_eff < LWbound | est_eff > UPbound) & index == "RIR")  {
   ##          stop(sprintf(
   ##          "Cannot calculate RIR because replacement values would need to be arbitrarily more extreme \nthan the threshold (%.3f) to achieve the threshold value. Consider using ITCV.", beta_threshold))
@@ -165,7 +165,7 @@ test_sensitivity <- function(est_eff,
     critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 2))
     # critical_t follows the direction of relative position of est_eff and nu
     # so critical_r should follow the same
-        if (signsuppression == 1) {
+        if (far_bound == 1) {
         critical_r <- critical_r * (-1)
     }
   } 
@@ -307,7 +307,7 @@ test_sensitivity <- function(est_eff,
   } else if (to_return == "corr_plot") {
     return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
   } else if (to_return == "print") {
-    return(output_print(n_covariates, est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index, signsuppression))
+    return(output_print(n_covariates, est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index, far_bound))
   } else if (to_return == "table") {
     return(output_table(model_object, tested_variable))
   } else {

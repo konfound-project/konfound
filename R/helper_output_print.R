@@ -26,7 +26,7 @@
 #' @param itcv The impact threshold for a confounding variable.
 #' @param alpha The level of statistical significance.
 #' @param index A character string indicating the index for which the output is generated ('RIR' or 'IT').
-#' @param signsuppression Indicator whether the threshold is towards the other side of nu or 0, by default is zero (same side), alternative is one (the other side).
+#' @param far_bound Indicator whether the threshold is towards the other side of nu or 0, by default is zero (same side), alternative is one (the other side).
 #' @importFrom crayon bold underline italic
 output_print <- function(n_covariates,
                          est_eff,
@@ -42,7 +42,7 @@ output_print <- function(n_covariates,
                          itcv,
                          alpha,
                          index,
-                         signsuppression) {
+                         far_bound) {
   if (index == "RIR"){
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
     if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
@@ -61,7 +61,7 @@ output_print <- function(n_covariates,
     } else if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
       cat(paste0("RIR = ", round(recase, 3), "\n"))
       cat("\n")
-      if ((signsuppression == 0) & (est_eff * eff_thr < 0)) {
+      if ((far_bound == 0) & (est_eff * eff_thr < 0)) {
           cat(sprintf("Sign for effect threshold changed to be that of estimated effect. The threshold is now %.3f. Different signs would require replacement values to be arbitrarily more extreme than the threshold (%.3f) to achieve the threshold value. Consider using ITCV.", beta_threshhold, eff_thr)
               )
           cat("\n")
@@ -69,7 +69,7 @@ output_print <- function(n_covariates,
       }
       cat(paste0("The estimated effect is ", round(est_eff, 3), ", and specified threshold for inference is ", round(eff_thr, 3), "."))
       cat("\n")
-      if ((signsuppression == 0) & (est_eff * eff_thr < 0)) {
+      if ((far_bound == 0) & (est_eff * eff_thr < 0)) {
           cat("The threshold used takes the same sign as the estimated effect. See comment above.")
           cat("\n")
       }
@@ -97,7 +97,7 @@ output_print <- function(n_covariates,
     } else if ((abs(est_eff) < abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
       cat(paste0("RIR = ", round(recase, 3), "\n"))
       cat("\n")
-      if ((signsuppression == 0) & (est_eff * eff_thr < 0)) {
+      if ((far_bound == 0) & (est_eff * eff_thr < 0)) {
           cat(sprintf("Sign for effect threshold changed to be that of estimated effect. The threshold is now %.3f. Different signs would require replacement values to be arbitrarily more extreme than the threshold (%.3f) to achieve the threshold value. Consider using ITCV.", beta_threshhold, eff_thr)
           )
           cat("\n")
@@ -105,7 +105,7 @@ output_print <- function(n_covariates,
       }
       cat(paste0("The estimated effect is ", round(est_eff, 3), ", and specified threshold for inference is ", round(eff_thr, 3), "."))
       cat("\n")
-      if ((signsuppression == 0) & (est_eff * eff_thr < 0)) {
+      if ((far_bound == 0) & (est_eff * eff_thr < 0)) {
           cat("The threshold used takes the same sign as the estimated effect. See comment above.")
           cat("\n")
       }
