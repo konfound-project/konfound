@@ -31,15 +31,15 @@ test_sensitivity <- function(est_eff,
  
   if (!is.na(eff_thr) & nu != 0) {
       nu <- 0
-      warning("Cannot test statistical significance from nu and evaluate relative to a specific threshold. Using the specified threshold for calculations and ignoring nu.")
+      warning("Cannot test statistical significance from nu and evaluate relative to a\n specific threshold. Using the specified threshold for calculations and\n ignoring nu.")
   }
     
     if (!is.na(eff_thr) & index == "RIR") {
-        warning("Interpreting the metric of the threshold in the metric of the estimated effect because you specified RIR.")
+        warning("Interpreting the metric of the threshold in the metric of the estimated\n effect because you specified RIR.")
     } 
 
     if (!is.na(eff_thr) & index == "IT") {
-        warning("Interpreting the effect threshold as a correlation because you specified ITCV. Future work will allow for thresholds in raw metric.")
+        warning("Interpreting the effect threshold as a correlation because you specified ITCV.\n Future work will allow for thresholds in raw metric.")
     } 
 
     
@@ -110,18 +110,18 @@ test_sensitivity <- function(est_eff,
   
   ## error message when eff_thr and beta_threshold are at two sides of zero
   if (est_eff * beta_threshold < 0 & index == "RIR") {
-      stop(sprintf("The condition you specified implies a threshold of %.3f. Cannot calculate RIR because replacement values would need to be arbitrarily more extreme than the threshold (%.3f) to achieve the threshold value. Consider using ITCV.", 
+      stop(sprintf("The condition you specified implies a threshold of %.3f. Cannot calculate\n RIR because replacement values would need to be arbitrarily more extreme\n than the threshold (%.3f) to achieve the threshold value. Consider using ITCV.", 
                    beta_threshold, beta_threshold))
   }
 
   ## error message when eff_thr == 0 
   if (beta_threshold == 0 & index == "RIR") {
-      stop("The condition you specified implies a threshold of 0. Therefore, 100% of the data points would have to be replaced with data points with an effect of 0 to reduce the estimate to 0. If you would like to use a threshold based on statistical significance for a null hypothesis of 0 then do not specify an eff_thr value but instead specify nu value.")
+      stop("The condition you specified implies a threshold of 0. Therefore, 100% of the\n data points would have to be replaced with data points with an effect of 0\n to reduce the estimate to 0. If you would like to use a threshold based on\n statistical significance for a null hypothesis of 0 then do not specify an\n eff_thr value but instead specify nu value.")
   }
   
   ## error message when est_eff == 0
   if (est_eff == 0 & index == "RIR") {
-      stop("The estimated effect is 0. Cannot modify the effect by replacing it with cases for which the effect is also 0.")
+      stop("The estimated effect is 0. Cannot modify the effect by replacing it with cases\n for which the effect is also 0.")
   }
   
   ## verify results 
@@ -218,7 +218,7 @@ test_sensitivity <- function(est_eff,
   
   # error message if r_con >= 1
   if (r_con >= 1 & index == "IT") {
-      stop("To achieve the threshold the absolute value of the correlations associated with the omitted confounding variable would have to be greater than or equal to one.")
+      stop("To achieve the threshold the absolute value of the correlations associated with\n the omitted confounding variable would have to be greater than or equal to one.")
   } 
 
   ## calculate the unconditional ITCV if user inputs sdx, sdy and R2
