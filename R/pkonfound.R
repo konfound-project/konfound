@@ -21,7 +21,7 @@
 #' @param sdx the standard deviation of X
 #' @param sdy the standard deviation of Y
 #' @param R2 the unadjusted,original R2 in the observed function
-#' @param far_bound whether the estimated effect is moved to the boundary closer (default 0) to further away (1);
+#' @param far_bound whether the estimated effect is moved to the boundary closer (default 0) or further away (1);
 #' @param eff_thr for RIR: unstandardized coefficient threshold to change an inference; for IT: correlation defining the threshold for inference 
 #' @param FR2max the largest R2, or R2max, in the final model with unobserved confounder 
 #' @param FR2max_multiplier the multiplier of R2 to get R2max, default is set to 1.3

@@ -68,7 +68,7 @@ pkonfound(
 
 \item{test}{whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test}
 
-\item{replace}{whether using entire sample or the control group to calculate the base rate; default is the entire sample}
+\item{replace}{whether using entire sample or the control group to calculate the base rate; default is control}
 
 \item{sdx}{the standard deviation of X}
 

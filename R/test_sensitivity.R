@@ -27,7 +27,7 @@ test_sensitivity <- function(est_eff,
                              tested_variable) {
 
   ## warning messages for potential confusion
-  if (far_bound == 1) warning("far_bound is defined by a threshold of opposite sign of the estimated effect.")
+  if (far_bound == 1) warning("far_bound is defined by whether the estimated effect is moved to the boundary closer(0) or further away(1).")
  
   if (!is.na(eff_thr) & nu != 0) {
       nu <- 0
