@@ -76,7 +76,7 @@ pkonfound(
 
 \item{R2}{the unadjusted,original R2 in the observed function}
 
-\item{far_bound}{whether the estimated effect is moved to the boundary closer (default 0) to further away (1);}
+\item{far_bound}{whether the estimated effect is moved to the boundary closer (default 0) or further away (1);}
 
 \item{eff_thr}{for RIR: unstandardized coefficient threshold to change an inference; for IT: correlation defining the threshold for inference}
 
