@@ -111,7 +111,8 @@ test_cop <- function(est_eff, # unstandardized
   D <- sqrt(FR2max - R2) # same above
   
   ## calculate rxcv & rycv implied by Oster from delta_star (assumes rcvz=0)
-  rxcv_oster <- rcvx_oster <- delta_star * rxz * (sdcv / sdz)
+  ### typically assume sdcv = sdz
+  rxcv_oster <- rcvx_oster <- delta_star * rxz * (sdcv / sdz) * sqrt(1 - rxz^2)
   if (abs(rcvx_oster) <1 && (rcvx_oster^2/v)<1)
   {rcvy_oster <- rycv_oster <- 
     D * sqrt(1 - (rcvx_oster^2 / v)) + 

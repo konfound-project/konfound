@@ -220,6 +220,11 @@ test_sensitivity <- function(est_eff,
   if (r_con >= 1 & index == "IT") {
       stop("To achieve the threshold the absolute value of the correlations associated with\n the omitted confounding variable would have to be greater than or equal to one.")
   } 
+  
+  # warning message when r_con is larger than 0.999
+  if (r_con >= 0.9995) {
+      warning("The correlations associated with the omitted confounding variable neccessary to change the inference have an absolute value larger than or equal to 0.9995. Due to rounding, print output will show as 1. Check raw_ouput for the specific values. This is an unusually robust inference. Confirm your input values.")
+  }
 
   ## calculate the unconditional ITCV if user inputs sdx, sdy and R2
   if (!is.na(sdx) & !is.na(sdy) & !is.na(R2) & (n_covariates > 0)) {
