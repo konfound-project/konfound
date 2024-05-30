@@ -103,10 +103,12 @@ test_sensitivity <- function(est_eff,
       } else if (abs(est_eff) < abs(beta_threshold)) {
         perc_to_change <- sustain <- 100 * (1 - (est_eff / beta_threshold))
         recase <- round(n_obs * (sustain / 100))
-      } else if (est_eff == beta_threshold) {
-        stop("The coefficient is exactly equal to the threshold.")
-      }
+      } 
   }
+    
+ if (est_eff == beta_threshold & index == "RIR") {
+     stop("The estimated effect equals the threshold value. Therefore no omitted variable is needed to make them equal.")
+ }
   
   ## error message when eff_thr and beta_threshold are at two sides of zero
   if (est_eff * beta_threshold < 0 & index == "RIR") {
@@ -125,6 +127,14 @@ test_sensitivity <- function(est_eff,
   }
   
   ## verify results 
+  if (est_eff * beta_threshold < 0 & index == "IT") {
+      perc_to_change = 101 
+      recase = n_obs + 1
+      if (to_return == "raw_output") {
+          warning("Ignore the following elements beta_threshold, beta_threshold_verify, perc_bias_to_change, RIR_primary and RIR_perc in the raw_output.")
+      }
+    }
+    
   if (abs(est_eff) > abs(beta_threshold)) {
       beta_threshold_verify = perc_to_change / 100 * 0 + (1 - perc_to_change / 100) * est_eff
   } 
@@ -183,9 +193,7 @@ test_sensitivity <- function(est_eff,
   
   # determine mp
   if (is.na(eff_thr)) {
-      # user specified suppression argument should NOT impact this
-      ##### qqqq when mp == 1, actually mp may be affected need to try both ways
-      if ((est_eff > LWbound) & (est_eff < UPbound)) {mp <- 1}
+      if ((est_eff > LWbound) & (est_eff < UPbound)) {mp <- 1} # this one does not matter if far_bound == 0 or 1 
       if (est_eff < LWbound | est_eff > UPbound) {mp <- -1}
   }
   
@@ -195,7 +203,15 @@ test_sensitivity <- function(est_eff,
       ##### qqqq when mp == 1, actually mp may be affected need to try both ways
       if (abs(act_r) < abs(eff_thr)) {mp <- 1}
       if (abs(act_r) > abs(eff_thr)) {mp <- -1}
-  }    
+  } 
+  
+  # note this overwrites the two conditions above (for both !is.na(eff_thr) and is.na(eff_thr)) 
+  if (far_bound == 1) {mp <- 1}
+  
+  if ((!is.na(eff_thr)) & (abs(act_r) == abs(eff_thr)) & (index == "IT")) {
+      stop("The estimated effect equals the threshold value. Therefore no omitted variable is needed to make them equal.")
+      }
+  
   
   # determine signITCV
   if (is.na(eff_thr)){
@@ -219,7 +235,13 @@ test_sensitivity <- function(est_eff,
   # error message if r_con >= 1
   if (r_con >= 1 & index == "IT") {
       stop("To achieve the threshold the absolute value of the correlations associated with\n the omitted confounding variable would have to be greater than or equal to one.")
-  } 
+  }
+ 
+  ###### qqqq check all the output elements that should not be interpreted in this case 
+  if (r_con >= 1 & to_return == "raw_output") {
+      warning("ITCV would require correlations greater than 1, ignore the following elements in the raw output: critical_r, r_final, rxcv, rycv, rxcvGz, rycvGz, itcvGz and itcv.")
+  }
+ 
   
   # warning message when r_con is larger than 0.999
   if (r_con >= 0.9995) {
