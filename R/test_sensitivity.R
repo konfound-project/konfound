@@ -182,6 +182,10 @@ test_sensitivity <- function(est_eff,
 
   if (!is.na(eff_thr)) {
       critical_r <- eff_thr
+  }
+  
+  if (abs(critical_r) > 1 & index == "IT") {
+      stop("Effect threshold for ITCV is interpreted as a correlation. You entered a value that is greater than 1 in absolute value. Please convert your threshold to a correlation by multiplying by sdx/sdy. This will be addressed in future versions.")
   } 
   
   ## later: use sdx and sdy to calculate critical_r based on eff_thr
