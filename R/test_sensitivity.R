@@ -131,7 +131,7 @@ test_sensitivity <- function(est_eff,
       perc_to_change = 101 
       recase = n_obs + 1
       if (to_return == "raw_output") {
-          warning("Ignore the following elements beta_threshold, beta_threshold_verify, perc_bias_to_change, RIR_primary and RIR_perc in the raw_output.")
+          warning("Ignore the following elements beta_threshold, beta_threshold_verify, perc_bias_to_change,\n RIR_primary and RIR_perc in the raw_output.")
       }
     }
     
@@ -185,7 +185,7 @@ test_sensitivity <- function(est_eff,
   }
   
   if (abs(critical_r) > 1 & index == "IT") {
-      stop("Effect threshold for ITCV is interpreted as a correlation. You entered a value that is greater than 1 in absolute value. Please convert your threshold to a correlation by multiplying by sdx/sdy. This will be addressed in future versions.")
+      stop("Effect threshold for ITCV is interpreted as a correlation. You entered a value\n that is greater than 1 in absolute value. Please convert your threshold to a\n correlation by multiplying by sdx/sdy. This will be addressed in future versions.")
   } 
   
   ## later: use sdx and sdy to calculate critical_r based on eff_thr
@@ -213,7 +213,7 @@ test_sensitivity <- function(est_eff,
   if (far_bound == 1) {mp <- 1}
   
   if ((!is.na(eff_thr)) & (abs(act_r) == abs(eff_thr)) & (index == "IT")) {
-      stop("The estimated effect equals the threshold value. Therefore no omitted variable is needed to make them equal.")
+      stop("The estimated effect equals the threshold value. Therefore no omitted variable\n is needed to make them equal.")
       }
   
   
@@ -243,7 +243,7 @@ test_sensitivity <- function(est_eff,
  
   ###### qqqq check all the output elements that should not be interpreted in this case 
   if (r_con >= 1 & to_return == "raw_output") {
-      warning("ITCV would require correlations greater than 1, ignore the following elements in the raw output: critical_r, r_final, rxcv, rycv, rxcvGz, rycvGz, itcvGz and itcv.")
+      warning("ITCV would require correlations greater than 1, ignore the following elements in\n the raw output: critical_r, r_final, rxcv, rycv, rxcvGz, rycvGz, itcvGz and itcv.")
   }
  
   
