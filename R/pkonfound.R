@@ -28,7 +28,41 @@
 #' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return
 #' @importFrom stats fisher.test
 #' @importFrom dplyr select
-#' @return prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
+#' @return pkonfound prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference. If to_return = "raw_output," a list will be given with the following components:
+#' \describe{
+#'   \item{obs_r}{correlation between predictor of interest and outcome in the observed regression}
+#'   \item{act_r}{correlation between predictor of interest and outcome in the observed regression accounting for non-zero null hypothesis}
+#'   \item{critical_r}{critical correlation value at which the inference would change.}
+#'   \item{r_final}{final correlation value given CV. should be equal to critical_r.}
+#'   \item{rxcv}{correlation between predictor of interest (X) and CV.}
+#'   \item{rycv}{correlation between outcome (Y) and CV.}
+#'   \item{rxcvGz}{correlation between predictor of interest and CV conditioning on all observed covariates.}  
+#'   \item{rycvGz}{correlation between outcome and CV conditioning on all observed covariates.}
+#'   \item{itcvGz}{ITCV conditioning on the observed covariates.}
+#'   \item{itcv}{Unconditional ITCV.}
+#'   \item{r2xz}{R2 if using all observed covariates to explain predictor of interest (X).}
+#'   \item{r2yz}{R2 if using all observed covariates to explain outcome (Y).}
+#'   \item{delta_star}{delta calculated using Oster's approximation}
+#'   \item{delta_star_restricted}{delta calculated using Oster's approximation under restricted assumption}
+#'   \item{delta_exact}{exact correlation-based delta.}
+#'   \item{delta_pctbias}{percent of bias when comparing delta_star with delta_exact.}
+#'   \item{cor_oster}{correlation matrix implied by delta_star.}
+#'   \item{cor_exact}{correlation matrix implied by delta_exact.}
+#'   \item{beta_threshold}{threshold value for estimated effect.}
+#'   \item{beta_threshold_verify}{the estimated effect given RIR. should be equal to beta_threshold.}
+#'   \item{perc_bias_to_change}{percent bias to change the inference.}
+#'   \item{RIR_primar}{Robustness of Inference to Replacement (RIR).}
+#'   \item{RIR_supplemental}{RIR for an extra row or column that is needed to change the infernece.}
+#'   \item{RIR_perc}{percentage of RIR out of total sample (for linear regression) or out of the number of data points in the cell where replacement takes place (for logistic and 2 by 2 table).}
+#'   \item{fragility_primary}{Fragility. the number of switches to change the inference.}
+#'   \item{fragility_supplemental}{Fragility for an extra row or column that is needed to change the infernece.} 
+#'   \item{starting_table}{Observed 2 by 2 table before replacement and switching. Implied tale for logistic regression.}
+#'   \item{final_table}{The 2 by 2 table after replacement and switching.}
+#'   \item{user_SE}{user entered standard error, only applicable for logistic regression.}
+#'   \item{analysis_SE}{the standard error used to generate a plausible 2 by 2 table. only applicable for logistic regression.}
+#'   \item{Fig_ITCV}{figure for ITCV.} 
+#'   \item{Fig_RIR}{figure for RIR.}
+#' }  
 #' @examples
 #' # using pkonfound for linear models
 #' pkonfound(2, .4, 100, 3)
