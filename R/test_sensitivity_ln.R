@@ -118,7 +118,7 @@ test_sensitivity_ln <- function(est_eff,
     solution2 <- getswitch(table_bstart2, thr_t, switch_trm, n_obs)
   }
   if (!check1 && !check2) {
-    stop("Cannot generate a usable contingency table!")
+    stop("Cannot generate a usable contingency table! This may be due to small cell sizes (less than 5) implied by the quantities you entered, please verify your input values.")
   }
   
   # get the number of switches for solutions that satisfy the requirements
