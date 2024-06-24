@@ -32,7 +32,7 @@
 #' \describe{
 #'   \item{obs_r}{correlation between predictor of interest (X) and outcome (Y) in the sample data.}
 #'   \item{act_r}{correlation between predictor of interest (X) and outcome (Y) from the sample regression based on the t-ratio accounting for non-zero null hypothesis.}
-#'   \item{critical_r}{critical correlation value at which the inference would change.}
+#'   \item{critical_r}{critical correlation value at which the inference would be nullified (e.g., associated with p=.05).}
 #'   \item{r_final}{final correlation value given CV. Should be equal to critical_r.}
 #'   \item{rxcv}{correlation between predictor of interest (X) and CV necessary to nullify the inference for smallest impact.}
 #'   \item{rycv}{correlation between outcome (Y) and CV necessary to nullify the inference for smallest impact.}
