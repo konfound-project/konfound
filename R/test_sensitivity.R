@@ -96,7 +96,7 @@ test_sensitivity <- function(est_eff,
   ## using -1 and +1 in the replacement
 
   # calculating percentage of effect and number of observations to sustain or invalidate inference
-  if (est_eff * beta_threshold > 0) {
+  if (est_eff * beta_threshold >= 0) {
       if (abs(est_eff) > abs(beta_threshold)) {
         perc_to_change <- bias <- 100 * (1 - (beta_threshold / est_eff))
         recase <- round(n_obs * (bias / 100))
@@ -105,6 +105,9 @@ test_sensitivity <- function(est_eff,
         recase <- round(n_obs * (sustain / 100))
       } 
   }
+    
+  if (is.na(perc_to_change)) {perc_to_change <- -999}
+  if (is.na(recase)) {recase <- -999}
     
  if (est_eff == beta_threshold & index == "RIR") {
      stop("The estimated effect equals the threshold value. Therefore no omitted variable is needed to make them equal.")
