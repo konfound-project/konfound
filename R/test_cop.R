@@ -3,16 +3,20 @@
 
 test_cop <- function(est_eff, # unstandardized
                      std_err, # unstandardized
-                     n_obs,
-                     n_covariates, # the number of z 
-                     sdx,
+                     n_obs, # sample size
+                     n_covariates, # the number of observed covariates 
+                     sdx, 
                      sdy,
-                     R2, # NOT the adjusted R2, should be the original R2
-                     eff_thr = 0, # this is the unstandardized version
-                     FR2max_multiplier = 1.3,
-                     FR2max = 0, # NOT the adjusted R2, should be the original R2
-                     alpha = 0.05,
-                     tails = 2, 
+                     R2, # NOT the adjusted R2, should be the original R2 in the estimated model with covariates
+                     eff_thr, # this is the threshold for unstandardized effect 
+                     FR2max_multiplier, 
+                     # the FR2max = FR2max_multiplier * R2
+                     # use only when FR2max is NOT specified
+                     # if FR2max is not specified, FR2max_multiplier is set as 1.3
+                     FR2max, # NOT the adjusted R2, should be the original R2
+                     # the R2 in the final model with the unobserved confounder(s)
+                     alpha,
+                     tails, 
                      to_return = to_return){
   
   ## test example
@@ -107,7 +111,8 @@ test_cop <- function(est_eff, # unstandardized
   D <- sqrt(FR2max - R2) # same above
   
   ## calculate rxcv & rycv implied by Oster from delta_star (assumes rcvz=0)
-  rxcv_oster <- rcvx_oster <- delta_star * rxz * (sdcv / sdz)
+  ### typically assume sdcv = sdz
+  rxcv_oster <- rcvx_oster <- delta_star * rxz * (sdcv / sdz) * sqrt(1 - rxz^2)
   if (abs(rcvx_oster) <1 && (rcvx_oster^2/v)<1)
   {rcvy_oster <- rycv_oster <- 
     D * sqrt(1 - (rcvx_oster^2 / v)) + 
@@ -329,36 +334,27 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
   }
   
   if (to_return == "print") {
-    cat("This function calculates delta* and the exact value of delta.")
+    cat(crayon::bold("Coefficient of Proportionality (COP):\n\n"))
+    cat("This function calculates a correlation-based coefficient of\nproportionality (delta) as well as Oster's delta*.")
     cat("\n")
     if (negest == 1) {
-      cat("Using the absolute value of the estimated effect, 
-          results can be interpreted by symmetry.")
-      cat("\n")
+      cat("Using the absolute value of the estimated effect, result can be interpreted\nby symmetry.\n")
     }
-    cat(sprintf("delta* is %.3f (assuming no covariates in the baseline model M1), 
-                the exact delta is %.3f, with a bias of %.3f%%.", 
-                delta_star, delta_exact, delta_pctbias))
     cat("\n")
-    cat(sprintf("With delta*, the coefficient in the final model will be %.3f. 
-                With the exact delta, the coefficient will be %.3f.",  
-                eff_x_M3_oster,eff_x_M3))
+    cat(sprintf("Delta* is %.3f (assuming no covariates in the baseline model M1),\nthe correlation-based delta is %.3f, with a bias of %.3f%%.\n", 
+              delta_star, delta_exact, delta_pctbias))
+    cat("Note that %bias = (delta* - delta) / delta.\n")
     cat("\n")
-    cat("Use to_return = raw_ouput to see more specific results 
-        and graphic presentation of the result.")
+    cat(sprintf("With delta*, the coefficient in the final model will be %.3f.\nWith the correlation-based delta, the coefficient will be %.3f.\n",  
+              eff_x_M3_oster, eff_x_M3))
     cat("\n")
+    cat("Use to_return = \"raw_output\" to see more specific results and graphic\npresentation of the result.\n")
     cat("\n")
-    cat("This function also calculates conditional RIR that 
-        invalidates the statistical inference.")
+    cat("This function also calculates conditional RIR that invalidates the statistical inference.\n")
     cat("\n")
-    cat("If the replacement cases have a fixed value, then RIR =", cond_RIR_fixedY, ".")
-    cat("\n")
-    cat("If the replacement cases follow a null distribution, 
-        then RIR =", cond_RIR_null, ".")
-    cat("\n")
-    cat("If the replacement cases satisfy rxy|Z = 0, then RIR =", cond_RIR_rxyz, ".")
-    cat("\n")
-    cat("\n")
+    cat(sprintf("If the replacement data points have a fixed value, then RIR = %.3f.\n", cond_RIR_fixedY))
+    cat(sprintf("If the replacement data points follow a null distribution, then RIR = %.3f.\n", cond_RIR_null))
+    cat(sprintf("If the replacement data points satisfy rxy|Z = 0, then RIR = %.3f.\n", cond_RIR_rxyz))
   }
   
 }

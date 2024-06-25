@@ -24,6 +24,11 @@
 #'
 #' @return Returns two plots showing the effect of hypothetical case switches 
 #'         on the effect size in a 2x2 table.
+#' @examples
+#' tkonfound_fig(14, 17, 6, 25, test = "chisq")
+#' 
+#' @export 
+
 tkonfound_fig <- function(a, b, c, d, thr_p = 0.05, switch_trm = TRUE, 
                           test = "fisher", replace = "control"){
 
