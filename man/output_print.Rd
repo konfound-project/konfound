@@ -18,7 +18,8 @@ output_print(
   r_con,
   itcv,
   alpha,
-  index
+  index,
+  far_bound
 )
 }
 \arguments{
@@ -50,6 +51,8 @@ statistical significance determination.}
 \item{alpha}{The level of statistical significance.}
 
 \item{index}{A character string indicating the index for which the output is generated ('RIR' or 'IT').}
+
+\item{far_bound}{Indicator whether the threshold is towards the other side of nu or 0, by default is zero (same side), alternative is one (the other side).}
 }
 \description{
 This function outputs printed text for various indices such as RIR

@@ -17,8 +17,8 @@ test_sensitivity <- function(est_eff,
                              tails = 2,
                              index,
                              nu = 0, # null hypothesis
-                             signsuppression = 0,
-                             ## signsuprresion  means towards the other side of nu
+                             far_bound = 0,
+                             ## far_bound means towards the further side
                              ## by default is zero
                              ## alternative is one
                              eff_thr = NA, # another non-zero and arbitrary threshold in terms of beta
@@ -27,85 +27,147 @@ test_sensitivity <- function(est_eff,
                              tested_variable) {
 
   ## warning messages for potential confusion
-if (signsuppression == 1) warning("signsuppression is defined by a threshold of opposite sign of the estimated effect.")
+  if (far_bound == 1) warning("far_bound is defined by whether the estimated effect is moved to the boundary closer(0) or further away(1).")
+ 
+  if (!is.na(eff_thr) & nu != 0) {
+      nu <- 0
+      warning("Cannot test statistical significance from nu and evaluate relative to a\n specific threshold. Using the specified threshold for calculations and\n ignoring nu.")
+  }
+    
+    if (!is.na(eff_thr) & index == "RIR") {
+        warning("Interpreting the metric of the threshold in the metric of the estimated\n effect because you specified RIR.")
+    } 
 
+    if (!is.na(eff_thr) & index == "IT") {
+        warning("Interpreting the effect threshold as a correlation because you specified ITCV.\n Future work will allow for thresholds in raw metric.")
+    } 
+
+    
   ## error message if input is inappropriate
-
   if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
   if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
   if ((!is.na(sdx) | !is.na(sdy) | !is.na(R2)) & (!((!is.na(sdx) & !is.na(sdy) & !is.na(R2))))) {
     stop("Did not run! Info regarding sdx, sdy and R2 are all needed to generate unconditional ITCV.")
   }
 
-  # calculate critical_t
+  # calculate critical_t (based on nu, not considering eff_thr)
   if (est_eff < nu) {
      critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
   } else {
      critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
   }
 
-  # create CI centered nu
-  UPbound <- nu + abs(critical_t * std_err)
-  LWbound <- nu - abs(critical_t * std_err)
-
-  # determine mp
-  # qqq user specified suppression argument should NOT impact this
-  ##### qqqqq when mp == 1, actually mp may be affected need to try both ways
-  if ((est_eff > LWbound) & (est_eff < UPbound)) {mp <- 1}
-  if (est_eff < LWbound | est_eff > UPbound) {mp <- -1}
-
+  # create CI centered nu (if user does not specify eff_thr)   
+  if (is.na(eff_thr)) {
+      UPbound <- nu + abs(critical_t * std_err)
+      LWbound <- nu - abs(critical_t * std_err)
+  }
+  
   # determine beta_threshold
-  # if signsuppression == 1, then the opposite
-  if (est_eff < nu) {
-      beta_threshold <- (signsuppression == 0) * LWbound +
-          (signsuppression == 1) * UPbound
+    ## if user does not specify eff_thr   
+  if (is.na(eff_thr)) {
+      # if far_bound == 1, then the opposite
+      if (est_eff < nu) {
+          beta_threshold <- (far_bound == 0) * LWbound +
+              (far_bound == 1) * UPbound
       }
-  if (est_eff >= nu) {
-      beta_threshold <- (signsuppression == 1) * LWbound +
-          (signsuppression == 0) * UPbound
+      if (est_eff >= nu) {
+          beta_threshold <- (far_bound == 1) * LWbound +
+              (far_bound == 0) * UPbound
       }
+  } 
 
-  # determine signITCV
-  if (est_eff < beta_threshold) {signITCV <- -1}
-  if (est_eff > beta_threshold) {signITCV <- 1}
-  if (est_eff == beta_threshold) {signITCV <- 0}
+    ## if user specifies eff_thr    
+  if (!is.na(eff_thr)) {
+      if (est_eff < 0) {
+          beta_threshold <- (far_bound == 0) * (-1) * abs(eff_thr) +
+              (far_bound == 1) * abs(eff_thr)
+      }
+      if (est_eff >= 0) {
+          beta_threshold <- (far_bound == 1) * (-1) * abs(eff_thr) +
+              (far_bound == 0) * abs(eff_thr)
+      }
+  }
+
 
   # I. for RIR
   # right now calculation in terms of effect size (not correlation)
-  # if swtich to correlation could do A D for signsuppression as well
+  # later if switch to correlation could do A D for far_bound as well
   ## using -1 and +1 in the replacement
 
   # calculating percentage of effect and number of observations to sustain or invalidate inference
-  if (signsuppression == 0) {
+  if (est_eff * beta_threshold >= 0) {
       if (abs(est_eff) > abs(beta_threshold)) {
         perc_to_change <- bias <- 100 * (1 - (beta_threshold / est_eff))
         recase <- round(n_obs * (bias / 100))
       } else if (abs(est_eff) < abs(beta_threshold)) {
         perc_to_change <- sustain <- 100 * (1 - (est_eff / beta_threshold))
         recase <- round(n_obs * (sustain / 100))
-      } else if (est_eff == beta_threshold) {
-        stop("The coefficient is exactly equal to the threshold.")
-      }
+      } 
+  }
+    
+  if (is.na(perc_to_change)) {perc_to_change <- -999}
+  if (is.na(recase)) {recase <- -999}
+    
+ if (est_eff == beta_threshold & index == "RIR") {
+     stop("The estimated effect equals the threshold value. Therefore no omitted variable is needed to make them equal.")
+ }
+  
+  ## error message when eff_thr and beta_threshold are at two sides of zero
+  if (est_eff * beta_threshold < 0 & index == "RIR") {
+      stop(sprintf("The condition you specified implies a threshold of %.3f. Cannot calculate\n RIR because replacement values would need to be arbitrarily more extreme\n than the threshold (%.3f) to achieve the threshold value. Consider using ITCV.", 
+                   beta_threshold, beta_threshold))
   }
 
-  if (signsuppression == 1) {
-      if (est_eff < LWbound | est_eff > UPbound) {
-          stop("Such scenarios do not make sense to consider RIR.")
-      }
-      if (est_eff >= LWbound & est_eff < nu) {
-          ## B case
-          ## consider est_eff as a combination of pi*LB+(1-pi)*UB
-          perc_to_change <- bias <- 100 * (UPbound - est_eff)/(UPbound - LWbound)
-          recase <- round(n_obs * (bias / 100))
-      }
-      if (est_eff >= nu & est_eff <= UPbound) {
-          ## C case
-          ## consider est_eff as a combination of pi*UB+(1-pi)*LB
-          perc_to_change <- bias <- 100 * (est_eff - LWbound)/(UPbound - LWbound)
-          recase <- round(n_obs * (bias / 100))
-      }
+  ## error message when eff_thr == 0 
+  if (beta_threshold == 0 & index == "RIR") {
+      stop("The condition you specified implies a threshold of 0. Therefore, 100% of the\n data points would have to be replaced with data points with an effect of 0\n to reduce the estimate to 0. If you would like to use a threshold based on\n statistical significance for a null hypothesis of 0 then do not specify an\n eff_thr value but instead specify nu value.")
   }
+  
+  ## error message when est_eff == 0
+  if (est_eff == 0 & index == "RIR") {
+      stop("The estimated effect is 0. Cannot modify the effect by replacing it with cases\n for which the effect is also 0.")
+  }
+  
+  ## verify results 
+  if (est_eff * beta_threshold < 0 & index == "IT") {
+      perc_to_change = 101 
+      recase = n_obs + 1
+      if (to_return == "raw_output") {
+          warning("Ignore the following elements beta_threshold, beta_threshold_verify, perc_bias_to_change,\n RIR_primary and RIR_perc in the raw_output.")
+      }
+    }
+    
+  if (abs(est_eff) > abs(beta_threshold)) {
+      beta_threshold_verify = perc_to_change / 100 * 0 + (1 - perc_to_change / 100) * est_eff
+  } 
+  if (abs(est_eff) < abs(beta_threshold)) {
+        beta_threshold_verify = est_eff / (1 - perc_to_change / 100)
+  }
+  ## compare beta_threshold_verify with beta_threshold
 
+  ## later when we introduce non-zero replacement 
+  ## far_bound == 1 and user specifies nu (statistical significance)
+  ## if (far_bound == 1 & is.na(eff_thr)) {
+  ##  if ((est_eff < LWbound | est_eff > UPbound) & index == "RIR")  {
+  ##          stop(sprintf(
+  ##          "Cannot calculate RIR because replacement values would need to be arbitrarily more extreme \nthan the threshold (%.3f) to achieve the threshold value. Consider using ITCV.", beta_threshold))
+  ##      }
+  ##        if (est_eff >= LWbound & est_eff < nu) {
+  ##          ## B case
+  ##          ## consider est_eff as a combination of pi*LB+(1-pi)*UB
+  ##          perc_to_change <- bias <- 100 * (UPbound - est_eff)/(UPbound - LWbound)
+  ##          recase <- round(n_obs * (bias / 100))
+  ##      }
+  ##    if (est_eff >= nu & est_eff <= UPbound) {
+  ##          ## C case
+  ##          ## consider est_eff as a combination of pi*UB+(1-pi)*LB
+  ##          perc_to_change <- bias <- 100 * (est_eff - LWbound)/(UPbound - LWbound)
+  ##          recase <- round(n_obs * (bias / 100))
+  ##      }
+  ## }
+    
+ 
   # II. for correlation-based approach
 
   # transforming t into obs_r
@@ -116,24 +178,82 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
     critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 2))
     # critical_t follows the direction of relative position of est_eff and nu
     # so critical_r should follow the same
-        if (signsuppression == 1) {
+        if (far_bound == 1) {
         critical_r <- critical_r * (-1)
     }
-  } else if (is.na(sdx) & is.na(sdy)) {
+  } 
+
+  if (!is.na(eff_thr)) {
       critical_r <- eff_thr
-  } else {
-      critical_r <- eff_thr * sdx / sdy
   }
+  
+  if (abs(critical_r) > 1 & index == "IT") {
+      stop("Effect threshold for ITCV is interpreted as a correlation. You entered a value\n that is greater than 1 in absolute value. Please convert your threshold to a\n correlation by multiplying by sdx/sdy. This will be addressed in future versions.")
+  } 
+  
+  ## later: use sdx and sdy to calculate critical_r based on eff_thr
+  ## assuming eff_thr is in terms of effect size 
 
   # calculating actual t and r (to account for non-zero nu)
   act_t <- (est_eff - nu)/std_err
   act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
-
+  
+  # determine mp
+  if (is.na(eff_thr)) {
+      if ((est_eff > LWbound) & (est_eff < UPbound)) {mp <- 1} # this one does not matter if far_bound == 0 or 1 
+      if (est_eff < LWbound | est_eff > UPbound) {mp <- -1}
+  }
+  
+  if (!is.na(eff_thr)) {
+      # determine mp
+      # user specified suppression argument should NOT impact this
+      ##### qqqq when mp == 1, actually mp may be affected need to try both ways
+      if (abs(act_r) < abs(eff_thr)) {mp <- 1}
+      if (abs(act_r) > abs(eff_thr)) {mp <- -1}
+  } 
+  
+  # note this overwrites the two conditions above (for both !is.na(eff_thr) and is.na(eff_thr)) 
+  if (far_bound == 1) {mp <- 1}
+  
+  if ((!is.na(eff_thr)) & (abs(act_r) == abs(eff_thr)) & (index == "IT")) {
+      stop("The estimated effect equals the threshold value. Therefore no omitted variable\n is needed to make them equal.")
+      }
+  
+  
+  # determine signITCV
+  if (is.na(eff_thr)){
+      if (est_eff < beta_threshold) {signITCV <- -1}
+      if (est_eff > beta_threshold) {signITCV <- 1}
+      if (est_eff == beta_threshold) {signITCV <- 0}
+  }
+  
+  if (!is.na(eff_thr)) {
+      if (act_r < eff_thr) {signITCV <- -1}
+      if (act_r > eff_thr) {signITCV <- 1}
+      if (act_r == eff_thr) {signITCV <- 0}
+  }
+  
   # calculating impact of the confounding variable
   itcv <- signITCV * abs(act_r - critical_r) / (1 + mp * abs(critical_r))
 
   # finding correlation of confound to invalidate / sustain inference
   r_con <- sqrt(abs(itcv))
+  
+  # error message if r_con >= 1
+  if (r_con >= 1 & index == "IT") {
+      stop("To achieve the threshold the absolute value of the correlations associated with\n the omitted confounding variable would have to be greater than or equal to one.")
+  }
+ 
+  ###### qqqq check all the output elements that should not be interpreted in this case 
+  if (r_con >= 1 & to_return == "raw_output") {
+      warning("ITCV would require correlations greater than 1, ignore the following elements in\n the raw output: critical_r, r_final, rxcv, rycv, rxcvGz, rycvGz, itcvGz and itcv.")
+  }
+ 
+  
+  # warning message when r_con is larger than 0.999
+  if (r_con >= 0.9995) {
+      warning("The correlations associated with the omitted confounding variable neccessary\n to change the inference have an absolute value larger than or equal to 0.9995.\n Due to rounding, print output will show as 1. Check raw_ouput for the specific\n values. This is an unusually robust inference. Confirm your input values.")
+  }
 
   ## calculate the unconditional ITCV if user inputs sdx, sdy and R2
   if (!is.na(sdx) & !is.na(sdy) & !is.na(R2) & (n_covariates > 0)) {
@@ -155,11 +275,12 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
   rxcvGz <- r_con
   itcvGz <- itcv # conditional ITCV
 
-  # verify
+  # verify result
   # act_r <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
   ## calculate act_r using one less df or maybe -1 instead
   act_r_forVF <- act_t / sqrt(act_t^2 + n_obs - n_covariates - 2)
   r_final <- (act_r_forVF - r_con * rycvGz)/sqrt((1 - r_con^2) * (1 - rycvGz^2))
+  ## compare r_final with critical_r
 
   # output dispatch
 
@@ -206,6 +327,7 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
                        delta_exact = NA, delta_pctbias = NA,
                        cor_oster = NA, cor_exact = NA,
                        beta_threshold = beta_threshold,
+                       beta_threshold_verify = beta_threshold_verify,
                        perc_bias_to_change = perc_to_change,
                        RIR_primary = recase, RIR_supplemental = NA, RIR_perc = perc_to_change,
                        fragility_primary = NA, fragility_supplemental = NA,
@@ -219,7 +341,7 @@ if (signsuppression == 1) warning("signsuppression is defined by a threshold of 
   } else if (to_return == "corr_plot") {
     return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
   } else if (to_return == "print") {
-    return(output_print(n_covariates, est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index))
+    return(output_print(n_covariates, est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index, far_bound))
   } else if (to_return == "table") {
     return(output_table(model_object, tested_variable))
   } else {

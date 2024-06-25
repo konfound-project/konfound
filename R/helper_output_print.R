@@ -26,6 +26,7 @@
 #' @param itcv The impact threshold for a confounding variable.
 #' @param alpha The level of statistical significance.
 #' @param index A character string indicating the index for which the output is generated ('RIR' or 'IT').
+#' @param far_bound Indicator whether the threshold is towards the other side of nu or 0, by default is zero (same side), alternative is one (the other side).
 #' @importFrom crayon bold underline italic
 output_print <- function(n_covariates,
                          est_eff,
@@ -40,15 +41,16 @@ output_print <- function(n_covariates,
                          r_con,
                          itcv,
                          alpha,
-                         index) {
+                         index,
+                         far_bound) {
   if (index == "RIR"){
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
     if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
       cat(paste0("RIR = ", round(recase, 3), "\n"))
       cat("\n")
-      cat(paste0("The estimated effect is ", round(est_eff, 3), ". To invalidate the inference of an effect using"))
+      cat(paste0("To invalidate the inference of an effect using"))
       cat("\n")
-      cat(paste0("the threshold of ", round(beta_threshhold, 3), " for statistical significance (with alpha = ", alpha, "), ", round(bias, 3), "% of"))
+      cat(paste0("the threshold of ", round(beta_threshhold, 3), " for statistical significance (with null hypothesis = ", nu, " and alpha = ", alpha, "), ", round(bias, 3), "% of"))
       cat("\n")
       cat(paste0("the (", round(est_eff, 3), ") estimate would have to be due to bias. This implies that to invalidate"))
       cat("\n")
@@ -59,8 +61,18 @@ output_print <- function(n_covariates,
     } else if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
       cat(paste0("RIR = ", round(recase, 3), "\n"))
       cat("\n")
+      if ((far_bound == 0) & (est_eff * eff_thr < 0)) {
+          cat(sprintf("Sign for effect threshold changed to be that of estimated effect. The threshold is now %.3f. Different signs would require replacement values to be arbitrarily more extreme than the threshold (%.3f) to achieve the threshold value. Consider using ITCV.", beta_threshhold, eff_thr)
+              )
+          cat("\n")
+          cat("\n")
+      }
       cat(paste0("The estimated effect is ", round(est_eff, 3), ", and specified threshold for inference is ", round(eff_thr, 3), "."))
       cat("\n")
+      if ((far_bound == 0) & (est_eff * eff_thr < 0)) {
+          cat("The threshold used takes the same sign as the estimated effect. See comment above.")
+          cat("\n")
+      }
       cat(paste0("To invalidate the inference based on your estimate, ", round(bias, 3), "% of the (", round(est_eff, 3), ")"))
       cat("\n")
       cat(paste0("estimate would have to be due to bias. This implies that to invalidate"))
@@ -74,7 +86,7 @@ output_print <- function(n_covariates,
       cat("\n")
       cat(paste0("The estimated effect is ", round(est_eff, 3), ". The threshold value for statistical significance"))
       cat("\n")
-      cat(paste0("is ", round(beta_threshhold, 3), " (alpha = ", alpha, "). To reach that threshold, ", round(sustain, 3), "% of the (", round(est_eff, 3), ") estimate"))
+      cat(paste0("is ", round(beta_threshhold, 3), " (with null hypothesis = ", nu, " and alpha = ", alpha, "). To reach that threshold, ", round(sustain, 3), "% of the (", round(est_eff, 3), ") estimate"))
       cat("\n")
       cat(paste0("would have to be due to bias. This implies to sustain an inference one would"))
       cat("\n")
@@ -85,8 +97,18 @@ output_print <- function(n_covariates,
     } else if ((abs(est_eff) < abs(beta_threshhold)) & is.na(eff_thr) == FALSE) {
       cat(paste0("RIR = ", round(recase, 3), "\n"))
       cat("\n")
+      if ((far_bound == 0) & (est_eff * eff_thr < 0)) {
+          cat(sprintf("Sign for effect threshold changed to be that of estimated effect. The threshold is now %.3f. Different signs would require replacement values to be arbitrarily more extreme than the threshold (%.3f) to achieve the threshold value. Consider using ITCV.", beta_threshhold, eff_thr)
+          )
+          cat("\n")
+          cat("\n")
+      }
       cat(paste0("The estimated effect is ", round(est_eff, 3), ", and specified threshold for inference is ", round(eff_thr, 3), "."))
       cat("\n")
+      if ((far_bound == 0) & (est_eff * eff_thr < 0)) {
+          cat("The threshold used takes the same sign as the estimated effect. See comment above.")
+          cat("\n")
+      }
       cat(paste0("To reach that threshold, ", round(sustain, 3), "% of the (", round(est_eff, 3), ") estimate would have to be due"))
       cat("\n")
       cat(paste0("to bias. This implies that to sustain an inference one would expect to have"))
@@ -123,7 +145,7 @@ output_print <- function(n_covariates,
 
   }
   if (index == "IT") { 
-    cat(crayon::bold("Impact Threshold for a Confounding Variable:\n"))
+    cat(crayon::bold("Impact Threshold for a Confounding Variable (ITCV):\n"))
     cat("\n")
     if (abs(obs_r) > abs(critical_r) & obs_r > 0) {
       cat("The minimum impact of an omitted variable to invalidate an inference")

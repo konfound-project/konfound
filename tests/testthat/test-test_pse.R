@@ -88,8 +88,8 @@ test_that("test_pse print output is correct", {
         "Conditional on the covariates, the correlation between X and CV is 0.248,",
         "and the correlation between Y and CV is 0.372.",
         "",
-        "Including such a CV, the coefficient changes to 0.097, and standard error",
-        "is 0.054.",
+        "Including such a CV, the coefficient changes to 0.097, with standard error",
+        "of 0.054.",
         "",
         "Use to_return = \"raw_output\" to see more specific results."
     )

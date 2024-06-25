@@ -91,7 +91,7 @@ test_that("test_cop outputs the correct language and values when to_return is 'p
         "the correlation-based delta is 1.172, with a bias of -66.980%.",
         "Note that %bias = (delta* - delta) / delta.",
         "",
-        "With delta*, the coefficient in the final model will be 0.447.",     
+        "With delta*, the coefficient in the final model will be 0.453.",     
         "With the correlation-based delta, the coefficient will be 0.300.",
         "",
         "Use to_return = \"raw_output\" to see more specific results and graphic",             

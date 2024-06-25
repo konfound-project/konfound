@@ -11,10 +11,11 @@ test_that("output_print produces the correct language when index is 'RIR' with e
     recase <- 5
     alpha <- 0.05
     index <- "RIR"
+    far_bound <- 0
     
     # Capture the output
     output <- capture.output(
-        output_print(n_covariates, est_eff, beta_threshhold, bias=bias, nu=nu, eff_thr=eff_thr, recase=recase, obs_r=NA, critical_r=NA, r_con=NA, itcv=NA, alpha=alpha, index=index)
+        output_print(n_covariates, est_eff, beta_threshhold, bias=bias, nu=nu, eff_thr=eff_thr, recase=recase, obs_r=NA, critical_r=NA, r_con=NA, itcv=NA, alpha=alpha, index=index, far_bound=far_bound)
     )
     
     # Define expected lines
@@ -53,10 +54,11 @@ test_that("output_print produces the correct language for 'TO SUSTAIN' when inde
     recase <- 10
     alpha <- 0.05
     index <- "RIR"
+    far_bound <- 0
     
     # Capture the output
     output <- capture.output(
-        output_print(n_covariates, est_eff, beta_threshhold, bias=NA, sustain=sustain, eff_thr=eff_thr, nu=nu, recase=recase, obs_r=NA, critical_r=NA, r_con=NA, itcv=NA, alpha=alpha, index=index)
+        output_print(n_covariates, est_eff, beta_threshhold, bias=NA, sustain=sustain, eff_thr=eff_thr, nu=nu, recase=recase, obs_r=NA, critical_r=NA, r_con=NA, itcv=NA, alpha=alpha, index=index, far_bound=far_bound)
     )
     
     # Define expected lines
