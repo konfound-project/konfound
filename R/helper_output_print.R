@@ -180,7 +180,7 @@ output_print <- function(n_covariates,
     } else if (abs(obs_r) < abs(critical_r) & obs_r > 0) {
       cat("The maximum impact (in absolute value) of an omitted variable to")
       cat("\n")
-      cat("sustain an inference for a null hypothesis of an effect of nu (", nu, ") is based on")
+      cat(paste0("sustain an inference for a null hypothesis of an effect of nu (", nu, ") is based on"))
       cat("\n")
       cat(paste0("a correlation of ", -round(r_con, 3), " with the outcome and ", round(r_con, 3), " with the predictor"))
       cat("\n")
