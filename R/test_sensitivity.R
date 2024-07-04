@@ -258,10 +258,18 @@ test_sensitivity <- function(est_eff,
   ## calculate the unconditional ITCV if user inputs sdx, sdy and R2
   if (!is.na(sdx) & !is.na(sdy) & !is.na(R2) & (n_covariates > 0)) {
     ## pull in the auxiliary function for R2yz and R2xz
-    r2yz <- cal_ryz(obs_r, R2)^2
-    uncond_rycv <- r_con * sqrt(1 - r2yz)
-    r2xz <- cal_rxz(sdx^2, sdy^2, R2, n_obs-n_covariates-2, std_err)^2
-    uncond_rxcv <- r_con * sqrt(1 - r2xz)
+    tryCatch({
+      r2yz <- cal_ryz(obs_r, R2)^2
+      uncond_rycv <- r_con * sqrt(1 - r2yz)
+      r2xz <- cal_rxz(sdx^2, sdy^2, R2, n_obs - n_covariates - 2, std_err)^2
+      uncond_rxcv <- r_con * sqrt(1 - r2xz)
+    }, error = function(e) {
+      message(e$message)
+      sdx <<- NA
+      sdy <<- NA
+      R2 <<- NA
+      r2yz <<- uncond_rycv <<- r2xz <<- uncond_rxcv <<- NA
+    })
   } else if (n_covariates == 0) {
       r2yz <- r2xz <- NA
       uncond_rycv <- r_con
