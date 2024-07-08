@@ -54,7 +54,7 @@ output_print <- function(n_covariates,
       cat("\n")
       cat(paste0("of the (", round(est_eff, 3), ") estimate would have to be due to bias. This implies that to"))
       cat("\n")
-      cat(paste0("invalidate the inference one would expect to have to replace", round(recase, 3), " (", round(bias, 3), "%)"))
+      cat(paste0("invalidate the inference one would expect to have to replace ", round(recase, 3), " (", round(bias, 3), "%)"))
       cat("\n")
       cat(paste0("observations with data points for which the effect is ", nu, " (RIR = ", round(recase, 3), ").\n"))
       cat("\n")
