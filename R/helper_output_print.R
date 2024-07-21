@@ -29,9 +29,6 @@
 #' @param far_bound Indicator whether the threshold is towards the other side of nu or 0, by default is zero (same side), alternative is one (the other side).
 #' @importFrom crayon bold underline italic
 
-# Use the source function with the URL of the raw content(cal_ryz) to grab R2yz for conditional error message
-source("https://raw.githubusercontent.com/konfound-project/konfound/newitcv/R/cop_pse_auxiliary.R")
-
 output_print <- function(n_covariates,
                          est_eff,
                          beta_threshhold,
@@ -216,24 +213,12 @@ output_print <- function(n_covariates,
     }
     cat("\n")
     
-    R2yz <- NA
-    
-    # Try to calculate R2yz using cal_ryz
-    tryCatch({
-        calculation <- cal_ryz(ryxGz, R2)
-        R2yz <- calculation$R2yz
-    }, error = function(e) {
-        # Handle the error silently
-    })
-    
-    if (!is.na(R2yz) && R2yz >= 0) {
-    cat("For calculation of unconditional ITCV, request raw output. For unconditional ITCV")
-    cat("\n")
-    cat("using pkonfound(), additionally include the R2, sdx, and sdy as input.")
-    cat("\n")
-    cat("\n")
-      }
-   
+#    cat("For calculation of unconditional ITCV, request raw output. For unconditional ITCV")
+#    cat("\n")
+#    cat("using pkonfound(), additionally include the R2, sdx, and sdy as input.")
+#    cat("\n")
+#    cat("\n")
+
     if (n_covariates == 0) {
         cat("Note that sdx and sdy and R2 are only used to calculate the unconditional ITCV when")
         cat("\n")
