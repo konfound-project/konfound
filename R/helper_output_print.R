@@ -231,9 +231,9 @@ output_print <- function(n_covariates,
     cat("\n")
     cat("using pkonfound(), additionally include the R2, sdx, and sdy as input.")
     cat("\n")
-      }
-    
     cat("\n")
+      }
+   
     if (n_covariates == 0) {
         cat("Note that sdx and sdy and R2 are only used to calculate the unconditional ITCV when")
         cat("\n")
