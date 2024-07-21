@@ -226,7 +226,7 @@ output_print <- function(n_covariates,
         # Handle the error silently
     })
     
-    if (is.na(R2yz) || R2yz >= 0) {
+    if (!is.na(R2yz) && R2yz >= 0) {
     cat("For calculation of unconditional ITCV, request raw output. For unconditional ITCV")
     cat("\n")
     cat("using pkonfound(), additionally include the R2, sdx, and sdy as input.")
