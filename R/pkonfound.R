@@ -51,7 +51,7 @@
 #'   \item{beta_threshold}{threshold value for estimated effect.}
 #'   \item{beta_threshold_verify}{estimated effect given RIR. Should be equal to beta_threshold.}
 #'   \item{perc_bias_to_change}{percent bias to change the inference.}
-#'   \item{RIR_primar}{Robustness of Inference to Replacement (RIR).}
+#'   \item{RIR_primary}{Robustness of Inference to Replacement (RIR).}
 #'   \item{RIR_supplemental}{RIR for an extra row or column that is needed to nullify the inference.}
 #'   \item{RIR_perc}{RIR as \% of total sample (for linear regression) or as \% of data points in the cell where replacement takes place (for logistic and 2 by 2 table).}
 #'   \item{fragility_primary}{Fragility. the number of switches (e.g., treatment success to treatment failure) to nullify the inference.}
