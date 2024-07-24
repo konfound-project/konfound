@@ -267,7 +267,7 @@ test_sensitivity <- function(est_eff,
       message(e$message)
       sdx <<- NA
       sdy <<- NA
-      R2 <<- NA
+      R2 <<- R2
       r2yz <<- uncond_rycv <<- r2xz <<- uncond_rxcv <<- NA
     })
   } else if (n_covariates == 0) {
