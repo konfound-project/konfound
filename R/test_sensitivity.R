@@ -47,8 +47,8 @@ test_sensitivity <- function(est_eff,
   if (!(std_err > 0)) {stop("Did not run! Standard error needs to be greater than zero.")}
   if (!(n_obs > n_covariates + 3)) {stop("Did not run! There are too few observations relative to the number of observations and covariates. Please specify a less complex model to use KonFound-It.")}
   if ((!is.na(sdx) | !is.na(sdy) | !is.na(R2)) & (!((!is.na(sdx) & !is.na(sdy) & !is.na(R2))))) {
-    stop("Did not run! Info regarding sdx, sdy and R2 are all needed to generate unconditional ITCV.")
-  }
+    stop("Conditional ITCV does not require R2, sdx, or sdy. Rerun without any of three\n if all you seek is the conditional ITCV. If you also want the unconditional ITCV\n then include sdy and sdx as well as R2.")
+  }                                                                                 
 
   # calculate critical_t (based on nu, not considering eff_thr)
   if (est_eff < nu) {
