@@ -27,6 +27,7 @@
 #' @param alpha The level of statistical significance.
 #' @param index A character string indicating the index for which the output is generated ('RIR' or 'IT').
 #' @param far_bound Indicator whether the threshold is towards the other side of nu or 0, by default is zero (same side), alternative is one (the other side).
+#' @param R2 the unadjusted, original R2 in the observed function.
 #' @importFrom crayon bold underline italic
 
 output_print <- function(n_covariates,
