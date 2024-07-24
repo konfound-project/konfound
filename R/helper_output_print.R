@@ -213,11 +213,11 @@ output_print <- function(n_covariates,
       warning("The correlation is exactly equal to the threshold.\n")
     }
     cat("\n")
-    
+
     if (is.na(R2)) {
-    cat("For calculation of unconditional ITCV, request raw output. For unconditional ITCV")
+    cat("For calculation of unconditional ITCV using pkonfound(), additionally include")
     cat("\n")
-    cat("using pkonfound(), additionally include the R2, sdx, and sdy as input.")
+    cat("the R2, sdx, and sdy as input, and request raw output.")
     cat("\n")
     cat("\n")
       }
