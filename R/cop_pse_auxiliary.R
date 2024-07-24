@@ -9,7 +9,7 @@ cal_ryz <- function(ryxGz, R2){
     if (R2yz >= 0) {
         ryz <- sqrt(R2yz)
     } else {
-        stop("The calculated variance in Y explained by Z is less than 0. This can occur if Z\n suppresses the relationship between X and Y. That is, if partialling on Z increases\n the relationship between X and Y. The unconditional ITCV is not conceptualized for\n this scenario.")
+        stop("The calculated variance in Y explained by Z is less than 0. This can occur if Z\n suppresses the relationship between X and Y. That is, if partialling on Z increases\n the relationship between X and Y. Note: the unconditional ITCV is not conceptualized\n for this scenario.")
     }
     return(ryz)
 }
