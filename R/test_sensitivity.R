@@ -106,8 +106,8 @@ test_sensitivity <- function(est_eff,
       } 
   }
     
-  if (is.na(perc_to_change)) {perc_to_change <- -999}
-  if (is.na(recase)) {recase <- -999}
+  if (exists("perc_to_change") == FALSE) {perc_to_change <- -999}
+  if (exists("recase") == FALSE) {recase <- -999}
     
  if (est_eff == beta_threshold & index == "RIR") {
      stop("The estimated effect equals the threshold value. Therefore no omitted variable is needed to make them equal.")
