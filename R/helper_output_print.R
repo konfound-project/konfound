@@ -43,7 +43,8 @@ output_print <- function(n_covariates,
                          itcv,
                          alpha,
                          index,
-                         far_bound) {
+                         far_bound,
+                         R2) {
   if (index == "RIR"){
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
     if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
@@ -213,11 +214,13 @@ output_print <- function(n_covariates,
     }
     cat("\n")
     
-#    cat("For calculation of unconditional ITCV, request raw output. For unconditional ITCV")
-#    cat("\n")
-#    cat("using pkonfound(), additionally include the R2, sdx, and sdy as input.")
-#    cat("\n")
-#    cat("\n")
+    if (is.na(R2)) {
+    cat("For calculation of unconditional ITCV, request raw output. For unconditional ITCV")
+    cat("\n")
+    cat("using pkonfound(), additionally include the R2, sdx, and sdy as input.")
+    cat("\n")
+    cat("\n")
+      }
 
     if (n_covariates == 0) {
         cat("Note that sdx and sdy and R2 are only used to calculate the unconditional ITCV when")
@@ -226,6 +229,7 @@ output_print <- function(n_covariates,
         cat("\n")
         cat("\n")
     }
+    
     cat("See Frank (2000) for a description of the method.")
     cat("\n")
     cat("\n")
