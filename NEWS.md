@@ -1,7 +1,6 @@
 # konfound 1.0.0
 
 * major release of changes that were being made in the "newitcv" branch
-* 
 
 # konfound 0.5.1
 
