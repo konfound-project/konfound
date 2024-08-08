@@ -30,7 +30,7 @@ konfound_lm(
 The results of the konfound analysis for the specified variable(s).
 }
 \description{
-This function performs konfound analysis on a linear model object 
+This function performs konfound analysis on a linear model object
 produced by lm.
 It calculates the sensitivity of inferences for coefficients in the model.
 It supports analysis for a single variable or multiple variables.

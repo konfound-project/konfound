@@ -23,11 +23,12 @@ pkonfound(
   two_by_two_table = NULL,
   test = "fisher",
   replace = "control",
-  sdx,
-  sdy,
-  R2,
-  eff_thr = 0,
-  FR2max,
+  sdx = NA,
+  sdy = NA,
+  R2 = NA,
+  far_bound = 0,
+  eff_thr = NA,
+  FR2max = 0,
   FR2max_multiplier = 1.3,
   to_return = "print"
 )
@@ -67,15 +68,17 @@ pkonfound(
 
 \item{test}{whether using Fisher's Exact Test or A chi-square test; defaults to Fisher's Exact Test}
 
-\item{replace}{whether using entire sample or the control group to calculate the base rate; default is the control group}
+\item{replace}{whether using entire sample or the control group to calculate the base rate; default is control}
 
 \item{sdx}{the standard deviation of X}
 
 \item{sdy}{the standard deviation of Y}
 
-\item{R2}{the unadjusted,original R2 in the observed function}
+\item{R2}{the unadjusted, original R2 in the observed function}
 
-\item{eff_thr}{unstandardized coefficient threshold to change an inference}
+\item{far_bound}{whether the estimated effect is moved to the boundary closer (default 0) or further away (1);}
+
+\item{eff_thr}{for RIR: unstandardized coefficient threshold to change an inference; for IT: correlation defining the threshold for inference}
 
 \item{FR2max}{the largest R2, or R2max, in the final model with unobserved confounder}
 
@@ -84,7 +87,41 @@ pkonfound(
 \item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
 }
 \value{
-prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to invalidate the inference
+pkonfound prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to nullify the inference. If to_return = "raw_output," a list will be given with the following components:
+\describe{
+  \item{obs_r}{correlation between predictor of interest (X) and outcome (Y) in the sample data.}
+  \item{act_r}{correlation between predictor of interest (X) and outcome (Y) from the sample regression based on the t-ratio accounting for non-zero null hypothesis.}
+  \item{critical_r}{critical correlation value at which the inference would be nullified (e.g., associated with p=.05).}
+  \item{r_final}{final correlation value given CV. Should be equal to critical_r.}
+  \item{rxcv}{correlation between predictor of interest (X) and CV necessary to nullify the inference for smallest impact.}
+  \item{rycv}{correlation between outcome (Y) and CV necessary to nullify the inference for smallest impact.}
+  \item{rxcvGz}{correlation between predictor of interest and CV necessary to nullify the inference for smallest impact conditioning on all observed covariates (given z).}  
+  \item{rycvGz}{correlation between outcome and CV necessary to nullify the inference for smallest impact conditioning on all observed covariates (given z).}
+  \item{itcvGz}{ITCV conditioning on the observed covariates.}
+  \item{itcv}{Unconditional ITCV.}
+  \item{r2xz}{R2 using all observed covariates to explain the predictor of interest (X).}
+  \item{r2yz}{R2 using all observed covariates to explain the outcome (Y).}
+  \item{delta_star}{delta calculated using Oster's unrestricted estimator.}
+  \item{delta_star_restricted}{delta calculated using Oster's restricted estimator.}
+  \item{delta_exact}{correlation-based delta.}
+  \item{delta_pctbias}{percent of bias when comparing delta_star with delta_exact.}
+  \item{cor_oster}{correlation matrix implied by delta_star.}
+  \item{cor_exact}{correlation matrix implied by delta_exact.}
+  \item{beta_threshold}{threshold value for estimated effect.}
+  \item{beta_threshold_verify}{estimated effect given RIR. Should be equal to beta_threshold.}
+  \item{perc_bias_to_change}{percent bias to change the inference.}
+  \item{RIR_primary}{Robustness of Inference to Replacement (RIR).}
+  \item{RIR_supplemental}{RIR for an extra row or column that is needed to nullify the inference.}
+  \item{RIR_perc}{RIR as \% of total sample (for linear regression) or as \% of data points in the cell where replacement takes place (for logistic and 2 by 2 table).}
+  \item{fragility_primary}{Fragility. the number of switches (e.g., treatment success to treatment failure) to nullify the inference.}
+  \item{fragility_supplemental}{Fragility for an extra row or column that is needed to nullify the inference.} 
+  \item{starting_table}{Observed 2 by 2 table before replacement and switching. Implied table for logistic regression.}
+  \item{final_table}{The 2 by 2 table after replacement and switching.}
+  \item{user_SE}{user entered standard error. Only applicable for logistic regression.}
+  \item{analysis_SE}{the standard error used to generate a plausible 2 by 2 table. Only applicable for logistic regression.}
+  \item{Fig_ITCV}{figure for ITCV.} 
+  \item{Fig_RIR}{figure for RIR.}
+}
 }
 \description{
 For published studies, this command calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient.
@@ -94,7 +131,6 @@ For published studies, this command calculates (1) how much bias there must be i
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
-
 pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 
 pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
@@ -110,7 +146,7 @@ pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
 pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
  eff_thr = 0, FR2max = .8, index = "COP", to_return = "raw_output")
 # use pkonfound to calculate rxcv and rycv when preserving standard error
-pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1, 
+pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
 sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
 
 }

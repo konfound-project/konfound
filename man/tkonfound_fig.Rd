@@ -45,3 +45,7 @@ is influenced by switching or replacing outcomes in a 2x2 table. It produces
 two plots: one showing all possibilities (switching) and another zoomed in 
 the area for positive RIR (Relative Impact Ratio).
 }
+\examples{
+tkonfound_fig(14, 17, 6, 25, test = "chisq")
+
+}

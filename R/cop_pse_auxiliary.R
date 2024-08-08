@@ -9,7 +9,7 @@ cal_ryz <- function(ryxGz, R2){
     if (R2yz >= 0) {
         ryz <- sqrt(R2yz)
     } else {
-        stop("Error! R2yz < 0!")
+        stop("The calculated variance in Y explained by Z is less than 0. This can occur if Z\n suppresses the relationship between X and Y. That is, if partialling on Z increases\n the relationship between X and Y. Note: the unconditional ITCV is not conceptualized\n for this scenario.")
     }
     return(ryz)
 }
@@ -25,7 +25,8 @@ cal_ryz <- function(ryxGz, R2){
 #' @importFrom lavaan parameterEstimates
 cal_rxz <- function(var_x, var_y, R2, df, std_err){
     R2xz <- 1 - ((var_y * (1 - R2))/(var_x * df * std_err^2))
-    if (R2xz <= 0) {stop("Error! R2xz < 0!")} 
+    if (R2xz <= 0) {stop("Error! R2xz < 0!
+                         Consider adding more significant digits to your input values.")}
     ## Note output the number of R2xz
     rxz <- sqrt(R2xz)
     return(rxz)
