@@ -1,3 +1,12 @@
+# konfound 1.0.0
+
+* major release of changes that were being made in the "newitcv" branch
+* 
+
+# konfound 0.5.1
+
+* minor patch for CRAN
+
 # konfound 0.5.0
 
 * edits in response to JOSS feedback, specifically:
