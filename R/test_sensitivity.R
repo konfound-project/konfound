@@ -131,18 +131,18 @@ test_sensitivity <- function(est_eff,
   
   ## verify results 
   if (est_eff * beta_threshold < 0 & index == "IT") {
-      perc_to_change = 101 
-      recase = n_obs + 1
+      perc_to_change <- 101 
+      recase <- n_obs + 1
       if (to_return == "raw_output") {
           warning("Ignore the following elements beta_threshold, beta_threshold_verify, perc_bias_to_change,\n RIR_primary and RIR_perc in the raw_output.")
       }
     }
     
   if (abs(est_eff) > abs(beta_threshold)) {
-      beta_threshold_verify = perc_to_change / 100 * 0 + (1 - perc_to_change / 100) * est_eff
+      beta_threshold_verify <- perc_to_change / 100 * 0 + (1 - perc_to_change / 100) * est_eff
   } 
   if (abs(est_eff) < abs(beta_threshold)) {
-        beta_threshold_verify = est_eff / (1 - perc_to_change / 100)
+        beta_threshold_verify <- est_eff / (1 - perc_to_change / 100)
   }
   ## compare beta_threshold_verify with beta_threshold
 
