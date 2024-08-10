@@ -1,6 +1,11 @@
 # konfound 1.0.0
 
-* major release of changes that were being made in the "newitcv" branch
+* major release of changes that were being made in the "newitcv" branch:
+   * Includes option to specify non-zero null hypotheses
+   * Includes option to directly specify threshold for inference
+   * Improved output statements
+   * Includes full raw results for RIR and ITCV
+   * Calculation for unconditional ITCV when possible
 
 # konfound 0.5.1
 
