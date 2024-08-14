@@ -112,14 +112,14 @@ ggplot2::annotate(
   "text",
   x = -.125,
   y = .5,
-  label = paste0("Rx.cv | Z =\n ", r_con),
+  label = paste0("Rx.cv | Z =\n ", round(r_con, 3)),
   fontface = 1
 ) +
 ggplot2::annotate(
   "text",
   x = .575,
   y = .35,
-  label = paste0("Ry.cv | Z =\n", r_con),
+  label = paste0("Ry.cv | Z =\n", round(r_con, 3)),
   fontface = 1
 ) +
 ggplot2::annotate(
