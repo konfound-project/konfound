@@ -163,7 +163,7 @@ output_print <- function(n_covariates,
       cat("\n")
       cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ") 
       cat("\n")
-      cat(round(r_con, 3), " X ", round(r_con, 3), " = ", round(r_con^2, 3), " to invalidate an inference for a null hypothesis of an effect of nu (", nu, ").\n", sep = ""))
+      cat(paste0(round(r_con, 3), " X ", round(r_con, 3), " = ", round(r_con^2, 3), " to invalidate an inference for a null hypothesis of an effect of nu (", nu, ").\n", sep = ""))
     } else if (abs(obs_r) > abs(critical_r) & obs_r < 0) {
       cat("The minimum (in absolute value) impact of an omitted variable to invalidate")
       cat("\n")
