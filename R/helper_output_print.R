@@ -167,7 +167,7 @@ output_print <- function(n_covariates,
     } else if (abs(obs_r) > abs(critical_r) & obs_r < 0) {
       cat("The minimum (in absolute value) impact of an omitted variable to invalidate")
       cat("\n")
-      cat(paste0("an inference for a null hypothesis of 0 effect is based on"))
+      cat(paste0("an inference for a null hypothesis of an effect of nu (", nu, ") is based on"))
       cat("\n")
       cat(paste0("a correlation of ", -round(r_con, 3), " with the outcome and ", round(r_con, 3), " with the predictor of"))
       cat("\n")
