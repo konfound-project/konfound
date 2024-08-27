@@ -1,0 +1,198 @@
+---
+title: "Introduction to konfound"
+author: "Joshua Rosenberg, Ran Xu, Qinyun Lin, and Ken Frank"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to konfound}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+collapse = TRUE,
+comment = "#>"
+)
+```
+
+# Introduction
+
+The goal of `konfound` is to carry out sensitivity analysis to help analysts to *quantify how robust inferences are to potential sources of bias*. This package provides functions based on developments in sensitivity analysis by Frank and colleagues, which previously have been implemented in `Stata`, through an Excel spreadsheet, and in `R` through the `konfound` package. In particular, we provide functions for *analyses carried out outside of R as well as from models (`lm`, `glm`, and `lme4::lmer` fit in R)* for:
+
+* Quantifying the bias necessary to nullify an inference from the framework of Rubin's (1974) causal model using the Robustness of Inference to Replacement (RIR)
+* The robustness of causal inference in terms of the impact threshold of a confounding variable (ITCV)
+
+Install `konfound` with the following:
+
+```{r gh-installation, eval = FALSE}
+install.packages("konfound")
+```
+
+Load konfound with the `library()` function:
+
+```{r, eval = TRUE}
+library(konfound)
+```
+
+## Use of pkonfound() for values from an already-conducted analysis
+
+`pkonfound()` is applied to an already-conducted analysis (like a regression analysis), such as one in an already-published study or from an analysis carried out using other software. 
+
+In the case of a regression analysis, values from the analysis would simply be used as the inputs to the `pkonfound()` function. In the example below, we simply enter the values for the estimated effect (an unstandardardized beta coefficient) (`2`), its standard error (`.4`), the sample size (`100`), and the number of covariates (`3`):
+
+```{r}
+pkonfound(est_eff = 2, std_err = .4, n_obs = 100, n_covariates = 3)
+```
+
+For the same example, one can also ask for the impact threshold of a confounding variable (ITCV) to nullify the inference, by specifying `index` as `IT`.   
+
+```{r}
+pkonfound(est_eff = 2, std_err = .4, n_obs = 100, n_covariates = 3, index = "IT")
+```
+
+We notice that the output includes a message that says we can view other forms of output by changing the `to_return` argument. Here are the two plots - for the bias necessary to alter an inference (`thresh_plot`) and for the robustness of an inference in terms of the impact of a confounding variable (`corr_plot`) that can be returned:
+
+```{r, fig.width = 6, fig.height = 6}
+pkonfound(est_eff = 2, std_err = .4, n_obs = 100, n_covariates = 3, to_return = "thresh_plot")
+```
+
+```{r, fig.width = 6, fig.height = 6}
+pkonfound(est_eff = 2, std_err = .4, n_obs = 100, n_covariates = 3, to_return = "corr_plot")
+```
+
+Finally, you can return the raw output, for use in other analyses. 
+
+```{r, fig.width = 6, fig.height = 6}
+pkonfound(est_eff = 2, std_err = .4, n_obs = 100, n_covariates = 3, to_return = "raw_output")
+```
+
+The `pkonfound()` command can be used with the values from a two-by-two table associated with an intervention (represented as a dichotomous predictor variable) that is related to a binary outcome, such as one that could be modeled using a logistic regression. Below:
+
+- `a` represents an unsuccessful control group outcome
+- `b` represents a successful control group outcome
+- `c` represents an unsuccessful treatment group outcome
+- `d` represents a successful treatment group outcome
+
+```{r}
+pkonfound(a = 35, b = 17, c = 17, d = 38)
+```
+
+A table can also be passed to this function: 
+
+```{r}
+my_table <- tibble::tribble(
+~unsuccess, ~success,
+35,         17,
+17,         38,
+)
+pkonfound(two_by_two_table = my_table)
+```
+
+One can also use this function for logistic regression with multiple covariates. Below: 
+
+- `est_eff` represents an estimated effect (log odds) for the predictor of interest
+- `std_err` represents the standard error of the estimated effect (log odds)
+- `n_obs` represents number of observations
+- `n_covariates` represents number of covariates in the logistic regression model 
+- `n_treat` represents number of data points in the treatment condition 
+
+```{r}
+pkonfound(est_eff = 0.4, std_err = 0.103, 
+          n_obs = 20888, n_covariates = 3, 
+          n_treat = 17888, model_type = 'logistic')
+```
+
+## Use of konfound() for models fit in R
+
+Where `pkonfound()` can be used with values from already-conducted analyses, `konfound()` can be used with models (`lm`, `glm`, and `lme4::lmer`) fit in R.
+
+**For linear models fit with lm()**
+
+```{r}
+m1 <- lm(mpg ~ wt + hp + qsec, data = mtcars)
+m1
+
+konfound(model_object = m1, 
+         tested_variable = hp)
+```
+
+With `konfound()` you can also request a table with some key output from the correlation-based approach.
+
+```{r}
+konfound(model_object = m1, tested_variable = wt, to_return = "table")
+```
+
+If the impact threshhold is greater than the impacts of the `Z`s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference. 
+
+**For logistic regression models fit with glm() with a dichotomous predictor of interest**
+
+We first fit a logistic regression model where the predictor of interest (`condition`) is binary/dichotomous.
+
+```{r}
+# View summary stats for condition variable
+table(binary_dummy_data$condition)
+# Fit the logistic regression model
+m4 <- glm(outcome ~ condition + control, 
+          data = binary_dummy_data, family = binomial)
+# View the summary of the model
+summary(m4)
+```
+
+Now we call konfound as below, where `n_treat` represents number of data points in the treatment condition.
+```{r}
+konfound(model_object = m4, 
+         tested_variable = condition,
+         two_by_two = TRUE, n_treat = 55)
+```
+
+**Mixed effects (or multi-level) models fit with the lmer() function from the lme4 package**
+
+`konfound` also works with models fit with the `lmer()` function from the package `lme4`, for mixed-effects or multi-level models. One challenge with carrying out sensitivity analysis for fixed effects in mixed effects models is calculating the correct denominator degrees of freedom for the t-test associated with the coefficients. This is not unique to sensitivity analysis, as, for example, `lmer()` does not report degrees of freedom (or p-values) for fixed effects predictors (see this information in the `lme4` FAQ [here](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have)). While it may be possible to determine the correct degrees of freedom for some models (i.e., models with relatively simple random effects structures), it is difficult to generalize this approach, and so the `konfound` command uses the Kenward-Roger approximation for the denominator degrees of freedom as implemented in the `pbkrtest` package (described in [Halekoh and Højsgaard, 2014](https://www.jstatsoft.org/htaccess.php?volume=59&type=i&issue=09&paper=true)).
+
+Here is an example of the use of `konfound()` with a model fit with `lmer()`:
+
+```{r}
+if (requireNamespace("lme4")) {
+    library(lme4)
+    m3 <- fm1 <- lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
+    konfound(m3, Days)
+}
+```
+
+## Use of mkonfound() for meta-analyses that include sensitivity analysis
+
+`mkonfound()` supports sensitivity that can be compared or synthesized across multiple analyses. Calculations are based on the RIR framework using correlations to express effects and thresholds in each study. For example, here, `d` represents output from a number (30 in this case) of past studies, read in a CSV file from a website:
+
+```{r, eval = TRUE}
+mkonfound_ex
+mkonfound(mkonfound_ex, t, df)
+```
+
+We can also return a plot summarizing the percent bias needed to sustan or invalidate an inference across all of the past studies:
+
+```{r, eval = TRUE}
+mkonfound(mkonfound_ex, t, df, return_plot = TRUE)
+```
+
+# Other information
+
+### Feedback, issues, and feature requests
+
+`konfound` is actively under development as of January, 2018. We welcome feedback and requests for improvement. We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/konfound-project/konfound/issues)) though we also welcome questions or feedback via email (see the DESCRIPTION file).
+
+### Code of Conduct
+
+Please note that this project is released with a Contributor Code of Conduct available at [https://www.contributor-covenant.org/version/1/0/0/](https://www.contributor-covenant.org/version/1/0/0/)
+
+### References
+
+* Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?: Using Rubin’s causal model to interpret the robustness of causal inferences. *Education, Evaluation and Policy Analysis*. Vol 35: 437-460. https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx
+
+* Frank, K. A. and Min, K. 2007. Indices of Robustness for Sample Representation. *Sociological Methodology*. Vol 37, 349-392. https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc (co first authors)
+
+* Frank, K. 2000. Impact of a Confounding Variable on the Inference of a Regression Coefficient. *Sociological Methods and Research*, 29(2), 147-194 https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf
+
+* Narvaiz, S., Lin, Q., Rosenberg, J. M., Frank, K. A., Maroulis, S., Wang, W., Xu, R., 2024. konfound: An R Sensitivity Analysis Package to Quantify the Robustness of Causal Inferences. *The Journal of Open Source Software*, 9(95), 5779. https://doi.org/10.21105/joss.05779
+
+* Xu, R., Frank, K. A., Maroulis, S. J., & Rosenberg, J. M. 2019. konfound: Command to quantify robustness of causal inferences. *The Stata Journal*, 19(3), 523-550. https://doi.org/10.1177/1536867X19874223
