@@ -82,7 +82,7 @@
 <div class="section level1">
 <div class="page-header"><h1 id="konfound">konfound<a class="anchor" aria-label="anchor" href="#konfound"></a>
 </h1></div>
-<p>In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias. The goal of <code>konfound</code> is to carry out sensitivity analysis to help analysts to <em>quantify how robust inferences are to potential sources of bias</em>. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.</p>
+<p>The goal of <code>konfound</code> is to carry out sensitivity analysis to help analysts to <em>quantify how robust inferences are to potential sources of bias</em>. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.</p>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -101,7 +101,7 @@
 <div class="section level2">
 <h2 id="pkonfound-for-published-studies">pkonfound() for published studies<a class="anchor" aria-label="anchor" href="#pkonfound-for-published-studies"></a>
 </h2>
-<p><code><a href="reference/pkonfound.html">pkonfound()</a></code>, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:</p>
+<p><code><a href="reference/pkonfound.html">pkonfound()</a></code>, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference, and interprets in terms of how much data would need to be replaced to nullify an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/konfound-project/konfound" class="external-link">konfound</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Sensitivity analysis as described in Frank, </span></span>
@@ -114,15 +114,13 @@
 <span>          n_obs <span class="op">=</span> <span class="fl">100</span>, </span>
 <span>          n_covariates <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Robustness of Inference to Replacement (RIR):</span></span>
-<span><span class="co">#&gt; TO INVALIDATE:</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; RIR = 60</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The estimated effect is 2. To invalidate the inference of an effect using</span></span>
-<span><span class="co">#&gt; the threshold of 0.794 for statistical significance with alpha = 0.05, 60.295% of</span></span>
-<span><span class="co">#&gt; the (2) estimate would have to be due to bias. This implies that to invalidate</span></span>
-<span><span class="co">#&gt; the inference one would expect to have to replace 60 (60.295%) observations</span></span>
-<span><span class="co">#&gt; with cases for which the treatment effect is 0 (RIR = 60).</span></span>
+<span><span class="co">#&gt; To invalidate the inference of an effect using the threshold of 0.794 for</span></span>
+<span><span class="co">#&gt; statistical significance (with null hypothesis = 0 and alpha = 0.05), 60.295%</span></span>
+<span><span class="co">#&gt; of the (2) estimate would have to be due to bias. This implies that to</span></span>
+<span><span class="co">#&gt; invalidate the inference one would expect to have to replace 60 (60.295%)</span></span>
+<span><span class="co">#&gt; observations with data points for which the effect is 0 (RIR = 60).</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; See Frank et al. (2013) for a description of the method.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -139,7 +137,7 @@
 <div class="section level2">
 <h2 id="konfound-for-models-fit-in-r">konfound() for models fit in R<a class="anchor" aria-label="anchor" href="#konfound-for-models-fit-in-r"></a>
 </h2>
-<p><code><a href="reference/konfound.html">konfound()</a></code> calculates the same for models fit in R. For example, here are the coefficients for a linear model fit with <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> using the built-in dataset <code>mtcars</code>:</p>
+<p><code><a href="reference/konfound.html">konfound()</a></code> calculates the robustness of inferences for models fit in R. For example, below are the coefficients for a linear model fit with <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> using the built-in dataset <code>mtcars</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="va">m1</span></span>
@@ -174,15 +172,13 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">wt</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Robustness of Inference to Replacement (RIR):</span></span>
-<span><span class="co">#&gt; TO INVALIDATE:</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; RIR = 9</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The estimated effect is -3.351. To invalidate the inference of an effect using</span></span>
-<span><span class="co">#&gt; the threshold of -2.381 for statistical significance with alpha = 0.05, 28.946% of</span></span>
-<span><span class="co">#&gt; the (-3.351) estimate would have to be due to bias. This implies that to invalidate</span></span>
-<span><span class="co">#&gt; the inference one would expect to have to replace 9 (28.946%) observations</span></span>
-<span><span class="co">#&gt; with cases for which the treatment effect is 0 (RIR = 9).</span></span>
+<span><span class="co">#&gt; To invalidate the inference of an effect using the threshold of -2.381 for</span></span>
+<span><span class="co">#&gt; statistical significance (with null hypothesis = 0 and alpha = 0.05), 28.946%</span></span>
+<span><span class="co">#&gt; of the (-3.351) estimate would have to be due to bias. This implies that to</span></span>
+<span><span class="co">#&gt; invalidate the inference one would expect to have to replace 9 (28.946%)</span></span>
+<span><span class="co">#&gt; observations with data points for which the effect is 0 (RIR = 9).</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; See Frank et al. (2013) for a description of the method.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -197,7 +193,7 @@
 <div class="section level2">
 <h2 id="mkonfound-for-meta-analyses-including-sensitivity-analysis">mkonfound for meta-analyses including sensitivity analysis<a class="anchor" aria-label="anchor" href="#mkonfound-for-meta-analyses-including-sensitivity-analysis"></a>
 </h2>
-<p>We can use an existing (and built-in) dataset, such as <code>mkonfound_ex</code>.</p>
+<p><code><a href="reference/mkonfound.html">mkonfound()</a></code> supports sensitivity that can be compared or synthesized across multiple analyses. We can use an existing (and built-in) dataset, such as <code>mkonfound_ex</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mkonfound_ex</span></span>
 <span><span class="co">#&gt; # A tibble: 30 × 2</span></span>
@@ -240,6 +236,7 @@
 </h3>
 <p>To learn more about sensitivity analysis, please visit:</p>
 <ul>
+<li>The <a href="https://konfound-it.org/" class="external-link">KonFound-It website</a>, with latest news, links to tools and support</li>
 <li>The <a href="https://konfound-it.org/konfound/articles/introduction-to-konfound.html" class="external-link">Introduction to konfound vignette</a>, with detailed information about each of the functions (<code><a href="reference/pkonfound.html">pkonfound()</a></code>, <code><a href="reference/konfound.html">konfound()</a></code>, and <code>mkounfound()</code>)</li>
 <li>The <a href="https://konfound-project.shinyapps.io/konfound-it/" class="external-link">Konfound-It! interactive web application</a>, with links to PowerPoints and key publications</li>
 </ul>

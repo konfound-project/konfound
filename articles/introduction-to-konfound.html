@@ -81,7 +81,7 @@
                         <h4 data-toc-skip class="author">Joshua
 Rosenberg, Ran Xu, Qinyun Lin, and Ken Frank</h4>
             
-            <h4 data-toc-skip class="date">2024-08-19</h4>
+            <h4 data-toc-skip class="date">2024-08-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/konfound-project/konfound/blob/master/vignettes/introduction-to-konfound.Rmd" class="external-link"><code>vignettes/introduction-to-konfound.Rmd</code></a></small>
       <div class="hidden name"><code>introduction-to-konfound.Rmd</code></div>
@@ -93,30 +93,26 @@ Rosenberg, Ran Xu, Qinyun Lin, and Ken Frank</h4>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>In social science (and educational) research, we often wish to
-understand how robust inferences about effects are to unobserved (or
-controlled for) covariates, possible problems with measurement, and
-other sources of bias. The goal of <code>konfound</code> is to carry out
-sensitivity analysis to help analysts to <em>quantify how robust
-inferences are to potential sources of bias</em>. This package provides
-functions based on developments in sensitivity analysis by Frank and
-colleagues, which previously have been implemented in <code>Stata</code>
-and through an Excel spreadsheet, in <code>R</code> through the
-<code>konfound</code> package. In particular, we provide functions for
-both <em>values from analyses carried out outside of R as well as from
-models (<code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>, <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>, and
-<code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code> fit in R)</em> for:</p>
+<p>The goal of <code>konfound</code> is to carry out sensitivity
+analysis to help analysts to <em>quantify how robust inferences are to
+potential sources of bias</em>. This package provides functions based on
+developments in sensitivity analysis by Frank and colleagues, which
+previously have been implemented in <code>Stata</code>, through an Excel
+spreadsheet, and in <code>R</code> through the <code>konfound</code>
+package. In particular, we provide functions for <em>analyses carried
+out outside of R as well as from models (<code>lm</code>,
+<code>glm</code>, and <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer</a></code> fit in R)</em> for:</p>
 <ul>
-<li>Quantifying the bias necessary to alter an inference from the
-framework of Rubin’s (1974) causal model</li>
+<li>Quantifying the bias necessary to nullify an inference from the
+framework of Rubin’s (1974) causal model using the Robustness of
+Inference to Replacement (RIR)</li>
 <li>The robustness of causal inference in terms of the impact threshold
-of a confounding variable</li>
+of a confounding variable (ITCV)</li>
 </ul>
-<p>You can install <code>konfound</code> with the following:</p>
+<p>Install <code>konfound</code> with the following:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"konfound"</span><span class="op">)</span></span></code></pre></div>
-<p>You can then load konfound with the <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>
-function:</p>
+<p>Load konfound with the <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code> function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/konfound-project/konfound" class="external-link">konfound</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Sensitivity analysis as described in Frank, </span></span>
@@ -127,18 +123,17 @@ function:</p>
 <h3 id="use-of-pkonfound-for-values-from-an-already-conducted-analysis">Use of pkonfound() for values from an already-conducted
 analysis<a class="anchor" aria-label="anchor" href="#use-of-pkonfound-for-values-from-an-already-conducted-analysis"></a>
 </h3>
-<p><code><a href="../reference/pkonfound.html">pkonfound()</a></code> is used when we have values from an
-already-conducted analysis (like a regression analysis), such as one in
-an already-published study or from an analysis carried out using other
-software.</p>
+<p><code><a href="../reference/pkonfound.html">pkonfound()</a></code> is applied to an already-conducted analysis
+(like a regression analysis), such as one in an already-published study
+or from an analysis carried out using other software.</p>
 <p>In the case of a regression analysis, values from the analysis would
 simply be used as the inputs to the <code><a href="../reference/pkonfound.html">pkonfound()</a></code> function.
-For example, in the use below, we simply enter the values for the
-estimated effect (an unstandardardized beta coefficient)
-(<code>2</code>), its standard error (<code>.4</code>), the sample size
-(<code>100</code>), and the number of covariates (<code>3</code>):</p>
+In the example below, we simply enter the values for the estimated
+effect (an unstandardardized beta coefficient) (<code>2</code>), its
+standard error (<code>.4</code>), the sample size (<code>100</code>),
+and the number of covariates (<code>3</code>):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">.4</span>, <span class="fl">100</span>, <span class="fl">3</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">2</span>, std_err <span class="op">=</span> <span class="fl">.4</span>, n_obs <span class="op">=</span> <span class="fl">100</span>, n_covariates <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span></span>
 <span><span class="co"><span style="font-weight: bold;">#&gt; </span>RIR = 60</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -159,63 +154,36 @@ estimated effect (an unstandardardized beta coefficient)
 <span><span class="co">#&gt; For other forms of output, run</span></span>
 <span><span class="co">#&gt;           ?pkonfound and inspect the to_return argument</span></span>
 <span><span class="co">#&gt; For models fit in R, consider use of konfound().</span></span></code></pre></div>
-<p>For this set of values, around 60% would need to be false due to a
-source of bias for the inference to be invalidated (based on statistical
-significance and a p-value (or alpha) of .05), possible a very robust
-effect. An omitted, confounding variable (sometimes referred to as a
-covariate) would need to have an impact (defined as the product of the
-confounding variable’s correlation with both the predictor of interest
-and the outcome) of 0.323, presenting a different interpretation of how
-robust this (hypothetical) effect is to a variable which is important
-but not included in the analysis.</p>
-<p>Here is another example, but one in which the unstandardized beta
-coefficient is smaller than its standard error:</p>
+<p>For the same example, one can also ask for the impact threshold of a
+confounding variable (ITCV) to nullify the inference, by specifying
+<code>index</code> as <code>IT</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">2</span>, <span class="fl">100</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span></span>
-<span><span class="co"><span style="font-weight: bold;">#&gt; </span>RIR = 90</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">2</span>, std_err <span class="op">=</span> <span class="fl">.4</span>, n_obs <span class="op">=</span> <span class="fl">100</span>, n_covariates <span class="op">=</span> <span class="fl">3</span>, index <span class="op">=</span> <span class="st">"IT"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Impact Threshold for a Confounding Variable (ITCV):</span></span></span>
+<span><span class="co"><span style="font-weight: bold;">#&gt; </span></span></span>
+<span><span class="co">#&gt; The minimum impact of an omitted variable to invalidate an inference for</span></span>
+<span><span class="co">#&gt; a null hypothesis of an effect of nu (0) is based on a correlation of 0.566</span></span>
+<span><span class="co">#&gt; with the outcome and 0.566 with the predictor of interest (conditioning</span></span>
+<span><span class="co">#&gt; on all observed covariates in the model; signs are interchangeable). This is</span></span>
+<span><span class="co">#&gt; based on a threshold effect of 0.2 for statistical significance (alpha = 0.05).</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The estimated effect is 0.4. The threshold value for statistical significance</span></span>
-<span><span class="co">#&gt; is 3.971 (with null hypothesis = 0 and alpha = 0.05). To reach that threshold,</span></span>
-<span><span class="co">#&gt; 89.926% of the (0.4) estimate would have to be due to bias. This implies to sustain</span></span>
-<span><span class="co">#&gt; an inference one would expect to have to replace 90 (89.926%) observations with</span></span>
-<span><span class="co">#&gt; effect of 0 with data points with effect of 3.971 (RIR = 90).</span></span>
+<span><span class="co">#&gt; Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be </span></span>
+<span><span class="co">#&gt; 0.566 X 0.566 = 0.321 to invalidate an inference for a null hypothesis of an effect of nu (0).</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; See Frank et al. (2013) for a description of the method.</span></span>
+<span><span class="co">#&gt; For calculation of unconditional ITCV using pkonfound(), additionally include</span></span>
+<span><span class="co">#&gt; the R2, sdx, and sdy as input, and request raw output.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="text-decoration: underline;">Citation:</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span></span>
-<span><span class="co">#&gt; What would it take to change an inference?</span></span>
-<span><span class="co">#&gt; Using Rubin's causal model to interpret the robustness of causal inferences.</span></span>
-<span><span class="co">#&gt; <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span></span>
+<span><span class="co">#&gt; See Frank (2000) for a description of the method.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Accuracy of results increases with the number of decimals reported.</span></span>
-<span><span class="co">#&gt; For other forms of output, run</span></span>
-<span><span class="co">#&gt;           ?pkonfound and inspect the to_return argument</span></span>
-<span><span class="co">#&gt; For models fit in R, consider use of konfound().</span></span></code></pre></div>
-<p>Note that this use of <code><a href="../reference/pkonfound.html">pkonfound()</a></code> is equivalent to
-naming the arguments, i.e. for a different set of values:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span>est_eff <span class="op">=</span> <span class="op">-</span><span class="fl">2.2</span>,</span>
-<span>          std_err <span class="op">=</span> <span class="fl">.65</span>, </span>
-<span>          n_obs <span class="op">=</span> <span class="fl">200</span>,</span>
-<span>          n_covariates <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span></span>
-<span><span class="co"><span style="font-weight: bold;">#&gt; </span>RIR = 83</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; To invalidate the inference of an effect using the threshold of -1.282 for</span></span>
-<span><span class="co">#&gt; statistical significance (with null hypothesis = 0 and alpha = 0.05), 41.73%</span></span>
-<span><span class="co">#&gt; of the (-2.2) estimate would have to be due to bias. This implies that to</span></span>
-<span><span class="co">#&gt; invalidate the inference one would expect to have to replace 83 (41.73%)</span></span>
-<span><span class="co">#&gt; observations with data points for which the effect is 0 (RIR = 83).</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; See Frank et al. (2013) for a description of the method.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="text-decoration: underline;">Citation:</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span></span>
-<span><span class="co">#&gt; What would it take to change an inference?</span></span>
-<span><span class="co">#&gt; Using Rubin's causal model to interpret the robustness of causal inferences.</span></span>
-<span><span class="co">#&gt; <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span></span>
+<span><span class="co">#&gt; <span style="text-decoration: underline;">Citation:</span></span></span>
+<span><span class="co">#&gt; Frank, K. (2000). Impact of a confounding variable on the inference of a</span></span>
+<span><span class="co">#&gt; regression coefficient. <span style="font-style: italic;">Sociological Methods and Research, 29</span> (2), 147-194</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Accuracy of results increases with the number of decimals reported.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The ITCV analysis was originally derived for OLS standard errors. If the</span></span>
+<span><span class="co">#&gt; standard errors reported in the table were not based on OLS, some caution</span></span>
+<span><span class="co">#&gt; should be used to interpret the ITCV.</span></span>
 <span><span class="co">#&gt; For other forms of output, run</span></span>
 <span><span class="co">#&gt;           ?pkonfound and inspect the to_return argument</span></span>
 <span><span class="co">#&gt; For models fit in R, consider use of konfound().</span></span></code></pre></div>
@@ -225,22 +193,22 @@ Here are the two plots - for the bias necessary to alter an inference
 (<code>thresh_plot</code>) and for the robustness of an inference in
 terms of the impact of a confounding variable (<code>corr_plot</code>)
 that can be returned:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">2</span>, std_err <span class="op">=</span> <span class="fl">.4</span>, n_obs <span class="op">=</span> <span class="fl">100</span>, n_covariates <span class="op">=</span> <span class="fl">3</span>, to_return <span class="op">=</span> <span class="st">"thresh_plot"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="introduction-to-konfound_files/figure-html/unnamed-chunk-4-1.png" width="576"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">2</span>, <span class="fl">100</span>, <span class="fl">3</span>, to_return <span class="op">=</span> <span class="st">"thresh_plot"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="introduction-to-konfound_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">2</span>, <span class="fl">100</span>, <span class="fl">3</span>, to_return <span class="op">=</span> <span class="st">"corr_plot"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="introduction-to-konfound_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">2</span>, std_err <span class="op">=</span> <span class="fl">.4</span>, n_obs <span class="op">=</span> <span class="fl">100</span>, n_covariates <span class="op">=</span> <span class="fl">3</span>, to_return <span class="op">=</span> <span class="st">"corr_plot"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="introduction-to-konfound_files/figure-html/unnamed-chunk-5-1.png" width="576"></p>
 <p>Finally, you can return the raw output, for use in other
 analyses.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">2</span>, <span class="fl">100</span>, <span class="fl">3</span>, to_return <span class="op">=</span> <span class="st">"raw_output"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">2</span>, std_err <span class="op">=</span> <span class="fl">.4</span>, n_obs <span class="op">=</span> <span class="fl">100</span>, n_covariates <span class="op">=</span> <span class="fl">3</span>, to_return <span class="op">=</span> <span class="st">"raw_output"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; For interpretation, check out to_return = 'print'.</span></span>
 <span><span class="co">#&gt; $obs_r</span></span>
-<span><span class="co">#&gt; [1] 0.02051525</span></span>
+<span><span class="co">#&gt; [1] 0.4564355</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $act_r</span></span>
-<span><span class="co">#&gt; [1] 0.02051525</span></span>
+<span><span class="co">#&gt; [1] 0.4564355</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $critical_r</span></span>
 <span><span class="co">#&gt; [1] 0.1995845</span></span>
@@ -249,38 +217,39 @@ analyses.</p>
 <span><span class="co">#&gt; [1] 0.1995845</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $rxcvGz</span></span>
-<span><span class="co">#&gt; [1] 0.3863626</span></span>
+<span><span class="co">#&gt; [1] 0.5664778</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $rycvGz</span></span>
-<span><span class="co">#&gt; [1] -0.3863626</span></span>
+<span><span class="co">#&gt; [1] 0.5664778</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $itcvGz</span></span>
-<span><span class="co">#&gt; [1] -0.1492761</span></span>
+<span><span class="co">#&gt; [1] 0.320897</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $beta_threshold</span></span>
-<span><span class="co">#&gt; [1] 3.970502</span></span>
+<span><span class="co">#&gt; [1] 0.7941004</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $beta_threshold_verify</span></span>
-<span><span class="co">#&gt; [1] 3.970502</span></span>
+<span><span class="co">#&gt; [1] 0.7941004</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $perc_bias_to_change</span></span>
-<span><span class="co">#&gt; [1] 89.92571</span></span>
+<span><span class="co">#&gt; [1] 60.29498</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $RIR_primary</span></span>
-<span><span class="co">#&gt; [1] 90</span></span>
+<span><span class="co">#&gt; [1] 60</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $RIR_perc</span></span>
-<span><span class="co">#&gt; [1] 89.92571</span></span>
+<span><span class="co">#&gt; [1] 60.29498</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $Fig_ITCV</span></span></code></pre></div>
-<p><img src="introduction-to-konfound_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="introduction-to-konfound_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 <pre><code><span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $Fig_RIR</span></span></code></pre>
-<p><img src="introduction-to-konfound_files/figure-html/unnamed-chunk-7-2.png" width="700"></p>
-<p>This function can be used with the values from a two-by-two table
-associated with an intervention (represented as a dichotomous predictor
-variable) that is related with a binary outcome, such as one that could
-be modeled using a logistic regression. Below:</p>
+<p><img src="introduction-to-konfound_files/figure-html/unnamed-chunk-6-2.png" width="576"></p>
+<p>The <code><a href="../reference/pkonfound.html">pkonfound()</a></code> command can be used with the values from
+a two-by-two table associated with an intervention (represented as a
+dichotomous predictor variable) that is related to a binary outcome,
+such as one that could be modeled using a logistic regression.
+Below:</p>
 <ul>
 <li>
 <code>a</code> represents an unsuccessful control group outcome</li>
@@ -292,25 +261,147 @@ outcome</li>
 <li>
 <code>d</code> represents a successful treatment group outcome</li>
 </ul>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># pkonfound(a = 35, b = 17, c = 17, d = 38)</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">35</span>, b <span class="op">=</span> <span class="fl">17</span>, c <span class="op">=</span> <span class="fl">17</span>, d <span class="op">=</span> <span class="fl">38</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span></span>
+<span><span class="co">#&gt; RIR = 14</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; This function calculates the number of data points that would have to be replaced with</span></span>
+<span><span class="co">#&gt; zero effect data points (RIR) to invalidate an inference made about the association</span></span>
+<span><span class="co">#&gt; between the rows and columns in a 2x2 table.</span></span>
+<span><span class="co">#&gt; One can also interpret this as switches (Fragility) from one cell to another, such as from the</span></span>
+<span><span class="co">#&gt; treatment success cell to the treatment failure cell.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; To invalidate the inference, one would need to replace 14 treatment success data points with data points</span></span>
+<span><span class="co">#&gt; for which the probability of failure in the control group applies (RIR = 14). </span></span>
+<span><span class="co">#&gt; This is equivalent to transferring 9 data points from treatment success to treatment failure (Fragility = 9).</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; For the User-entered Table, the estimated odds ratio is 4.530, with p-value of 0.000:</span></span>
+<span><span class="co">#&gt; <span style="text-decoration: underline;">User-entered Table:</span></span></span>
+<span><span class="co">#&gt;           Fail Success Success_Rate</span></span>
+<span><span class="co">#&gt; Control     35      17       32.69%</span></span>
+<span><span class="co">#&gt; Treatment   17      38       69.09%</span></span>
+<span><span class="co">#&gt; Total       52      55       51.40%</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; For the Transfer Table, the estimated odds ratio is 2.278, with p-value of 0.051:</span></span>
+<span><span class="co">#&gt; <span style="text-decoration: underline;">Transfer Table:</span></span></span>
+<span><span class="co">#&gt;           Fail Success Success_Rate</span></span>
+<span><span class="co">#&gt; Control     35      17       32.69%</span></span>
+<span><span class="co">#&gt; Treatment   26      29       52.73%</span></span>
+<span><span class="co">#&gt; Total       61      46       42.99%</span></span>
+<span><span class="co">#&gt; For other forms of output, run</span></span>
+<span><span class="co">#&gt;           ?pkonfound and inspect the to_return argument</span></span>
+<span><span class="co">#&gt; For models fit in R, consider use of konfound().</span></span></code></pre></div>
 <p>A table can also be passed to this function:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">my_table</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
+<span><span class="op">~</span><span class="va">unsuccess</span>, <span class="op">~</span><span class="va">success</span>,</span>
+<span><span class="fl">35</span>,         <span class="fl">17</span>,</span>
+<span><span class="fl">17</span>,         <span class="fl">38</span>,</span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span>two_by_two_table <span class="op">=</span> <span class="va">my_table</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span></span>
+<span><span class="co">#&gt; RIR = 14</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; This function calculates the number of data points that would have to be replaced with</span></span>
+<span><span class="co">#&gt; zero effect data points (RIR) to invalidate an inference made about the association</span></span>
+<span><span class="co">#&gt; between the rows and columns in a 2x2 table.</span></span>
+<span><span class="co">#&gt; One can also interpret this as switches (Fragility) from one cell to another, such as from the</span></span>
+<span><span class="co">#&gt; treatment success cell to the treatment failure cell.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; To invalidate the inference, one would need to replace 14 treatment success data points with data points</span></span>
+<span><span class="co">#&gt; for which the probability of failure in the control group applies (RIR = 14). </span></span>
+<span><span class="co">#&gt; This is equivalent to transferring 9 data points from treatment success to treatment failure (Fragility = 9).</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; For the User-entered Table, the estimated odds ratio is 4.530, with p-value of 0.000:</span></span>
+<span><span class="co">#&gt; <span style="text-decoration: underline;">User-entered Table:</span></span></span>
+<span><span class="co">#&gt;           Fail Success Success_Rate</span></span>
+<span><span class="co">#&gt; Control     35      17       32.69%</span></span>
+<span><span class="co">#&gt; Treatment   17      38       69.09%</span></span>
+<span><span class="co">#&gt; Total       52      55       51.40%</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; For the Transfer Table, the estimated odds ratio is 2.278, with p-value of 0.051:</span></span>
+<span><span class="co">#&gt; <span style="text-decoration: underline;">Transfer Table:</span></span></span>
+<span><span class="co">#&gt;           Fail Success Success_Rate</span></span>
+<span><span class="co">#&gt; Control     35      17       32.69%</span></span>
+<span><span class="co">#&gt; Treatment   26      29       52.73%</span></span>
+<span><span class="co">#&gt; Total       61      46       42.99%</span></span>
+<span><span class="co">#&gt; For other forms of output, run</span></span>
+<span><span class="co">#&gt;           ?pkonfound and inspect the to_return argument</span></span>
+<span><span class="co">#&gt; For models fit in R, consider use of konfound().</span></span></code></pre></div>
+<p>One can also use this function for logistic regression with multiple
+covariates. Below:</p>
+<ul>
+<li>
+<code>est_eff</code> represents an estimated effect (log odds) for
+the predictor of interest</li>
+<li>
+<code>std_err</code> represents the standard error of the estimated
+effect (log odds)</li>
+<li>
+<code>n_obs</code> represents number of observations</li>
+<li>
+<code>n_covariates</code> represents number of covariates in the
+logistic regression model</li>
+<li>
+<code>n_treat</code> represents number of data points in the
+treatment condition</li>
+</ul>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># my_table &lt;- tibble::tribble(</span></span>
-<span><span class="co"># ~unsuccess, ~success,</span></span>
-<span><span class="co"># 35,         17,</span></span>
-<span><span class="co"># 17,         38,</span></span>
-<span><span class="co"># )</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># pkonfound(two_by_two_table = my_table)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pkonfound.html">pkonfound</a></span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">0.4</span>, std_err <span class="op">=</span> <span class="fl">0.103</span>, </span>
+<span>          n_obs <span class="op">=</span> <span class="fl">20888</span>, n_covariates <span class="op">=</span> <span class="fl">3</span>, </span>
+<span>          n_treat <span class="op">=</span> <span class="fl">17888</span>, model_type <span class="op">=</span> <span class="st">'logistic'</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span></span>
+<span><span class="co"><span style="font-weight: bold;">#&gt; </span>RIR = 2607</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The table implied by the parameter estimates and sample sizes you entered:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;           Fail Success Success_Rate</span></span>
+<span><span class="co">#&gt; Control    122    2878       95.93%</span></span>
+<span><span class="co">#&gt; Treatment  495   17393       97.23%</span></span>
+<span><span class="co">#&gt; Total      617   20271       97.05%</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The reported effect size = 0.400, SE = 0.103, and p-value = 0.000. </span></span>
+<span><span class="co">#&gt; Values have been rounded to the nearest integer. This may cause </span></span>
+<span><span class="co">#&gt; a small change to the estimated effect for the table.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; To invalidate the inference that the effect is different from 0 </span></span>
+<span><span class="co">#&gt; (alpha = 0.050) one would need to replace 2607 (14.989%) treatment success </span></span>
+<span><span class="co">#&gt; data points with data points for which the probability of failure in the control </span></span>
+<span><span class="co">#&gt; group (4.067%) applies (RIR = 2607). This is equivalent to transferring </span></span>
+<span><span class="co">#&gt; 106 data points from treatment success to treatment failure (Fragility = 106).</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note that RIR = Fragility/[1-P(success in the control group)]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The transfer of 106 data points yields the following table:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;           Fail Success Success_Rate</span></span>
+<span><span class="co">#&gt; Control    122    2878       95.93%</span></span>
+<span><span class="co">#&gt; Treatment  601   17287       96.64%</span></span>
+<span><span class="co">#&gt; Total      723   20165       96.54%</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Effect size = 0.198, SE = 0.101, p-value = 0.050. </span></span>
+<span><span class="co">#&gt; This is based on t = estimated effect/standard error</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; See Frank et al. (2013) for a description of the method.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span></span>
+<span><span class="co">#&gt; What would it take to change an inference?</span></span>
+<span><span class="co">#&gt; Using Rubin's causal model to interpret the robustness of causal inferences.</span></span>
+<span><span class="co">#&gt; <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> , 437-460.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Accuracy of results increases with the number of decimals reported.</span></span>
+<span><span class="co">#&gt; For other forms of output, run</span></span>
+<span><span class="co">#&gt;           ?pkonfound and inspect the to_return argument</span></span>
+<span><span class="co">#&gt; For models fit in R, consider use of konfound().</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="use-of-konfound-for-models-fit-in-r">Use of konfound() for models fit in R<a class="anchor" aria-label="anchor" href="#use-of-konfound-for-models-fit-in-r"></a>
 </h3>
 <p>Where <code><a href="../reference/pkonfound.html">pkonfound()</a></code> can be used with values from
 already-conducted analyses, <code><a href="../reference/konfound.html">konfound()</a></code> can be used with
-models (<code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code>, <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>, and
-<code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer()</a></code>) fit in R.</p>
+models (<code>lm</code>, <code>glm</code>, and <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lme4::lmer</a></code>)
+fit in R.</p>
 <p><strong>For linear models fit with lm()</strong></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
@@ -323,7 +414,8 @@ models (<code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm
 <span><span class="co">#&gt; (Intercept)           wt           hp         qsec  </span></span>
 <span><span class="co">#&gt;    27.61053     -4.35880     -0.01782      0.51083</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">hp</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/konfound.html">konfound</a></span><span class="op">(</span>model_object <span class="op">=</span> <span class="va">m1</span>, </span>
+<span>         tested_variable <span class="op">=</span> <span class="va">hp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span></span>
 <span><span class="co"><span style="font-weight: bold;">#&gt; </span>RIR = 13</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -342,11 +434,10 @@ models (<code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Accuracy of results increases with the number of decimals reported.</span></span>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
-<p>Whereas this cannot be carried out with <code><a href="../reference/pkonfound.html">pkonfound()</a></code>,
-with <code><a href="../reference/konfound.html">konfound()</a></code> you can also return a table with some key
-output from the correlation-based approach.</p>
+<p>With <code><a href="../reference/konfound.html">konfound()</a></code> you can also request a table with some
+key output from the correlation-based approach.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">wt</span>, to_return <span class="op">=</span> <span class="st">"table"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/konfound.html">konfound</a></span><span class="op">(</span>model_object <span class="op">=</span> <span class="va">m1</span>, tested_variable <span class="op">=</span> <span class="va">wt</span>, to_return <span class="op">=</span> <span class="st">"table"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Dependent variable is mpg</span></span>
 <span><span class="co">#&gt; For interpretation, check out to_return = 'print'.</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 6</span></span></span>
@@ -359,56 +450,90 @@ output from the correlation-based approach.</p>
 <p>If the impact threshhold is greater than the impacts of the
 <code>Z</code>s (the other covariates) then an omitted variable would
 have to have a greater impact than any of the observed covariates to
-change the inference. Note that in fields in which there is a lot known
-about covariates given the outcome of interest, then the omitted ones
-are likely less important than those that are known an included (i.e.,
-we have a good sense of the factors that matter in terms of educational
-achievement).</p>
-<p><strong>For logistic regression models fit with glm()</strong></p>
-<p>Effects for these models are typically interpreted on the basis of
-average partial (or marginal) effects (calculated using the
-<code>margins</code> package).</p>
-<p>Due to an issue with the margins and predictions package, these are
-the raw coefficients, not the average marginal effects; we will address
-this in future patches.</p>
+change the inference.</p>
+<p><strong>For logistic regression models fit with glm() with a
+dichotomous predictor of interest</strong></p>
+<p>We first fit a logistic regression model where the predictor of
+interest (<code>condition</code>) is binary/dichotomous.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># if forcats is not installed, this install it first using install.packages("forcats") for this to run</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"forcats"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">forcats</span><span class="fu">::</span><span class="va"><a href="https://forcats.tidyverse.org/reference/gss_cat.html" class="external-link">gss_cat</a></span></span>
-<span>    </span>
-<span>    <span class="va">d</span><span class="op">$</span><span class="va">married</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">marital</span> <span class="op">==</span> <span class="st">"Married"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
-<span>    </span>
-<span>    <span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">married</span> <span class="op">~</span> <span class="va">age</span>, data <span class="op">=</span> <span class="va">d</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="../reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m2</span>, <span class="va">age</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="co">#&gt; Warning in konfound_glm(model_object = model_object, tested_variable_string =</span></span>
-<span><span class="co">#&gt; tested_variable_string, : Due to an issue with the margins and predictions</span></span>
-<span><span class="co">#&gt; package, these are the raw coefficients, not the average marginal effects; we</span></span>
-<span><span class="co">#&gt; will address this in future patches</span></span>
-<span><span class="co">#&gt; <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span></span>
-<span><span class="co"><span style="font-weight: bold;">#&gt; </span>RIR = 17983</span></span>
+<code class="sourceCode R"><span><span class="co"># View summary stats for condition variable</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">binary_dummy_data</span><span class="op">$</span><span class="va">condition</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; To invalidate the inference of an effect using the threshold of 0.002 for</span></span>
-<span><span class="co">#&gt; statistical significance (with null hypothesis = 0 and alpha = 0.05), 84.006%</span></span>
-<span><span class="co">#&gt; of the (0.01) estimate would have to be due to bias. This implies that to</span></span>
-<span><span class="co">#&gt; invalidate the inference one would expect to have to replace 17983 (84.006%)</span></span>
-<span><span class="co">#&gt; observations with data points for which the effect is 0 (RIR = 17983).</span></span>
+<span><span class="co">#&gt;  0  1 </span></span>
+<span><span class="co">#&gt; 52 55</span></span>
+<span><span class="co"># Fit the logistic regression model</span></span>
+<span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">condition</span> <span class="op">+</span> <span class="va">control</span>, </span>
+<span>          data <span class="op">=</span> <span class="va">binary_dummy_data</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span></span>
+<span><span class="co"># View the summary of the model</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m4</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; glm(formula = outcome ~ condition + control, family = binomial, </span></span>
+<span><span class="co">#&gt;     data = binary_dummy_data)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;             Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span><span class="co">#&gt; (Intercept) -0.04611    0.46507  -0.099 0.921028    </span></span>
+<span><span class="co">#&gt; condition    1.51945    0.42298   3.592 0.000328 ***</span></span>
+<span><span class="co">#&gt; control     -1.33693    0.73013  -1.831 0.067089 .  </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; (Dispersion parameter for binomial family taken to be 1)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     Null deviance: 148.25  on 106  degrees of freedom</span></span>
+<span><span class="co">#&gt; Residual deviance: 130.29  on 104  degrees of freedom</span></span>
+<span><span class="co">#&gt; AIC: 136.29</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Number of Fisher Scoring iterations: 4</span></span></code></pre></div>
+<p>Now we call konfound as below, where <code>n_treat</code> represents
+number of data points in the treatment condition.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/konfound.html">konfound</a></span><span class="op">(</span>model_object <span class="op">=</span> <span class="va">m4</span>, </span>
+<span>         tested_variable <span class="op">=</span> <span class="va">condition</span>,</span>
+<span>         two_by_two <span class="op">=</span> <span class="cn">TRUE</span>, n_treat <span class="op">=</span> <span class="fl">55</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span></span>
+<span><span class="co"><span style="font-weight: bold;">#&gt; </span>RIR = 14</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The table implied by the parameter estimates and sample sizes you entered:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;           Fail Success Success_Rate</span></span>
+<span><span class="co">#&gt; Control     39      13       25.00%</span></span>
+<span><span class="co">#&gt; Treatment   22      33       60.00%</span></span>
+<span><span class="co">#&gt; Total       61      46       42.99%</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The reported effect size = 1.519, SE = 0.423, and p-value = 0.001. </span></span>
+<span><span class="co">#&gt; Values have been rounded to the nearest integer. This may cause </span></span>
+<span><span class="co">#&gt; a small change to the estimated effect for the table.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; To invalidate the inference that the effect is different from 0 </span></span>
+<span><span class="co">#&gt; (alpha = 0.050) one would need to replace 14 (42.424%) treatment success </span></span>
+<span><span class="co">#&gt; data points with data points for which the probability of failure in the control </span></span>
+<span><span class="co">#&gt; group (75.000%) applies (RIR = 14). This is equivalent to transferring </span></span>
+<span><span class="co">#&gt; 10 data points from treatment success to treatment failure (Fragility = 10).</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Note that RIR = Fragility/[1-P(success in the control group)]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The transfer of 10 data points yields the following table:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;           Fail Success Success_Rate</span></span>
+<span><span class="co">#&gt; Control     39      13       25.00%</span></span>
+<span><span class="co">#&gt; Treatment   32      23       41.82%</span></span>
+<span><span class="co">#&gt; Total       71      36       33.64%</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Effect size = 0.768, SE = 0.421, p-value = 0.071. </span></span>
+<span><span class="co">#&gt; This is based on t = estimated effect/standard error</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; See Frank et al. (2013) for a description of the method.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="text-decoration: underline;">Citation:</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span></span>
+<span><span class="co">#&gt; Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span></span>
 <span><span class="co">#&gt; What would it take to change an inference?</span></span>
 <span><span class="co">#&gt; Using Rubin's causal model to interpret the robustness of causal inferences.</span></span>
-<span><span class="co">#&gt; <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span></span>
+<span><span class="co">#&gt; <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> , 437-460.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Accuracy of results increases with the number of decimals reported.</span></span>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
-<p><strong>For logistic regression models fit with glm() with a
-dichotomous predictor of interest</strong></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">condition</span>, data <span class="op">=</span> <span class="va">binary_dummy_data</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/konfound.html">konfound</a></span><span class="op">(</span><span class="va">m4</span>, <span class="va">condition</span>, two_by_two <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><strong>For mixed effects (or multi-level) models fit with the lmer()
+<p><strong>Mixed effects (or multi-level) models fit with the lmer()
 function from the lme4 package</strong></p>
 <p><code>konfound</code> also works with models fit with the
 <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer()</a></code> function from the package <code>lme4</code>, for
@@ -421,10 +546,10 @@ of freedom (or p-values) for fixed effects predictors (see this
 information in the <code>lme4</code> FAQ <a href="http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have" class="external-link">here</a>).
 While it may be possible to determine the correct degrees of freedom for
 some models (i.e., models with relatively simple random effects
-structures), it is difficult to generalize this approach, and so in this
-package the Kenward-Roger approximation for the denominator degrees of
-freedom as implemented in the <code>pbkrtest</code> package (described
-in <a href="https://www.jstatsoft.org/htaccess.php?volume=59&amp;type=i&amp;issue=09&amp;paper=true" class="external-link">Halekoh
+structures), it is difficult to generalize this approach, and so the
+<code>konfound</code> command uses the Kenward-Roger approximation for
+the denominator degrees of freedom as implemented in the
+<code>pbkrtest</code> package (described in <a href="https://www.jstatsoft.org/htaccess.php?volume=59&amp;type=i&amp;issue=09&amp;paper=true" class="external-link">Halekoh
 and Højsgaard, 2014</a>).</p>
 <p>Here is an example of the use of <code><a href="../reference/konfound.html">konfound()</a></code> with a model
 fit with <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer()</a></code>:</p>
@@ -467,10 +592,12 @@ fit with <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-
 <h3 id="use-of-mkonfound-for-meta-analyses-that-include-sensitivity-analysis">Use of mkonfound() for meta-analyses that include sensitivity
 analysis<a class="anchor" aria-label="anchor" href="#use-of-mkonfound-for-meta-analyses-that-include-sensitivity-analysis"></a>
 </h3>
-<p>We can also use <code>konfound</code> to carry out sensitivity
-analysis as part of meta-analyses. For example, here, <code>d</code>
-represents output from a number (30 in this case) of past studies, read
-in a CSV file from a website:</p>
+<p><code><a href="../reference/mkonfound.html">mkonfound()</a></code> supports sensitivity that can be compared or
+synthesized across multiple analyses. Calculations are based on the RIR
+framework using correlations to express effects and thresholds in each
+study. For example, here, <code>d</code> represents output from a number
+(30 in this case) of past studies, read in a CSV file from a
+website:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mkonfound_ex</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 30 × 2</span></span></span>
@@ -542,16 +669,19 @@ Conduct available at <a href="https://www.contributor-covenant.org/version/1/0/0
 would it take to change an inference?: Using Rubin’s causal model to
 interpret the robustness of causal inferences. <em>Education, Evaluation
 and Policy Analysis</em>. Vol 35: 437-460. <a href="https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx" class="external-link uri">https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx</a></p></li>
-<li><p>Frank, K.A., Gary Sykes, Dorothea Anagnostopoulos, Marisa
-Cannata, Linda Chard, Ann Krause, Raven McCrory. 2008. Extended
-influence: National Board Certified Teachers as help providers.
-<em>Education, Evaluation, and Policy Analysis</em>. Vol 30(1): 3-30. <a href="https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc" class="external-link uri">https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc</a></p></li>
 <li><p>Frank, K. A. and Min, K. 2007. Indices of Robustness for Sample
 Representation. <em>Sociological Methodology</em>. Vol 37, 349-392. <a href="https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc" class="external-link uri">https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc</a>
 (co first authors)</p></li>
-<li><p>Frank, K. 2000. “Impact of a Confounding Variable on the
-Inference of a Regression Coefficient.” <em>Sociological Methods and
-Research</em>, 29(2), 147-194 <a href="https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf" class="external-link uri">https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf</a></p></li>
+<li><p>Frank, K. 2000. Impact of a Confounding Variable on the Inference
+of a Regression Coefficient. <em>Sociological Methods and Research</em>,
+29(2), 147-194 <a href="https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf" class="external-link uri">https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf</a></p></li>
+<li><p>Narvaiz, S., Lin, Q., Rosenberg, J. M., Frank, K. A., Maroulis,
+S., Wang, W., Xu, R., 2024. konfound: An R Sensitivity Analysis Package
+to Quantify the Robustness of Causal Inferences. <em>The Journal of Open
+Source Software</em>, 9(95), 5779. <a href="https://doi.org/10.21105/joss.05779" class="external-link uri">https://doi.org/10.21105/joss.05779</a></p></li>
+<li><p>Xu, R., Frank, K. A., Maroulis, S. J., &amp; Rosenberg, J. M.
+2019. konfound: Command to quantify robustness of causal inferences.
+<em>The Stata Journal</em>, 19(3), 523-550. <a href="https://doi.org/10.1177/1536867X19874223" class="external-link uri">https://doi.org/10.1177/1536867X19874223</a></p></li>
 </ul>
 </div>
 </div>
