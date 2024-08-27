@@ -11,15 +11,12 @@ status](https://www.r-pkg.org/badges/version/konfound)](https://cran.r-project.o
 
 # konfound
 
-In social science (and educational) research, we often wish to
-understand how robust inferences about effects are to unobserved (or
-controlled for) covariates, possible problems with measurement, and
-other sources of bias. The goal of `konfound` is to carry out
-sensitivity analysis to help analysts to *quantify how robust inferences
-are to potential sources of bias*. This R package provides tools to
-carry out sensitivity analysis as described in Frank, Maroulis, Duong,
-and Kelcey (2013) based on Rubin’s (1974) causal model as well as in
-Frank (2000) based on the impact threshold for a confounding variable.
+The goal of `konfound` is to carry out sensitivity analysis to help
+analysts to *quantify how robust inferences are to potential sources of
+bias*. This R package provides tools to carry out sensitivity analysis
+as described in Frank, Maroulis, Duong, and Kelcey (2013) based on
+Rubin’s (1974) causal model as well as in Frank (2000) based on the
+impact threshold for a confounding variable.
 
 # Installation
 
@@ -41,9 +38,10 @@ devtools::install_github("konfound-project/konfound")
 ## pkonfound() for published studies
 
 `pkonfound()`, for published studies, calculates (1) how much bias there
-must be in an estimate to invalidate/sustain an inference; (2) the
-impact of an omitted variable necessary to invalidate/sustain an
-inference for a regression coefficient:
+must be in an estimate to invalidate/sustain an inference, and
+interprets in terms of how much data would need to be replaced to
+nullify an inference; (2) the impact of an omitted variable necessary to
+invalidate/sustain an inference for a regression coefficient:
 
 ``` r
 library(konfound)
@@ -59,15 +57,13 @@ pkonfound(est_eff = 2,
           n_obs = 100, 
           n_covariates = 3)
 #> Robustness of Inference to Replacement (RIR):
-#> TO INVALIDATE:
-#> 
 #> RIR = 60
 #> 
-#> The estimated effect is 2. To invalidate the inference of an effect using
-#> the threshold of 0.794 for statistical significance with alpha = 0.05, 60.295% of
-#> the (2) estimate would have to be due to bias. This implies that to invalidate
-#> the inference one would expect to have to replace 60 (60.295%) observations
-#> with cases for which the treatment effect is 0 (RIR = 60).
+#> To invalidate the inference of an effect using the threshold of 0.794 for
+#> statistical significance (with null hypothesis = 0 and alpha = 0.05), 60.295%
+#> of the (2) estimate would have to be due to bias. This implies that to
+#> invalidate the inference one would expect to have to replace 60 (60.295%)
+#> observations with data points for which the effect is 0 (RIR = 60).
 #> 
 #> See Frank et al. (2013) for a description of the method.
 #> 
@@ -84,9 +80,9 @@ pkonfound(est_eff = 2,
 
 ## konfound() for models fit in R
 
-`konfound()` calculates the same for models fit in R. For example, here
-are the coefficients for a linear model fit with `lm()` using the
-built-in dataset `mtcars`:
+`konfound()` calculates the robustness of inferences for models fit in
+R. For example, below are the coefficients for a linear model fit with
+`lm()` using the built-in dataset `mtcars`:
 
 ``` r
 m1 <- lm(mpg ~ wt + disp, data = mtcars)
@@ -126,15 +122,13 @@ as follows, specifying the fitted model object:
 ``` r
 konfound(m1, wt)
 #> Robustness of Inference to Replacement (RIR):
-#> TO INVALIDATE:
-#> 
 #> RIR = 9
 #> 
-#> The estimated effect is -3.351. To invalidate the inference of an effect using
-#> the threshold of -2.381 for statistical significance with alpha = 0.05, 28.946% of
-#> the (-3.351) estimate would have to be due to bias. This implies that to invalidate
-#> the inference one would expect to have to replace 9 (28.946%) observations
-#> with cases for which the treatment effect is 0 (RIR = 9).
+#> To invalidate the inference of an effect using the threshold of -2.381 for
+#> statistical significance (with null hypothesis = 0 and alpha = 0.05), 28.946%
+#> of the (-3.351) estimate would have to be due to bias. This implies that to
+#> invalidate the inference one would expect to have to replace 9 (28.946%)
+#> observations with data points for which the effect is 0 (RIR = 9).
 #> 
 #> See Frank et al. (2013) for a description of the method.
 #> 
@@ -149,7 +143,9 @@ konfound(m1, wt)
 
 ## mkonfound for meta-analyses including sensitivity analysis
 
-We can use an existing (and built-in) dataset, such as `mkonfound_ex`.
+`mkonfound()` supports sensitivity that can be compared or synthesized
+across multiple analyses. We can use an existing (and built-in) dataset,
+such as `mkonfound_ex`.
 
 ``` r
 mkonfound_ex
@@ -191,6 +187,8 @@ mkonfound(mkonfound_ex, t, df)
 
 To learn more about sensitivity analysis, please visit:
 
+- The [KonFound-It website](https://konfound-it.org/), with latest news,
+  links to tools and support
 - The [Introduction to konfound
   vignette](https://konfound-it.org/konfound/articles/introduction-to-konfound.html),
   with detailed information about each of the functions (`pkonfound()`,

@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 # konfound
 
-In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias.  The goal of `konfound` is to carry out sensitivity analysis to help analysts to *quantify how robust inferences are to potential sources of bias*. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.
+The goal of `konfound` is to carry out sensitivity analysis to help analysts to *quantify how robust inferences are to potential sources of bias*. This R package provides tools to carry out sensitivity analysis as described in Frank, Maroulis, Duong, and Kelcey (2013) based on Rubin’s (1974) causal model as well as in Frank (2000) based on the impact threshold for a confounding variable.
 
 # Installation
 
@@ -42,7 +42,7 @@ devtools::install_github("konfound-project/konfound")
 
 ## pkonfound() for published studies
 
-`pkonfound()`, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:
+`pkonfound()`, for published studies, calculates (1) how much bias there must be in an estimate to invalidate/sustain an inference, and interprets in terms of how much data would need to be replaced to nullify an inference; (2) the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient:
 
 ```{r, eval = T}
 library(konfound)
@@ -57,7 +57,7 @@ pkonfound(est_eff = 2,
 
 ## konfound() for models fit in R
 
-`konfound()` calculates the same for models fit in R. For example, here are the coefficients for a linear model fit with `lm()` using the built-in dataset `mtcars`:
+`konfound()` calculates the robustness of inferences for models fit in R. For example, below are the coefficients for a linear model fit with `lm()` using the built-in dataset `mtcars`:
 
 ```{r}
 m1 <- lm(mpg ~ wt + disp, data = mtcars)
@@ -73,7 +73,7 @@ konfound(m1, wt)
 
 ## mkonfound for meta-analyses including sensitivity analysis
 
-We can use an existing (and built-in) dataset, such as `mkonfound_ex`.
+`mkonfound()` supports sensitivity that can be compared or synthesized across multiple analyses. We can use an existing (and built-in) dataset, such as `mkonfound_ex`.
 
 ```{r}
 mkonfound_ex
@@ -86,6 +86,7 @@ mkonfound(mkonfound_ex, t, df)
 
 To learn more about sensitivity analysis, please visit:
 
+* The [KonFound-It website](https://konfound-it.org/), with latest news, links to tools and support
 * The [Introduction to konfound vignette](https://konfound-it.org/konfound/articles/introduction-to-konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
 * The [Konfound-It! interactive web application](https://konfound-project.shinyapps.io/konfound-it/), with links to PowerPoints and key publications
 
