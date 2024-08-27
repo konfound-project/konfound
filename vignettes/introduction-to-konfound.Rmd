@@ -113,40 +113,37 @@ Where `pkonfound()` can be used with values from already-conducted analyses, `ko
 m1 <- lm(mpg ~ wt + hp + qsec, data = mtcars)
 m1
 
-konfound(m1, hp)
+konfound(model_object = m1, 
+         tested_variable = hp)
 ```
 
 With `konfound()` you can also request a table with some key output from the correlation-based approach.
 
 ```{r}
-konfound(m1, wt, to_return = "table")
+konfound(model_object = m1, tested_variable = wt, to_return = "table")
 ```
 
-If the impact threshhold is greater than the impacts of the `Z`s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference. Note that in fields in which there is a lot known about covariates given the outcome of interest, then the omitted covariates are likely less important than those that are known and included.
-
-**For logistic regression models fit with glm()**
-
-Effects for logistic models are typically interpreted on the basis of average partial (or marginal) effects (calculated using the `margins` package).
-
-Due to an issue with the margins and predictions package, these are the raw coefficients, not the average marginal effects; we will address this in future patches.
-
-```{r, message = F}
-# if forcats is not installed, this install it first using install.packages("forcats") for this to run
-if (requireNamespace("forcats")) {
-    d <- forcats::gss_cat
-    
-    d$married <- ifelse(d$marital == "Married", 1, 0)
-    
-    m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
-    konfound(m2, age)
-}
-```
+If the impact threshhold is greater than the impacts of the `Z`s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference. 
 
 **For logistic regression models fit with glm() with a dichotomous predictor of interest**
 
-```{r, eval = FALSE}
-m4 <- glm(outcome ~ condition, data = binary_dummy_data)
-konfound(m4, condition, two_by_two = TRUE)
+We first fit a logistic regression model where the predictor of interest (`condition`) is binary/dichotomous.
+
+```{r}
+# View summary stats for condition variable
+table(binary_dummy_data$condition)
+# Fit the logistic regression model
+m4 <- glm(outcome ~ condition + control, 
+          data = binary_dummy_data, family = binomial)
+# View the summary of the model
+summary(m4)
+```
+
+Now we call konfound as below, where `n_treat` represents number of data points in the treatment condition.
+```{r}
+konfound(model_object = m4, 
+         tested_variable = condition,
+         two_by_two = TRUE, n_treat = 55)
 ```
 
 **Mixed effects (or multi-level) models fit with the lmer() function from the lme4 package**
@@ -165,7 +162,7 @@ if (requireNamespace("lme4")) {
 
 ## Use of mkonfound() for meta-analyses that include sensitivity analysis
 
-`mkonfound()` supports sensitivity that can be compared or synthesized across multiple analyses. For example, here, `d` represents output from a number (30 in this case) of past studies, read in a CSV file from a website:
+`mkonfound()` supports sensitivity that can be compared or synthesized across multiple analyses. Calculations are based on the RIR framework using correlations to express effects and thresholds in each study. For example, here, `d` represents output from a number (30 in this case) of past studies, read in a CSV file from a website:
 
 ```{r, eval = TRUE}
 mkonfound_ex
