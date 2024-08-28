@@ -235,17 +235,18 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       " data points from ", transferway, " (Fragility = ", final, ").")
   }
 
-  if (allnotenough){
-    conclusion1 <- paste(
-      change, c("only transferring data points from" ), transferway,
-      sprintf(" is not enough. We also need to transfer %d data points from ", final_extra))
-
+  if (allnotenough) {
+    conclusion1 <- paste0(
+      change, "only transferring data points from ", transferway, "\n",
+      "is not enough. We also need to transfer ", final_extra, " data points from ", transferway_extra, " as shown,"
+    )
     conclusion1b <- paste0(
-      transferway_extra, c("as shown, from the User-entered Table to the Transfer Table."))
-
-    conclusion1c <- paste0(sprintf(" This means we need to replace %d of ", RIR), RIRway,
-    sprintf( " with null hypothesis data points; and replace %d ", RIR_extra), RIRway_extra,
-    c(" with null hypothesis data points to change the inference."))
+      "from the User-entered Table to the Transfer Table.\n",
+      "This means we need to replace ", RIR, " of ", RIRway, " with null hypothesis data points;"
+    )
+    conclusion1c <- paste0(
+      "and replace ", RIR_extra, " ", RIRway_extra, " with null hypothesis data points to change the inference."
+    )
   }
 
   if (test == "chisq"){
