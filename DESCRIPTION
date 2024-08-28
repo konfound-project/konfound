@@ -9,7 +9,12 @@ Authors@R: c(
     person("Spiro", "Maroulis", , "Spiro.Maroulis@asu.edu", role = "ctb"),
     person("Sarah", "Narvaiz", , "snarvaiz@alum.utk.edu", role = "ctb"),
     person(c("Kenneth", "A"), "Frank", , "kenfrank@msu.edu", role = "ctb"),
-    person("Wei", "Wang", , "wwang93@vols.utk.edu", role = "ctb")
+    person("Wei", "Wang", , "wwang93@vols.utk.edu", role = "ctb"),
+    person("Yunhe", "Cui", , "yunhe.cui@uconn.edu", role = "ctb"),
+    person("Gaofei", "Zhang", , "gaofei.2.zhang@uconn.edu", role = "ctb"),
+    person("Xuesen", "Cheng", , "chengxu3@msu.edu", role = "ctb"),
+    person("JiHoon", "Choi", , "choijih3@msu.edu", role = "ctb"),
+    person("Guan", "Saw", , "guan.saw@cgu.edu", role = "ctb")
   )
 Description: Statistical methods that quantify the conditions necessary to
     alter inferences, also known as sensitivity analysis, are becoming
