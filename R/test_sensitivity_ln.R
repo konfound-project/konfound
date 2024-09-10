@@ -141,6 +141,11 @@ test_sensitivity_ln <- function(est_eff,
   }
   
   final <- final_solution$final_switch
+  
+  if (final %% 1 == 0.5) {
+      final <- floor(final)  # Round down if final is x.5
+  }
+  
   a <- final_solution$table_start[1,1]
   b <- final_solution$table_start[1,2]
   c <- final_solution$table_start[2,1]
@@ -148,9 +153,11 @@ test_sensitivity_ln <- function(est_eff,
   
   if (switch_trm && dcroddsratio_ob) {
     transferway <- "treatment success to treatment failure"
+    transferway_start <- "treatment row"
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") +
            ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment success"
+    RIRway_start <- "treatment row"
     RIR_pi <- RIR / d * 100
     if (replace == "entire"){
       RIRway_phrase <- "success in the entire sample"
@@ -160,9 +167,11 @@ test_sensitivity_ln <- function(est_eff,
   }
   if (switch_trm && !dcroddsratio_ob) {
     transferway <- "treatment failure to treatment success"
+    transferway_start <- "treatment row"
     RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") +
            ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment failure"
+    RIRway_start <- "treatment row"
     RIR_pi <- RIR / c * 100
 
     ### added to show RIR calculation
@@ -175,8 +184,10 @@ test_sensitivity_ln <- function(est_eff,
   }
   if (!switch_trm && dcroddsratio_ob) {
     transferway <- "control failure to control success"
+    transferway_start <- "control row"
     RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control failure"
+    RIRway_start <- "control row"
     RIR_pi <- RIR / a * 100
 
     if (replace == "entire"){
@@ -187,8 +198,10 @@ test_sensitivity_ln <- function(est_eff,
   }
   if (!switch_trm && !dcroddsratio_ob) {
     transferway <- "control success to control failure"
+    transferway_start <- "control row"
     RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control success"
+    RIRway_start <- "control row"
     RIR_pi <- RIR / b * 100
 
     if (replace == "entire"){
@@ -197,8 +210,7 @@ test_sensitivity_ln <- function(est_eff,
       RIRway_phrase <- "success in the control group"
     }
   }
-  RIR_extra <- final_extra <- NA
-
+  
   RIR_extra <- final_extra <- NA
 
   if (final_solution$needtworows) {
@@ -206,29 +218,43 @@ test_sensitivity_ln <- function(est_eff,
     ## because denominator is tricky
     RIR_pi <- NA
     final_extra <- final_solution$final_extra
+    
+    # apply similar rounding down like `final` for `final_extra` if needed
+    if (final_extra %% 1 == 0.5) {
+        final_extra <- floor(final_extra)
+    }
+    
     if (switch_trm && dcroddsratio_ob) {
       transferway_extra <- "control failure to control success"
+      transferway_extra_start <- "control row"
       RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
         ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
       RIRway_extra <- "control failure"
+      RIRway_extra_start <- "control row"
     }
     if (switch_trm && !dcroddsratio_ob) {
       transferway_extra <- "control success to control failure"
+      transferway_extra_start <- "control row"
       RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
         ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
       RIRway_extra <- "control success"
+      RIRway_extra_start <- "control row"
     }
     if (!switch_trm && dcroddsratio_ob) {
       transferway_extra <- "treatment success to treatment failure"
+      transferway_extra_start <- "treatment row"
       RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
         ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
       RIRway_extra <- "treatment success"
+      RIRway_extra_start <- "treatment row"
     }
     if (!switch_trm && !dcroddsratio_ob) {
       transferway_extra <- "treatment failure to treatment success"
+      transferway_extra_start <- "treatment row"
       RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
         ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
       RIRway_extra <- "treatment failure"
+      RIRway_extra_start <- "treatment row"
     }
   }
 
@@ -307,7 +333,7 @@ test_sensitivity_ln <- function(est_eff,
   }
 
   if (final_solution$needtworows) {
-    total_switch <- final_solution$final_switch+final_solution$final_extra
+    total_switch <- final_solution$final_switch + final_solution$final_extra
     total_RIR <- RIR + RIR_extra
   } else {
     total_switch <- final_solution$final_switch
@@ -359,10 +385,10 @@ test_sensitivity_ln <- function(est_eff,
   }
 
 # Components from final_solution$table_start
-treatment_success_start <- final_solution$table_start[2,2]
-treatment_failure_start <- final_solution$table_start[2,1]
 control_failure_start <- final_solution$table_start[1,1]
 control_success_start <- final_solution$table_start[1,2]
+treatment_success_start <- final_solution$table_start[2,2]
+treatment_failure_start <- final_solution$table_start[2,1]
 
 # Calculating success percentages and totals for the start table
 success_percent_control_start <- control_success_start / (control_failure_start + control_success_start) * 100
@@ -378,18 +404,23 @@ total_rate_start <- paste0(sprintf("%.2f", total_percentage_start), "%")
 
 # Adjusting the 3x3 start table to include Success Rate with "%" and updated column name
 table_start_3x3 <- data.frame(
-  Fail = c(control_failure_start, treatment_failure_start, total_fail_start),
-  Success = c(control_success_start, treatment_success_start, total_success_start),
-  `Success_Rate` = c(success_rate_control_start, success_rate_treatment_start, total_rate_start),
-  row.names = c("Control", "Treatment", "Total")
+    Fail = c(control_failure_start, treatment_failure_start, total_fail_start),
+    Success = c(control_success_start, treatment_success_start, total_success_start),
+    `Success_Rate` = c(success_rate_control_start, success_rate_treatment_start, total_rate_start),
+    row.names = c("Control", "Treatment", "Total")
 )
 
-	
 # Repeat the process for final_solution$table_final for the transferred table
-treatment_success_final <- final_solution$table_final[2,2]
-treatment_failure_final <- final_solution$table_final[2,1]
 control_failure_final <- final_solution$table_final[1,1]
 control_success_final <- final_solution$table_final[1,2]
+treatment_success_final <- final_solution$table_final[2,2]
+treatment_failure_final <- final_solution$table_final[2,1]
+
+# Check if a_final, b_final, c_final, or d_final is exactly 0.5, and if so, set them to 0
+if (control_failure_final == 0.5) control_failure_final <- 0
+if (control_success_final == 0.5) control_success_final <- 0
+if (treatment_failure_final == 0.5) treatment_failure_final <- 0
+if (treatment_success_final == 0.5) treatment_success_final <- 0
 
 # Calculating success percentages and totals for the final table
 success_percent_control_final <- control_success_final / (control_failure_final + control_success_final) * 100
@@ -405,10 +436,10 @@ total_rate_final <- paste0(sprintf("%.2f", total_percentage_final), "%")
 
 # Adjusting the 3x3 final table to include Success Rate with "%" and updated column name
 table_final_3x3 <- data.frame(
-  Fail = c(control_failure_final, treatment_failure_final, total_fail_final),
-  Success = c(control_success_final, treatment_success_final, total_success_final),
-  `Success_Rate` = c(success_rate_control_final, success_rate_treatment_final, total_rate_final),
-  row.names = c("Control", "Treatment", "Total")
+    Fail = c(control_failure_final, treatment_failure_final, total_fail_final),
+    Success = c(control_success_final, treatment_success_final, total_success_final),
+    `Success_Rate` = c(success_rate_control_final, success_rate_treatment_final, total_rate_final),
+    row.names = c("Control", "Treatment", "Total")
 )
 
 
@@ -482,7 +513,22 @@ table_final_3x3 <- data.frame(
 
       ### start from changeSE = T
 
-      cat(sprintf("RIR = %d\n\n", total_RIR))
+        if(!final_solution$needtworows){
+            cat("RIR =", total_RIR)
+            cat("\n")
+            cat("Fragility =", total_switch)
+            cat("\n")
+        } else if (final_solution$needtworows){
+            # Total RIR = primary RIR + supplemental RIR
+            cat("RIR = ", RIR, " + ", RIR_extra, " = ", total_RIR, "\n", sep = "")
+            cat("Calculated by RIR in ", RIRway_start, " + supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
+            
+            # Total Fragility = primary Fragility + supplemental Fragility
+            cat("Fragility = ", final, " + ", final_extra, " = ", total_switch, "\n", sep = "")
+            cat("Calculated by fragility in ", transferway_start, " + supplemental fragility in ", transferway_extra_start, "\n", sep = "")
+        }
+        
+      cat("\n")
       cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
       print(Implied_Table)
       cat("\n")
@@ -572,8 +618,8 @@ table_final_3x3 <- data.frame(
 
           #conclusion1 <-
         cat(paste0(
-            sprintf("The inference cannot be invalidated merely by switching data points in"),
-            sprintf("\nonly one treatment condition. Therefore, data points have been switched from"),
+            sprintf("The inference cannot be invalidated merely by switching %d data points in", final),
+            sprintf("\nonly one treatment condition. Therefore, %d data points have been switched from", final_extra),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
@@ -663,8 +709,8 @@ table_final_3x3 <- data.frame(
 
           #conclusion1 <-
         cat(paste0(
-            sprintf("The inference cannot be sustained merely by switching data points in"),
-            sprintf("\nonly one treatment condition. Therefore, data points have been switched from"),
+            sprintf("The inference cannot be sustained merely by switching %d data points in", final),
+            sprintf("\nonly one treatment condition. Therefore, %d data points have been switched from", final_extra),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
@@ -687,7 +733,22 @@ table_final_3x3 <- data.frame(
 
       ### when changeSE = F
 
-      cat(sprintf("RIR = %d\n\n", total_RIR))
+        if(!final_solution$needtworows){
+            cat("RIR =", total_RIR)
+            cat("\n")
+            cat("Fragility =", total_switch)
+            cat("\n")
+        } else if (final_solution$needtworows){
+            # Total RIR = primary RIR + supplemental RIR
+            cat("RIR = ", RIR, " + ", RIR_extra, " = ", total_RIR, "\n", sep = "")
+            cat("Calculated by RIR in ", RIRway_start, " + supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
+            
+            # Total Fragility = primary Fragility + supplemental Fragility
+            cat("Fragility = ", final, " + ", final_extra, " = ", total_switch, "\n", sep = "")
+            cat("Calculated by fragility in ", transferway_start, " + supplemental fragility in ", transferway_extra_start, "\n", sep = "")
+        }
+        
+      cat("\n")    
       cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
       print(Implied_Table)
       cat("\n")
@@ -774,8 +835,8 @@ table_final_3x3 <- data.frame(
 
           #conclusion1 <-
             cat(paste0(
-            sprintf("The inference cannot be invalidated merely by switching data points in"),
-            sprintf("\nonly one treatment condition. Therefore, data points have been switched from"),
+            sprintf("The inference cannot be invalidated merely by switching %d data points in", final),
+            sprintf("\nonly one treatment condition. Therefore, %d data points have been switched from", final_extra),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
@@ -864,8 +925,8 @@ table_final_3x3 <- data.frame(
 
           #conclusion1 <-
             cat(paste0(
-            sprintf("The inference cannot be sustained merely by switching data points in"),
-            sprintf("\nonly one treatment condition. Therefore, data points have been switched from"),
+            sprintf("The inference cannot be sustained merely by switching %d data points in", final),
+            sprintf("\nonly one treatment condition. Therefore, %d data points have been switched from", final_extra),
             c("\n"), transferway, c(" and from "),
             transferway_extra, c("."), c("\n"),
             sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
