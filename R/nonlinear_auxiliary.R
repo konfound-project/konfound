@@ -267,12 +267,21 @@ getswitch <- function(table_bstart, thr_t, switch_trm, n_obs) {
   std_err_final <- sqrt(1 / a_final + 1 / b_final + 1 / c_final + 1 / d_final)
   t_final <- est_eff_final / std_err_final
   table_final <- matrix(c(a_final, b_final, c_final, d_final), byrow = TRUE, 2, 2)
+  
+  ### switch_trm allnotenough final(total_switch)
+  #*. 1.         1.           abs(a - a_final) + abs(c - c_final)
+  #*. 1.         0.           abs(c - c_final)
+  #*. 0.         1.           abs(a - a_final) + abs(c - c_final)
+  #*. 0.         0.           abs(a - a_final)
+  
+  ### final includes all switches for two rows 
   if (switch_trm == allnotenough) {
     final <- abs(a - a_final) + as.numeric(allnotenough) * abs(c - c_final)
   } else {
     final <- abs(c - c_final) + as.numeric(allnotenough) * abs(a - a_final)
   }
 
+  ### final_extra is the extra switch
   if (allnotenough) {
     taylor_pred <- NA
     perc_bias_pred <- NA
@@ -682,14 +691,12 @@ if (allnotenough) {
   final_extra <- 0
 }
 
-total_switch <- final + allnotenough*final_extra
-
 result <- list(final_switch = final, User_enter_value = table_start, 
                Transfer_Table = table_final, 
                p_final = p_final, chisq_final = chisq_final,
                needtworows = allnotenough, taylor_pred = taylor_pred,
                perc_bias_pred = perc_bias_pred, final_extra = final_extra, 
-               dcroddsratio_ob = dcroddsratio_ob, total_switch = total_switch, 
+               dcroddsratio_ob = dcroddsratio_ob,
                isinvalidate_ob = isinvalidate_ob)
 
 return(result)
@@ -1040,13 +1047,11 @@ getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = TRUE){
     final_extra <- 0
   }
   
-  total_switch <- final + allnotenough*final_extra
-  
   result <- list(final_switch = final, User_enter_value = table_start, Transfer_Table = table_final, 
                  p_final = p_final, fisher_final = fisher_final,
                  needtworows = allnotenough, taylor_pred = taylor_pred,
                  perc_bias_pred = perc_bias_pred, final_extra = final_extra, 
-                 dcroddsratio_ob = dcroddsratio_ob, total_switch = total_switch, isinvalidate_ob = isinvalidate_ob)
+                 dcroddsratio_ob = dcroddsratio_ob, isinvalidate_ob = isinvalidate_ob)
   
   return(result)
 }

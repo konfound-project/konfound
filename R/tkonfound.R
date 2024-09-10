@@ -83,8 +83,9 @@ tkonfound <- function(a, b, c, d,
   p_final <- solution$p_final
   taylor_pred <- solution$taylor_pred
   perc_bias_pred <- solution$perc_bias_pred
-  total_switch <- solution$total_switch
-
+  final_extra <- solution$final_extra
+  final_primary <- final - final_extra
+  
   # 'final' is rounded down if it is a non-integer like 3.5
   if (final %% 1 == 0.5) {
       final <- floor(final)  # Round down if final is x.5
@@ -147,7 +148,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   if (switch_trm && dcroddsratio_ob) {
     transferway <- "treatment success to treatment failure"
     transferway_start <- "treatment row"
-    RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
+    RIR <- ceiling(final_primary/((a+c)/n_obs))*(replace=="entire") + 
+        ceiling(final_primary/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment success"
     RIRway_start <- "treatment row"
     RIR_pi <- RIR / d * 100
@@ -155,7 +157,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   if (switch_trm && !dcroddsratio_ob) {
     transferway <- "treatment failure to treatment success"
     transferway_start <- "treatment row"
-    RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
+    RIR <- ceiling(final_primary/((b+d)/n_obs))*(replace=="entire") + 
+        ceiling(final_primary/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "treatment failure"
     RIRway_start <- "treatment row"
     RIR_pi <- RIR / c * 100
@@ -163,7 +166,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   if (!switch_trm && dcroddsratio_ob) {
     transferway <- "control failure to control success"
     transferway_start <- "control row"
-    RIR <- ceiling(final/((b+d)/n_obs))*(replace=="entire") + ceiling(final/(b/(a+b)))*(1-(replace=="entire"))
+    RIR <- ceiling(final_primary/((b+d)/n_obs))*(replace=="entire") + 
+        ceiling(final_primary/(b/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control failure"
     RIRway_start <- "control row"
     RIR_pi <- RIR / a * 100
@@ -171,21 +175,19 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   if (!switch_trm && !dcroddsratio_ob) {
     transferway <- "control success to control failure"
     transferway_start <- "control row"
-    RIR <- ceiling(final/((a+c)/n_obs))*(replace=="entire") + ceiling(final/(a/(a+b)))*(1-(replace=="entire"))
+    RIR <- ceiling(final_primary/((a+c)/n_obs))*(replace=="entire") + 
+        ceiling(final_primary/(a/(a+b)))*(1-(replace=="entire"))
     RIRway <- "control success"
     RIRway_start <- "control row"
     RIR_pi <- RIR / b * 100
   }
 
-  RIR_extra <- final_extra <- NA
-  RIR_extra <- 0
-  RIR_extra <- final_extra <- NA
+  RIR_extra <- NA
 
   if (allnotenough) {
       # if need two rows, then do not report RIR_pi
       ## because denominator is tricky
       RIR_pi <- NA
-      final_extra <- solution$final_extra
       
       # apply similar rounding down like `final` for `final_extra` if needed
       if (final_extra %% 1 == 0.5) {
@@ -196,7 +198,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       transferway_extra <- "control failure to control success"
       transferway_extra_start <- "control row"
       RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
+        ceiling(final_extra/(b/(b+a)))*(1-(replace=="entire"))
       RIRway_extra <- "control failure"
       RIRway_extra_start <- "control row"
     }
@@ -221,7 +223,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       transferway_extra <- "treatment failure to treatment success"
       transferway_extra_start <- "treatment row"
       RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(b/(b+d)))*(1-(replace=="entire"))
+        ceiling(final_extra/(b/(b+a)))*(1-(replace=="entire"))
       RIRway_extra <- "treatment failure"
       RIRway_extra_start <- "treatment row"
     }
@@ -270,7 +272,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
 
   if (allnotenough) {
     conclusion1 <- paste0(
-      change, "only transferring ", final, " data points from ", transferway, "\n",
+      change, "only transferring ", final_primary, " data points from ", transferway, "\n",
       "is not enough. We also need to transfer ", final_extra, " data points from ", transferway_extra, " as shown,"
     )
     conclusion1b <- paste0(
@@ -318,7 +320,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
                      RIR_primary = RIR,
                      RIR_supplemental = RIR_extra,
                      RIR_perc = RIR_pi,
-                     fragility_primary = final,
+                     fragility_primary = final_primary,
                      fragility_supplemental = final_extra,
                      starting_table = table_start,
                      final_table = table_final,
@@ -354,8 +356,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
         cat("Calculated by RIR in ", RIRway_start, " + supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
         
         # Total Fragility = primary Fragility + supplemental Fragility
-        total_Fragility <- final + final_extra
-        cat("Fragility = ", final, " + ", final_extra, " = ", total_Fragility, "\n", sep = "")
+        total_Fragility <- final_primary + final_extra
+        cat("Fragility = ", final_primary, " + ", final_extra, " = ", total_Fragility, "\n", sep = "")
         cat("Calculated by fragility in ", transferway_start, " + supplemental fragility in ", transferway_extra_start, "\n", sep = "")
     }
    
