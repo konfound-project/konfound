@@ -527,18 +527,18 @@ table_final_3x3 <- data.frame(
         } else if (final_solution$needtworows){
             # Total RIR = primary RIR + supplemental RIR
             cat("RIR = ", RIR, " + ", RIR_extra, " = ", total_RIR, "\n", sep = "")
-            cat("Calculated by RIR in ", RIRway_start, " + supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
+            cat("Total RIR = Primary RIR in ", RIRway_start, " + Supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
             
             # Total Fragility = primary Fragility + supplemental Fragility
             cat("Fragility = ", final_primary, " + ", final_extra, " = ", total_switch, "\n", sep = "")
-            cat("Calculated by fragility in ", transferway_start, " + supplemental fragility in ", transferway_extra_start, "\n", sep = "")
+            cat("Total Fragility = Primary Fragility in ", transferway_start, " + Supplemental Fragility in ", transferway_extra_start, "\n", sep = "")
         }
         
       cat("\n")
       cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, and p-value = %.3f.",
+      cat(paste(sprintf("The reported log odds = %.3f, SE = %.3f, and p-value = %.3f.",
                         est_eff, user_std_err, p_start),
                 sprintf("\nThe SE has been adjusted to %.3f to generate real numbers in the", final_solution$std_err_start),
                 sprintf("\nimplied table for which the p-value would be %.3f. Numbers in ", p_start),
@@ -624,14 +624,13 @@ table_final_3x3 <- data.frame(
 
           #conclusion1 <-
         cat(paste0(
-            sprintf("The inference cannot be invalidated merely by switching %d data points in", final_primary),
-            sprintf("\nonly the treatment condition. Therefore, %d data points have been switched from", final_extra),
-            c("\n"), transferway, c(" and from "),
-            transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
-            c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
-            )
-              )
+		sprintf("The inference cannot be invalidated merely by switching %d data points in", final_primary),
+		sprintf("\nthe treatment condition. Therefore, %d additional data points have been \nswitched from ", final_extra),
+		transferway_extra, c("."), c("\n"),
+		sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
+		c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
+	)
+	   )
         }
         ### changed due to consistent linebreak
       } else {
@@ -715,14 +714,13 @@ table_final_3x3 <- data.frame(
 
           #conclusion1 <-
         cat(paste0(
-            sprintf("The inference cannot be sustained merely by switching %d data points in", final_primary),
-            sprintf("\nonly one treatment condition. Therefore, %d data points have been switched from", final_extra),
-            c("\n"), transferway, c(" and from "),
-            transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
-            c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
-            )
-              )
+		sprintf("The inference cannot be sustained merely by switching %d data points in", final_primary),
+		sprintf("\nthe treatment condition. Therefore, %d additional data points have been \nswitched from ", final_extra),
+		transferway_extra, c("."), c("\n"),
+		sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
+		c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
+	)
+	   )
         }
         ###
       }
@@ -747,18 +745,18 @@ table_final_3x3 <- data.frame(
         } else if (final_solution$needtworows){
             # Total RIR = primary RIR + supplemental RIR
             cat("RIR = ", RIR, " + ", RIR_extra, " = ", total_RIR, "\n", sep = "")
-            cat("Calculated by RIR in ", RIRway_start, " + supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
+            cat("Total RIR = Primary RIR in ", RIRway_start, " + Supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
             
             # Total Fragility = primary Fragility + supplemental Fragility
             cat("Fragility = ", final_primary, " + ", final_extra, " = ", total_switch, "\n", sep = "")
-            cat("Calculated by fragility in ", transferway_start, " + supplemental fragility in ", transferway_extra_start, "\n", sep = "")
+            cat("Total Fragility = Primary Fragility in ", transferway_start, " + Supplemental Fragility in ", transferway_extra_start, "\n", sep = "")
         }
         
       cat("\n")    
       cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
       print(Implied_Table)
       cat("\n")
-      cat(paste(sprintf("The reported effect size = %.3f, SE = %.3f, and p-value = %.3f.",
+      cat(paste(sprintf("The reported log odds = %.3f, SE = %.3f, and p-value = %.3f.",
                         est_eff, user_std_err, p_start),
                 sprintf("\nValues have been rounded to the nearest integer. This may cause"),
                 sprintf("\na small change to the estimated effect for the table.\n\n"))
@@ -841,14 +839,13 @@ table_final_3x3 <- data.frame(
 
           #conclusion1 <-
             cat(paste0(
-            sprintf("The inference cannot be invalidated merely by switching %d data points in", final_primary),
-            sprintf("\nonly one treatment condition. Therefore, %d data points have been switched from", final_extra),
-            c("\n"), transferway, c(" and from "),
-            transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
-            c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
-            )
-              )
+		    sprintf("The inference cannot be invalidated merely by switching %d data points in", final_primary),
+		    sprintf("\nthe treatment condition. Therefore, %d additional data points have been \nswitched from ", final_extra),
+		    transferway_extra, c("."), c("\n"),
+		    sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
+		    c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
+	    )
+	       )
                    }
         ### changed due to consistent linebreak
       } else {
@@ -932,13 +929,12 @@ table_final_3x3 <- data.frame(
           #conclusion1 <-
             cat(paste0(
             sprintf("The inference cannot be sustained merely by switching %d data points in", final_primary),
-            sprintf("\nonly one treatment condition. Therefore, %d data points have been switched from", final_extra),
-            c("\n"), transferway, c(" and from "),
-            transferway_extra, c("."), c("\n"),
-            sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
-            c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
-            )
-              )
+		    sprintf("\nthe treatment condition. Therefore, %d additional data points have been \nswitched from ", final_extra),
+		    transferway_extra, c("."), c("\n"),
+		    sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
+		    c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
+	    )
+	       )
         }
         ###
       }
@@ -947,7 +943,7 @@ table_final_3x3 <- data.frame(
       
       print(Transfer_Table)
       cat("\n")    
-      cat(sprintf("Effect size = %.3f, SE = %.3f, p-value = %.3f.",
+      cat(sprintf("The log odds = %.3f, SE = %.3f, p-value = %.3f.",
                   final_solution$est_eff_final, final_solution$std_err_final, p_final),
                  c("\nThis is based on t = estimated effect/standard error")
          )
@@ -963,7 +959,7 @@ cat("What would it take to change an inference?\n")
 cat("Using Rubin's causal model to interpret the robustness of causal inferences.\n")
 cat(crayon::italic("Education, Evaluation and Policy Analysis, 35"), ", 437-460.\n")
 cat("\n")
-cat("Accuracy of results increases with the number of decimals reported.\n")
+cat("Accuracy of results increases with the number of decimals entered.\n")
 
   }
 }
