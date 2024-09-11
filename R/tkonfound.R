@@ -32,368 +32,368 @@ tkonfound <- function(a, b, c, d,
                       test = "fisher", 
                       replace = "control", 
                       to_return = to_return){
-  # stop message
-  if (a < 0 || b < 0 || c < 0 || d < 0) {
-    stop("Please enter non-negative integers for each cell.")
-  }
-
-  if (a != as.integer(a) || b != as.integer(b) || c != as.integer(c) || d != as.integer(d)) {
-    stop("Please enter non-negative integers for each cell.")
-  }
-
-  # use fisher if any of the cell is smaller than 5
-  if (a < 5 || b < 5 || c < 5 || d < 5){
-    test <- "fisher"
-  }
-
-  # odds_ratio <- a*d/(b*c)
-  n_cnt <- a+b
-  n_trm <- c+d
-  n_obs <- n_cnt + n_trm
-  # est <- log(odds_ratio)
-
-  # this is the 2 by 2 table we start with
-  table_ob <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
-
-  if (test == "fisher") {
-    p_ob <- fisher_p(a, b, c, d)
-    fisher_ob <- fisher_oddsratio(a, b, c, d)
-  }
-  if (test == "chisq") {
-    p_ob <- chisq_p(a, b, c, d)
-    chisq_ob <- chisq_value(a, b, c, d)
-  }
-
-  # get solution
-  if (test == "chisq"){
-    solution <- getswitch_chisq(a, b, c, d, alpha, switch_trm)
-    chisq_final <- solution$chisq_final
-  }
-
-  if (test == "fisher"){
-    solution <- getswitch_fisher(a, b, c, d, alpha, switch_trm)
-    fisher_final <- solution$fisher_final
-  }
-
-  table_final <- solution$Transfer_Table
-  table_start <- table_ob
-  dcroddsratio_ob <- solution$dcroddsratio_ob
-  allnotenough <- solution$needtworows
-  final <- solution$final_switch
-  p_final <- solution$p_final
-  taylor_pred <- solution$taylor_pred
-  perc_bias_pred <- solution$perc_bias_pred
-  final_extra <- solution$final_extra
-  final_primary <- final - final_extra
-  
-  # 'final' is rounded down if it is a non-integer like 3.5
-  if (final_primary %% 1 == 0.5) {
-      final_primary <- floor(final_primary)  # Round down if final is x.5
-  }
-  
-  ### add column and row names to contingency tables
-  rownames(table_start) <- rownames(table_final) <- c("Control", "Treatment")
-  colnames(table_start) <- colnames(table_final) <- c("Fail", "Success")
-
-a_start <- table_ob[1,1]
-b_start <- table_ob[1,2]
-c_start <- table_ob[2,1]
-d_start <- table_ob[2,2]
-
-success_rate_control_start <- b_start / (a_start + b_start) * 100
-success_rate_treatment_start <- d_start / (c_start + d_start) * 100
-total_fail_start <- a_start + c_start
-total_success_start <- b_start + d_start
-total_rate_start <- total_success_start / (total_fail_start + total_success_start) * 100
-  
-  # Adjust table_start to a data.frame for revised 3x3 format
-  table_start_revised <- data.frame(
-    Fail = c(a_start, c_start, total_fail_start),
-    Success = c(b_start, d_start, total_success_start),
-    `Success_Rate` = c(sprintf("%.2f%%", success_rate_control_start), 
-                       sprintf("%.2f%%", success_rate_treatment_start), 
-                       sprintf("%.2f%%", total_rate_start))
-  )
-  
-  rownames(table_start_revised) <- c("Control", "Treatment", "Total")
-
-a_final <- solution$Transfer_Table[1,1]
-b_final <- solution$Transfer_Table[1,2]
-c_final <- solution$Transfer_Table[2,1]
-d_final <- solution$Transfer_Table[2,2]
-
-# Check if a_final, b_final, c_final, or d_final is exactly 0.5, and if so, set them to 0
-if (a_final == 0.5) a_final <- 0
-if (b_final == 0.5) b_final <- 0
-if (c_final == 0.5) c_final <- 0
-if (d_final == 0.5) d_final <- 0
-
-success_rate_control_final <- b_final / (a_final + b_final) * 100
-success_rate_treatment_final <- d_final / (c_final + d_final) * 100
-total_fail_final <- a_final + c_final
-total_success_final <- b_final + d_final
-total_rate_final <- total_success_final / (total_fail_final + total_success_final) * 100
-  
-  # Adjust table_final to a data.frame for revised 3x3 format
-  table_final_revised <- data.frame(
-    Fail = c(a_final, c_final, total_fail_final),
-    Success = c(b_final, d_final, total_success_final),
-    `Success_Rate` = c(sprintf("%.2f%%", success_rate_control_final), 
-                       sprintf("%.2f%%", success_rate_treatment_final), 
-                       sprintf("%.2f%%", total_rate_final))
-  )
-  
-  rownames(table_final_revised) <- c("Control", "Treatment", "Total")
-  
-  if (switch_trm && dcroddsratio_ob) {
-    transferway <- "treatment success to treatment failure"
-    transferway_start <- "treatment row"
-    RIR <- ceiling(final_primary/((a+c)/n_obs))*(replace=="entire") + 
-        ceiling(final_primary/(a/(a+b)))*(1-(replace=="entire"))
-    RIRway <- "treatment success"
-    RIRway_start <- "treatment row"
-    RIR_pi <- RIR / d * 100
-  }
-  if (switch_trm && !dcroddsratio_ob) {
-    transferway <- "treatment failure to treatment success"
-    transferway_start <- "treatment row"
-    RIR <- ceiling(final_primary/((b+d)/n_obs))*(replace=="entire") + 
-        ceiling(final_primary/(b/(a+b)))*(1-(replace=="entire"))
-    RIRway <- "treatment failure"
-    RIRway_start <- "treatment row"
-    RIR_pi <- RIR / c * 100
-  }
-  if (!switch_trm && dcroddsratio_ob) {
-    transferway <- "control failure to control success"
-    transferway_start <- "control row"
-    RIR <- ceiling(final_primary/((b+d)/n_obs))*(replace=="entire") + 
-        ceiling(final_primary/(b/(a+b)))*(1-(replace=="entire"))
-    RIRway <- "control failure"
-    RIRway_start <- "control row"
-    RIR_pi <- RIR / a * 100
-  }
-  if (!switch_trm && !dcroddsratio_ob) {
-    transferway <- "control success to control failure"
-    transferway_start <- "control row"
-    RIR <- ceiling(final_primary/((a+c)/n_obs))*(replace=="entire") + 
-        ceiling(final_primary/(a/(a+b)))*(1-(replace=="entire"))
-    RIRway <- "control success"
-    RIRway_start <- "control row"
-    RIR_pi <- RIR / b * 100
-  }
-
-  RIR_extra <- NA
-
-  if (allnotenough) {
-      # if need two rows, then do not report RIR_pi
-      ## because denominator is tricky
-      RIR_pi <- NA
-      
-      # apply similar rounding down like `final` for `final_extra` if needed
-      if (final_extra %% 1 == 0.5) {
-          final_extra <- floor(final_extra)
-      }
-      
+    # stop message
+    if (a < 0 || b < 0 || c < 0 || d < 0) {
+        stop("Please enter non-negative integers for each cell.")
+    }
+    
+    if (a != as.integer(a) || b != as.integer(b) || c != as.integer(c) || d != as.integer(d)) {
+        stop("Please enter non-negative integers for each cell.")
+    }
+    
+    # use fisher if any of the cell is smaller than 5
+    if (a < 5 || b < 5 || c < 5 || d < 5){
+        test <- "fisher"
+    }
+    
+    # odds_ratio <- a*d/(b*c)
+    n_cnt <- a+b
+    n_trm <- c+d
+    n_obs <- n_cnt + n_trm
+    # est <- log(odds_ratio)
+    
+    # this is the 2 by 2 table we start with
+    table_ob <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
+    
+    if (test == "fisher") {
+        p_ob <- fisher_p(a, b, c, d)
+        fisher_ob <- fisher_oddsratio(a, b, c, d)
+    }
+    if (test == "chisq") {
+        p_ob <- chisq_p(a, b, c, d)
+        chisq_ob <- chisq_value(a, b, c, d)
+    }
+    
+    # get solution
+    if (test == "chisq"){
+        solution <- getswitch_chisq(a, b, c, d, alpha, switch_trm)
+        chisq_final <- solution$chisq_final
+    }
+    
+    if (test == "fisher"){
+        solution <- getswitch_fisher(a, b, c, d, alpha, switch_trm)
+        fisher_final <- solution$fisher_final
+    }
+    
+    table_final <- solution$Transfer_Table
+    table_start <- table_ob
+    dcroddsratio_ob <- solution$dcroddsratio_ob
+    allnotenough <- solution$needtworows
+    final <- solution$final_switch
+    p_final <- solution$p_final
+    taylor_pred <- solution$taylor_pred
+    perc_bias_pred <- solution$perc_bias_pred
+    final_extra <- solution$final_extra
+    final_primary <- final - final_extra
+    
+    # 'final' is rounded down if it is a non-integer like 3.5
+    if (final_primary %% 1 == 0.5) {
+        final_primary <- floor(final_primary)  # Round down if final is x.5
+    }
+    
+    ### add column and row names to contingency tables
+    rownames(table_start) <- rownames(table_final) <- c("Control", "Treatment")
+    colnames(table_start) <- colnames(table_final) <- c("Fail", "Success")
+    
+    a_start <- table_ob[1,1]
+    b_start <- table_ob[1,2]
+    c_start <- table_ob[2,1]
+    d_start <- table_ob[2,2]
+    
+    success_rate_control_start <- b_start / (a_start + b_start) * 100
+    success_rate_treatment_start <- d_start / (c_start + d_start) * 100
+    total_fail_start <- a_start + c_start
+    total_success_start <- b_start + d_start
+    total_rate_start <- total_success_start / (total_fail_start + total_success_start) * 100
+    
+    # Adjust table_start to a data.frame for revised 3x3 format
+    table_start_revised <- data.frame(
+        Fail = c(a_start, c_start, total_fail_start),
+        Success = c(b_start, d_start, total_success_start),
+        `Success_Rate` = c(sprintf("%.2f%%", success_rate_control_start), 
+                           sprintf("%.2f%%", success_rate_treatment_start), 
+                           sprintf("%.2f%%", total_rate_start))
+    )
+    
+    rownames(table_start_revised) <- c("Control", "Treatment", "Total")
+    
+    a_final <- solution$Transfer_Table[1,1]
+    b_final <- solution$Transfer_Table[1,2]
+    c_final <- solution$Transfer_Table[2,1]
+    d_final <- solution$Transfer_Table[2,2]
+    
+    # Check if a_final, b_final, c_final, or d_final is exactly 0.5, and if so, set them to 0
+    if (a_final == 0.5) a_final <- 0
+    if (b_final == 0.5) b_final <- 0
+    if (c_final == 0.5) c_final <- 0
+    if (d_final == 0.5) d_final <- 0
+    
+    success_rate_control_final <- b_final / (a_final + b_final) * 100
+    success_rate_treatment_final <- d_final / (c_final + d_final) * 100
+    total_fail_final <- a_final + c_final
+    total_success_final <- b_final + d_final
+    total_rate_final <- total_success_final / (total_fail_final + total_success_final) * 100
+    
+    # Adjust table_final to a data.frame for revised 3x3 format
+    table_final_revised <- data.frame(
+        Fail = c(a_final, c_final, total_fail_final),
+        Success = c(b_final, d_final, total_success_final),
+        `Success_Rate` = c(sprintf("%.2f%%", success_rate_control_final), 
+                           sprintf("%.2f%%", success_rate_treatment_final), 
+                           sprintf("%.2f%%", total_rate_final))
+    )
+    
+    rownames(table_final_revised) <- c("Control", "Treatment", "Total")
+    
     if (switch_trm && dcroddsratio_ob) {
-      transferway_extra <- "control failure to control success"
-      transferway_extra_start <- "control row"
-      RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(b/(b+a)))*(1-(replace=="entire"))
-      RIRway_extra <- "control failure"
-      RIRway_extra_start <- "control row"
+        transferway <- "treatment success to treatment failure"
+        transferway_start <- "treatment row"
+        RIR <- ceiling(final_primary/((a+c)/n_obs))*(replace=="entire") + 
+            ceiling(final_primary/(a/(a+b)))*(1-(replace=="entire"))
+        RIRway <- "treatment success"
+        RIRway_start <- "treatment row"
+        RIR_pi <- RIR / d * 100
     }
     if (switch_trm && !dcroddsratio_ob) {
-      transferway_extra <- "control success to control failure"
-      transferway_extra_start <- "control row"
-      RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
-      RIRway_extra <- "control success"
-      RIRway_extra_start <- "control row"
-      
+        transferway <- "treatment failure to treatment success"
+        transferway_start <- "treatment row"
+        RIR <- ceiling(final_primary/((b+d)/n_obs))*(replace=="entire") + 
+            ceiling(final_primary/(b/(a+b)))*(1-(replace=="entire"))
+        RIRway <- "treatment failure"
+        RIRway_start <- "treatment row"
+        RIR_pi <- RIR / c * 100
     }
     if (!switch_trm && dcroddsratio_ob) {
-      transferway_extra <- "treatment success to treatment failure"
-      transferway_extra_start <- "treatment row"
-      RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
-      RIRway_extra <- "treatment success"
-      RIRway_extra_start <- "treatment row"
+        transferway <- "control failure to control success"
+        transferway_start <- "control row"
+        RIR <- ceiling(final_primary/((b+d)/n_obs))*(replace=="entire") + 
+            ceiling(final_primary/(b/(a+b)))*(1-(replace=="entire"))
+        RIRway <- "control failure"
+        RIRway_start <- "control row"
+        RIR_pi <- RIR / a * 100
     }
     if (!switch_trm && !dcroddsratio_ob) {
-      transferway_extra <- "treatment failure to treatment success"
-      transferway_extra_start <- "treatment row"
-      RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(b/(b+a)))*(1-(replace=="entire"))
-      RIRway_extra <- "treatment failure"
-      RIRway_extra_start <- "treatment row"
+        transferway <- "control success to control failure"
+        transferway_start <- "control row"
+        RIR <- ceiling(final_primary/((a+c)/n_obs))*(replace=="entire") + 
+            ceiling(final_primary/(a/(a+b)))*(1-(replace=="entire"))
+        RIRway <- "control success"
+        RIRway_start <- "control row"
+        RIR_pi <- RIR / b * 100
     }
-  }
-
-  if (p_ob < alpha) {
-    change <- "To invalidate the inference, "
-  } else {
-    change <- "To sustain an inference, "
-  }
-
-  if (!allnotenough & final > 1) {
-    conclusion1 <- paste0(
-      change, sprintf("one would need to replace %d ", RIR), RIRway, " data points with data points")
-
-    if (replace == "control") {
-      conclusion1b <- paste0(
-        sprintf("for which the probability of failure in the control group applies (RIR = %d). ", RIR))
-    } else {
-      conclusion1b <- paste0(
-        sprintf("for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
-    }
-
-    conclusion1c <- paste0(
-      sprintf("This is equivalent to transferring %d", final),
-      " data points from ", transferway, " (Fragility = ", final, ")."
-      )
-  }
-
-  if (!allnotenough & final == 1) {
-    conclusion1 <- paste0(
-      change, sprintf("one would need to replace %d ", RIR), RIRway, " data points with data points")
-
-    if (replace == "control") {
-      conclusion1b <- paste0(
-        sprintf("for which the probability of failure in the control group applies (RIR = %d). ", RIR))
-    } else {
-      conclusion1b <- paste0(
-        sprintf("for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
-      }
-
-    conclusion1c <- paste0(
-      sprintf("This is equivalent to transferring %d", final),
-      " data points from ", transferway, " (Fragility = ", final, ").")
-  }
-
-  if (allnotenough) {
-    conclusion1 <- paste0(
-      change, "only transferring ", final_primary, " data points from ", transferway, "\n",
-      "is not enough. We also need to transfer ", final_extra, " data points from ", transferway_extra, " as shown,"
-    )
-    conclusion1b <- paste0(
-      "from the User-entered Table to the Transfer Table.\n",
-      "This means we need to replace ", RIR, " of ", RIRway, " with null hypothesis data points;"
-    )
-    conclusion1c <- paste0(
-      "and replace ", RIR_extra, " ", RIRway_extra, " with null hypothesis data points to change the inference."
-    )
-  }
-
-  if (test == "chisq"){
-    conclusion2 <- sprintf(
-      "For the User-entered Table, the Pearson's chi square is %.3f, with p-value of %.3f:", chisq_ob, p_ob)
-    conclusion3 <- sprintf(
-      "For the Transfer Table, the Pearson's chi square is %.3f, with p-value of %.3f:", chisq_final, p_final)
-  }
-
-  if (test == "fisher"){
-    conclusion2 <- sprintf(
-      "For the User-entered Table, the estimated odds ratio is %.3f, with p-value of %.3f:", fisher_ob, p_ob)
-    conclusion3 <- sprintf(
-      "For the Transfer Table, the estimated odds ratio is %.3f, with p-value of %.3f:", fisher_final, p_final)
-  }
-
-  info1 <- "This function calculates the number of data points that would have to be replaced with"
-  info2 <- "zero effect data points (RIR) to invalidate an inference made about the association"
-  info3 <- "between the rows and columns in a 2x2 table."
-  info4 <- "One can also interpret this as switches (Fragility) from one cell to another, such as from the"
-  info5 <- "treatment success cell to the treatment failure cell."
-
-  if (to_return == "raw_output") {
-  return(output_list(obs_r = NA, act_r = NA,
-                     critical_r = NA, r_final = NA,
-                     rxcv = NA, rycv = NA,
-                     rxcvGz = NA, rycvGz = NA,
-                     itcvGz = NA, itcv = NA,
-                     r2xz = NA, r2yz = NA,
-                     delta_star = NA, delta_star_restricted = NA,
-                     delta_exact = NA, delta_pctbias = NA,
-                     cor_oster = NA, cor_exact = NA,
-                     beta_threshold = NA,
-                     beta_threshold_verify = NA,
-                     perc_bias_to_change = NA,
-                     RIR_primary = RIR,
-                     RIR_supplemental = RIR_extra,
-                     RIR_perc = RIR_pi,
-                     fragility_primary = final_primary,
-                     fragility_supplemental = final_extra,
-                     starting_table = table_start,
-                     final_table = table_final,
-                     user_SE = NA,
-                     analysis_SE = NA,
-                     Fig_ITCV = NA,
-                     Fig_RIR = NA))
-    result <- list(info1,
-                   info2,
-                   conclusion1,
-                   conclusion1b,
-                   conclusion1c,
-                   User_enter_value = table_start,
-                   Transfer_Table = table_final,
-                   conclusion2,
-                   conclusion3,
-                   RIR = RIR)
-
-    return(result)
     
-  } else  if (to_return == "print") {
-    cat(crayon::bold("Robustness of Inference to Replacement (RIR):"))
-    cat("\n")
-    if(!allnotenough){
-        cat("RIR =", RIR)
-        cat("\n")
-        cat("Fragility =", final)
-        cat("\n")
-    } else if (allnotenough){
-        # Total RIR = primary RIR + supplemental RIR
-        total_RIR <- RIR + RIR_extra
-        cat("RIR = ", RIR, " + ", RIR_extra, " = ", total_RIR, "\n", sep = "")
-        cat("Calculated by RIR in ", RIRway_start, " + supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
+    RIR_extra <- NA
+    
+    if (allnotenough) {
+        # if need two rows, then do not report RIR_pi
+        ## because denominator is tricky
+        RIR_pi <- NA
         
-        # Total Fragility = primary Fragility + supplemental Fragility
-        total_Fragility <- final_primary + final_extra
-        cat("Fragility = ", final_primary, " + ", final_extra, " = ", total_Fragility, "\n", sep = "")
-        cat("Calculated by fragility in ", transferway_start, " + supplemental fragility in ", transferway_extra_start, "\n", sep = "")
+        # apply similar rounding down like `final` for `final_extra` if needed
+        if (final_extra %% 1 == 0.5) {
+            final_extra <- floor(final_extra)
+        }
+        
+        if (switch_trm && dcroddsratio_ob) {
+            transferway_extra <- "control failure to control success"
+            transferway_extra_start <- "control row"
+            RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
+                ceiling(final_extra/(b/(b+a)))*(1-(replace=="entire"))
+            RIRway_extra <- "control failure"
+            RIRway_extra_start <- "control row"
+        }
+        if (switch_trm && !dcroddsratio_ob) {
+            transferway_extra <- "control success to control failure"
+            transferway_extra_start <- "control row"
+            RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
+                ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
+            RIRway_extra <- "control success"
+            RIRway_extra_start <- "control row"
+            
+        }
+        if (!switch_trm && dcroddsratio_ob) {
+            transferway_extra <- "treatment success to treatment failure"
+            transferway_extra_start <- "treatment row"
+            RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
+                ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
+            RIRway_extra <- "treatment success"
+            RIRway_extra_start <- "treatment row"
+        }
+        if (!switch_trm && !dcroddsratio_ob) {
+            transferway_extra <- "treatment failure to treatment success"
+            transferway_extra_start <- "treatment row"
+            RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
+                ceiling(final_extra/(b/(b+a)))*(1-(replace=="entire"))
+            RIRway_extra <- "treatment failure"
+            RIRway_extra_start <- "treatment row"
+        }
     }
-   
-    cat("\n")
-    cat(info1)
-    cat("\n")
-    cat(info2)
-    cat("\n")
-    cat(info3)
-    cat("\n")
-    cat(info4)
-    cat("\n")
-    cat(info5)
-    cat("\n")
-    cat("\n")
-    cat(conclusion1)
-    cat("\n")
-    cat(conclusion1b)
-    cat("\n")
-    cat(conclusion1c)
-    cat("\n")
-    cat("\n")
-    cat(conclusion2)
-    cat("\n")
-    cat(crayon::underline("User-entered Table:"))
-    cat("\n")
-    print(table_start_revised)
-    cat("\n")
-    cat(conclusion3)
-    cat("\n")
-    cat(crayon::underline("Transfer Table:"))
-    cat("\n")
-    print(table_final_revised)
-    cat("\n")
-
     
-  }
-  
+    if (p_ob < alpha) {
+        change <- "To invalidate the inference, "
+    } else {
+        change <- "To sustain an inference, "
+    }
+    
+    if (!allnotenough & final > 1) {
+        conclusion1 <- paste0(
+            change, sprintf("one would need to replace %d ", RIR), RIRway, " data points with data points")
+        
+        if (replace == "control") {
+            conclusion1b <- paste0(
+                sprintf("for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+        } else {
+            conclusion1b <- paste0(
+                sprintf("for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
+        }
+        
+        conclusion1c <- paste0(
+            sprintf("This is equivalent to transferring %d", final),
+            " data points from ", transferway, " (Fragility = ", final, ")."
+        )
+    }
+    
+    if (!allnotenough & final == 1) {
+        conclusion1 <- paste0(
+            change, sprintf("one would need to replace %d ", RIR), RIRway, " data points with data points")
+        
+        if (replace == "control") {
+            conclusion1b <- paste0(
+                sprintf("for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+        } else {
+            conclusion1b <- paste0(
+                sprintf("for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
+        }
+        
+        conclusion1c <- paste0(
+            sprintf("This is equivalent to transferring %d", final),
+            " data points from ", transferway, " (Fragility = ", final, ").")
+    }
+    
+    if (allnotenough) {
+        conclusion1 <- paste0(
+            change, "only transferring ", final_primary, " data points from ", transferway, "\n",
+            "is not enough to change the inference. \nWe also need to transfer ", final_extra, " data points from ", transferway_extra, " as shown, from the"
+        )
+        conclusion1b <- paste0(
+            "User-entered Table to the Transfer Table.\n",
+            "These switches would require one to replace ", RIR, " of ", RIRway, " with null hypothesis data points;"
+        )
+        conclusion1c <- paste0(
+            "and replace ", RIR_extra, " ", RIRway_extra, " with null hypothesis data points to change the inference."
+        )
+    }
+    
+    if (test == "chisq"){
+        conclusion2 <- sprintf(
+            "For the User-entered Table, the Pearson's chi square is %.3f, with p-value of %.3f:", chisq_ob, p_ob)
+        conclusion3 <- sprintf(
+            "For the Transfer Table, the Pearson's chi square is %.3f, with p-value of %.3f:", chisq_final, p_final)
+    }
+    
+    if (test == "fisher"){
+        conclusion2 <- sprintf(
+            "For the User-entered Table, the estimated odds ratio is %.3f, with p-value of %.3f:", fisher_ob, p_ob)
+        conclusion3 <- sprintf(
+            "For the Transfer Table, the estimated odds ratio is %.3f, with p-value of %.3f:", fisher_final, p_final)
+    }
+    
+    info1 <- "This function calculates the number of data points that would have to be replaced with"
+    info2 <- "zero effect data points (RIR) to invalidate an inference made about the association"
+    info3 <- "between the rows and columns in a 2x2 table."
+    info4 <- "One can also interpret this as switches (Fragility) from one cell to another, such as from the"
+    info5 <- "treatment success cell to the treatment failure cell."
+    
+    if (to_return == "raw_output") {
+        return(output_list(obs_r = NA, act_r = NA,
+                           critical_r = NA, r_final = NA,
+                           rxcv = NA, rycv = NA,
+                           rxcvGz = NA, rycvGz = NA,
+                           itcvGz = NA, itcv = NA,
+                           r2xz = NA, r2yz = NA,
+                           delta_star = NA, delta_star_restricted = NA,
+                           delta_exact = NA, delta_pctbias = NA,
+                           cor_oster = NA, cor_exact = NA,
+                           beta_threshold = NA,
+                           beta_threshold_verify = NA,
+                           perc_bias_to_change = NA,
+                           RIR_primary = RIR,
+                           RIR_supplemental = RIR_extra,
+                           RIR_perc = RIR_pi,
+                           fragility_primary = final_primary,
+                           fragility_supplemental = final_extra,
+                           starting_table = table_start,
+                           final_table = table_final,
+                           user_SE = NA,
+                           analysis_SE = NA,
+                           Fig_ITCV = NA,
+                           Fig_RIR = NA))
+        result <- list(info1,
+                       info2,
+                       conclusion1,
+                       conclusion1b,
+                       conclusion1c,
+                       User_enter_value = table_start,
+                       Transfer_Table = table_final,
+                       conclusion2,
+                       conclusion3,
+                       RIR = RIR)
+        
+        return(result)
+        
+    } else  if (to_return == "print") {
+        cat(crayon::bold("Robustness of Inference to Replacement (RIR):"))
+        cat("\n")
+        if(!allnotenough){
+            cat("RIR =", RIR)
+            cat("\n")
+            cat("Fragility =", final)
+            cat("\n")
+        } else if (allnotenough){
+            # Total RIR = primary RIR + supplemental RIR
+            total_RIR <- RIR + RIR_extra
+            cat("RIR = ", RIR, " + ", RIR_extra, " = ", total_RIR, "\n", sep = "")
+            cat("Total RIR = Primary RIR in ", RIRway_start, " + Supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
+            
+            # Total Fragility = primary Fragility + supplemental Fragility
+            total_Fragility <- final_primary + final_extra
+            cat("Fragility = ", final_primary, " + ", final_extra, " = ", total_Fragility, "\n", sep = "")
+            cat("Total Fragility = Primary Fragility in ", transferway_start, " + Supplemental Fragility in ", transferway_extra_start, "\n", sep = "")
+        }
+        
+        cat("\n")
+        cat(info1)
+        cat("\n")
+        cat(info2)
+        cat("\n")
+        cat(info3)
+        cat("\n")
+        cat(info4)
+        cat("\n")
+        cat(info5)
+        cat("\n")
+        cat("\n")
+        cat(conclusion1)
+        cat("\n")
+        cat(conclusion1b)
+        cat("\n")
+        cat(conclusion1c)
+        cat("\n")
+        cat("\n")
+        cat(conclusion2)
+        cat("\n")
+        cat(crayon::underline("User-entered Table:"))
+        cat("\n")
+        print(table_start_revised)
+        cat("\n")
+        cat(conclusion3)
+        cat("\n")
+        cat(crayon::underline("Transfer Table:"))
+        cat("\n")
+        print(table_final_revised)
+        cat("\n")
+        
+        
+    }
+    
 }
