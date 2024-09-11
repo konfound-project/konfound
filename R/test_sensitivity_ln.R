@@ -492,6 +492,7 @@ table_final_3x3 <- data.frame(
                   final_table = final_solution$table_final,
                   user_SE = user_std_err,
                   analysis_SE = std_err,
+                  needtworows = final_solution$needtworows,
                   Fig_ITCV = NA,
                   Fig_RIR = NA))
 

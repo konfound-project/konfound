@@ -322,10 +322,11 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
                      RIR_perc = RIR_pi,
                      fragility_primary = final_primary,
                      fragility_supplemental = final_extra,
-                     starting_table = table_start,
-                     final_table = table_final,
+                     starting_table = table_start_revised,
+                     final_table = table_final_revised,
                      user_SE = NA,
                      analysis_SE = NA,
+                     needtworows = allnotenough,
                      Fig_ITCV = NA,
                      Fig_RIR = NA))
     result <- list(info1,
