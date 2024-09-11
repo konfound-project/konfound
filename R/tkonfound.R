@@ -270,19 +270,19 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       " data points from ", transferway, " (Fragility = ", final, ").")
   }
 
-  if (allnotenough) {
-    conclusion1 <- paste0(
-      change, "only transferring ", final_primary, " data points from ", transferway, "\n",
-      "is not enough. We also need to transfer ", final_extra, " data points from ", transferway_extra, " as shown,"
-    )
-    conclusion1b <- paste0(
-      "from the User-entered Table to the Transfer Table.\n",
-      "This means we need to replace ", RIR, " of ", RIRway, " with null hypothesis data points;"
-    )
-    conclusion1c <- paste0(
-      "and replace ", RIR_extra, " ", RIRway_extra, " with null hypothesis data points to change the inference."
-    )
-  }
+    if (allnotenough) {
+        conclusion1 <- paste0(
+            change, "only transferring ", final_primary, " data points from ", transferway, "\n",
+            "is not enough to change the inference. \nWe also need to transfer ", final_extra, " data points from ", transferway_extra, " as shown, from the"
+        )
+        conclusion1b <- paste0(
+            "User-entered Table to the Transfer Table.\n",
+            "These switches would require one to replace ", RIR, " of ", RIRway, " with null hypothesis data points;"
+        )
+        conclusion1c <- paste0(
+            "and replace ", RIR_extra, " ", RIRway_extra, " with null hypothesis data points to change the inference."
+        )
+    }
 
   if (test == "chisq"){
     conclusion2 <- sprintf(
@@ -353,12 +353,12 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
         # Total RIR = primary RIR + supplemental RIR
         total_RIR <- RIR + RIR_extra
         cat("RIR = ", RIR, " + ", RIR_extra, " = ", total_RIR, "\n", sep = "")
-        cat("Calculated by RIR in ", RIRway_start, " + supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
+        cat("Total RIR = Primary RIR in ", RIRway_start, " + Supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
         
         # Total Fragility = primary Fragility + supplemental Fragility
         total_Fragility <- final_primary + final_extra
         cat("Fragility = ", final_primary, " + ", final_extra, " = ", total_Fragility, "\n", sep = "")
-        cat("Calculated by fragility in ", transferway_start, " + supplemental fragility in ", transferway_extra_start, "\n", sep = "")
+        cat("Total Fragility = Primary Fragility in ", transferway_start, " + Supplemental Fragility in ", transferway_extra_start, "\n", sep = "")
     }
    
     cat("\n")
