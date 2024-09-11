@@ -87,8 +87,8 @@ tkonfound <- function(a, b, c, d,
   final_primary <- final - final_extra
   
   # 'final' is rounded down if it is a non-integer like 3.5
-  if (final %% 1 == 0.5) {
-      final <- floor(final)  # Round down if final is x.5
+  if (final_primary %% 1 == 0.5) {
+      final_primary <- floor(final_primary)  # Round down if final is x.5
   }
   
   ### add column and row names to contingency tables
