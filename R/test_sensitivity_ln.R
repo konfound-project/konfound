@@ -716,7 +716,7 @@ table_final_3x3 <- data.frame(
           #conclusion1 <-
         cat(paste0(
 		sprintf("The inference cannot be sustained merely by switching %d data points in", final_primary),
-		sprintf("\nthe treatment condition. Therefore, %d additional data points have been \nswitched from ", final_extra),
+		sprintf("\nthe %s. Therefore, %d additional data points have been \nswitched from ", transferway_start, final_extra),
 		transferway_extra, c("."), c("\n"),
 		sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
 		c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
@@ -930,7 +930,7 @@ table_final_3x3 <- data.frame(
           #conclusion1 <-
             cat(paste0(
             sprintf("The inference cannot be sustained merely by switching %d data points in", final_primary),
-		    sprintf("\nthe treatment condition. Therefore, %d additional data points have been \nswitched from ", final_extra),
+		    sprintf("\nthe %s. Therefore, %d additional data points have been \nswitched from ", transferway_start, final_extra),
 		    transferway_extra, c("."), c("\n"),
 		    sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
 		    c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
