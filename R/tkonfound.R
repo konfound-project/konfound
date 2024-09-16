@@ -36,21 +36,40 @@ tkonfound <- function(a, b, c, d,
   if (a < 0 || b < 0 || c < 0 || d < 0) {
     stop("Please enter non-negative integers for each cell.")
   }
-
+ 
   if (a != as.integer(a) || b != as.integer(b) || c != as.integer(c) || d != as.integer(d)) {
     stop("Please enter non-negative integers for each cell.")
   }
-
+    
   # use fisher if any of the cell is smaller than 5
-  if (a < 5 || b < 5 || c < 5 || d < 5){
-    test <- "fisher"
+  expected_a <- (a + c) * (a + b) / (a + b + c + d)
+  expected_b <- (a + b) * (b + d) / (a + b + c + d)
+  expected_c <- (a + c) * (c + d) / (a + b + c + d)
+  expected_d <- (c + d) * (b + d) / (a + b + c + d)
+  
+  if ((test != "fisher") & (expected_a < 5 || expected_b < 5 || expected_c < 5 || expected_d < 5)){
+      warning("Because the expected value in at least one cell is less than 5 consider rerunning using Fisher's exact p-value.")
   }
 
-  # odds_ratio <- a*d/(b*c)
+  ## if any of a, b, c, d is exactly zero, then we add 0.5 to all of them
+  ## note that this is only for computing odds ratio and log OR
+  if (a == 0 || b == 0 || c == 0 || d == 0) {
+      a_OR <- a + 0.5
+      b_OR <- b + 0.5
+      c_OR <- c + 0.5
+      d_OR <- d + 0.5
+  } else {
+      a_OR <- a
+      b_OR <- b
+      c_OR <- c 
+      d_OR <- d
+  }  
+
+  odds_ratio <- a_OR * d_OR / (b_OR * c_OR)
   n_cnt <- a+b
   n_trm <- c+d
   n_obs <- n_cnt + n_trm
-  # est <- log(odds_ratio)
+  est <- log(odds_ratio)
 
   # this is the 2 by 2 table we start with
   table_ob <- matrix(c(a, b, c, d), byrow = TRUE, 2, 2)
@@ -66,12 +85,12 @@ tkonfound <- function(a, b, c, d,
 
   # get solution
   if (test == "chisq"){
-    solution <- getswitch_chisq(a, b, c, d, alpha, switch_trm)
+    solution <- getswitch_chisq(a, b, c, d, odds_ratio, alpha, switch_trm)
     chisq_final <- solution$chisq_final
   }
 
   if (test == "fisher"){
-    solution <- getswitch_fisher(a, b, c, d, alpha, switch_trm)
+    solution <- getswitch_fisher(a, b, c, d, odds_ratio, alpha, switch_trm)
     fisher_final <- solution$fisher_final
   }
 
@@ -153,6 +172,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     RIRway <- "treatment success"
     RIRway_start <- "treatment row"
     RIR_pi <- RIR / d * 100
+    p_destination_control <- a/(a+b)
   }
   if (switch_trm && !dcroddsratio_ob) {
     transferway <- "treatment failure to treatment success"
@@ -162,6 +182,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     RIRway <- "treatment failure"
     RIRway_start <- "treatment row"
     RIR_pi <- RIR / c * 100
+    p_destination_control <- b/(a+b)
   }
   if (!switch_trm && dcroddsratio_ob) {
     transferway <- "control failure to control success"
@@ -171,6 +192,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     RIRway <- "control failure"
     RIRway_start <- "control row"
     RIR_pi <- RIR / a * 100
+    p_destination_control <- b/(a+b)
   }
   if (!switch_trm && !dcroddsratio_ob) {
     transferway <- "control success to control failure"
@@ -180,9 +202,11 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     RIRway <- "control success"
     RIRway_start <- "control row"
     RIR_pi <- RIR / b * 100
+    p_destination_control <- a/(a+b)
   }
 
   RIR_extra <- NA
+  p_destination_control_extra <- NA
 
   if (allnotenough) {
       # if need two rows, then do not report RIR_pi
@@ -201,6 +225,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
         ceiling(final_extra/(b/(b+a)))*(1-(replace=="entire"))
       RIRway_extra <- "control failure"
       RIRway_extra_start <- "control row"
+      p_destination_control_extra <- b/(a+b)
     }
     if (switch_trm && !dcroddsratio_ob) {
       transferway_extra <- "control success to control failure"
@@ -209,7 +234,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
         ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
       RIRway_extra <- "control success"
       RIRway_extra_start <- "control row"
-      
+      p_destination_control_extra <- a/(a+b)
     }
     if (!switch_trm && dcroddsratio_ob) {
       transferway_extra <- "treatment success to treatment failure"
@@ -218,6 +243,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
         ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
       RIRway_extra <- "treatment success"
       RIRway_extra_start <- "treatment row"
+      p_destination_control_extra <- a/(a+b)
     }
     if (!switch_trm && !dcroddsratio_ob) {
       transferway_extra <- "treatment failure to treatment success"
@@ -226,6 +252,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
         ceiling(final_extra/(b/(b+a)))*(1-(replace=="entire"))
       RIRway_extra <- "treatment failure"
       RIRway_extra_start <- "treatment row"
+      p_destination_control_extra <- b/(a+b)
     }
   }
 
@@ -237,14 +264,14 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
 
   if (!allnotenough & final > 1) {
     conclusion1 <- paste0(
-      change, sprintf("one would need to replace %d ", RIR), RIRway, " data points with data points")
+      change, sprintf("one would need to replace %g ", RIR), RIRway, " data points with data points")
 
     if (replace == "control") {
       conclusion1b <- paste0(
-        sprintf("for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+        sprintf("for which the probability of failure in the control group applies (RIR = %g). ", RIR))
     } else {
       conclusion1b <- paste0(
-        sprintf("for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
+        sprintf("for which the probability of failure in the entire group applies (RIR = %g). ", RIR))
     }
 
     conclusion1c <- paste0(
@@ -255,14 +282,14 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
 
   if (!allnotenough & final == 1) {
     conclusion1 <- paste0(
-      change, sprintf("one would need to replace %d ", RIR), RIRway, " data points with data points")
+      change, sprintf("one would need to replace %g ", RIR), RIRway, " data points with data points")
 
     if (replace == "control") {
       conclusion1b <- paste0(
-        sprintf("for which the probability of failure in the control group applies (RIR = %d). ", RIR))
+        sprintf("for which the probability of failure in the control group applies (RIR = %g). ", RIR))
     } else {
       conclusion1b <- paste0(
-        sprintf("for which the probability of failure in the entire group applies (RIR = %d). ", RIR))
+        sprintf("for which the probability of failure in the entire group applies (RIR = %g). ", RIR))
       }
 
     conclusion1c <- paste0(
@@ -379,6 +406,12 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     cat(conclusion1b)
     cat("\n")
     cat(conclusion1c)
+    cat("\n")
+    cat("\n")
+    if (p_destination_control == 0 | 
+        (!is.na(p_destination_control_extra) & p_destination_control_extra == 0)) {
+        cat("The RIR is infinite because the probability used to represent the target cell is zero: RIR=Fragility/p(replacement source). Consider rerunning specifying that replacements should be based on the probability of success/failure in the overall sample rather than a specific cell (replace = 'entire').")
+    }
     cat("\n")
     cat("\n")
     cat(conclusion2)

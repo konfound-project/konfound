@@ -80,6 +80,7 @@ taylorexp <- function(a, b, c, d, q, thr) {
   # x is the number of cases need to be replaced solved based on the taylor expansion
   # this is the (linear approximation) of the original/unsquared term around the value of q
   x <- (thr - log(a * (d - q) / (b * (c + q))) / sqrt((1 / a + 1 / b + 1 / (c + q) + 1 / (d - q)))) / d1unsquare + q
+  if (is.na(x)) {x <- 0}
   return(x)
 }
 
@@ -340,7 +341,7 @@ get_pi <- function(odds_ratio, std_err, n_obs, n_trm) {
 #' @importFrom stats chisq.test
 chisq_p <- function(a, b, c, d){
   table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
-  p <- chisq.test(table,correct = FALSE)$p.value
+  p <- suppressWarnings(chisq.test(table,correct = FALSE)$p.value) 
   return(p)
 }
 
@@ -355,7 +356,7 @@ fisher_p <- function(a, b, c, d){
 # get chi-square value for chi-square test 
 chisq_value <- function(a, b, c, d){
   table <- matrix(c(a,b,c,d), byrow = TRUE, 2, 2)
-  value <- chisq.test(table,correct = FALSE)$statistic
+  value <- suppressWarnings(chisq.test(table,correct = FALSE)$statistic)
   return(value)
 }
 
@@ -366,8 +367,7 @@ fisher_oddsratio <- function(a, b, c, d){
   return(value)
 }
 
-getswitch_chisq <- function(a, b, c, d, thr_p = 0.05, switch_trm = TRUE){
-odds_ratio <- a*d/(b*c)
+getswitch_chisq <- function(a, b, c, d, odds_ratio, thr_p = 0.05, switch_trm = TRUE){
 n_cnt <- a+b
 n_trm <- c+d
 n_obs <- n_cnt + n_trm
@@ -406,20 +406,20 @@ if (dcroddsratio_start) {
 ### check whether it is enough to transfer all cases in one row
 if (!dcroddsratio_start) {
   # transfer cases from B to A or C to D to increase odds ratio
-  c_tryall <- c - (c - 1) * as.numeric(switch_trm)
-  d_tryall <- d + (c - 1) * as.numeric(switch_trm)
-  a_tryall <- a + (b - 1) * (1 - as.numeric(switch_trm))
-  b_tryall <- b - (b - 1) * (1 - as.numeric(switch_trm))
+  c_tryall <- c - c * as.numeric(switch_trm)
+  d_tryall <- d + c * as.numeric(switch_trm)
+  a_tryall <- a + b * (1 - as.numeric(switch_trm))
+  b_tryall <- b - b * (1 - as.numeric(switch_trm))
   tryall_p <- chisq_p(a_tryall, b_tryall, c_tryall, d_tryall)
   tryall_est <- log(a_tryall*d_tryall/c_tryall/b_tryall)
   allnotenough <- isTRUE((thr_p-tryall_p)*tryall_est< 0 & tryall_est*est >= 0)
 }
 if (dcroddsratio_start ) {
   # transfer cases from A to B or D to C to decrease odds ratio
-  c_tryall <- c + (d - 1) * as.numeric(switch_trm)
-  d_tryall <- d - (d - 1) * as.numeric(switch_trm)
-  a_tryall <- a - (a - 1) * (1 - as.numeric(switch_trm))
-  b_tryall <- b + (a - 1) * (1 - as.numeric(switch_trm))
+  c_tryall <- c + d * as.numeric(switch_trm)
+  d_tryall <- d - d * as.numeric(switch_trm)
+  a_tryall <- a - a * (1 - as.numeric(switch_trm))
+  b_tryall <- b + a * (1 - as.numeric(switch_trm))
   tryall_p <- chisq_p(a_tryall, b_tryall, c_tryall, d_tryall)
   tryall_est <- log(a_tryall*d_tryall/c_tryall/b_tryall)
   allnotenough <- isTRUE((thr_p-tryall_p)*tryall_est> 0  & tryall_est*est >= 0)
@@ -702,12 +702,8 @@ result <- list(final_switch = final, User_enter_value = table_start,
 return(result)
 }
 
-getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = TRUE){
-  if (a > 0 & b > 0 & c > 0 & d > 0){
-    odds_ratio <- fisher_oddsratio(a, b, c, d)
-  } else {
-    odds_ratio <- 1 + 0.1*(a*d-b*c)
-  }
+getswitch_fisher <- function(a, b, c, d, odds_ratio, thr_p = 0.05, switch_trm = TRUE){
+  
   est <- log(odds_ratio)
   n_cnt <- a+b
   n_trm <- c+d
@@ -750,24 +746,24 @@ getswitch_fisher <- function(a, b, c, d, thr_p = 0.05, switch_trm = TRUE){
     d_tryall <- d + c * as.numeric(switch_trm)
     a_tryall <- a + b * (1 - as.numeric(switch_trm))
     b_tryall <- b - b * (1 - as.numeric(switch_trm))
-    if (a_tryall == 0) {a_tryall <- a_tryall + 0.5}
-    if (b_tryall == 0) {b_tryall <- b_tryall + 0.5}
-    if (c_tryall == 0) {c_tryall <- c_tryall + 0.5}
-    if (d_tryall == 0) {d_tryall <- d_tryall + 0.5}
+    # if (a_tryall == 0) {a_tryall <- a_tryall + 0.5}
+    # if (b_tryall == 0) {b_tryall <- b_tryall + 0.5}
+    # if (c_tryall == 0) {c_tryall <- c_tryall + 0.5}
+    # if (d_tryall == 0) {d_tryall <- d_tryall + 0.5}
     tryall_p <- fisher_p(a_tryall, b_tryall, c_tryall, d_tryall)
     tryall_est <- log(a_tryall*d_tryall/c_tryall/b_tryall)
     allnotenough <- isTRUE((thr_p-tryall_p)*tryall_est< 0 & tryall_est*est >= 0)
   }
-  if (dcroddsratio_start ) {
+  if (dcroddsratio_start) {
     # transfer cases from A to B or D to C to decrease odds ratio
     c_tryall <- c + d * as.numeric(switch_trm)
     d_tryall <- d - d * as.numeric(switch_trm)
     a_tryall <- a - a * (1 - as.numeric(switch_trm))
     b_tryall <- b + a * (1 - as.numeric(switch_trm))
-    if (a_tryall == 0) {a_tryall <- a_tryall + 0.5}
-    if (b_tryall == 0) {b_tryall <- b_tryall + 0.5}
-    if (c_tryall == 0) {c_tryall <- c_tryall + 0.5}
-    if (d_tryall == 0) {d_tryall <- d_tryall + 0.5}
+    # if (a_tryall == 0) {a_tryall <- a_tryall + 0.5}
+    # if (b_tryall == 0) {b_tryall <- b_tryall + 0.5}
+    # if (c_tryall == 0) {c_tryall <- c_tryall + 0.5}
+    # if (d_tryall == 0) {d_tryall <- d_tryall + 0.5}
     tryall_p <- fisher_p(a_tryall, b_tryall, c_tryall, d_tryall)
     tryall_est <- log(a_tryall*d_tryall/c_tryall/b_tryall)
     allnotenough <- isTRUE((thr_p-tryall_p)*tryall_est> 0  & tryall_est*est >= 0)

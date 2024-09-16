@@ -121,14 +121,30 @@ meta$cntrl_p <- meta$b/(meta$a + meta$b)
 meta$tr_p <- meta$d/(meta$c + meta$d)
 meta$pdif <- meta$tr_p - meta$cntrl_p
 
+## if any of a, b, c, d is exactly zero, then we add 0.5 to all of them
+## note that this is only for computing odds ratio and log OR
+if (a == 0 || b == 0 || c == 0 || d == 0) {
+    a_OR <- a + 0.5
+    b_OR <- b + 0.5
+    c_OR <- c + 0.5
+    d_OR <- d + 0.5
+} else {
+    a_OR <- a
+    b_OR <- b
+    c_OR <- c 
+    d_OR <- d
+}  
+
+odds_ratio <- a_OR * d_OR / (b_OR * c_OR)
+
 ###***find out significant thresholds 
 if (test == "chisq"){
-  solution <- getswitch_chisq(a, b, c, d, thr_p, switch_trm)
+  solution <- getswitch_chisq(a, b, c, d, odds_ratio, thr_p, switch_trm)
   meta$logodds <- log(meta$a*meta$d/meta$c/meta$b)
 }
 
 if (test == "fisher"){
-  solution <- getswitch_fisher(a, b, c, d, thr_p, switch_trm)
+  solution <- getswitch_fisher(a, b, c, d, odds_ratio, thr_p, switch_trm)
   for (i in 1:(n_obs-3)){
   meta$logodds[i] <- log(fisher_oddsratio(meta$a[i], meta$b[i], 
                                           meta$c[i], meta$d[i]))
