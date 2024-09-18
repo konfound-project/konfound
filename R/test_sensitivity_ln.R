@@ -217,6 +217,7 @@ test_sensitivity_ln <- function(est_eff,
     }
   }
   
+  RIRway_split <- strsplit(RIRway, " ")[[1]][1]
   RIR_extra <- final_extra <- NA
 
   if (final_solution$needtworows) {
@@ -448,6 +449,126 @@ table_final_3x3 <- data.frame(
     row.names = c("Control", "Treatment", "Total")
 )
 
+### Output language objects
+# Conditional Fragility calculation component (for formula)
+if (RIRway_start == "treatment row" && p_start < .05) {
+    prob_indicator = "Failure"
+} else if (RIRway_start == "control row" && p_start < .05) {
+    prob_indicator = "Success"
+} else if (RIRway_start == "treatment row" && p_start > .05) {
+    prob_indicator = "Success"
+} else if (RIRway_start == "control row" && p_start > .05) {
+    prob_indicator = "Failure"
+}
+
+# Summarizing statement for the start
+conclusion_sum <- if (!final_solution$needtworows) {
+    paste0("RIR = ", total_RIR, "\nFragility = ", total_switch, "\n\n")
+} else if (final_solution$needtworows) {
+    paste0("RIR = ", RIR, " + ", RIR_extra, " = ", total_RIR, "\n",
+           "Total RIR = Primary RIR in ", RIRway_start, " + Supplemental RIR in ", RIRway_extra_start, "\n\n",
+           "Fragility = ", final_primary, " + ", final_extra, " = ", total_switch, "\n",
+           "Total Fragility = Primary Fragility in ", transferway_start, " + Supplemental Fragility in ", transferway_extra_start, "\n\n")
+}
+
+### Table output
+table_header1 <- "The table implied by the parameter estimates and sample sizes you entered:\n\n"
+
+# The summary of the estimates of implied table
+if (changeSE) {
+    estimates_summary1 <- paste(
+        sprintf("The reported log odds = %.3f, SE = %.3f, and p-value = %.3f.", est_eff, user_std_err, p_start),
+        sprintf("\nThe SE has been adjusted to %.3f to generate real numbers in the implied table", final_solution$std_err_start),
+        sprintf("\nfor which the p-value would be %.3f. Numbers in the table cells have been rounded", p_start),
+        sprintf("\nto integers, which may slightly alterthe estimated effect from the value originally entered.\n\n")
+    )
+} else if (!changeSE){
+    estimates_summary1 <- paste(
+        sprintf("The reported log odds = %.3f, SE = %.3f, and p-value = %.3f.", est_eff, user_std_err, p_start),
+        "\nValues have been rounded to the nearest integer. This may cause a small change",
+        "\nto the estimated effect for the table.\n\n"
+    )
+}
+
+# The summary of the estimates of transfer table
+estimates_summary2 <- paste0(
+    sprintf("The log odds = %.3f, SE = %.3f, p-value = %.3f.", 
+            final_solution$est_eff_final, final_solution$std_err_final, p_final),
+    "\nThis is based on t = estimated effect/standard error"
+)
+
+if (invalidate_ob) {
+    change <- sprintf("To invalidate the inference that the effect is different from 0 (alpha = %.3f)", alpha)
+    change_t <- sprintf("to invalidate the inference, ")
+} else if (!invalidate_ob){
+    change <- sprintf("To sustain the inference that the effect is different from 0 (alpha = %.3f)", alpha)
+    change_t <- sprintf("to sustain the inference, ")
+}
+
+if (!final_solution$needtworows) {
+    conclusion1 <- paste0(
+        change, 
+        sprintf("\none would need to replace %d (%.3f%%) ", total_RIR, RIR_pi), RIRway, " data points with data points"
+    )
+}
+
+conclusion2 <- if (replace == "control") {
+    sprintf("\nfor which the probability of failure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR)
+} else {
+    sprintf("\nfor which the probability of failure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR)
+}
+
+conclusion3 <- paste0(
+    sprintf("\nThis is equivalent to transferring %d ", final_solution$final_switch),
+    "data points from ", transferway, sprintf("\n(Fragility = %d).", total_switch),
+    "\n\nNote that RIR = Fragility/[1-P(", prob_indicator, ")]\n"
+)
+
+conclusion4 <- sprintf("\nThe transfer of %d data points yields the following table:\n\n", total_switch)
+
+### Special case if RIR percentage > 100
+if (!final_solution$needtworows && RIR_pi > 100) {
+    conclusion_large_rir <- paste0(
+        sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
+        "\nrequire replacing more data points than are in the ", RIRway, " condition.\n")
+} else {
+    conclusion_large_rir <- ""  # Empty string if RIR_pi <= 100
+}
+
+if (final_solution$needtworows) {
+    conclusion_twoway_1 <- paste0(
+        "In terms of Fragility, ", change_t, "only transferring ", final_primary, " data points from\n", 
+        transferway, " is not enough to change the inference.\n",
+        "One would also need to transfer ", final_extra, " data points from ", transferway_extra, " as shown,\n",
+        "from the User-entered Table to the Transfer Table.\n",
+        "These switches would require one to replace ", RIR, " of ", RIRway, " with zero effect data points;\n",
+        "and replace ", RIR_extra, " ", RIRway_extra, " with zero effect data points to change the inference.\n\n"
+    )
+    
+    conclusion_twoway_2 <- paste0(
+        "In terms of RIR, to generate the ", final_primary, " switches from ", transferway, ",\n",
+        "one would expect to have to replace ", RIR, " ", RIRway, " data points with data points\n", 
+        "for which the ", RIRway_split, " had no effect. In addition, to generate the ", final_extra, " switches from\n",
+        transferway_extra, " one would also expect to have to replace ", RIR_extra, " ", RIRway, "\n",
+        "data points with zero effect data points to change the inference.\n\n"
+    )
+    
+    conclusion_twoway_3 <- paste0(
+        "Therefore, the total RIR is ", RIR + RIR_extra, ".\n\n",
+        "Note that RIR = Fragility/[1-P(", prob_indicator, ")]\n\n",
+        "These replacement data points are assumed to come from a distribution defined\n",
+        "by the probability of success in the ", replace, " sample.\n"
+    )
+}
+
+citation <- paste0(
+    "See Frank et al. (2021) for a description of the methods.\n\n",
+    "*Frank, K. A., *Lin, Q., *Maroulis, S., *Mueller, A. S., Xu, R., Rosenberg, J. M., ... & Zhang, L. (2021).\n",
+    "Hypothetical case replacement can be used to quantify the robustness of trial results. ",
+    crayon::italic("Journal of Clinical\nEpidemiology, 134"), ", 150-159.\n",
+    "*authors are listed alphabetically.\n\n",
+    "Accuracy of results increases with the number of decimals entered.\n"
+)
 
   # output dispatch
   if (to_return == "raw_output") {
@@ -468,26 +589,6 @@ table_final_3x3 <- data.frame(
                   RIR_perc = RIR_pi,  # need to discuss the denominator
                   fragility_primary = final_primary,
                   fragility_supplemental = final_extra,
-                  ## to see intermediate outputs
-                  # thr_t = thr_t, t_ob = t_ob,
-                  # t_start = final_solution$t_start, t_final = final_solution$t_final,
-                  # p_start = p_start, p_final = p_final,
-                  # p_chi_start = p_start_chi, p_chi_final = p_final_chi,
-                  # p_fisher_start = p_start_fisher, p_fisher_final = p_final_fisher,
-		              # a_1 = a1, b_1 = b1, c_1 = c1, d_1 = d1,
-		              # a = a, b = b, c = c, d = d,
-		              # table_bstart1 = table_bstart1,
-                  # RIRway_phrase = RIRway_phrase,
-                  # final = final, dcroddsratio_ob = dcroddsratio_ob, final_extra = final_extra,
-                  # RIR_primary = RIR,
-                  # RIR_supplemental = RIR_extra,
-                  # RIR_perc = RIR_pi,  # need to discuss the denominator
-		              # prob_replace = prob_replace, needtworows = final_solution$needtworows,
-		              # est_eff_start = final_solution$est_eff_start, std_err_start = final_solution$std_err_start,
-		              # est_eff_final = final_solution$est_eff_final, std_err_final = final_solution$std_err_final,
-                  # fragility_primary = final,
-                  # fragility_supplemental = final_extra,
-
                   starting_table = final_solution$table_start,
                   final_table = final_solution$table_final,
                   user_SE = user_std_err,
@@ -498,469 +599,40 @@ table_final_3x3 <- data.frame(
 
   } else  if (to_return == "print") {
 
-    result <- list(conclusion1,conclusion1b, conclusion1c,
-                   Implied_Table = table_start_3x3, notice, Transfer_Table = table_final_3x3,
-                   conclusion2, conclusion3,
-                   total_RIR = total_RIR, total_switch = final)
-
-    # Extracting the results into variables for cleaner reference
-    conclusion1 <- result$conclusion1
-    conclusion1b <- result$conclusion1b
-    conclusion1c <- result$conclusion1c
-    Implied_Table <- result$Implied_Table
-    Transfer_Table <- result$Transfer_Table
-    conclusion2 <- result$conclusion2
-    conclusion3 <- result$conclusion3
-    notice <- result$notice
-    RIR_value <- result$RIR
-    
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
 
-    if (changeSE) {
-
-      ### start from changeSE = T
-
-        if(!final_solution$needtworows){
-            cat("RIR =", total_RIR)
-            cat("\n")
-            cat("Fragility =", total_switch)
-            cat("\n")
-        } else if (final_solution$needtworows){
-            # Total RIR = primary RIR + supplemental RIR
-            cat("RIR = ", RIR, " + ", RIR_extra, " = ", total_RIR, "\n", sep = "")
-            cat("Total RIR = Primary RIR in ", RIRway_start, " + Supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
-            
-            # Total Fragility = primary Fragility + supplemental Fragility
-            cat("Fragility = ", final_primary, " + ", final_extra, " = ", total_switch, "\n", sep = "")
-            cat("Total Fragility = Primary Fragility in ", transferway_start, " + Supplemental Fragility in ", transferway_extra_start, "\n", sep = "")
-        }
+    cat(conclusion_sum)
+    cat(table_header1)
+    print(table_start_3x3)
+    cat("\n")
+    cat(estimates_summary1)
+    
+    if (!final_solution$needtworows & final_solution$final_switch > 1) {
         
-      cat("\n")
-      cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
-      print(Implied_Table)
-      cat("\n")
-      cat(paste(sprintf("The reported log odds = %.3f, SE = %.3f, and p-value = %.3f.",
-                        est_eff, user_std_err, p_start),
-                sprintf("\nThe SE has been adjusted to %.3f to generate real numbers in the", final_solution$std_err_start),
-                sprintf("\nimplied table for which the p-value would be %.3f. Numbers in ", p_start),
-                sprintf("\nthe table cells have been rounded to integers, which may slightly "),
-                sprintf("\nalter the estimated effect from the value originally entered.\n\n")
-      ))
-
-      if (invalidate_ob) {
-#111
-        ### when invalidate = T
-
-        change <- sprintf("To invalidate the inference that the effect is different from 0 \n(alpha = %.3f)", alpha)
-        ###
-        if (!final_solution$needtworows & final_solution$final_switch > 1) {
-          #conclusion1 <-
-          cat(paste(
-            change, sprintf("one would need to replace %d (%.3f%%)", total_RIR, RIR_pi), RIRway, "\ndata points "))
-
-          if (replace == "control") {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of failure in the control \ngroup (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR))
-          } else {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of failure in the entire \nsample (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR))
-          }
-
-          #conclusion1b <-
-          cat(paste0(
-            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch),
-            c(" data points from "), transferway,
-            sprintf(" (Fragility = %d).", total_switch),
-            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
-             )
-
-
-          cat("\n")
-
-          ### for RIR_perc larger than 100%
-          if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
-                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
-               )
-            }
-
-          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
-
-
-        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
-          #conclusion1 <- 222
-          cat(paste(
-            change, sprintf("one would need to replace %d (%.3f%%)", total_RIR, RIR_pi), RIRway, "\ndata points"))
-
-          if (replace == "control") {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of failure in the control \ngroup (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR))
-          } else {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of failure in the entire \nsample (%.3f%%) applies (RIR = %d).", prob_replace, total_RIR))
-          }
-
-          #conclusion1b <-
-          cat(paste0(
-            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch),
-            c(" data points from "), transferway,
-            sprintf(" (Fragility = %d).", total_switch),
-            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
-             )
-
-          cat("\n")
-
-          ### for RIR_perc larger than 100%
-          if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
-                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
-               )
-            }
-
-          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
-
-        } else {
-
-          ### when needtworows = T
-
-          #conclusion1 <-
-        cat(paste0(
-		sprintf("The inference cannot be invalidated merely by switching %d data points in", final_primary),
-		sprintf("\nthe treatment condition. Therefore, %d additional data points have been \nswitched from ", final_extra),
-		transferway_extra, c("."), c("\n"),
-		sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
-		c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
-	)
-	   )
-        }
-        ### changed due to consistent linebreak
-      } else {
-
-          ### when invalidate = F (sustain)333
-
-        if (est_eff >= 0) {
-          change <- sprintf("To reach the threshold that would sustain an inference that the \neffect is different from 0 (alpha = %.3f)", alpha)
-        } else {
-          change <- sprintf("To reach the threshold that would sustain an inference that the \neffect is different from 0 (alpha = %.3f)", alpha)
-        }
-        ###
-        if (!final_solution$needtworows & final_solution$final_switch > 1) {
-          #conclusion1 <-
-          cat(paste(
-            change, sprintf("one would need to replace %d \n(%.3f%%)", RIR, RIR_pi), RIRway, "data points "))
-
-          if (replace == "control") {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of \nfailure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
-          } else {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of \nfailure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
-          }
-
-          #conclusion1b <-
-          cat(paste0(
-            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch),
-            c(" data points from "), transferway,
-            sprintf("\n(Fragility = %d).", total_switch),
-            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
-             )
-
-     cat("\n")
-
-          ### for RIR_perc larger than 100%
-          if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
-                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
-               )
-            }
-
-          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
-
-
-        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
-          #conclusion1 <- 444
-          cat(paste(
-            change, sprintf("one would need to replace %d \n(%.3f%%)", RIR, RIR_pi), RIRway, "\ndata points"))
-
-          if (replace == "control") {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of \nfailure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
-          } else {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of \nfailure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
-          }
-
-          #conclusion1b <-
-          cat(paste0(
-            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch),
-            c(" data points from "), transferway,
-            sprintf(" (Fragility = %d).", total_switch),
-            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
-             )
-
-          cat("\n")
-
-          ### for RIR_perc larger than 100%
-          if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
-                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
-               )
-            }
-
-          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
-
-        } else {
-
-          ### when needtworows = T
-
-          #conclusion1 <-
-        cat(paste0(
-		sprintf("The inference cannot be sustained merely by switching %d data points in", final_primary),
-		sprintf("\nthe %s. Therefore, %d additional data points have been \nswitched from ", transferway_start, final_extra),
-		transferway_extra, c("."), c("\n"),
-		sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
-		c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
-	)
-	   )
-        }
-        ###
-      }
-
-      cat("\n\n")
-      print(Transfer_Table)
-      cat("\n")
-      cat(sprintf("The log odds = %.3f, SE = %.3f, p-value = %.3f.",
-                  final_solution$est_eff_final, final_solution$std_err_final, p_final),
-                 c("\nThis is based on t = estimated effect/standard error")
-         )
-
+        cat(conclusion1, conclusion2, conclusion3)
+        cat(conclusion_large_rir)
+        
+    } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
+        
+        cat(conclusion1, conclusion2, conclusion3)
+        cat(conclusion_large_rir)
+        
+        
     } else {
-
-      ### when changeSE = F
-
-        if(!final_solution$needtworows){
-            cat("RIR =", total_RIR)
-            cat("\n")
-            cat("Fragility =", total_switch)
-            cat("\n")
-        } else if (final_solution$needtworows){
-            # Total RIR = primary RIR + supplemental RIR
-            cat("RIR = ", RIR, " + ", RIR_extra, " = ", total_RIR, "\n", sep = "")
-            cat("Total RIR = Primary RIR in ", RIRway_start, " + Supplemental RIR in ", RIRway_extra_start, "\n\n", sep = "")
-            
-            # Total Fragility = primary Fragility + supplemental Fragility
-            cat("Fragility = ", final_primary, " + ", final_extra, " = ", total_switch, "\n", sep = "")
-            cat("Total Fragility = Primary Fragility in ", transferway_start, " + Supplemental Fragility in ", transferway_extra_start, "\n", sep = "")
-        }
         
-      cat("\n")    
-      cat("The table implied by the parameter estimates and sample sizes you entered:\n\n")
-      print(Implied_Table)
-      cat("\n")
-      cat(paste(sprintf("The reported log odds = %.3f, SE = %.3f, and p-value = %.3f.",
-                        est_eff, user_std_err, p_start),
-                sprintf("\nValues have been rounded to the nearest integer. This may cause"),
-                sprintf("\na small change to the estimated effect for the table.\n\n"))
-      )
-
-      ### start here
-      if (invalidate_ob) {
-
-        ### invalidate = T555
-
-        change <- sprintf("To invalidate the inference that the effect is different from 0 \n(alpha = %.3f)", alpha)
-        ###
-        if (!final_solution$needtworows & final_solution$final_switch > 1) {
-          #conclusion1 <-
-          cat(paste(
-            change, sprintf("one would need to replace %d (%.3f%%)", RIR, RIR_pi), RIRway, "\ndata points "))
-
-          if (replace == "control") {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of failure in the control \ngroup (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
-          } else {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of failure in the entire \nsample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
-          }
-
-          #conclusion1b <-
-          cat(paste0(
-            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch),
-            c(" data points from "), transferway,
-            sprintf(" (Fragility = %d).", total_switch),
-            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
-             )
-
-          cat("\n")
-
-          ### for RIR_perc larger than 100%
-          if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
-                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
-               )
-            }
-
-          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
-
-        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
-          #conclusion1 <- 666
-          cat(paste(
-            change, sprintf("one would need to replace %d (%.3f%%)", RIR, RIR_pi), RIRway, "\ndata points"))
-
-          if (replace == "control") {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of failure in the control \ngroup (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
-          } else {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of failure in the entire \nsample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
-          }
-
-          #conclusion1b <-
-          cat(paste0(
-            sprintf(" This is equivalent to transferring \n%d", final_solution$final_switch),
-            c(" data points from "), transferway,
-            sprintf(" (Fragility = %d).", total_switch),
-            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
-             )
-
-          cat("\n")
-
-          ### for RIR_perc larger than 100%
-          if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
-                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
-               )
-            }
-
-          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
-
-        } else {
-
-            ### needtworows = T
-
-          #conclusion1 <-
-            cat(paste0(
-		    sprintf("The inference cannot be invalidated merely by switching %d data points in", final_primary),
-		    sprintf("\nthe treatment condition. Therefore, %d additional data points have been \nswitched from ", final_extra),
-		    transferway_extra, c("."), c("\n"),
-		    sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
-		    c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
-	    )
-	       )
-                   }
-        ### changed due to consistent linebreak
-      } else {
-
-        ### invalidate = F (sustain) 777
-
-        if (est_eff >= 0) {
-          change <- sprintf("To reach the threshold that would sustain an inference that the \neffect is different from 0 (alpha = %.3f)", alpha)
-        } else {
-          change <- sprintf("To reach the threshold that would sustain an inference that the \neffect is different from 0 (alpha = %.3f)", alpha)
-        }
-        ###
-        if (!final_solution$needtworows & final_solution$final_switch > 1) {
-          #conclusion1 <-
-          cat(paste(
-            change, sprintf("one would need to replace %d \n(%.3f%%)", RIR, RIR_pi), RIRway, "data points "))
-
-          if (replace == "control") {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of \nfailure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
-          } else {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of \nfailure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
-          }
-
-          #conclusion1b <-
-          cat(paste0(
-            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch),
-            c(" data points from "), transferway,
-            sprintf("\n(Fragility = %d).", total_switch),
-            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
-             )
-
-          cat("\n")
-
-          ### for RIR_perc larger than 100%
-          if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
-                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
-               )
-            }
-
-          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
-
-        } else if (!final_solution$needtworows & final_solution$final_switch == 1) {
-          #conclusion1 <- 888
-          cat(paste(
-            change, sprintf("one would need to replace %d \n(%.3f%%)", RIR, RIR_pi), RIRway, "data points "))
-
-          if (replace == "control") {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of \nfailure in the control group (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
-          } else {
-            #conclusion1a <-
-            cat(sprintf("with data points for which the probability of \nfailure in the entire sample (%.3f%%) applies (RIR = %d).", prob_replace, RIR))
-          }
-
-          #conclusion1b <-
-          cat(paste0(
-            sprintf(" This is equivalent \nto transferring %d", final_solution$final_switch),
-            c(" data points from "), transferway,
-            sprintf("\n(Fragility = %d).", total_switch),
-            c("\n\nNote that RIR = Fragility/[1-P("), RIRway_phrase, c(")]"))
-             )
-
-          cat("\n")
-
-          ### for RIR_perc larger than 100%
-          if (RIR_pi > 100){
-            cat(paste0(sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_switch),
-                c("\nrequire replacing more data points than are in the "), RIRway, c(" condition.\n"))
-               )
-            }
-
-          cat(sprintf("\nThe transfer of %d data points yields the following table:", total_switch))
-
-        } else {
-
-            ### needtworows = T
-
-          #conclusion1 <-
-            cat(paste0(
-            sprintf("The inference cannot be sustained merely by switching %d data points in", final_primary),
-		    sprintf("\nthe %s. Therefore, %d additional data points have been \nswitched from ", transferway_start, final_extra),
-		    transferway_extra, c("."), c("\n"),
-		    sprintf("The final Fragility(= %d) and RIR(= %d)", total_switch, total_RIR),
-		    c(" reflect both sets of changes. \nPlease compare the after transfer table with the implied table.")
-	    )
-	       )
-        }
-        ###
-      }
-
-      cat("\n\n")
-      
-      print(Transfer_Table)
-      cat("\n")    
-      cat(sprintf("The log odds = %.3f, SE = %.3f, p-value = %.3f.",
-                  final_solution$est_eff_final, final_solution$std_err_final, p_final),
-                 c("\nThis is based on t = estimated effect/standard error")
-         )
-
-
+        cat(conclusion_twoway_1)
+        cat(conclusion_twoway_2)
+        cat(conclusion_twoway_3)
+        
     }
-cat("\n")
-cat("\n")
-cat("See Frank et al. (2013) for a description of the method.\n")
-cat("\n")
-cat("Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).\n")
-cat("What would it take to change an inference?\n")
-cat("Using Rubin's causal model to interpret the robustness of causal inferences.\n")
-cat(crayon::italic("Education, Evaluation and Policy Analysis, 35"), ", 437-460.\n")
-cat("\n")
-cat("Accuracy of results increases with the number of decimals entered.\n")
+    
+    cat(conclusion4) 
+    print(table_final_3x3)
+    cat("\n")    
+    cat(estimates_summary2)
+    cat("\n")
+    cat("\n")
+    cat(citation)
 
   }
 }

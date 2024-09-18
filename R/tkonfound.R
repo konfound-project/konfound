@@ -204,7 +204,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     RIR_pi <- RIR / b * 100
     p_destination_control <- a/(a+b)
   }
-
+  
+  RIRway_split <- strsplit(RIRway, " ")[[1]][1]
   RIR_extra <- NA
   p_destination_control_extra <- NA
 
@@ -297,20 +298,44 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       " data points from ", transferway, " (Fragility = ", final, ").")
   }
 
-    if (allnotenough) {
-        conclusion1 <- paste0(
-            change, "only transferring ", final_primary, " data points from ", transferway, "\n",
-            "is not enough to change the inference. \nWe also need to transfer ", final_extra, " data points from ", transferway_extra, " as shown, from the"
-        )
-        conclusion1b <- paste0(
-            "User-entered Table to the Transfer Table.\n",
-            "These switches would require one to replace ", RIR, " of ", RIRway, " with null hypothesis data points;"
-        )
-        conclusion1c <- paste0(
-            "and replace ", RIR_extra, " ", RIRway_extra, " with null hypothesis data points to change the inference."
-        )
-    }
+  if (allnotenough) {
+      change_t <- paste0(tolower(substr(change, 1, 1)), substr(change, 2, nchar(change)))
+      
+      conclusion1 <- paste0(
+          "In terms of Fragility, ", change_t, "only transferring ", final_primary, " data points from\n", 
+          transferway, " is not enough to change the inference.\n",
+          "One would also need to transfer ", final_extra, " data points from ", transferway_extra, " as shown,"
+      )
+      conclusion1b <- paste0(
+          "from the User-entered Table to the Transfer Table.\n\n",
+          "These switches would require one to replace ", RIR, " of ", RIRway, " with zero effect data points;"
+      )
+      conclusion1c <- paste0(
+          "and replace ", RIR_extra, " ", RIRway_extra, " with zero effect data points to change the inference.\n"
+      )
+      conclusion1d <- paste0(
+          "In terms of RIR, to generate the ", final_primary, " switches from ", transferway, ",\n",
+          "one would expect to have to replace ", RIR, " ", RIRway, " data points with data points\n", 
+          "for which the ", RIRway_split, " had no effect. In addition, to generate the ", final_extra, " switches from\n",
+          transferway_extra, ", one would also expect to have to replace ", RIR_extra, " ", RIRway, "\n",
+          "data points with zero effect data points to change the inference.\n"
+      )
+      conclusion1e <- paste0(
+          "Therefore, the total RIR is ", RIR + RIR_extra, ".\n\n",
+          "These replacement data points are assumed to come from a distribution defined\n",
+          "by the probability of success in the ", replace, " sample."
+      )
+      
+  }
 
+  citation <- paste0(
+      "See Frank et al. (2021) for a description of the methods.\n\n",
+      "*Frank, K. A., *Lin, Q., *Maroulis, S., *Mueller, A. S., Xu, R., Rosenberg, J. M., ... & Zhang, L. (2021).\n",
+      "Hypothetical case replacement can be used to quantify the robustness of trial results. Journal of Clinical\n",
+      "Epidemiology, 134, 150-159.\n",
+      "*authors are listed alphabetically." 
+  )
+  
   if (test == "chisq"){
     conclusion2 <- sprintf(
       "For the User-entered Table, the Pearson's chi square is %.3f, with p-value of %.3f:", chisq_ob, p_ob)
@@ -406,13 +431,21 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     cat(conclusion1b)
     cat("\n")
     cat(conclusion1c)
-    cat("\n")
+    if (allnotenough){
+        cat("\n")
+        cat(conclusion1d)
+        cat("\n")
+        cat(conclusion1e)
+    }
     cat("\n")
     if (p_destination_control == 0 | 
         (!is.na(p_destination_control_extra) & p_destination_control_extra == 0)) {
-        cat("The RIR is infinite because the probability used to represent the target cell is zero: RIR=Fragility/p(replacement source). Consider rerunning specifying that replacements should be based on the probability of success/failure in the overall sample rather than a specific cell (replace = 'entire').")
+        cat("\n")
+        cat("The RIR is infinite because the probability used to represent the target cell is zero:")
+        cat("\nRIR=Fragility/p(replacement source). Consider rerunning specifying that replacements")
+        cat("\nshould be based on the probability of success/failure in the overall sample rather than")
+        cat("\na specific cell (replace = 'entire').\n")
     }
-    cat("\n")
     cat("\n")
     cat(conclusion2)
     cat("\n")
@@ -426,7 +459,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     cat("\n")
     print(table_final_revised)
     cat("\n")
-
+    cat(citation)
+    cat("\n")
     
   }
   
