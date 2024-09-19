@@ -167,8 +167,11 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   if (switch_trm && dcroddsratio_ob) {
     transferway <- "treatment success to treatment failure"
     transferway_start <- "treatment row"
-    RIR <- ceiling(final_primary/((a+c)/n_obs))*(replace=="entire") + 
-        ceiling(final_primary/(a/(a+b)))*(1-(replace=="entire"))
+    if (replace == "entire") {
+        RIR <- ceiling(final_primary/((a+c)/n_obs))
+    } else {
+        RIR <- ceiling(final_primary/(a/(a+b)))
+    }
     RIRway <- "treatment success"
     RIRway_start <- "treatment row"
     RIR_pi <- RIR / d * 100
@@ -177,8 +180,11 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   if (switch_trm && !dcroddsratio_ob) {
     transferway <- "treatment failure to treatment success"
     transferway_start <- "treatment row"
-    RIR <- ceiling(final_primary/((b+d)/n_obs))*(replace=="entire") + 
-        ceiling(final_primary/(b/(a+b)))*(1-(replace=="entire"))
+    if (replace == "entire") {
+        RIR <- ceiling(final_primary/((b+d)/n_obs))
+    } else {
+        RIR <- ceiling(final_primary/(b/(a+b)))
+    }
     RIRway <- "treatment failure"
     RIRway_start <- "treatment row"
     RIR_pi <- RIR / c * 100
@@ -187,8 +193,11 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   if (!switch_trm && dcroddsratio_ob) {
     transferway <- "control failure to control success"
     transferway_start <- "control row"
-    RIR <- ceiling(final_primary/((b+d)/n_obs))*(replace=="entire") + 
-        ceiling(final_primary/(b/(a+b)))*(1-(replace=="entire"))
+    if (replace == "entire") {
+        RIR <- ceiling(final_primary/((b+d)/n_obs))
+    } else {
+        RIR <- ceiling(final_primary/(b/(a+b)))
+    }
     RIRway <- "control failure"
     RIRway_start <- "control row"
     RIR_pi <- RIR / a * 100
@@ -197,8 +206,11 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   if (!switch_trm && !dcroddsratio_ob) {
     transferway <- "control success to control failure"
     transferway_start <- "control row"
-    RIR <- ceiling(final_primary/((a+c)/n_obs))*(replace=="entire") + 
-        ceiling(final_primary/(a/(a+b)))*(1-(replace=="entire"))
+    if (replace == "entire") {
+        RIR <- ceiling(final_primary/((a+c)/n_obs))
+    } else {
+        RIR <- ceiling(final_primary/(a/(a+b)))
+    }
     RIRway <- "control success"
     RIRway_start <- "control row"
     RIR_pi <- RIR / b * 100
@@ -222,8 +234,11 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     if (switch_trm && dcroddsratio_ob) {
       transferway_extra <- "control failure to control success"
       transferway_extra_start <- "control row"
-      RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(b/(b+a)))*(1-(replace=="entire"))
+      if (replace == "entire") {
+          RIR_extra <- ceiling(final_extra/((b+d)/n_obs))
+      } else {
+          RIR_extra <- ceiling(final_extra/(b/(b+a)))
+      }
       RIRway_extra <- "control failure"
       RIRway_extra_start <- "control row"
       p_destination_control_extra <- b/(a+b)
@@ -231,8 +246,11 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     if (switch_trm && !dcroddsratio_ob) {
       transferway_extra <- "control success to control failure"
       transferway_extra_start <- "control row"
-      RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
+      if (replace == "entire") {
+          RIR_extra <- ceiling(final_extra/((a+c)/n_obs))
+      } else {
+          RIR_extra <- ceiling(final_extra/(a/(a+b)))
+      }
       RIRway_extra <- "control success"
       RIRway_extra_start <- "control row"
       p_destination_control_extra <- a/(a+b)
@@ -240,8 +258,11 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     if (!switch_trm && dcroddsratio_ob) {
       transferway_extra <- "treatment success to treatment failure"
       transferway_extra_start <- "treatment row"
-      RIR_extra <- ceiling(final_extra/((a+c)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(a/(a+b)))*(1-(replace=="entire"))
+      if (replace == "entire") {
+          RIR_extra <- ceiling(final_extra/((a+c)/n_obs))
+      } else (
+          RIR_extra <- ceiling(final_extra/(a/(a+b)))
+      )
       RIRway_extra <- "treatment success"
       RIRway_extra_start <- "treatment row"
       p_destination_control_extra <- a/(a+b)
@@ -249,8 +270,11 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     if (!switch_trm && !dcroddsratio_ob) {
       transferway_extra <- "treatment failure to treatment success"
       transferway_extra_start <- "treatment row"
-      RIR_extra <- ceiling(final_extra/((b+d)/n_obs))*(replace=="entire") +
-        ceiling(final_extra/(b/(b+a)))*(1-(replace=="entire"))
+      if (replace == "entire") {
+          RIR_extra <- ceiling(final_extra/((b+d)/n_obs))
+      } else {
+          RIR_extra <- ceiling(final_extra/(b/(b+a)))
+      }
       RIRway_extra <- "treatment failure"
       RIRway_extra_start <- "treatment row"
       p_destination_control_extra <- b/(a+b)
