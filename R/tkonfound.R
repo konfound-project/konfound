@@ -48,7 +48,7 @@ tkonfound <- function(a, b, c, d,
   expected_d <- (c + d) * (b + d) / (a + b + c + d)
   
   if ((test != "fisher") & (expected_a < 5 || expected_b < 5 || expected_c < 5 || expected_d < 5)){
-      warning("Because the expected value in at least one cell is less than 5 consider rerunning using Fisher's exact p-value.")
+      warning("Because the expected value in at least one cell is less than 5 consider rerunning using Fisher's exact p-value.\n")
   }
 
   ## if any of a, b, c, d is exactly zero, then we add 0.5 to all of them
@@ -176,6 +176,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     RIRway_start <- "treatment row"
     RIR_pi <- RIR / d * 100
     p_destination_control <- a/(a+b)
+    p_destination <- round((a+c)/(a+b+c+d) * 100, 3) * (replace == "entire") + 
+        round(a/(a+b) * 100, 3) * (1 - (replace == "entire"))
   }
   if (switch_trm && !dcroddsratio_ob) {
     transferway <- "treatment failure to treatment success"
@@ -189,6 +191,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     RIRway_start <- "treatment row"
     RIR_pi <- RIR / c * 100
     p_destination_control <- b/(a+b)
+    p_destination <- round((b+d)/(a+b+c+d) * 100, 3) * (replace == "entire") + 
+        round(b/(a+b) * 100, 3) * (1 - (replace == "entire"))
   }
   if (!switch_trm && dcroddsratio_ob) {
     transferway <- "control failure to control success"
@@ -202,6 +206,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     RIRway_start <- "control row"
     RIR_pi <- RIR / a * 100
     p_destination_control <- b/(a+b)
+    p_destination <- round((b+d)/(a+b+c+d) * 100, 3) * (replace == "entire") + 
+        round(b/(a+b) * 100, 3) * (1 - (replace == "entire"))
   }
   if (!switch_trm && !dcroddsratio_ob) {
     transferway <- "control success to control failure"
@@ -215,6 +221,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     RIRway_start <- "control row"
     RIR_pi <- RIR / b * 100
     p_destination_control <- a/(a+b)
+    p_destination <- round((a+c)/(a+b+c+d) * 100, 3) * (replace == "entire") + 
+        round(a/(a+b) * 100, 3) * (1 - (replace == "entire"))
   }
   
   RIRway_split <- strsplit(RIRway, " ")[[1]][1]
@@ -242,6 +250,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       RIRway_extra <- "control failure"
       RIRway_extra_start <- "control row"
       p_destination_control_extra <- b/(a+b)
+      p_destination_extra <- round((b+d)/(a+b+c+d) * 100, 3) * (replace == "entire") + 
+          round(b/(a+b) * 100, 3) * (1 - (replace == "entire"))
     }
     if (switch_trm && !dcroddsratio_ob) {
       transferway_extra <- "control success to control failure"
@@ -254,6 +264,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       RIRway_extra <- "control success"
       RIRway_extra_start <- "control row"
       p_destination_control_extra <- a/(a+b)
+      p_destination_extra <- round((a+c)/(a+b+c+d) * 100, 3) * (replace == "entire") + 
+          round(a/(a+b) * 100, 3) * (1 - (replace == "entire"))
     }
     if (!switch_trm && dcroddsratio_ob) {
       transferway_extra <- "treatment success to treatment failure"
@@ -266,6 +278,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       RIRway_extra <- "treatment success"
       RIRway_extra_start <- "treatment row"
       p_destination_control_extra <- a/(a+b)
+      p_destination_extra <- round((a+c)/(a+b+c+d) * 100, 3) * (replace == "entire") + 
+          round(a/(a+b) * 100, 3) * (1 - (replace == "entire"))
     }
     if (!switch_trm && !dcroddsratio_ob) {
       transferway_extra <- "treatment failure to treatment success"
@@ -278,76 +292,140 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       RIRway_extra <- "treatment failure"
       RIRway_extra_start <- "treatment row"
       p_destination_control_extra <- b/(a+b)
+      p_destination_extra <- round((b+d)/(a+b+c+d) * 100, 3) * (replace == "entire") + 
+          round(b/(a+b) * 100, 3) * (1 - (replace == "entire"))
     }
   }
 
+  
+  ### Output language objects
+  # Conditional Fragility calculation component 
+  if (p_ob < 0.05) {
+      if (RIRway == "treatment success") {
+          prob_indicator = "failure"  
+      } else if (RIRway == "treatment failure") {
+          prob_indicator = "success"  
+      } else if (RIRway == "control success") {
+          prob_indicator = "failure"  
+      } else if (RIRway == "control failure") {
+          prob_indicator = "success" 
+      }
+  } else {  # p_start > 0.05
+      if (RIRway == "treatment success") {
+          prob_indicator = "failure"  
+      } else if (RIRway == "treatment failure") {
+          prob_indicator = "success" 
+      } else if (RIRway == "control success") {
+          prob_indicator = "failure" 
+      } else if (RIRway == "control failure") {
+          prob_indicator = "success" 
+      }
+  }
+  
+  if (allnotenough) {
+      # Conditional Fragility calculation component 
+      if (p_ob < 0.05) {
+          if (RIRway_extra == "treatment success") {
+              prob_indicator_extra = "failure"  
+          } else if (RIRway_extra == "treatment failure") {
+              prob_indicator_extra = "success"  
+          } else if (RIRway_extra == "control success") {
+              prob_indicator_extra = "failure"  
+          } else if (RIRway_extra == "control failure") {
+              prob_indicator_extra = "success" 
+          }
+      } else {  # p_start > 0.05
+          if (RIRway_extra == "treatment success") {
+              prob_indicator_extra = "failure"  
+          } else if (RIRway_extra == "treatment failure") {
+              prob_indicator_extra = "success" 
+          } else if (RIRway_extra == "control success") {
+              prob_indicator_extra = "failure" 
+          } else if (RIRway_extra == "control failure") {
+              prob_indicator_extra = "success" 
+          }
+      }
+  }
+  
+  
   if (p_ob < alpha) {
-    change <- "To invalidate the inference, "
+    change <- paste0("To invalidate the inference that the effect is different from 0 (alpha = ", alpha, "),\n")
   } else {
-    change <- "To sustain an inference, "
+    change <- paste0("To sustain an inference that the effect is different from 0 (alpha = ", alpha, "),\n")
   }
 
   if (!allnotenough & final > 1) {
     conclusion1 <- paste0(
-      change, sprintf("one would need to replace %g ", RIR), RIRway, " data points with data points")
+      change, 
+      sprintf("one would need to transfer %g data points from ", final), transferway, " as shown,\n",
+      "from the User-entered Table to the Transfer Table (Fragility = ", final, ").\n",
+      sprintf("This is equivalent to replacing %g (%.3f%%) ", RIR, RIR_pi), RIRway, " data points with data points")
 
     if (replace == "control") {
       conclusion1b <- paste0(
-        sprintf("for which the probability of failure in the control group applies (RIR = %g). ", RIR))
+        sprintf("for which the probability of %s in the control group (%g%%) applies (RIR = %g). ", prob_indicator, p_destination, RIR))
     } else {
       conclusion1b <- paste0(
-        sprintf("for which the probability of failure in the entire group applies (RIR = %g). ", RIR))
+        sprintf("for which the probability of %s in the entire group (%g%%) applies (RIR = %g). ", prob_indicator, p_destination, RIR))
     }
 
     conclusion1c <- paste0(
-      sprintf("This is equivalent to transferring %d", final),
-      " data points from ", transferway, " (Fragility = ", final, ")."
+      "\nRIR = Fragility/P(destination)\n"
       )
   }
 
   if (!allnotenough & final == 1) {
-    conclusion1 <- paste0(
-      change, sprintf("one would need to replace %g ", RIR), RIRway, " data points with data points")
-
-    if (replace == "control") {
-      conclusion1b <- paste0(
-        sprintf("for which the probability of failure in the control group applies (RIR = %g). ", RIR))
-    } else {
-      conclusion1b <- paste0(
-        sprintf("for which the probability of failure in the entire group applies (RIR = %g). ", RIR))
+      conclusion1 <- paste0(
+          change, 
+          sprintf("one would need to transfer %g data points from ", final), transferway, " as shown,\n",
+          "from the User-entered Table to the Transfer Table (Fragility = ", final, ").\n",
+          sprintf("This is equivalent to replacing %g (%.3f%%) ", RIR, RIR_pi), RIRway, " data points with data points")
+      
+      if (replace == "control") {
+          conclusion1b <- paste0(
+              sprintf("for which the probability of %s in the control group (%g%%) applies (RIR = %g). ", prob_indicator, p_destination, RIR))
+      } else {
+          conclusion1b <- paste0(
+              sprintf("for which the probability of %s in the entire group (%g%%) applies (RIR = %g). ", prob_indicator, p_destination, RIR))
       }
-
-    conclusion1c <- paste0(
-      sprintf("This is equivalent to transferring %d", final),
-      " data points from ", transferway, " (Fragility = ", final, ").")
+      
+      conclusion1c <- paste0(
+          "\nRIR = Fragility/P(", prob_indicator, ")\n"
+      )
   }
 
+  ### Special case if RIR percentage > 100
+  if (!allnotenough && RIR_pi > 100) {
+      total_Fragility <- final_primary + final_extra
+      conclusion_large_rir <- paste0(
+          sprintf("\nNote the RIR exceeds 100%%. Generating the transfer of %d data points would", total_Fragility),
+          "\nrequire replacing more data points than are in the ", RIRway, " condition.")
+  } else {
+      conclusion_large_rir <- ""  # Empty string if RIR_pi <= 100
+  }
+  
   if (allnotenough) {
       change_t <- paste0(tolower(substr(change, 1, 1)), substr(change, 2, nchar(change)))
       
       conclusion1 <- paste0(
-          "In terms of Fragility, ", change_t, "only transferring ", final_primary, " data points from\n", 
-          transferway, " is not enough to change the inference.\n",
-          "One would also need to transfer ", final_extra, " data points from ", transferway_extra, " as shown,"
+          "In terms of Fragility, ", change_t, "only transferring ", final_primary, " data points from ", 
+          transferway, " is not enough to change the\n",
+          "inference. One would also need to transfer ", final_extra, " data points from ", transferway_extra
       )
       conclusion1b <- paste0(
-          "from the User-entered Table to the Transfer Table.\n\n",
-          "These switches would require one to replace ", RIR, " of ", RIRway, " with zero effect data points;"
+          "as shown, from the User-entered Table to the Transfer Table.\n"
       )
       conclusion1c <- paste0(
-          "and replace ", RIR_extra, " ", RIRway_extra, " with zero effect data points to change the inference.\n"
+          "In terms of RIR, generating the ", final_primary, " switches from ", transferway, " is equivalent to\n",
+          "replacing ", RIR, " ", RIRway, " data points with data points for which the probability of ", prob_indicator, " in the\n", 
+          replace, " sample (", p_destination, "%) applies.\n\n",
+          "In addition, generating the ", final_extra, " switches from ", transferway_extra, " is equivalent to\n",
+          "replacing ", RIR_extra, " ", RIRway_extra, " data points with data points for which the probability of ", prob_indicator_extra, "\n",
+          "in the ", replace, " sample (", p_destination_extra, "%) applies.\n"
       )
       conclusion1d <- paste0(
-          "In terms of RIR, to generate the ", final_primary, " switches from ", transferway, ",\n",
-          "one would expect to have to replace ", RIR, " ", RIRway, " data points with data points\n", 
-          "for which the ", RIRway_split, " had no effect. In addition, to generate the ", final_extra, " switches from\n",
-          transferway_extra, ", one would also expect to have to replace ", RIR_extra, " ", RIRway, "\n",
-          "data points with zero effect data points to change the inference.\n"
-      )
-      conclusion1e <- paste0(
           "Therefore, the total RIR is ", RIR + RIR_extra, ".\n\n",
-          "These replacement data points are assumed to come from a distribution defined\n",
-          "by the probability of success in the ", replace, " sample."
+          "RIR = Fragility/P(destination)"
       )
       
   }
@@ -375,7 +453,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   }
 
   info1 <- "This function calculates the number of data points that would have to be replaced with"
-  info2 <- "zero effect data points (RIR) to invalidate an inference made about the association"
+  info2 <- "zero effect data points (RIR) to invalidate the inference made about the association"
   info3 <- "between the rows and columns in a 2x2 table."
   info4 <- "One can also interpret this as switches (Fragility) from one cell to another, such as from the"
   info5 <- "treatment success cell to the treatment failure cell."
@@ -455,11 +533,10 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     cat(conclusion1b)
     cat("\n")
     cat(conclusion1c)
+    cat(conclusion_large_rir)
     if (allnotenough){
         cat("\n")
         cat(conclusion1d)
-        cat("\n")
-        cat(conclusion1e)
     }
     cat("\n")
     if (p_destination_control == 0 | 
