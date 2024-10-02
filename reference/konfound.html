@@ -228,44 +228,44 @@ or a summary table.</p>
 <span class="r-in"><span><span class="fu">konfound</span><span class="op">(</span><span class="va">m4</span>, <span class="va">condition</span>, two_by_two <span class="op">=</span> <span class="cn">TRUE</span>, n_treat <span class="op">=</span> <span class="fl">55</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fragility = 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The table implied by the parameter estimates and sample sizes you entered:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">User-entered Table:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Fail Success Success_Rate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control     36      16       30.77%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Treatment   18      37       67.27%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total       54      53       49.53%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The reported effect size = 1.527, SE = 0.415, and p-value = 0.000. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Values have been rounded to the nearest integer. This may cause </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The reported log odds = 1.527, SE = 0.415, and p-value = 0.000. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Values in the table have been rounded to the nearest integer. This may cause </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a small change to the estimated effect for the table.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference that the effect is different from 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (alpha = 0.050) one would need to replace 15 (40.541%) treatment success </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data points with data points for which the probability of failure in the control </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> group (69.231%) applies (RIR = 15). This is equivalent to transferring </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 data points from treatment success to treatment failure (Fragility = 10).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference that the effect is different from 0 (alpha = 0.050),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> one would need to transfer 10 data points from treatment success to treatment failure (Fragility = 10).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to replacing 15 (40.541%) treatment success data points with data points </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> for which the probability of failure in the control group (69.231%) applies (RIR = 15). </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Note that RIR = Fragility/[1-P(success in the control group)]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note that RIR = Fragility/P(destination)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The transfer of 10 data points yields the following table:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Transfer Table:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Fail Success Success_Rate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control     36      16       30.77%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Treatment   28      27       49.09%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total       64      43       40.19%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Effect size = 0.775, SE = 0.404, p-value = 0.058. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The log odds (estimated effect) = 0.775, SE = 0.404, p-value = 0.058.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is based on t = estimated effect/standard error</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2021) for a description of the methods.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Using Rubin's causal model to interpret the robustness of causal inferences.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> , 437-460.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> *Frank, K. A., *Lin, Q., *Maroulis, S., *Mueller, A. S., Xu, R., Rosenberg, J. M., ... &amp; Zhang, L. (2021).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Hypothetical case replacement can be used to quantify the robustness of trial results. <span style="font-style: italic;">Journal of Clinical</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Epidemiology, 134</span>, 150-159.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> *authors are listed alphabetically.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals reported.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals entered.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -279,7 +279,7 @@ or a summary table.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>

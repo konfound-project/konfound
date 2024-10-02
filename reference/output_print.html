@@ -80,7 +80,11 @@ output for each case.</p>
 <span>  <span class="va">alpha</span>,</span>
 <span>  <span class="va">index</span>,</span>
 <span>  <span class="va">far_bound</span>,</span>
-<span>  <span class="va">R2</span></span>
+<span>  sdx <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  sdy <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  R2 <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  rxcv <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  rycv <span class="op">=</span> <span class="cn">NA</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -149,8 +153,24 @@ statistical significance determination.</p></dd>
 <dd><p>Indicator whether the threshold is towards the other side of nu or 0, by default is zero (same side), alternative is one (the other side).</p></dd>
 
 
+<dt id="arg-sdx">sdx<a class="anchor" aria-label="anchor" href="#arg-sdx"></a></dt>
+<dd><p>Standard deviation of x.</p></dd>
+
+
+<dt id="arg-sdy">sdy<a class="anchor" aria-label="anchor" href="#arg-sdy"></a></dt>
+<dd><p>Standard deviation of y.</p></dd>
+
+
 <dt id="arg-r-">R2<a class="anchor" aria-label="anchor" href="#arg-r-"></a></dt>
 <dd><p>the unadjusted, original R2 in the observed function.</p></dd>
+
+
+<dt id="arg-rxcv">rxcv<a class="anchor" aria-label="anchor" href="#arg-rxcv"></a></dt>
+<dd><p>the correlation between x and CV.</p></dd>
+
+
+<dt id="arg-rycv">rycv<a class="anchor" aria-label="anchor" href="#arg-rycv"></a></dt>
+<dd><p>the correlation between y and CV.</p></dd>
 
 </dl></div>
 
@@ -163,7 +183,7 @@ statistical significance determination.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>
