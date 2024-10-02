@@ -538,7 +538,7 @@ if (!final_solution$needtworows && RIR_pi > 100) {
 
 if (final_solution$needtworows) {
     conclusion_twoway_1 <- paste0(
-        "In terms of Fragility, ", change_t, "only transferring ", final_primary, " data points from\n", 
+        "In terms of Fragility, ", change_t, "transferring ", final_primary, " data points from\n", 
         transferway, " is not enough to change the inference.\n",
         "One would also need to transfer ", final_extra, " data points from ", transferway_extra, "\n",
         "as shown, from the User-entered Table to the Transfer Table.\n\n"

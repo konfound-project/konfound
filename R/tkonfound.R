@@ -408,7 +408,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       change_t <- paste0(tolower(substr(change, 1, 1)), substr(change, 2, nchar(change)))
       
       conclusion1 <- paste0(
-          "In terms of Fragility, ", change_t, "only transferring ", final_primary, " data points from ", 
+          "In terms of Fragility, ", change_t, "transferring ", final_primary, " data points from ", 
           transferway, " is not enough to change the\n",
           "inference. One would also need to transfer ", final_extra, " data points from ", transferway_extra
       )
