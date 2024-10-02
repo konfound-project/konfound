@@ -20,7 +20,11 @@ output_print(
   alpha,
   index,
   far_bound,
-  R2
+  sdx = NA,
+  sdy = NA,
+  R2 = NA,
+  rxcv = NA,
+  rycv = NA
 )
 }
 \arguments{
@@ -55,7 +59,15 @@ statistical significance determination.}
 
 \item{far_bound}{Indicator whether the threshold is towards the other side of nu or 0, by default is zero (same side), alternative is one (the other side).}
 
+\item{sdx}{Standard deviation of x.}
+
+\item{sdy}{Standard deviation of y.}
+
 \item{R2}{the unadjusted, original R2 in the observed function.}
+
+\item{rxcv}{the correlation between x and CV.}
+
+\item{rycv}{the correlation between y and CV.}
 }
 \description{
 This function outputs printed text for various indices such as RIR

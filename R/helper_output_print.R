@@ -27,7 +27,11 @@
 #' @param alpha The level of statistical significance.
 #' @param index A character string indicating the index for which the output is generated ('RIR' or 'IT').
 #' @param far_bound Indicator whether the threshold is towards the other side of nu or 0, by default is zero (same side), alternative is one (the other side).
+#' @param sdx Standard deviation of x.
+#' @param sdy Standard deviation of y. 
 #' @param R2 the unadjusted, original R2 in the observed function.
+#' @param rxcv the correlation between x and CV. 
+#' @param rycv the correlation between y and CV. 
 #' @importFrom crayon bold underline italic
 
 output_print <- function(n_covariates,
