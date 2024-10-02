@@ -370,7 +370,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
     }
 
     conclusion1c <- paste0(
-      "\nRIR = Fragility/P(destination)\n"
+      "\nRIR = Fragility/P(destination)"
       )
   }
 
@@ -390,7 +390,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       }
       
       conclusion1c <- paste0(
-          "\nRIR = Fragility/P(", prob_indicator, ")\n"
+          "\nRIR = Fragility/P(destination)"
       )
   }
 
