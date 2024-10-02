@@ -341,6 +341,7 @@ test_sensitivity <- function(est_eff,
                        fragility_primary = NA, fragility_supplemental = NA,
                        starting_table = NA, final_table = NA,
                        user_SE = NA, analysis_SE = NA,
+                       needtworows = NA, 
                        Fig_ITCV =
                          plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r),
                        Fig_RIR = plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff)))

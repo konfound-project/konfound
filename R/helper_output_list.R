@@ -8,7 +8,8 @@ output_list <- function(obs_r, act_r,
                         RIR_primary, RIR_supplemental, RIR_perc, 
                         fragility_primary, fragility_supplemental,
                         starting_table, final_table, 
-                        user_SE, analysis_SE, 
+                        user_SE, analysis_SE,
+                        needtworows, 
                         Fig_ITCV, Fig_RIR) {
   result <- list(obs_r = obs_r,
                  act_r = act_r, 
@@ -40,6 +41,7 @@ output_list <- function(obs_r, act_r,
                  final_table = final_table, 
                  user_SE = user_SE,
                  analysis_SE = analysis_SE, 
+                 needtworows = needtworows,
                  Fig_ITCV = Fig_ITCV,
                  Fig_RIR = Fig_RIR)
   result <- result[!is.na(result)]

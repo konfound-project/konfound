@@ -190,10 +190,10 @@ test_that("two by two works with pkonfound", {
     expect_equal(output12, 5)
 
     output13 <- pkonfound(a = 18, b = 3, c = 12, d = 1, test = "chisq", to_return = "raw_output")$RIR_primary
-    expect_equal(output13, 6)
+    expect_equal(output13, 2)
 
     output14 <- pkonfound(a = 18, b = 1, c = 12, d = 1, switch_trm = FALSE, to_return = "raw_output")$RIR_primary
-    expect_equal(output14, 5)
+    expect_equal(output14, 2)
 })
 
 test_that("pkonfound printed output works for a positive case", {
