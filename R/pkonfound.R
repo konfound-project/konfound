@@ -119,50 +119,54 @@
                       sdy = NA,
                       R2 = NA,
                       far_bound = 0,
-                      ## by default is zero
-                      ## alternative is one
                       eff_thr = NA,
                       FR2max = 0,
                       FR2max_multiplier = 1.3,
                       to_return = "print") {
-  if ("table" %in% to_return) stop("a table can only be
-                                   output when using konfound")
+  if ("table" %in% to_return) stop("a table can only be output when using konfound")
   
-   if (index == "COP") {
-     
-     # if user does not specify eff_thr then set default as 0 
-     if (is.na(eff_thr)) {eff_thr <- 0}  
-     
-     out <- test_cop(
-       est_eff = est_eff, # unstandardized
-       std_err = std_err, # unstandardized
-       n_obs = n_obs,
-       n_covariates, # the number of z 
-       sdx = sdx,
-       sdy = sdy,
-       R2 = R2, # NOT the adjusted R2, should be the original R2
-       eff_thr = eff_thr, # this is the unstandardized version
-       FR2max_multiplier = FR2max_multiplier,
-       FR2max = FR2max, # NOT the adjusted R2, should be the original R2
-       alpha = alpha, 
-       tails = tails, 
-       to_return = to_return)
-  
-   } else if (index == "PSE") {
-     
-     out <- test_pse(
-       est_eff = est_eff,
-       std_err = std_err,
-       n_obs = n_obs,
-       n_covariates = n_covariates, # the number of z
-       sdx = sdx,
-       sdy = sdy,
-       R2 = R2,
-       eff_thr = eff_thr,
-       to_return = to_return
-     )
-     
-   } else if (model_type == "logistic" & !is.null(n_treat)) {
+  if (index == "COP") {
+    if (is.na(eff_thr)) {eff_thr <- 0}
+    out <- test_cop(
+      est_eff = est_eff,
+      std_err = std_err,
+      n_obs = n_obs,
+      n_covariates,
+      sdx = sdx,
+      sdy = sdy,
+      R2 = R2,
+      eff_thr = eff_thr,
+      FR2max_multiplier = FR2max_multiplier,
+      FR2max = FR2max,
+      alpha = alpha,
+      tails = tails,
+      to_return = to_return)
+  } else if (index == "PSE") {
+    out <- test_pse(
+      est_eff = est_eff,
+      std_err = std_err,
+      n_obs = n_obs,
+      n_covariates = n_covariates,
+      sdx = sdx,
+      sdy = sdy,
+      R2 = R2,
+      eff_thr = eff_thr,
+      to_return = to_return
+    )
+  } else if (index == "cRIR") {
+    out <- test_cRIR(
+      est_eff = est_eff,
+      std_err = std_err,
+      n_obs = n_obs,
+      n_covariates = n_covariates,
+      sdx = sdx,
+      sdy = sdy,
+      R2 = R2,
+      alpha = alpha,
+      tails = tails,
+      to_return = to_return
+    )
+  } else if (model_type == "logistic" & !is.null(n_treat)) {
     out <- test_sensitivity_ln(
       est_eff = est_eff,
       std_err = std_err,
@@ -176,30 +180,10 @@
       switch_trm = switch_trm,
       replace = replace
     )
-  } else if(!is.null(a)) {
-    # error handling
+  } else if (!is.null(a)) {
     if (is.null(a) | is.null(b) | is.null(c) | is.null(d)) {
-      stop("Please enter values for a, b, c,
-           and d to use the 2 x 2 table functionality")
+      stop("Please enter values for a, b, c, and d to use the 2 x 2 table functionality")
     }
-    
-    out <- tkonfound(a = a, 
-                     b = b, 
-                     c =c, 
-                     d = d, 
-                     alpha = alpha, 
-                     switch_trm = switch_trm,
-                     test = test, 
-                     replace = replace,
-                     to_return = to_return)
-    
-  } else if(!is.null(two_by_two_table)) {
-    
-    a <- dplyr::pull(two_by_two_table[1, 1])
-    b <- dplyr::pull(two_by_two_table[1, 2])
-    c <- dplyr::pull(two_by_two_table[2, 1])
-    d <- dplyr::pull(two_by_two_table[2, 2])
-    
     out <- tkonfound(a = a, 
                      b = b, 
                      c = c, 
@@ -209,36 +193,47 @@
                      test = test, 
                      replace = replace,
                      to_return = to_return)
-  
+  } else if (!is.null(two_by_two_table)) {
+    a <- dplyr::pull(two_by_two_table[1, 1])
+    b <- dplyr::pull(two_by_two_table[1, 2])
+    c <- dplyr::pull(two_by_two_table[2, 1])
+    d <- dplyr::pull(two_by_two_table[2, 2])
+    out <- tkonfound(a = a, 
+                     b = b, 
+                     c = c, 
+                     d = d, 
+                     alpha = alpha, 
+                     switch_trm = switch_trm,
+                     test = test, 
+                     replace = replace,
+                     to_return = to_return)
   } else if (model_type == "ols") {
-    
-  out <- test_sensitivity(
-    est_eff = est_eff,
-    std_err = std_err,
-    n_obs = n_obs,
-    n_covariates = n_covariates,
-    sdx = sdx,
-    sdy = sdy,
-    R2 = R2,
-    alpha = alpha,
-    tails = tails,
-    index = index,
-    nu = nu,
-    far_bound = far_bound,
-    eff_thr = eff_thr,
-    to_return = to_return
-  )
-} 
-      
-if (!is.null(out)) { # dealing with a strange print issue
-  return(out)
-}
-
-if (to_return == "print") {
-  cat("\n")
-  message("For other forms of output, run
-          ?pkonfound and inspect the to_return argument")
-}
-
-message("For models fit in R, consider use of konfound().")
+    out <- test_sensitivity(
+      est_eff = est_eff,
+      std_err = std_err,
+      n_obs = n_obs,
+      n_covariates = n_covariates,
+      sdx = sdx,
+      sdy = sdy,
+      R2 = R2,
+      alpha = alpha,
+      tails = tails,
+      index = index,
+      nu = nu,
+      far_bound = far_bound,
+      eff_thr = eff_thr,
+      to_return = to_return
+    )
+  }
+  
+  if (!is.null(out)) {
+    return(out)
+  }
+  
+  if (to_return == "print") {
+    cat("\n")
+    message("For other forms of output, run ?pkonfound and inspect the to_return argument")
+  }
+  
+  message("For models fit in R, consider use of konfound().")
 }
