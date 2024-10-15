@@ -118,6 +118,7 @@ pkonfound prints the bias and the number of cases that would have to be replaced
   \item{starting_table}{Observed 2 by 2 table before replacement and switching. Implied table for logistic regression.}
   \item{final_table}{The 2 by 2 table after replacement and switching.}
   \item{user_SE}{user entered standard error. Only applicable for logistic regression.}
+  \item{needtworows}{whether double row switches are needed.}
   \item{analysis_SE}{the standard error used to generate a plausible 2 by 2 table. Only applicable for logistic regression.}
   \item{Fig_ITCV}{figure for ITCV.} 
   \item{Fig_RIR}{figure for RIR.}
