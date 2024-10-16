@@ -162,7 +162,20 @@
        to_return = to_return
      )
      
-   } else if (model_type == "logistic" & !is.null(n_treat)) {
+   } else if (index == "cRIR") {
+  out <- test_cRIR(
+    est_eff = est_eff,
+    std_err = std_err,
+    n_obs = n_obs,
+    n_covariates = n_covariates,
+    sdx = sdx,
+    sdy = sdy,
+    R2 = R2,
+    alpha = alpha,
+    tails = tails,
+    to_return = to_return
+  )
+}else if (model_type == "logistic" & !is.null(n_treat)) {
     out <- test_sensitivity_ln(
       est_eff = est_eff,
       std_err = std_err,
