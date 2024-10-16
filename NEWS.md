@@ -1,3 +1,7 @@
+# konfound 1.0.1
+
+* minor edits in advance of CRAN submit
+
 # konfound 1.0.0
 
 * major release of changes that were being made in the "newitcv" branch:
