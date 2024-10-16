@@ -19,3 +19,5 @@ table-of-features.xlsx
 .DS_Store
 .DS_Store
 docs
+/doc/
+/Meta/
