@@ -1,3 +1,8 @@
+# konfound 1.0.2
+
+* edits to README and vignette
+* small edit to DESCRIPTION
+
 # konfound 1.0.1
 
 * minor edits in advance of CRAN submit
