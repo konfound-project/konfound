@@ -21,3 +21,13 @@ test_cRIR <- function(est_eff, std_err, n_obs, n_covariates = 1, sdx = NA, sdy =
     return(list(cond_RIRpi_null = cond_RIRpi_null, cond_RIRpi_fixedY = cond_RIRpi_fixedY, cond_RIRpi_rxyz = cond_RIRpi_rxyz))
   }
 }
+
+## NOTE for print output
+### general introduction to RIR 
+### This application of RIR quantifies how much data to replace when the properties of the replacement data are specified as conditional on other terms already in the model.
+## If the replacement data points have a fixed value, then RIR = %.3f.\n", cond_RIR_fixedY
+## If the replacement data points follow a null distribution, then RIR = %.3f.\n", cond_RIR_null
+## If the replacement data points satisfy rxy|Z = 0, then RIR = %.3f.\n", cond_RIR_rxyz
+
+## NOTE for raw output
+## the three RIR with documentation 
