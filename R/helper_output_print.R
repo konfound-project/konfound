@@ -52,8 +52,8 @@ output_print <- function(n_covariates,
                          sdx = NA,
                          sdy = NA,
                          R2 = NA,
-                         rxcv = NA,
-                         rycv = NA) {
+                         rxcv = uncond_rxcv,
+                         rycv = uncond_rycv) {
   if (index == "RIR"){
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
     if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
