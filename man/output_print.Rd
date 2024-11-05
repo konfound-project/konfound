@@ -24,7 +24,9 @@ output_print(
   sdy = NA,
   R2 = NA,
   rxcv = NA,
-  rycv = NA
+  rycv = NA,
+  rxcvGz,
+  rycvGz
 )
 }
 \arguments{
