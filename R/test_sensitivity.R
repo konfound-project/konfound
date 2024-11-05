@@ -344,7 +344,10 @@ test_sensitivity <- function(est_eff,
                        needtworows = NA, 
                        Fig_ITCV =
                          plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r),
-                       Fig_RIR = plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff)))
+                       Fig_RIR = plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff),
+                       cond_RIRpi_null = NA, cond_RIRpi_fixedY = NA, cond_RIRpi_rxyz = NA,
+                       cond_RIR_null = NA, cond_RIR_fixedY = NA, cond_RIR_rxyz = NA
+                       ))
   } else if (to_return == "thresh_plot") { # this still makes sense for NLMs (just not quite as accurate)
     return(plot_threshold(beta_threshold = beta_threshold, est_eff = est_eff))
   } else if (to_return == "corr_plot") {
