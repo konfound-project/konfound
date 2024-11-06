@@ -22,7 +22,7 @@ test_cRIR <- function(est_eff, std_err, n_obs, n_covariates = 1, sdx = NA, sdy =
   # Return results based on user's preference
   if (to_return == "print") {
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
-    cat("This application of RIR quantifies how much data to replace when the properties of the replacement data are specified as conditional on other terms already in the model.")  
+    cat("This application of RIR quantifies how much data we expect to have to replace when the properties of the replacement data are specified as conditional on other terms already in the model.")  
     cat(sprintf("If the replacement data points follow a null distribution, then RIR = %.3f.\n", cond_RIR_null))
     if (!is.na(cond_RIR_fixedY)) cat(sprintf("If the replacement data points have a fixed value, then RIR = %.3f.\n", cond_RIR_fixedY))
     if (!is.na(cond_RIR_rxyz)) cat(sprintf("If the replacement data points satisfy rxy|Z = 0, then RIR = %.3f.\n", cond_RIR_rxyz))
