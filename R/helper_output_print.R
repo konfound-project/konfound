@@ -334,7 +334,7 @@ output_print <- function(n_covariates,
     if (is.na(sdx) && is.na(sdy) && is.na(R2)) {
         cat("For calculation of unconditional ITCV using pkonfound(), additionally include")
         cat("\n")
-        cat("the R2, sdx, and sdy as input, and request raw output.")
+        cat("the R2, sdx, and sdy as input.")
         cat("\n")
         cat("\n")
       }
