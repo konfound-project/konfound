@@ -70,6 +70,10 @@ statistical significance determination.}
 \item{rxcv}{the correlation between x and CV.}
 
 \item{rycv}{the correlation between y and CV.}
+
+\item{rxcvGz}{the correlation between predictor of interest and CV necessary to nullify the inference for smallest impact, conditioning on all observed covariates.}
+
+\item{rycvGz}{the correlation between outcome and CV necessary to nullify the inference for smallest impact, conditioning on all observed covariates.}
 }
 \description{
 This function outputs printed text for various indices such as RIR
