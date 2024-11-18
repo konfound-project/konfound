@@ -1,3 +1,7 @@
+# konfound 1.0.3
+
+* XX
+
 # konfound 1.0.2
 
 * edits to README and vignette
