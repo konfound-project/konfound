@@ -1,4 +1,4 @@
-# konfound 1.0.3
+# konfound 1.0.3 (IN DEVELOPMENT)
 
 * XX
 
