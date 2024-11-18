@@ -1,6 +1,6 @@
 # konfound 1.0.3 (IN DEVELOPMENT)
 
-* XX
+* fix sign problems in print output for some cases 
 
 # konfound 1.0.2
 
