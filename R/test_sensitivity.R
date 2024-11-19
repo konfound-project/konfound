@@ -353,7 +353,7 @@ test_sensitivity <- function(est_eff,
   } else if (to_return == "corr_plot") {
     return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
   } else if (to_return == "print") {
-    return(output_print(n_covariates, est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index, far_bound, R2))
+    return(output_print(n_covariates, est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index, far_bound, sdx, sdy, R2, uncond_rxcv, uncond_rycv, rxcvGz, rycvGz))
   } else if (to_return == "table") {
     return(output_table(model_object, tested_variable))
   } else {

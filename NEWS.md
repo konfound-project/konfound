@@ -1,3 +1,16 @@
+# konfound 1.0.3 (IN DEVELOPMENT)
+
+* fix sign problems in print output for some cases 
+
+# konfound 1.0.2
+
+* edits to README and vignette
+* small edit to DESCRIPTION
+
+# konfound 1.0.1
+
+* minor edits in advance of CRAN submit
+
 # konfound 1.0.0
 
 * major release of changes that were being made in the "newitcv" branch:
