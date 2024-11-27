@@ -282,6 +282,24 @@
   <dt>Fig_RIR</dt>
 <dd><p>figure for RIR.</p></dd>
 
+  <dt>cond_RIRpi_null</dt>
+<dd><p>Conditional RIR as % of total sample if the replacement data points follow a null distribution.</p></dd>
+
+  <dt>cond_RIRpi_fixedY</dt>
+<dd><p>Conditional RIR as % of total sample if the replacement data points have a fixed value.</p></dd>
+
+  <dt>cond_RIRpi_rxyz</dt>
+<dd><p>Conditional RIR as % of total sample if the replacement data points satisfy rxy|Z = 0.</p></dd>
+
+  <dt>cond_RIR_null</dt>
+<dd><p>Conditional RIR if the replacement data points follow a null distribution.</p></dd>
+
+  <dt>cond_RIR_fixedY</dt>
+<dd><p>Conditional RIR if the replacement data points have a fixed value.</p></dd>
+
+  <dt>cond_RIR_rxyz</dt>
+<dd><p>Conditional RIR if the replacement data points satisfy rxy|Z = 0.</p></dd>
+
 
 </dl></div>
 
@@ -642,24 +660,6 @@
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Use of `figTable$ModelLabel` is discouraged.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Use `ModelLabel` instead.</span>
 <span class="r-plt img"><img src="pkonfound-3.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR pi (fixed y)`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4842727</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR (fixed y)`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 140.4391</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR pi (null)`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2818584</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR (null)`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 81.73894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR pi (rxyGz)`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4977821</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`conditional RIR (rxyGz)`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 144.3568</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># use pkonfound to calculate rxcv and rycv when preserving standard error</span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">.5</span>, std_err <span class="op">=</span> <span class="fl">.056</span>, n_obs <span class="op">=</span> <span class="fl">6174</span>, eff_thr <span class="op">=</span> <span class="fl">.1</span>,</span></span>
