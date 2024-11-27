@@ -593,7 +593,10 @@ citation <- paste0(
                   analysis_SE = std_err,
                   needtworows = final_solution$needtworows,
                   Fig_ITCV = NA,
-                  Fig_RIR = NA))
+                  Fig_RIR = NA,
+                  cond_RIRpi_null = NA, cond_RIRpi_fixedY = NA, cond_RIRpi_rxyz = NA,
+                  cond_RIR_null = NA, cond_RIR_fixedY = NA, cond_RIR_rxyz = NA
+                  ))
 
   } else  if (to_return == "print") {
 

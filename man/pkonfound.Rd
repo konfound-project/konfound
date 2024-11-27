@@ -122,6 +122,12 @@ pkonfound prints the bias and the number of cases that would have to be replaced
   \item{analysis_SE}{the standard error used to generate a plausible 2 by 2 table. Only applicable for logistic regression.}
   \item{Fig_ITCV}{figure for ITCV.} 
   \item{Fig_RIR}{figure for RIR.}
+  \item{cond_RIRpi_null}{Conditional RIR as \% of total sample if the replacement data points follow a null distribution.}
+  \item{cond_RIRpi_fixedY}{Conditional RIR as \% of total sample if the replacement data points have a fixed value.}
+  \item{cond_RIRpi_rxyz}{Conditional RIR as \% of total sample if the replacement data points satisfy rxy|Z = 0.}
+  \item{cond_RIR_null}{Conditional RIR if the replacement data points follow a null distribution.}
+  \item{cond_RIR_fixedY}{Conditional RIR if the replacement data points have a fixed value.}
+  \item{cond_RIR_rxyz}{Conditional RIR if the replacement data points satisfy rxy|Z = 0.}
 }
 }
 \description{

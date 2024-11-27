@@ -10,7 +10,10 @@ output_list <- function(obs_r, act_r,
                         starting_table, final_table, 
                         user_SE, analysis_SE,
                         needtworows, 
-                        Fig_ITCV, Fig_RIR) {
+                        Fig_ITCV, Fig_RIR,
+                        cond_RIRpi_null, cond_RIRpi_fixedY, cond_RIRpi_rxyz,
+                        cond_RIR_null, cond_RIR_fixedY, cond_RIR_rxyz
+                        ) {
   result <- list(obs_r = obs_r,
                  act_r = act_r, 
                  critical_r = critical_r, 
@@ -43,7 +46,14 @@ output_list <- function(obs_r, act_r,
                  analysis_SE = analysis_SE, 
                  needtworows = needtworows,
                  Fig_ITCV = Fig_ITCV,
-                 Fig_RIR = Fig_RIR)
+                 Fig_RIR = Fig_RIR,
+                 cond_RIRpi_null = cond_RIRpi_null, 
+                 cond_RIRpi_fixedY = cond_RIRpi_fixedY, 
+                 cond_RIRpi_rxyz = cond_RIRpi_rxyz,
+                 cond_RIR_null = cond_RIR_null, 
+                 cond_RIR_fixedY = cond_RIR_fixedY, 
+                 cond_RIR_rxyz = cond_RIR_rxyz
+                 )
   result <- result[!is.na(result)]
   message("For interpretation, check out to_return = 'print'.")
   return(result)

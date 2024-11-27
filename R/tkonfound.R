@@ -482,7 +482,14 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
                      analysis_SE = NA,
                      needtworows = allnotenough,
                      Fig_ITCV = NA,
-                     Fig_RIR = NA))
+                     Fig_RIR = NA,
+                     cond_RIRpi_null = NA, 
+                     cond_RIRpi_fixedY = NA, 
+                     cond_RIRpi_rxyz = NA,
+                     cond_RIR_null = NA, 
+                     cond_RIR_fixedY = NA, 
+                     cond_RIR_rxyz = NA
+                     ))
     result <- list(info1,
                    info2,
                    conclusion1,

@@ -96,12 +96,12 @@ test_that("test_cop outputs the correct language and values when to_return is 'p
         "",
         "Use to_return = \"raw_output\" to see more specific results and graphic",             
         "presentation of the result.",                     
-        "",                                                                    
-        "This function also calculates conditional RIR that invalidates the statistical inference.",  
-        "",                                                                    
-        "If the replacement data points have a fixed value, then RIR = 80.035.",  
-        "If the replacement data points follow a null distribution, then RIR = 55.317.",                                       
-        "If the replacement data points satisfy rxy|Z = 0, then RIR = 56.317."
+        ""                                                                    
+#        "This function also calculates conditional RIR that invalidates the statistical inference.",  
+#        "",                                                                    
+#        "If the replacement data points have a fixed value, then RIR = 80.035.",  
+#        "If the replacement data points follow a null distribution, then RIR = 55.317.",                                       
+#        "If the replacement data points satisfy rxy|Z = 0, then RIR = 56.317."
     )
     
     # Check each line against expected

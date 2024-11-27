@@ -281,25 +281,25 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
   ######### conditional RIR ####################
   
   # calculating critical r
-  if (est_eff < 0) {
-    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
-  } else {
-    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
-  }
-  critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 2))
+#  if (est_eff < 0) {
+#    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2) * -1
+#  } else {
+#    critical_t <- stats::qt(1 - (alpha / tails), n_obs - n_covariates - 2)
+#  }
+#  critical_r <- critical_t / sqrt((critical_t^2) + (n_obs - n_covariates - 2))
   
   # final solutions 
-  cond_RIRpi_fixedY <- (R2 - ryz^2 + ryz^2 * critical_r^2 - critical_r^2) / 
-    (R2 - ryz^2 + ryz^2 * critical_r^2)
-  cond_RIR_fixedY <- cond_RIRpi_fixedY * n_obs
+#  cond_RIRpi_fixedY <- (R2 - ryz^2 + ryz^2 * critical_r^2 - critical_r^2) / 
+#    (R2 - ryz^2 + ryz^2 * critical_r^2)
+#  cond_RIR_fixedY <- cond_RIRpi_fixedY * n_obs
   
-  cond_RIRpi_null <- 1 - sqrt(critical_r^2 / 
-                                (R2 - ryz^2 + ryz^2 * critical_r^2))
-  cond_RIR_null <- cond_RIRpi_null * n_obs
+#  cond_RIRpi_null <- 1 - sqrt(critical_r^2 / 
+#                                (R2 - ryz^2 + ryz^2 * critical_r^2))
+#  cond_RIR_null <- cond_RIRpi_null * n_obs
   
-  cond_RIRpi_rxyz <- 1 - sqrt((critical_r^2 * (1 - ryz^2)) / 
-                                (R2 - ryz^2))
-  cond_RIR_rxyz <- cond_RIRpi_rxyz * n_obs
+#  cond_RIRpi_rxyz <- 1 - sqrt((critical_r^2 * (1 - ryz^2)) / 
+#                                (R2 - ryz^2))
+#  cond_RIR_rxyz <- cond_RIRpi_rxyz * n_obs
   
   ##############################################
   ######### output #############################
@@ -323,13 +323,13 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
                   #"var(Z)" = sdz^2,
                    "var(CV)" = sdcv^2,
                    "Table" = fTable,
-                   "Figure" = fig,
-                   "conditional RIR pi (fixed y)" = cond_RIRpi_fixedY,
-                   "conditional RIR (fixed y)" = cond_RIR_fixedY,
-                   "conditional RIR pi (null)" = cond_RIRpi_null,
-                   "conditional RIR (null)" = cond_RIR_null,
-                   "conditional RIR pi (rxyGz)" = cond_RIRpi_rxyz,
-                   "conditional RIR (rxyGz)" = cond_RIR_rxyz)
+                   "Figure" = fig)
+#                   "conditional RIR pi (fixed y)" = cond_RIRpi_fixedY,
+#                   "conditional RIR (fixed y)" = cond_RIR_fixedY,
+#                   "conditional RIR pi (null)" = cond_RIRpi_null,
+#                   "conditional RIR (null)" = cond_RIR_null,
+#                   "conditional RIR pi (rxyGz)" = cond_RIRpi_rxyz,
+#                   "conditional RIR (rxyGz)" = cond_RIR_rxyz
     return(output)
   }
   
@@ -350,11 +350,6 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
     cat("\n")
     cat("Use to_return = \"raw_output\" to see more specific results and graphic\npresentation of the result.\n")
     cat("\n")
-    cat("This function also calculates conditional RIR that invalidates the statistical inference.\n")
-    cat("\n")
-    cat(sprintf("If the replacement data points have a fixed value, then RIR = %.3f.\n", cond_RIR_fixedY))
-    cat(sprintf("If the replacement data points follow a null distribution, then RIR = %.3f.\n", cond_RIR_null))
-    cat(sprintf("If the replacement data points satisfy rxy|Z = 0, then RIR = %.3f.\n", cond_RIR_rxyz))
   }
   
 }
