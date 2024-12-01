@@ -1,3 +1,36 @@
+# konfound 1.0.3 (IN DEVELOPMENT)
+
+* fix sign problems in print output for some cases 
+
+# konfound 1.0.2
+
+* edits to README and vignette
+* small edit to DESCRIPTION
+
+# konfound 1.0.1
+
+* minor edits in advance of CRAN submit
+
+# konfound 1.0.0
+
+* major release of changes that were being made in the "newitcv" branch:
+   * Includes option to specify non-zero null hypotheses
+   * Includes option to directly specify threshold for inference
+   * Improved output statements
+   * Includes full raw results for RIR and ITCV
+   * Calculation for unconditional ITCV when possible
+
+# konfound 0.5.1
+
+* minor patch for CRAN
+
+# konfound 0.5.0
+
+* edits in response to JOSS feedback, specifically:
+    * improved testing suite
+    * removal of test_all = TRUE to deal with high cyclomatic complexity
+    * improvement of coding style to be consistent and in accordance with good practice
+
 # konfound 0.4.0
 
 * major updates in advance of initial submission to the R Journal

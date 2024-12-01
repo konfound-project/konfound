@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Sarah Narvaiz, Qinyun Lin, Joshua M. Rosenberg, Kenneth A. Frank, Spiro Maroulis, Wei Wang, Ran Xu" />
+
+<meta name="date" content="2024-10-16" />
+
+<title>Introduction to konfound</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to konfound</h1>
+<h4 class="author">Sarah Narvaiz, Qinyun Lin, Joshua M. Rosenberg,
+Kenneth A. Frank, Spiro Maroulis, Wei Wang, Ran Xu</h4>
+<h4 class="date">2024-10-16</h4>
+
+
+
+<p><em>Note</em>: This is identical to the following open-access
+paper:</p>
+<blockquote>
+<p>Narvaiz, S., Lin, Q., Rosenberg, J. M., Frank, K. A., Maroulis, S.
+J., Wang, W., &amp; Xu, R. (2024). konfound: An R Sensitivity Analysis
+Package to Quantify the Robustness of Causal Inferences. <em>Journal of
+Open Source Software, 9</em>(95), 1-6. <a href="https://joss.theoj.org/papers/10.21105/joss.05779.pdf" class="uri">https://joss.theoj.org/papers/10.21105/joss.05779.pdf</a></p>
+</blockquote>
+<div id="quantifying-the-robustness-of-inferences" class="section level2">
+<h2>Quantifying the Robustness of Inferences</h2>
+<p>Sensitivity analysis, a statistical method crucial for validating
+inferences across disciplines, quantifies the conditions that could
+alter conclusions <span class="citation">(Razavi et al. 2021)</span>.
+One line of work is rooted in linear models and foregrounds the
+sensitivity of inferences to the strength of omitted variables <span class="citation">(Frank 2000; Cinelli and Hazlett 2019)</span>. A more
+recent approach is rooted in the potential outcomes framework for causal
+inference and foregrounds how hypothetical changes in a sample would
+alter an inference if such cases were otherwise observed <span class="citation">(Frank and Min 2007; Frank et al. 2008, 2013; Xu et al.
+2019)</span>.</p>
+<p>One sensitivity measure is the <em>Impact Threshold of a Confounding
+Variable</em>, or ITCV, which generates statements about the correlation
+of an omitted, confounding variable with both a predictor of interest
+and the outcome <span class="citation">(Frank 2000)</span>. The ITCV
+index can be calculated for any linear model. The <em>Robustness of an
+Inference to Replacement</em>, RIR, assesses how replacing a certain
+percentage of cases with counterfactuals of zero treatment effect could
+nullify an inference <span class="citation">(Frank et al. 2013)</span>.
+The RIR index is more general than the ITCV index.</p>
+<p>The sensitivity analysis techniques we describe in this paper and
+implement in the <code>konfound</code> R package differ from others in
+several ways. Unlike <span class="citation">Linden, Mathur, and
+VanderWeele (2020)</span>, whose approach focuses on dichotomous
+outcomes and omitted variable sensitivity, our approach extends to
+continuous outcomes and evaluates both changes in estimates and standard
+errors. <span class="citation">Oster (2019)</span> focuses only on
+selection into the treatment based on unobservable variables versus
+observable variables necessary to nullify an estimate. The ITCV index
+focuses on the relationship of the unobservable to the predictor of
+interest and to the outcome. More generally, many others used
+simulation-based approaches, while our approach uses closed-form
+expressions to generate a single term representing sensitivity. These
+techniques, along with others, are reviewed and discussed (along with
+the ITCV and RIR approaches) in <span class="citation">Frank et al.
+(2023)</span>.</p>
+<p>We have implemented the calculation of both the ITCV and RIR indices
+in the <code>konfound</code> R package. This package is intended to
+provide an easy-to-use and principled set of sensitivity techniques that
+are suitable for a range of model and dependent variable types and use
+cases. Its audience is broad: primarily social scientists, but also
+interested individuals in other disciplines (e.g., the health sciences).
+This paper provides an overview of two core functions within the
+<code>konfound</code> package, each of which can calculate the ITCV and
+RIR indices: <code>konfound()</code> and <code>pkonfound()</code>. These
+functions allow users to calculate the robustness of inferences using a
+model estimated (with R) or using information about a model from a
+published study, respectively.</p>
+<p>The <code>konfound</code> package is available from the Comprehensive
+R Archive Network (CRAN) at <a href="https://CRAN.R-project.org/package=konfound">https://CRAN.R-project.org/package=konfound</a>;
+it can be installed via the <code>install.packages(“konfound”)</code>
+function within R.</p>
+</div>
+<div id="functionality" class="section level2">
+<h2>Functionality</h2>
+<div id="konfound" class="section level3">
+<h3><strong>konfound</strong></h3>
+<p>This function calculates the ITCV and RIR for models fitted in R.
+This function currently works for linear models fitted with
+<code>lm()</code>, <code>glm()</code>, and <code>lmer()</code>. The
+output printed in the R console is the bias that must be present and the
+number of cases that would have to be replaced with cases for which
+there is no effect to nullify the inference.</p>
+<div id="example-for-linear-models-fit-with-lm" class="section level4">
+<h4><em>Example for linear models fit with lm()</em></h4>
+<p>For this example, we will use the <code>concord1</code> dataset built
+into the <code>konfound</code> package. This dataset comes from a study
+that examines the causal mechanism behind household water conservation
+in a U.S. city.</p>
+<p>We will estimate the effect of the following variables on household
+water consumption in 1981:</p>
+<ul>
+<li>household water consumption in 1980 (<code>water80</code>)</li>
+<li>household income (<code>income</code>)</li>
+<li>education level of household survey respondent
+(<code>educat</code>)</li>
+<li>retirement status of respondent (<code>retire</code>)</li>
+<li>number of individuals in household in 1980
+(<code>peop80</code>)</li>
+</ul>
+<p>Here is the code we use to fit a linear model using these
+variables:</p>
+<pre><code>m &lt;- lm(water81 ~ water80 + income + educat + retire + peop80, data = concord1)</code></pre>
+<p>The results of the model fitting (which can be obtained by running
+<code>summary(m)</code> within R) indicate that all of the predictors
+apart from <code>retire</code> have a statistically significant effect
+on water consumption. In the example, we focus on the coefficient for
+<code>peop80</code> (β = 225.198, <em>SE</em> = 28.704, <em>t</em> =
+7.845, <em>p</em> &lt; .001).</p>
+</div>
+<div id="itcv-example-for-linear-models-fit-with-lm" class="section level4">
+<h4><em>ITCV example for linear models fit with lm()</em></h4>
+<p>Now, let’s examine the robustness of the <code>peop80</code> effect
+by calculating the ITCV:</p>
+<pre><code>library(konfound)
+
+konfound(m, peop80, index = &quot;IT&quot;)
+
+## Impact Threshold for a Confounding Variable:
+## The minimum impact of an omitted variable to invalidate an inference
+## for a null hypothesis of 0 effect is based on a correlation of 0.52 with 
+## the outcome and at  0.52  with the predictor of interest (conditioning on
+## observed covariates) based on a threshold of 0.089 for statistical 
+## significance (alpha = 0.05).
+## 
+## Correspondingly the impact of an omitted variable (as defined in Frank 
+## 2000) must be 0.52 X 0.52 = 0.27 to invalidate an inference for a null 
+## hypothesis of 0 effect. See Frank (2000) for a description of the method.
+## 
+## Citation:
+## Frank, K. (2000). Impact of a confounding variable on the
+## inference of a regression coefficient. Sociological Methods and Research,
+## 29(2), 147-194
+
+## For more detailed output, consider setting `to_return` to table
+
+## To consider other predictors of interest, consider setting `test_all` to
+## TRUE.</code></pre>
+<p>The output indicates that to invalidate the inference that
+<code>peop80</code> has an effect on <code>water81</code> using
+statistical significance as a threshold (e.g., <em>p</em> = .05), an
+omitted variable would have to be correlated at 0.520 with
+<code>peop80</code> and 0.520 with <code>water81</code>, conditioning on
+observed covariates.</p>
+</div>
+<div id="rir-example-for-linear-models-fit-with-lm" class="section level4">
+<h4><em>RIR example for linear models fit with lm()</em></h4>
+<p>We can also examine the robustness by calculating the RIR:</p>
+<pre><code>konfound(m, peop80, index = &quot;RIR&quot;) 
+
+## Robustness of Inference to Replacement (RIR):
+## To invalidate an inference,  74.955 % of the 
+## estimate would have to be due to bias. 
+## This is based on a threshold of 56.4 for statistical 
+## significance (alpha = 0.05).
+##
+## To invalidate an inference,  372  observations would 
+## have to be replaced with cases for which the effect is 0 (RIR = 372).
+## 
+## See Frank et al. (2013) for a description of the method.
+## 
+## Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+## What would it take to change an inference?
+## Using Rubin&#39;s causal model to interpret the robustness of causal inferences.
+## Education, Evaluation and Policy Analysis, 35 437-460.
+
+## For more detailed output, consider setting `to_return` to table
+
+## To consider other predictors of interest, 
+## consider setting `test_all` to TRUE.</code></pre>
+<p>The output presents two interpretations of the RIR. First, 74.956% of
+the estimated effect of <code>peop80</code> on <code>water81</code>
+would have to be attributed to bias to invalidate the inference.
+Equivalently, we would expect to have to replace 372 out of the 486
+households (about 76%) with cases for which <code>peop80</code> had no
+effect to invalidate the inference. We have created guidelines for
+evaluating the RIR relative to the bias accounted for by observed
+covariates or published norms <span class="citation">(Frank et al. 2013,
+2021)</span>.</p>
+</div>
+</div>
+<div id="pkonfound" class="section level3">
+<h3><strong>pkonfound</strong></h3>
+<p>This function quantifies the sensitivity for analyses that have
+already been conducted, such as in an already-published study or from
+analysis carried out using other software. This function calculates how
+much bias there must be in an estimate to invalidate/sustain an
+inference, which can be interpreted as the percentage of cases that
+would have to be replaced (e.g., with cases for which the predictor had
+no effect on the outcome) to invalidate the inference. It also
+calculates the impact of an omitted variable necessary to
+invalidate/sustain an inference for a regression coefficient, where
+impact is defined as the correlation between the omitted variable and
+the focal predictor multiplied with the correlation between the omitted
+variable and the outcome.</p>
+<div id="itcv-example-for-a-regression-analysis" class="section level4">
+<h4><em>ITCV example for a regression analysis</em></h4>
+<p>For this example, the following estimated quantities from an
+estimated regression model would be entered into the
+<code>pkonfound</code> function: unstandardized beta coefficient for the
+predictor of interest (<code>est_eff</code> = 2), estimated standard
+error (<code>std_err</code> = .4), sample size (<code>n_obs</code> =
+100), and the number of covariates (<code>n_covariates</code> = 3), as
+follows:</p>
+<pre><code>pkonfound(2, .4, 100, 3, index = &quot;IT&quot;)
+
+## Impact Threshold for a Confounding Variable:
+## The minimum impact of an omitted variable to invalidate an inference for 
+## a null hypothesis of 0 effect is based on a correlation of  0.568 with 
+## the outcome and at  0.568  with the predictor of interest (conditioning 
+## on observed covariates) based on a threshold of 0.201 for statistical 
+## significance (alpha = 0.05).
+## 
+## Correspondingly the impact of an omitted variable (as defined in Frank 
+## 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null
+## hypothesis of 0 effect. See Frank (2000) for a description of the method.
+## 
+## Citation:
+## Frank, K. (2000). Impact of a confounding variable on the inference of a 
+## regression coefficient. Sociological Methods and Research, 29 (2), 147-194
+
+## For other forms of output, run ?pkonfound and inspect the to_return argument
+
+## For models fit in R, consider use of konfound().</code></pre>
+</div>
+<div id="rir-example-for-a-regression-analysis" class="section level4">
+<h4><em>RIR example for a regression analysis</em></h4>
+<p>We can also use the same inputs to calculate output for the RIR
+index:</p>
+<pre><code>pkonfound(2, .4, 100, 3, index = &quot;RIR&quot;)
+
+## Robustness of Inference to Replacement (RIR):
+## To invalidate an inference,  60.29 % of the estimate would have to be 
+## due to bias. This is based on a threshold of 0.794 for statistical 
+## significance (alpha = 0.05).
+## 
+## To invalidate an inference,  60  observations would have to be replaced 
+## with cases for which the effect is 0 (RIR = 60).
+## 
+## See Frank et al. (2013) for a description of the method.
+## 
+## Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+## What would it take to change an inference?
+## Using Rubin&#39;s causal model to interpret the robustness of causal inferences.
+## Education, Evaluation and Policy Analysis, 35 437-460.
+
+## For other forms of output, run ?pkonfound and inspect the to_return argument
+
+## For models fit in R, consider use of konfound().</code></pre>
+</div>
+</div>
+</div>
+<div id="doing-and-learning-more" class="section level2">
+<h2>Doing and Learning More</h2>
+<p>We have created a website including a Shiny interactive web
+application at <a href="http://konfound-it.com">http://konfound-it.com</a> that can be
+applied to linear models, 2x2 tables resulting corresponding to
+treatment and control by success and failure conditions, and logistic
+regression models. We are also developing extensions of the sensitivity
+analysis techniques described in this paper, including preserving the
+standard error <span class="citation">(Frank et al. 2023)</span> and
+calculating the coefficient of proportionality <span class="citation">(Frank et al. 2022)</span> for ITCV analyses.
+Functionality for designs including mediation, hazard functions,
+differences in difference, and regression discontinuity are also
+presently under development. Additional documentation on the R package
+and its future extensions are available at the <a href="http://konfound-it.com">http://konfound-it.com</a> website.</p>
+</div>
+<div id="acknowledgements" class="section level2">
+<h2>Acknowledgements</h2>
+<p>The research reported here was supported by the Institute of
+Education Sciences, U.S. Department of Education, through Grant
+R305D220022 to Michigan State University. The opinions expressed are
+those of the authors and do not represent views of the Institute or the
+U.S. Department of Education.</p>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-cinelli2019" class="csl-entry">
+Cinelli, C., and C. Hazlett. 2019. <span>“<span class="nocase">Making
+Sense of Sensitivity: Extending Omitted Variable Bias</span>.”</span>
+<em>Journal of the Royal Statistical Society Series B: Statistical
+Methodology</em> 82 (1): 39–67. <a href="https://doi.org/10.1111/rssb.12348">https://doi.org/10.1111/rssb.12348</a>.
+</div>
+<div id="ref-frank2000" class="csl-entry">
+Frank, K. A. 2000. <span>“Impact of a <span>Confounding</span>
+<span>Variable</span> on a <span>Regression</span>
+<span>Coefficient</span>.”</span> <em>Sociological Methods &amp;
+Research</em> 29 (2): 147–94. <a href="https://doi.org/10.1177/0049124100029002001">https://doi.org/10.1177/0049124100029002001</a>.
+</div>
+<div id="ref-frank2022" class="csl-entry">
+Frank, K. A., Qinyun Lin, Spiro Maroulis, Shimeng Dai, Nicole Jess,
+Hung-chang Lin, Sarah Maestrales, Ellen Searle, Jordan Tait, et al.
+2022. <span>“Improving Oster’s <span class="math inline">\(\delta\)</span>*: Exact Calculation for the
+Coefficient of Proportionality Without Subjective Specification of a
+Baseline Model.”</span> <em>Ellen and Tait, Jordan, Improving Oster’s
+<span class="math inline">\(\delta\)</span>*: Exact Calculation for the
+Coefficient of Proportionality Without Subjective Specification of a
+Baseline Model (December 16, 2022)</em>. <a href="https://doi.org/10.2139/ssrn.4305243">https://doi.org/10.2139/ssrn.4305243</a>.
+</div>
+<div id="ref-frank2021" class="csl-entry">
+Frank, K. A., Q. Lin, S. Maroulis, A. S. Mueller, R. Xu, J. M.
+Rosenberg, C. S. Hayter, et al. 2021. <span>“Hypothetical Case
+Replacement Can Be Used to Quantify the Robustness of Trial
+Results.”</span> <em>Journal of Clinical Epidemiology</em> 134: 150–59.
+<a href="https://doi.org/10.1016/j.jclinepi.2021.01.025">https://doi.org/10.1016/j.jclinepi.2021.01.025</a>.
+</div>
+<div id="ref-frank2023" class="csl-entry">
+Frank, K. A., Q. Lin, R. Xu, S. Maroulis, and A. Mueller. 2023.
+<span>“Quantifying the Robustness of Causal Inferences: Sensitivity
+Analysis for Pragmatic Social Science.”</span> <em>Social Science
+Research</em> 110 (February). <a href="https://doi.org/10.1016/j.ssresearch.2022.102815">https://doi.org/10.1016/j.ssresearch.2022.102815</a>.
+</div>
+<div id="ref-frank2013" class="csl-entry">
+Frank, K. A., S. J. Maroulis, M. Q. Duong, and B. M. Kelcey. 2013.
+<span>“What Would It Take to Change an Inference? Using Rubin’s Causal
+Model to Interpret the Robustness of Causal Inferences.”</span>
+<em>Educational Evaluation and Policy Analysis</em> 35 (4): 437–60. <a href="https://doi.org/10.3102/0162373713493129">https://doi.org/10.3102/0162373713493129</a>.
+</div>
+<div id="ref-frank2007" class="csl-entry">
+Frank, K. A., and K.-S. Min. 2007. <span>“Indices of Robustness for
+Sample Representation.”</span> <em>Sociological Methodology</em> 37 (1):
+349–92. <a href="https://doi.org/10.1111/j.1467-9531.2007.00186.x">https://doi.org/10.1111/j.1467-9531.2007.00186.x</a>.
+</div>
+<div id="ref-frank2008" class="csl-entry">
+Frank, K. A., G. Sykes, D. Anagnostopoulos, M. Cannata, L. Chard, A.
+Krause, and R. McCrory. 2008. <span>“Does NBPTS Certification Affect the
+Number of Colleagues a Teacher Helps with Instructional Matters?”</span>
+<em>Educational Evaluation and Policy Analysis</em> 30 (1): 3–30. <a href="https://doi.org/10.3102/0162373707313781">https://doi.org/10.3102/0162373707313781</a>.
+</div>
+<div id="ref-linden2020conducting" class="csl-entry">
+Linden, Ariel, Maya B Mathur, and Tyler J VanderWeele. 2020.
+<span>“Conducting Sensitivity Analysis for Unmeasured Confounding in
+Observational Studies Using e-Values: The Evalue Package.”</span>
+<em>The Stata Journal</em> 20 (1): 162–75. <a href="https://doi.org/10.1177/1536867X20909696">https://doi.org/10.1177/1536867X20909696</a>.
+</div>
+<div id="ref-oster2019unobservable" class="csl-entry">
+Oster, Emily. 2019. <span>“Unobservable Selection and Coefficient
+Stability: Theory and Evidence.”</span> <em>Journal of Business &amp;
+Economic Statistics</em> 37 (2): 187–204.
+</div>
+<div id="ref-razavi2021" class="csl-entry">
+Razavi, S., A. Jakeman, A. Saltelli, C. Prieur, B. Iooss, E. Borgonovo,
+E. Plischke, et al. 2021. <span>“The Future of Sensitivity Analysis: An
+Essential Discipline for Systems Modeling and Policy Support.”</span>
+<em>Environmental Modelling &amp; Software</em> 137 (March). <a href="https://doi.org/10.1016/j.envsoft.2020.104954">https://doi.org/10.1016/j.envsoft.2020.104954</a>.
+</div>
+<div id="ref-xu2019" class="csl-entry">
+Xu, R., K. A. Frank, S. J. Maroulis, and J. M. Rosenberg. 2019.
+<span>“Konfound: Command to Quantify Robustness of Causal
+Inferences.”</span> <em>The Stata Journal</em> 19 (3): 523–50. <a href="https://doi.org/10.1177/1536867X19874223">https://doi.org/10.1177/1536867X19874223</a>.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,17 +1,12 @@
 context("Checking mkonfound")
 
-library(lme4)
-library(mice)
+test_that("mkonfound produces table", {
+    d <- mkonfound(mkonfound_ex, t, df)
+    expect_is(d, "data.frame")
+})
 
-popmis <- popmis[1:100, ]
-
-testmod1 <- lm(teachpop ~ texp + sex, data = popmis)
-testmod2 <- lmer(teachpop ~ texp + sex + (1 | school), data = popmis)
-
-output1 <- konfound(testmod1, texp, test_all = TRUE, to_return = "raw_output")
-output2 <- konfound(testmod2, texp, test_all = TRUE, to_return = "raw_output")
-
-test_that("mkonfound works for lm and lmer outout", {
-  expect_is(output1, "data.frame")
-  expect_is(output2, "data.frame")
+test_that("mkonfound produces plot", {
+    p <- mkonfound(mkonfound_ex, t, df, return_plot = TRUE)
+    p
+    expect_s3_class(p, "ggplot")
 })

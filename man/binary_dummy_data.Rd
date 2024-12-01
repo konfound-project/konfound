@@ -5,7 +5,7 @@
 \alias{binary_dummy_data}
 \title{Binary dummy data}
 \format{
-A data.frame with 107 rows and 2 variables.
+A data.frame with 107 rows and 3 variables.
 }
 \description{
 This data is made-up data for use in examples.

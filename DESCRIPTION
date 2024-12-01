@@ -1,28 +1,35 @@
 Type: Package
 Package: konfound
 Title: Quantify the Robustness of Causal Inferences
-Version: 0.4.0
+Version: 1.0.3
 Authors@R: c(
     person(c("Joshua", "M"), "Rosenberg", , "jmrosen48@gmail.com", role = c("aut", "cre")),
     person("Ran", "Xu", , "ranxu@msu.edu", role = "ctb"),
     person("Qinyun", "Lin", , "linqinyun1001@gmail.com", role = "ctb"),
     person("Spiro", "Maroulis", , "Spiro.Maroulis@asu.edu", role = "ctb"),
     person("Sarah", "Narvaiz", , "snarvaiz@alum.utk.edu", role = "ctb"),
-    person(c("Kenneth", "A"), "Frank", , "kenfrank@msu.edu", role = "ctb")
+    person(c("Kenneth", "A"), "Frank", , "kenfrank@msu.edu", role = "ctb"),
+    person("Wei", "Wang", , "wwang93@vols.utk.edu", role = "ctb"),
+    person("Yunhe", "Cui", , "yunhe.cui@uconn.edu", role = "ctb"),
+    person("Gaofei", "Zhang", , "gaofei.2.zhang@uconn.edu", role = "ctb"),
+    person("Xuesen", "Cheng", , "chengxu3@msu.edu", role = "ctb"),
+    person("JiHoon", "Choi", , "choijih3@msu.edu", role = "ctb"),
+    person("Guan", "Saw", , "guan.saw@cgu.edu", role = "ctb")
   )
 Description: Statistical methods that quantify the conditions necessary to
     alter inferences, also known as sensitivity analysis, are becoming
     increasingly important to a variety of quantitative sciences. A series
     of recent works, including Frank (2000)
-    <doi:10.1177/0049124100029002001> and Frank et al.  (2013)
+    <doi:10.1177/0049124100029002001> and Frank et al. (2013)
     <doi:10.3102/0162373713493129> extend previous sensitivity analyses by
     considering the characteristics of omitted variables or unobserved
     cases that would change an inference if such variables or cases were
     observed. These analyses generate statements such as "an omitted
     variable would have to be correlated at xx with the predictor of
-    interest (e.g., treatment) and outcome to invalidate an inference of a
+    interest (e.g., the treatment) and outcome to invalidate an inference of a
     treatment effect". Or "one would have to replace pp percent of the
-    observed data with null hypothesis cases to invalidate the inference".
+    observed data with nor which the treatment had no effect to invalidate the 
+    inference".
     We implement these recent developments of sensitivity analysis and
     provide modules to calculate these two robustness indices and generate
     such statements in R. In particular, the functions konfound(),
@@ -30,8 +37,8 @@ Description: Statistical methods that quantify the conditions necessary to
     inferences for a user's own model, a single published study and
     multiple studies respectively.
 License: MIT + file LICENSE
-URL: https://github.com/jrosen48/konfound
-BugReports: https://github.com/jrosen48/konfound/issues
+URL: https://github.com/konfound-project/konfound, https://konfound-it.org/konfound/
+BugReports: https://github.com/konfound-project/konfound/issues
 Depends: 
     R (>= 2.10)
 Imports: 
@@ -41,27 +48,27 @@ Imports:
     dplyr,
     ggplot2,
     lavaan,
-    mice,
     purrr,
     rlang,
+    tidyr,
+    lme4 (>= 1.1-35.1),
     tibble,
-    tidyr
+    ggrepel,
+    pbkrtest
 Suggests: 
     covr,
     devtools,
     forcats,
-    ggrepel,
     knitr,
-    lme4,
-    margins,
-    pbkrtest,
     rmarkdown,
+    mice,
     roxygen2,
-    testthat
+    testthat,
+    Matrix (>= 1.6-2)
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Roxygen: list(roclets = c("collate", "rd", "namespace", 
               "doctest::dt_roclet"), packages = "doctest")

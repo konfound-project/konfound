@@ -1,0 +1,34 @@
+url: https://konfound-it.org/konfound/
+template:
+  bootstrap: 5
+reference:
+  - title: "Main"
+    contents:
+      - konfound
+      - pkonfound
+      - mkonfound
+  - title: "Auxiliary"
+    contents:
+      - binary_dummy_data
+      - cal_delta_star
+      - cal_rxy
+      - cal_rxz
+      - cal_ryz
+      - chisq_p
+      - concord1
+      - get_kr_df
+      - konfound_glm
+      - konfound_glm_dichotomous
+      - konfound_lm
+      - konfound_lmer
+      - mkonfound_ex
+      - output_df
+      - output_print
+      - output_table
+      - plot_correlation
+      - plot_threshold
+      - tkonfound
+      - tkonfound_fig
+      - verify_reg_Gzcv
+      - verify_reg_uncond
+      - zzz
