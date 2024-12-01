@@ -1076,10 +1076,10 @@ cal_thr_t <- function(est_eff, alpha, tails, n_obs, n_covariates) {
 # see any cell with <5 cases or negative or nan cases
 check_starting_table <- function(n_cnt, n_treat, a, b, c, d){
     check <- TRUE
-    if (!(n_cnt >= a && a >= 5 && 
-          n_cnt >= b && b >= 5 && 
-          n_treat >= c && c >= 5 && 
-          n_treat >= d && d >= 5)
+    if (!(n_cnt >= a && #a >= 5 && relaxed small cell restriction for calculations
+          n_cnt >= b && #b >= 5 && 
+          n_treat >= c && #c >= 5 && 
+          n_treat >= d) #&& d >= 5)
         || is.nan(a) || is.nan(b) || is.nan(c) || is.nan(d)) {
         check <- FALSE
     } 
