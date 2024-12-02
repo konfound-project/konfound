@@ -322,9 +322,9 @@ test_sensitivity_ln <- function(est_eff,
 
 
   ### chi-square p
-  p_start_chi <- chisq.test(final_solution$table_start,correct = FALSE)$p.value
-  p_final_chi <- chisq.test(final_solution$table_final,correct = FALSE)$p.value
-
+  p_start_chi <- suppressWarnings(chisq.test(final_solution$table_start,correct = FALSE)$p.value)
+  p_final_chi <- suppressWarnings(chisq.test(final_solution$table_final,correct = FALSE)$p.value)
+  
   ### Fisher's p
   p_start_fisher <- suppressWarnings(fisher.test(final_solution$table_start)$p.value)
   p_final_fisher <- suppressWarnings(fisher.test(final_solution$table_final)$p.value)

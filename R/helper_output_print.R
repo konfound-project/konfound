@@ -34,6 +34,8 @@
 #' @param rycv the correlation between y and CV. 
 #' @param rxcvGz the correlation between predictor of interest and CV necessary to nullify the inference for smallest impact, conditioning on all observed covariates.
 #' @param rycvGz the correlation between outcome and CV necessary to nullify the inference for smallest impact, conditioning on all observed covariates.
+#' @param benchmark_corr_product the product of the correlations of covariates Z with X and Y (Rxz * Ryz), measuring the observed association strength.
+#' @param itcv_ratio_to_benchmark the ratio of the ITCV to the benchmark_corr_product, indicating the robustness of inference.
 #' @importFrom crayon bold underline italic
 
 output_print <- function(n_covariates,
@@ -57,7 +59,9 @@ output_print <- function(n_covariates,
                          rxcv = NA,
                          rycv = NA,
                          rxcvGz,
-                         rycvGz) {
+                         rycvGz,
+                         benchmark_corr_product = NA,
+                         itcv_ratio_to_benchmark = NA) {
   if (index == "RIR"){
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
     if ((abs(est_eff) > abs(beta_threshhold)) & is.na(eff_thr) == TRUE) {
@@ -340,6 +344,26 @@ output_print <- function(n_covariates,
         cat("\n")
         cat("there are covariates included (number of covariates > 0).")
         cat("\n")
+        cat("\n")
+    }
+    
+    if (!is.na(benchmark_corr_product)) {
+        cat("Interpretation of Benchmark Correlations for ITCV:")
+        cat("\n")
+        cat(paste0("Benchmark correlation product ('benchmark_corr_product') is Rxz*Ryz = ", round(benchmark_corr_product, 4),
+                   ", showing"))
+        cat("\n")
+        cat("the association strength of all observed covariates Z with X and Y.\n")
+        cat("\n")
+        cat(paste0("The ratio ('itcv_ratio_to_benchmark') is ", round(itcv_ratio_to_benchmark, 4),
+                   ", indicating the robustness of inference."))
+        cat("\n")
+        cat("A smaller ratio means required correlations to nullify the inference would need to be")
+        cat("\n")
+        cat("much stronger than observed.\n")
+        cat("\n")
+        cat("If Z includes pretests or fixed effects, the benchmark may be inflated, making the ratio\n")
+        cat("unusually small. Interpret robustness cautiously in such cases.\n")
         cat("\n")
     }
     
