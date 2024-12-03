@@ -33,14 +33,14 @@ output4 <- konfound(m4, condition, two_by_two = TRUE, n_treat = 55, to_return = 
 # })
 
 test_that("konfound works for glm, 2x2 model", {
-    expect_equal(output4$RIR, 15)
+    expect_equal(output4$RIR_primary, 15)
 })
 
 m5 <- lm(mpg ~ wt + hp, data = mtcars)
-output5 <- konfound(m1, wt, to_return = "table")
+output5 <- konfound(m5, wt, to_return = "table")
 
 test_that("konfound returns a tibble", {
-    expect_s3_class(output5, "tbl_df")
+    expect_s3_class(output5$Main_Output, "tbl_df")
 })
 
 gss_cat$married <- ifelse(gss_cat$marital == "Married", 1, 0)
@@ -49,5 +49,5 @@ m6 <- glm(married ~ age, data = gss_cat, family = binomial(link = "logit"))
 m6_output <- konfound(m6, age, to_return = "raw_output")
 
 test_that("konfound glm works", {
-    expect_equal(as.vector(m6_output$percent_bias_to_change_inference), 35.357)
+    expect_equal(as.vector(m6_output$perc_bias_to_change), 84.00597)
 })

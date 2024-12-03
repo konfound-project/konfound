@@ -67,15 +67,7 @@ if (requireNamespace("forcats")) {
   m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
   konfound(m2, age)
 }
-
-# using lme4 for mixed effects (or multi-level) models
-if (requireNamespace("lme4")) {
-  library(lme4)
-  m3 <- fm1 <- lme4::lmer(Reaction ~ Days + (1 | Subject), sleepstudy)
-  konfound(m3, Days)
-}
-
-m4 <- glm(outcome ~ condition, data = binary_dummy_data, family = binomial(link = "logit"))
-konfound(m4, condition, two_by_two = TRUE, n_treat = 55)
+m3 <- glm(outcome ~ condition, data = binary_dummy_data, family = binomial(link = "logit"))
+konfound(m3, condition, two_by_two = TRUE, n_treat = 55)
 
 }
