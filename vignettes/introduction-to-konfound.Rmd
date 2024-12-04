@@ -1,10 +1,11 @@
 ---
 title: "Introduction to konfound"
-author: "Joshua Rosenberg, Ran Xu, Qinyun Lin, and Ken Frank"
+author: "Sarah Narvaiz, Qinyun Lin, Joshua M. Rosenberg, Kenneth A. Frank, Spiro Maroulis, Wei Wang, Ran Xu"
 date: "`r Sys.Date()`"
+bibliography: references.bib
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to Konfound}
+  %\VignetteIndexEntry{Introduction to konfound}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,216 +17,166 @@ comment = "#>"
 )
 ```
 
-# Introduction
+*Note*: This is identical to the following open-access paper: 
 
-In social science (and educational) research, we often wish to understand how robust inferences about effects are to unobserved (or controlled for) covariates, possible problems with measurement, and other sources of bias.  The goal of `konfound` is to carry out sensitivity analysis to help analysts to *quantify how robust inferences are to potential sources of bias*. This package provides functions based on developments in sensitivity analysis by Frank and colleagues, which previously have been implemented in `Stata` and through an Excel spreadsheet, in `R` through the `konfound` package. In particular, we provide functions for both *values from analyses carried out outside of R as well as from models (`lm()`, `glm()`, and `lme4::lmer()` fit in R)* for:
+> Narvaiz, S., Lin, Q., Rosenberg, J. M., Frank, K. A., Maroulis, S. J., Wang, W., & Xu, R. (2024). konfound: An R Sensitivity Analysis Package to Quantify the Robustness of Causal Inferences. *Journal of Open Source Software, 9*(95), 1-6. https://joss.theoj.org/papers/10.21105/joss.05779.pdf
 
-* Quantifying the bias necessary to alter an inference from the framework of Rubin's (1974) causal model
-* The robustness of causal inference in terms of the impact threshold of a confounding variable
+## Quantifying the Robustness of Inferences
 
-You can install `konfound` with the following:
+Sensitivity analysis, a statistical method crucial for validating inferences across disciplines, quantifies the conditions that could alter conclusions [@razavi2021]. One line of work is rooted in linear models and foregrounds the sensitivity of inferences to the strength of omitted variables [@frank2000; @cinelli2019]. A more recent approach is rooted in the potential outcomes framework for causal inference and foregrounds how hypothetical changes in a sample would alter an inference if such cases were otherwise observed [@frank2007; @frank2008; @frank2013; @xu2019].
 
-```{r gh-installation, eval = FALSE}
-install.packages("konfound")
-```
+One sensitivity measure is the *Impact Threshold of a Confounding Variable*, or ITCV, which generates statements about the correlation of an omitted, confounding variable with both a predictor of interest and the outcome [@frank2000]. The ITCV index can be calculated for any linear model. The *Robustness of an Inference to Replacement*, RIR, assesses how replacing a certain percentage of cases with counterfactuals of zero treatment effect could nullify an inference [@frank2013]. The RIR index is more general than the ITCV index.
 
-You can then load konfound with the `library()` function:
+The sensitivity analysis techniques we describe in this paper and implement in the `konfound` R package differ from others in several ways. Unlike @linden2020conducting, whose approach focuses on dichotomous outcomes and omitted variable sensitivity, our approach extends to continuous outcomes and evaluates both changes in estimates and standard errors. @oster2019unobservable focuses only on selection into the treatment based on unobservable variables versus observable variables necessary to nullify an estimate. The ITCV index focuses on the relationship of the unobservable to the predictor of interest and to the outcome. More generally, many others used simulation-based approaches, while our approach uses closed-form expressions to generate a single term representing sensitivity. These techniques, along with others, are reviewed and discussed (along with the ITCV and RIR approaches) in @frank2023.
 
-```{r, eval = TRUE}
-library(konfound)
-```
+We have implemented the calculation of both the ITCV and RIR indices in the `konfound` R package. This package is intended to provide an easy-to-use and principled set of sensitivity techniques that are suitable for a range of model and dependent variable types and use cases. Its audience is broad: primarily social scientists, but also interested individuals in other disciplines (e.g., the health sciences). This paper provides an overview of two core functions within the `konfound` package, each of which can calculate the ITCV and RIR indices: `konfound()` and `pkonfound()`. These functions allow users to calculate the robustness of inferences using a model estimated (with R) or using information about a model from a published study, respectively. 
 
-## Use of pkonfound() for values from an already-conducted analysis
+The `konfound` package is available from the Comprehensive R Archive Network (CRAN) at [https://CRAN.R-project.org/package=konfound](https://CRAN.R-project.org/package=konfound); it can be installed via the `install.packages(“konfound”)` function within R.
 
-`pkonfound()` is used when we have values from an already-conducted analysis (like a regression analysis), such as one in an already-published study or from an analysis carried out using other software. 
+## Functionality
 
-In the case of a regression analysis, values from the analysis would simply be used as the inputs to the `pkonfound()` function. For example, in the use below, we simply enter the values for the estimated effect (an unstandardardized beta coefficient) (`2`), its standard error (`.4`), the sample size (`100`), and the number of covariates (`3`):
+### **konfound**
 
-```{r}
-pkonfound(2, .4, 100, 3)
-```
+This function calculates the ITCV and RIR for models fitted in R. This function currently works for linear models fitted with `lm()`, `glm()`, and `lmer()`. The output printed in the R console is the bias that must be present and the number of cases that would have to be replaced with cases for which there is no effect to nullify the inference.
 
-For this set of values, around 60% would need to be false due to a source of bias for the inference to be invalidated (based on statistical significance and a p-value (or alpha) of .05), possible a very robust effect. An omitted, confounding variable (sometimes referred to as a covariate) would need to have an impact (defined as the product of the confounding variable's correlation with both the predictor of interest and the outcome) of 0.323, presenting a different interpretation of how robust this (hypothetical) effect is to a variable which is important but not included in the analysis. 
+#### *Example for linear models fit with lm()*
 
-Here is another example, but one in which the unstandardized beta coefficient is smaller than its standard error:
+For this example, we will use the `concord1` dataset built into the `konfound` package. This dataset comes from a study that examines the causal mechanism behind household water conservation in a U.S. city.
 
-```{r}
-pkonfound(.4, 2, 100, 3)
-```
+We will estimate the effect of the following variables on household water consumption in 1981:
 
-Note that this use of `pkonfound()` is equivalent to naming the arguments, i.e. for a different set of values:
+- household water consumption in 1980 (`water80`) 
+- household income (`income`)
+- education level of household survey respondent (`educat`)
+- retirement status of respondent (`retire`)
+- number of individuals in household in 1980 (`peop80`)
 
-```{r}
-pkonfound(est_eff = -2.2,
-          std_err = .65, 
-          n_obs = 200,
-          n_covariates = 3)
-```
-
-We notice that the output includes a message that says we can view other forms of output by changing the `to_return` argument. Here are the two plots - for the bias necessary to alter an inference (`thresh_plot`) and for the robustness of an inference in terms of the impact of a confounding variable (`corr_plot`) that can be returned:
-
-```{r}
-pkonfound(.4, 2, 100, 3, to_return = "thresh_plot")
-```
-
-```{r}
-pkonfound(.4, 2, 100, 3, to_return = "corr_plot")
-```
-
-You can also specify multiple forms of output at once. 
-
-```{r}
-model_output <- pkonfound(2, .4, 200, 3, to_return = c("raw_output", "corr_plot"))
-summary(model_output)
-```
-
-When we type the name of the object, we see that we created three types of output that we can access as follows:
-
-```{r}
-model_output$raw_output
-model_output$thresh_plot
-model_output$corr_plot
-```
-
-Finally, you can return the raw output, for use in other analyses. 
-
-```{r}
-pkonfound(.4, 2, 100, 3, to_return = "raw_output")
-```
-
-This function can be used with the values from a two-by-two table associated with an intervention (represented as a dichotomous predictor variable) that is related with a binary outcome, such as one that could be modeled using a logistic regression. Below:
-
-- `a` represents an unsuccessful control group outcome
-- `b` represents a successful control group outcome
-- `c` represents an unsuccessful treatment group outcome
-- `d` represents a successful treatment group outcome
-
-```{r}
-# pkonfound(a = 35, b = 17, c = 17, d = 38)
-```
-
-A table can also be passed to this function: 
-
-```{r}
-# my_table <- tibble::tribble(
-# ~unsuccess, ~success,
-# 35,         17,
-# 17,         38,
-# )
-# 
-# pkonfound(two_by_two_table = my_table)
-```
-
-## Use of konfound() for models fit in R
-
-Where `pkonfound()` can be used with values from already-conducted analyses, `konfound()` can be used with models (`lm()`, `glm()`, and `lme4::lmer()`) fit in R.
-
-**For linear models fit with lm()**
-
-```{r}
-m1 <- lm(mpg ~ wt + hp + qsec, data = mtcars)
-m1
-
-konfound(m1, hp)
-```
-
-Like with `pkonfound()`, we can also output multiple forms of output at once with `konfound()`:
-
-```{r}
-konfound_output <- konfound(m1, hp, to_return = c("raw_output", "thresh_plot", "corr_plot"))
-summary(konfound_output)
-```
-
-Again, we can type each of those, i.e.:
-
-```{r}
-konfound_output$raw_output
-konfound_output$thresh_plot
-```
-
-We can also test all of the variables as predictors of interest:
-
-```{r}
-konfound(m1, wt, test_all = TRUE)
-```
-
-Whereas this cannot be carried out with `pkonfound()`, with `konfound()` you can also return a table with some key output from the correlation-based approach.
-
-```{r}
-# konfound(m1, wt, to_return = "table")
-```
-
-If the impact threshhold is greater than the impacts of the `Z`s (the other covariates) then an omitted variable would have to have a greater impact than any of the observed covariates to change the inference. Note that in fields in which there is a lot known about covariates given the outcome of interest, then the omitted ones are likely less important than those that are known an included (i.e., we have a good sense of the factors that matter in terms of educational achievement).
-
-**For logistic regression models fit with glm()**
-
-Effects for these models are interpreted on the basis of average partial (or marginal) effects (calculated using the `margins` package).
-
-```{r, message = F}
-# if forcats is not installed, this install it first using install.packages("forcats") for this to run
-if (requireNamespace("forcats")) {
-    d <- forcats::gss_cat
+Here is the code we use to fit a linear model using these variables:
     
-    d$married <- ifelse(d$marital == "Married", 1, 0)
+    m <- lm(water81 ~ water80 + income + educat + retire + peop80, data = concord1)
+
+The results of the model fitting (which can be obtained by running `summary(m)` within R) indicate that all of the predictors apart from `retire` have a statistically significant effect on water consumption. In the example, we focus on the coefficient for `peop80` (β = 225.198, *SE* = 28.704, *t* = 7.845, *p* < .001).
+
+#### *ITCV example for linear models fit with lm()*
+
+Now, let's examine the robustness of the `peop80` effect by calculating the ITCV:
+
+    library(konfound)
     
-    m2 <- glm(married ~ age, data = d, family = binomial(link = "logit"))
-    konfound(m2, age)
-}
-```
+    konfound(m, peop80, index = "IT")
 
-**For logistic regression models fit with glm() with a dichotomous predictor of interest**
+    ## Impact Threshold for a Confounding Variable:
+    ## The minimum impact of an omitted variable to invalidate an inference
+    ## for a null hypothesis of 0 effect is based on a correlation of 0.52 with 
+    ## the outcome and at  0.52  with the predictor of interest (conditioning on
+    ## observed covariates) based on a threshold of 0.089 for statistical 
+    ## significance (alpha = 0.05).
+    ## 
+    ## Correspondingly the impact of an omitted variable (as defined in Frank 
+    ## 2000) must be 0.52 X 0.52 = 0.27 to invalidate an inference for a null 
+    ## hypothesis of 0 effect. See Frank (2000) for a description of the method.
+    ## 
+    ## Citation:
+    ## Frank, K. (2000). Impact of a confounding variable on the
+    ## inference of a regression coefficient. Sociological Methods and Research,
+    ## 29(2), 147-194
 
-```{r, eval = FALSE}
-m4 <- glm(outcome ~ condition, data = binary_dummy_data)
-konfound(m4, condition, two_by_two = TRUE)
-```
+    ## For more detailed output, consider setting `to_return` to table
 
-As with models fit with `lm()` (and use of `pkonfound()`), multiple forms of output can be specified with the `to_return` argument to `konfound()`, i.e. `konfound(m2, age, to_return = c("raw_output", "corr_plot", "thresh_plot"))`.
+    ## To consider other predictors of interest, consider setting `test_all` to
+    ## TRUE.
 
-**For mixed effects (or multi-level) models fit with the lmer() function from the lme4 package**
+The output indicates that to invalidate the inference that `peop80` has an effect on `water81` using statistical significance as a threshold (e.g., *p* = .05), an omitted variable would have to be correlated at 0.520 with `peop80` and 0.520 with `water81`, conditioning on observed covariates.
 
-`konfound` also works with models fit with the `lmer()` function from the package `lme4`, for mixed-effects or multi-level models. One challenge with carrying out sensitivity analysis for fixed effects in mixed effects models is calculating the correct denominator degrees of freedom for the t-test associated with the coefficients. This is not unique to sensitivity analysis, as, for example, `lmer()` does not report degrees of freedom (or p-values) for fixed effects predictors (see this information in the `lme4` FAQ [here](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have)). While it may be possible to determine the correct degrees of freedom for some models (i.e., models with relatively simple random effects structures), it is difficult to generalize this approach, and so in this package the Kenward-Roger approximation for the denominator degrees of freedom as implemented in the `pbkrtest` package (described in [Halekoh and Højsgaard, 2014](https://www.jstatsoft.org/htaccess.php?volume=59&type=i&issue=09&paper=true)).
+#### *RIR example for linear models fit with lm()*
 
-## Use of mkonfound() for meta-analyses that include sensitivity analysis
+We can also examine the robustness by calculating the RIR:
 
-We can also use `konfound` to carry out sensitivity analysis as part of meta-analyses. For example, here, `d` represents output from a number (30 in this case) of past studies, read in a CSV file from a website:
+    konfound(m, peop80, index = "RIR") 
 
-```{r, eval = FALSE}
-d <- read.csv("https://msu.edu/~kenfrank/example%20dataset%20for%20mkonfound.csv")
-head(d)
-mkonfound(d, t, df)
-```
+    ## Robustness of Inference to Replacement (RIR):
+    ## To invalidate an inference,  74.955 % of the 
+    ## estimate would have to be due to bias. 
+    ## This is based on a threshold of 56.4 for statistical 
+    ## significance (alpha = 0.05).
+    ##
+    ## To invalidate an inference,  372  observations would 
+    ## have to be replaced with cases for which the effect is 0 (RIR = 372).
+    ## 
+    ## See Frank et al. (2013) for a description of the method.
+    ## 
+    ## Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+    ## What would it take to change an inference?
+    ## Using Rubin's causal model to interpret the robustness of causal inferences.
+    ## Education, Evaluation and Policy Analysis, 35 437-460.
 
-We can also return a plot summarizing the percent bias needed to sustan or invalidate an inference across all of the past studies:
+    ## For more detailed output, consider setting `to_return` to table
 
-```{r, eval = FALSE}
-mkonfound(d, t, df, return_plot = T)
-```
+    ## To consider other predictors of interest, 
+    ## consider setting `test_all` to TRUE.
 
-# Other information
+The output presents two interpretations of the RIR. First, 74.956% of the estimated effect of `peop80` on `water81` would have to be attributed to bias to invalidate the inference. Equivalently, we would expect to have to replace 372 out of the 486 households (about 76%) with cases for which `peop80` had no effect to invalidate the inference. We have created guidelines for evaluating the RIR relative to the bias accounted for by observed covariates or published norms [@frank2013; @frank2021].
 
-### How to learn more about sensitivity analysis
+### **pkonfound**
 
-To learn more about sensitivity analysis, please visit:
-'/
-?˘* The [Introduction to konfound vignette](https://jrosen48.github.io/konfound/articles/Introduction_to_konfound.html), with detailed information about each of the functions (`pkonfound()`, `konfound()`, and `mkounfound()`)
-* The causal inference section of Ken Frank's website [here](https://msu.edu/~kenfrank/research.htm#causal)
-* The [konfound interactive web application](https://jmichaelrosenberg.shinyapps.io/shinykonfound/), with links to PowerPoints and key publications
+This function quantifies the sensitivity for analyses that have already been conducted, such as in an already-published study or from analysis carried out using other software. This function calculates how much bias there must be in an estimate to invalidate/sustain an inference, which can be interpreted as the percentage of cases that would have to be replaced (e.g., with cases for which the predictor had no effect on the outcome) to invalidate the inference. It also calculates the impact of an omitted variable necessary to invalidate/sustain an inference for a regression coefficient, where impact is defined as the correlation between the omitted variable and the focal predictor multiplied with the correlation between the omitted variable and the outcome.
 
-### Feedback, issues, and feature requests
+#### *ITCV example for a regression analysis*
 
-`konfound` is actively under development as of January, 2018. We welcome feedback and requests for improvement. We prefer for issues to be filed via GitHub (link to the issues page for `konfound` [here](https://github.com/jrosen48/konfound/issues)) though we also welcome questions or feedback via email (see the DESCRIPTION file).
+For this example, the following estimated quantities from an estimated regression model would be entered into the `pkonfound` function: unstandardized beta coefficient for the predictor of interest (`est_eff` = 2), estimated standard error (`std_err` = .4), sample size (`n_obs` = 100), and the number of covariates (`n_covariates` = 3), as follows:
 
-### Code of Conduct
+    pkonfound(2, .4, 100, 3, index = "IT")
 
-Please note that this project is released with a Contributor Code of Conduct available at [https://www.contributor-covenant.org/version/1/0/0/](https://www.contributor-covenant.org/version/1/0/0/)
+    ## Impact Threshold for a Confounding Variable:
+    ## The minimum impact of an omitted variable to invalidate an inference for 
+    ## a null hypothesis of 0 effect is based on a correlation of  0.568 with 
+    ## the outcome and at  0.568  with the predictor of interest (conditioning 
+    ## on observed covariates) based on a threshold of 0.201 for statistical 
+    ## significance (alpha = 0.05).
+    ## 
+    ## Correspondingly the impact of an omitted variable (as defined in Frank 
+    ## 2000) must be 0.568 X 0.568 = 0.323 to invalidate an inference for a null
+    ## hypothesis of 0 effect. See Frank (2000) for a description of the method.
+    ## 
+    ## Citation:
+    ## Frank, K. (2000). Impact of a confounding variable on the inference of a 
+    ## regression coefficient. Sociological Methods and Research, 29 (2), 147-194
 
-### References
+    ## For other forms of output, run ?pkonfound and inspect the to_return argument
 
-* Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. 2013. What would it take to change an inference?: Using Rubin’s causal model to interpret the robustness of causal inferences. *Education, Evaluation and Policy Analysis*. Vol 35: 437-460. https://msu.edu/~kenfrank/What%20would%20it%20take%20to%20Change%20an%20Inference%20published.docx
+    ## For models fit in R, consider use of konfound().
 
-* Frank, K.A., Gary Sykes, Dorothea Anagnostopoulos, Marisa Cannata, Linda Chard, Ann Krause, Raven McCrory. 2008. Extended influence: National Board Certified Teachers as help providers. *Education, Evaluation, and Policy Analysis*. Vol 30(1): 3-30. https://msu.edu/~kenfrank/papers/Does%20NBPTS%20Certification%20Affect%20the%20Number%20of%20Colleagues%20a%20Teacher%20Helps%20with%20Instructional%20Matters%20acceptance%20version%202.doc
+#### *RIR example for a regression analysis*
 
-* Frank, K. A. and Min, K. 2007. Indices of Robustness for Sample Representation. *Sociological Methodology*. Vol 37, 349-392. https://msu.edu/~kenfrank/papers/INDICES%20OF%20ROBUSTNESS%20TO%20CONCERNS%20REGARDING%20THE%20REPRESENTATIVENESS%20OF%20A%20SAMPLE.doc (co first authors)
+We can also use the same inputs to calculate output for the RIR index:
 
-* Frank, K. 2000. "Impact of a Confounding Variable on the Inference of a Regression Coefficient." *Sociological Methods and Research*, 29(2), 147-194 https://msu.edu/~kenfrank/papers/impact%20of%20a%20confounding%20variable.pdf
+    pkonfound(2, .4, 100, 3, index = "RIR")
+
+    ## Robustness of Inference to Replacement (RIR):
+    ## To invalidate an inference,  60.29 % of the estimate would have to be 
+    ## due to bias. This is based on a threshold of 0.794 for statistical 
+    ## significance (alpha = 0.05).
+    ## 
+    ## To invalidate an inference,  60  observations would have to be replaced 
+    ## with cases for which the effect is 0 (RIR = 60).
+    ## 
+    ## See Frank et al. (2013) for a description of the method.
+    ## 
+    ## Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+    ## What would it take to change an inference?
+    ## Using Rubin's causal model to interpret the robustness of causal inferences.
+    ## Education, Evaluation and Policy Analysis, 35 437-460.
+
+    ## For other forms of output, run ?pkonfound and inspect the to_return argument
+
+    ## For models fit in R, consider use of konfound().
+
+## Doing and Learning More
+
+We have created a website including a Shiny interactive web application at [http://konfound-it.com](http://konfound-it.com) that can be applied to linear models, 2x2 tables resulting corresponding to treatment and control by success and failure conditions, and logistic regression models. We are also developing extensions of the sensitivity analysis techniques described in this paper, including preserving the standard error [@frank2023] and calculating the coefficient of proportionality [@frank2022] for ITCV analyses. Functionality for designs including mediation, hazard functions, differences in difference, and regression discontinuity are also presently under development. Additional documentation on the R package and its future extensions are available at the [http://konfound-it.com](http://konfound-it.com) website.
+
+## Acknowledgements
+
+The research reported here was supported by the Institute of Education Sciences, U.S. Department of Education, through Grant R305D220022 to Michigan State University. The opinions expressed are those of the authors and do not represent views of the Institute or the U.S. Department of Education.
+
+## References
