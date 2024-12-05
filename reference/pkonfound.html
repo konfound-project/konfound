@@ -427,8 +427,28 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
-<span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>upper_bound <span class="op">=</span> <span class="fl">3</span>, lower_bound <span class="op">=</span> <span class="fl">1</span>, <span class="fl">100</span>, <span class="fl">3</span><span class="op">)</span> <span class="co"># using a confidence interval </span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in pkonfound(upper_bound = 3, lower_bound = 1, 100, 3):</span> argument "n_obs" is missing, with no default</span>
+<span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>upper_bound <span class="op">=</span> <span class="fl">3</span>, lower_bound <span class="op">=</span> <span class="fl">1</span>, n_obs <span class="op">=</span> <span class="fl">100</span>, n_covariates <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="co"># using a confidence interval </span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference of an effect using the threshold of 1 for</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> statistical significance (with null hypothesis = 0 and alpha = 0.05), 49.987%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> of the (2) estimate would have to be due to bias. This implies that to</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> invalidate the inference one would expect to have to replace 50 (49.987%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> observations with data points for which the effect is 0 (RIR = 50).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference?</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Using Rubin's causal model to interpret the robustness of causal inferences.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals reported.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">.4</span>, <span class="fl">100</span>, <span class="fl">3</span>, to_return <span class="op">=</span> <span class="st">"thresh_plot"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="pkonfound-1.png" alt="" width="700" height="433"></span>
