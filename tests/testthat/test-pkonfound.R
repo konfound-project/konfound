@@ -223,3 +223,7 @@ test_that("pkonfound printed output works for a negative case", {
     output <- capture.output(pkonfound(-.01, .65, 200, 3, to_return = "print", index = "IT"))
     expect_true(length(output) > 0)
 })
+
+test_that("pkonfound works for a CI", {
+    expect_equal(pkonfound(upper_bound = 2, lower_bound = 1, n_obs = 200, n_covariates = 3, to_return = "raw_output")$RIR_perc, 66.664, tolerance = .001)
+})
