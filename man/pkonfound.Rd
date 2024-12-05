@@ -30,7 +30,9 @@ pkonfound(
   eff_thr = NA,
   FR2max = 0,
   FR2max_multiplier = 1.3,
-  to_return = "print"
+  to_return = "print",
+  upper_bound = NULL,
+  lower_bound = NULL
 )
 }
 \arguments{
@@ -85,6 +87,10 @@ pkonfound(
 \item{FR2max_multiplier}{the multiplier of R2 to get R2max, default is set to 1.3}
 
 \item{to_return}{whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return}
+
+\item{upper_bound}{optional (replaces the est_eff); the upper bound of the confidence interval}
+
+\item{lower_bound}{optional (replaces the est_eff); the lowerxw bound of the confidence interval}
 }
 \value{
 pkonfound prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to nullify the inference. If to_return = "raw_output," a list will be given with the following components:
@@ -139,6 +145,7 @@ pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
 pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
+pkonfound(upper_bound = 3, lower_bound = 1, 100, 3) # using a confidence interval 
 
 pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 pkonfound(2, .4, 100, 3, to_return = "corr_plot")
