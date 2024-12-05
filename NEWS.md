@@ -2,6 +2,7 @@
 
 * fix sign problems in print output for some cases 
 * separate out conditional RIR from COP
+* add the ability to enter a confidence interval instead of an estimeted effect
 
 # konfound 1.0.2
 

@@ -26,6 +26,8 @@
 #' @param FR2max the largest R2, or R2max, in the final model with unobserved confounder 
 #' @param FR2max_multiplier the multiplier of R2 to get R2max, default is set to 1.3
 #' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return
+#' @param upper_bound optional (replaces the est_eff); the upper bound of the confidence interval
+#' @param lower_bound optional (replaces the est_eff); the lowerxw bound of the confidence interval
 #' @importFrom stats fisher.test
 #' @importFrom dplyr select
 #' @return pkonfound prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to nullify the inference. If to_return = "raw_output," a list will be given with the following components:
@@ -130,9 +132,18 @@
                       eff_thr = NA,
                       FR2max = 0,
                       FR2max_multiplier = 1.3,
-                      to_return = "print") {
+                      to_return = "print",
+                      upper_bound = NULL,
+                      lower_bound = NULL
+                      ) {
   if ("table" %in% to_return) stop("a table can only be
                                    output when using konfound")
+     
+     
+    if (!is.null(upper_bound) & !is.null(lower_bound)) {
+      est_eff = (upper_bound + lower_bound) / 2
+      std_err = (est_eff - lower_bound) / qt(alpha / tails, n_obs - n_covariates, lower.tail = FALSE)
+    }
   
    if (index == "COP") {
      
