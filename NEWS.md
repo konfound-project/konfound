@@ -1,6 +1,7 @@
 # konfound 1.0.3 (IN DEVELOPMENT)
 
 * fix sign problems in print output for some cases 
+* seperate out conditional RIR from COP
 
 # konfound 1.0.2
 
