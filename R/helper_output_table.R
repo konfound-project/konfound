@@ -16,7 +16,6 @@
 #' @importFrom stats cor
 #' @importFrom ppcor pcor
 #' @importFrom dplyr select filter mutate arrange
-#' @importFrom magrittr %>%
 #' @importFrom rlang !! enquo
 output_table <- function(model_object, tested_variable) {
   p <- all.vars(model_object$call)[1]
@@ -95,9 +94,6 @@ output_table <- function(model_object, tested_variable) {
           impact_table_partial$Partial_Impact[i] <- NA
       })
   }
-  
-  # Sort Partial Impact Table in descending order
-  impact_table_partial <- impact_table_partial %>% dplyr::arrange(desc(Partial_Impact))
   
   cat(paste0("X represents ", tested_variable, ", Y represents ", p, 
              ", v represents each covariate.\n",
