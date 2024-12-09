@@ -15,7 +15,8 @@
 #' @importFrom purrr modify_if
 #' @importFrom stats cor
 #' @importFrom ppcor pcor
-#' @importFrom dplyr select filter mutate arrange %>%
+#' @importFrom dplyr select filter mutate arrange
+#' @importFrom magrittr %>%
 #' @importFrom rlang !! enquo
 output_table <- function(model_object, tested_variable) {
   p <- all.vars(model_object$call)[1]
