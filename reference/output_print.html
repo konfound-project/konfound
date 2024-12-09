@@ -86,7 +86,9 @@ output for each case.</p>
 <span>  rxcv <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  rycv <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  <span class="va">rxcvGz</span>,</span>
-<span>  <span class="va">rycvGz</span></span>
+<span>  <span class="va">rycvGz</span>,</span>
+<span>  benchmark_corr_product <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  itcv_ratio_to_benchmark <span class="op">=</span> <span class="cn">NA</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -181,6 +183,14 @@ statistical significance determination.</p></dd>
 
 <dt id="arg-rycvgz">rycvGz<a class="anchor" aria-label="anchor" href="#arg-rycvgz"></a></dt>
 <dd><p>the correlation between outcome and CV necessary to nullify the inference for smallest impact, conditioning on all observed covariates.</p></dd>
+
+
+<dt id="arg-benchmark-corr-product">benchmark_corr_product<a class="anchor" aria-label="anchor" href="#arg-benchmark-corr-product"></a></dt>
+<dd><p>the product of the correlations of covariates Z with X and Y (Rxz * Ryz), measuring the observed association strength.</p></dd>
+
+
+<dt id="arg-itcv-ratio-to-benchmark">itcv_ratio_to_benchmark<a class="anchor" aria-label="anchor" href="#arg-itcv-ratio-to-benchmark"></a></dt>
+<dd><p>the ratio of the ITCV to the benchmark_corr_product, indicating the robustness of inference.</p></dd>
 
 </dl></div>
 

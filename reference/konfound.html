@@ -150,12 +150,30 @@ or a summary table.</p>
 <span class="r-in"><span><span class="fu">konfound</span><span class="op">(</span><span class="va">m1</span>, <span class="va">wt</span>, to_return <span class="op">=</span> <span class="st">"table"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dependent variable is mpg </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For interpretation, check out to_return = 'print'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X represents wt, Y represents mpg, v represents each covariate.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First table is based on unconditional correlations, second table is based on</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> partial correlations.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Main_Output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   term        estimate std.error statistic p.value   itcv</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> (Intercept)   37.2       1.60      23.3    0     <span style="color: #BB0000;">NA</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> wt            -<span style="color: #BB0000;">3.88</span>      0.633     -<span style="color: #BB0000;">6.13</span>   0      0.291</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hp            -<span style="color: #BB0000;">0.032</span>     0.009     -<span style="color: #BB0000;">3.52</span>   0.001  0.511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> wt            -3.88      0.633     -6.13   0      0.291</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hp            -0.032     0.009     -3.52   0.001  0.511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Unconditional_Impact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   term  `Cor(vX)` `Cor(vY)` Impact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> hp        0.659    -0.776 -0.511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Partial_Impact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   term  `Partial Cor(vX)` `Partial Cor(vY)` Partial_Impact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> hp                0.659            -0.776         -0.511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># using glm() for non-linear models</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"forcats"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
