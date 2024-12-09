@@ -14,7 +14,8 @@
 #' @importFrom broom tidy
 #' @importFrom purrr modify_if
 #' @importFrom stats cor
-#' @importFrom dplyr select filter mutate
+#' @importFrom ppcor pcor
+#' @importFrom dplyr select filter mutate arrange %>%
 #' @importFrom rlang !! enquo
 output_table <- function(model_object, tested_variable) {
   p <- all.vars(model_object$call)[1]
@@ -46,5 +47,77 @@ output_table <- function(model_object, tested_variable) {
                                    round, 
                                    digits = 3)
 
-  return(model_output)
-}
+  options(pillar.neg = FALSE)
+  
+  # Observed Impact Table
+  impact_table <- tibble(
+      term = covariate_names,
+      `Cor(vX)` = NA_real_,
+      `Cor(vY)` = NA_real_,
+      Impact = NA_real_
+  )
+  
+  for (i in seq_along(covariate_names)) {
+      covariate <- covariate_names[i]
+      if (all(c(covariate, tested_variable, p) %in% colnames(cor_df))) {
+          cor_vx <- cor_df[covariate, tested_variable]
+          cor_vy <- cor_df[covariate, p]
+          impact <- cor_vx * cor_vy
+          impact_table$`Cor(vX)`[i] <- round(cor_vx, 4)
+          impact_table$`Cor(vY)`[i] <- round(cor_vy, 4)
+          impact_table$Impact[i] <- round(impact, 4)
+      }
+  }
+  
+  # Partial Impact Table
+  impact_table_partial <- tibble(
+      term = covariate_names,
+      `Partial Cor(vX)` = NA_real_,
+      `Partial Cor(vY)` = NA_real_,
+      Partial_Impact = NA_real_
+  )
+  
+  # Compute partial correlations with error handling
+  for (i in seq_along(covariate_names)) {
+      covariate <- covariate_names[i]
+      tryCatch({
+          pcor_vx <- suppressWarnings(ppcor::pcor(model_object$model[, c(covariate, tested_variable, covariate_names)])$estimate[1, 2])
+          pcor_vy <- suppressWarnings(ppcor::pcor(model_object$model[, c(covariate, p, covariate_names)])$estimate[1, 2])
+          partial_impact <- pcor_vx * pcor_vy
+          impact_table_partial$`Partial Cor(vX)`[i] <- round(pcor_vx, 4)
+          impact_table_partial$`Partial Cor(vY)`[i] <- round(pcor_vy, 4)
+          impact_table_partial$Partial_Impact[i] <- round(partial_impact, 4)
+      }, error = function(e) {
+          # Handle errors during partial correlation computation
+          impact_table_partial$`Partial Cor(vX)`[i] <- NA
+          impact_table_partial$`Partial Cor(vY)`[i] <- NA
+          impact_table_partial$Partial_Impact[i] <- NA
+      })
+  }
+  
+  # Sort Partial Impact Table in descending order
+  impact_table_partial <- impact_table_partial %>% dplyr::arrange(desc(Partial_Impact))
+  
+  cat(paste0("X represents ", tested_variable, ", Y represents ", p, 
+             ", v represents each covariate.\n",
+             "First table is based on unconditional correlations, second table is based on\n",
+             "partial correlations.\n\n"))
+  
+  # Check if any row has all Partial Correlation components as NA
+  if (any(is.na(impact_table_partial$`Partial Cor(vX)`) &
+          is.na(impact_table_partial$`Partial Cor(vY)`) &
+          is.na(impact_table_partial$Partial_Impact))) {
+      stop(
+          paste0(
+              "Numerical instability detected in partial correlation. This indicates potential multicollinearity or scaling issues.\n",
+              "To resolve this issue, consider:\n",
+              "1) Standardize predictors with scale().\n",
+              "2) Remove or combine highly correlated predictors.\n",
+              "3) Apply regularization (e.g., ridge regression)."
+          )
+      )
+  }
+  
+  # Return all three tables as a list
+  return(list(Main_Output = model_output, Unconditional_Impact = impact_table, Partial_Impact = impact_table_partial))
+  }
