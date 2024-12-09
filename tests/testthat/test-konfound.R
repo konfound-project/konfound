@@ -30,13 +30,13 @@ test_that("konfound returns a tibble", {
     m5 <- lm(mpg ~ wt + hp, data = mtcars)
     output5 <- konfound(m5, wt, to_return = "table")
 
-    expect_s3_class(output5, "tbl_df")
+    expect_s3_class(output5$Main_Output, "tbl_df")
 
     mtcars$my_var <- runif(nrow(mtcars))
     m5b <- lm(wt ~ my_var, data = mtcars)
     output5b <- konfound(m5b, my_var, to_return = "table")
 
-    expect_s3_class(output5b, "tbl_df")
+    expect_s3_class(output5b$Main_Output, "tbl_df")
 })
 
 test_that("konfound glm works", {

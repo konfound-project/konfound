@@ -290,6 +290,20 @@ test_sensitivity <- function(est_eff,
   r_final <- (act_r_forVF - r_con * rycvGz)/sqrt((1 - r_con^2) * (1 - rycvGz^2))
   ## compare r_final with critical_r
 
+  # calculate ITCV benchmark only if r2xz and r2yz are not NA
+  benchmark_corr_product <- if (!is.na(r2xz) && !is.na(r2yz)) {
+      r2xz * r2yz
+  } else {
+      NA
+  }
+  
+  # itcv_ratio_to_benchmark only if benchmark_corr_product, uncond_rcxv, and uncond_rcyv are not NA
+  itcv_ratio_to_benchmark <- if (!is.na(benchmark_corr_product) && !is.na(uncond_rxcv) && !is.na(uncond_rycv)) {
+      abs((uncond_rxcv * uncond_rycv) / benchmark_corr_product)
+  } else {
+      NA
+  }
+  
   # output dispatch
 
   if (length(to_return) > 1) {
@@ -331,6 +345,8 @@ test_sensitivity <- function(est_eff,
                        rxcvGz = rxcvGz, rycvGz = rycvGz,
                        itcvGz = itcvGz, itcv = uncond_rxcv * uncond_rycv,
                        r2xz = r2xz, r2yz = r2yz,
+                       benchmark_corr_product = NA,
+                       itcv_ratio_to_benchmark = NA,
                        delta_star = NA, delta_star_restricted = NA,
                        delta_exact = NA, delta_pctbias = NA,
                        cor_oster = NA, cor_exact = NA,
@@ -353,7 +369,10 @@ test_sensitivity <- function(est_eff,
   } else if (to_return == "corr_plot") {
     return(plot_correlation(r_con = r_con, obs_r = obs_r, critical_r = critical_r))
   } else if (to_return == "print") {
-    return(output_print(n_covariates, est_eff, beta_threshold, bias, sustain, nu, eff_thr, recase, obs_r, critical_r, r_con, itcv, alpha, index, far_bound, sdx, sdy, R2, uncond_rxcv, uncond_rycv, rxcvGz, rycvGz))
+      return(output_print(n_covariates, est_eff, beta_threshold, bias, sustain, nu, eff_thr, 
+                          recase, obs_r, critical_r, r_con, itcv, alpha, index, far_bound, 
+                          sdx, sdy, R2, uncond_rxcv, uncond_rycv, rxcvGz, rycvGz,
+                          benchmark_corr_product, itcv_ratio_to_benchmark))
   } else if (to_return == "table") {
     return(output_table(model_object, tested_variable))
   } else {
