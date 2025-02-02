@@ -303,6 +303,8 @@ test_sensitivity_ln <- function(est_eff,
     }
   }
 
+  if (!exists("p_destination_extra")) p_destination_extra <- NA
+  
   if (final_solution$needtworows) {
     total_switch <- final_solution$final_switch
     total_RIR <- RIR + RIR_extra
@@ -595,7 +597,14 @@ citation <- paste0(
                   Fig_ITCV = NA,
                   Fig_RIR = NA,
                   cond_RIRpi_null = NA, cond_RIRpi_fixedY = NA, cond_RIRpi_rxyz = NA,
-                  cond_RIR_null = NA, cond_RIR_fixedY = NA, cond_RIR_rxyz = NA
+                  cond_RIR_null = NA, cond_RIR_fixedY = NA, cond_RIR_rxyz = NA,
+                  # added to fully grab variables in printed output
+                  est_eff = est_eff, user_std_err = user_std_err, p_start = p_start,
+                  est_eff_final = final_solution$est_eff_final, std_err_final = final_solution$std_err_final, p_final = p_final,
+                  p_destination = p_destination, p_destination_extra = p_destination_extra,
+                  total_RIR = total_RIR, total_switch = total_switch,
+                  # values from implied/transferred table
+                  table_start_3x3 = table_start_3x3, table_final_3x3 = table_final_3x3                  
                   ))
 
   } else  if (to_return == "print") {
