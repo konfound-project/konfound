@@ -12,7 +12,14 @@ output_list <- function(obs_r, act_r,
                         needtworows, 
                         Fig_ITCV, Fig_RIR,
                         cond_RIRpi_null, cond_RIRpi_fixedY, cond_RIRpi_rxyz,
-                        cond_RIR_null, cond_RIR_fixedY, cond_RIR_rxyz
+                        cond_RIR_null, cond_RIR_fixedY, cond_RIR_rxyz,
+                        est_eff = NA, user_std_err = NA, p_start = NA,
+                        est_eff_final = NA, std_err_final = NA, p_final = NA,
+                        p_destination = NA, p_destination_extra = NA,
+                        total_RIR = NA, total_switch = NA,
+                        table_start_3x3 = NA, table_final_3x3 = NA,
+                        fisher_ob = NA, chisq_ob = NA, 
+                        fisher_final = NA, chisq_final = NA
                         ) {
   result <- list(obs_r = obs_r,
                  act_r = act_r, 
@@ -54,7 +61,14 @@ output_list <- function(obs_r, act_r,
                  cond_RIRpi_rxyz = cond_RIRpi_rxyz,
                  cond_RIR_null = cond_RIR_null, 
                  cond_RIR_fixedY = cond_RIR_fixedY, 
-                 cond_RIR_rxyz = cond_RIR_rxyz
+                 cond_RIR_rxyz = cond_RIR_rxyz,
+                 est_eff = est_eff, user_std_err = user_std_err, p_start = p_start,
+                 est_eff_final = est_eff_final, std_err_final = std_err_final, p_final = p_final,
+                 p_destination = p_destination, p_destination_extra = p_destination_extra,
+                 total_RIR = total_RIR, total_switch = total_switch,
+                 table_start_3x3 = table_start_3x3, table_final_3x3 = table_final_3x3,
+                 fisher_ob = fisher_ob, chisq_ob = chisq_ob, 
+                 fisher_final = fisher_final, chisq_final = chisq_final
                  )
   result <- result[!is.na(result)]
   message("For interpretation, check out to_return = 'print'.")

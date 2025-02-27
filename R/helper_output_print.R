@@ -164,7 +164,7 @@ output_print <- function(n_covariates,
 
   }
   if (index == "IT") { 
-    cat(crayon::bold("Impact Threshold for a Confounding Variable (ITCV):\n"))
+    cat(crayon::bold("Impact Threshold for a Confounding Variable (ITCV):"))
     cat("\n")
     sign_interchangeable <- ifelse(sign(rxcv) == sign(rycv), "fixed", "interchangeable")
     sign_cond_interchangeable <- ifelse(sign(rxcvGz) == sign(rycvGz), "fixed", "interchangeable")
@@ -348,7 +348,7 @@ output_print <- function(n_covariates,
     }
     
     if (!is.na(benchmark_corr_product)) {
-        cat("Interpretation of Benchmark Correlations for ITCV:")
+        cat(crayon::bold("Interpretation of Benchmark Correlations for ITCV:"))
         cat("\n")
         cat(paste0("Benchmark correlation product ('benchmark_corr_product') is Rxz*Ryz = ", round(benchmark_corr_product, 4),
                    ", showing"))
@@ -361,6 +361,10 @@ output_print <- function(n_covariates,
         cat("A smaller ratio means required correlations to nullify the inference would need to be")
         cat("\n")
         cat("much stronger than observed.\n")
+        cat("\n")
+        cat("This indicates how large the impact of an unobserved covariate must be relative to the\n")
+        cat("impact of all observed covariates (Z) to invalidate the inference. The larger the ratio,\n")
+        cat("the more robust the inference.\n")
         cat("\n")
         cat("If Z includes pretests or fixed effects, the benchmark may be inflated, making the ratio\n")
         cat("unusually small. Interpret robustness cautiously in such cases.\n")

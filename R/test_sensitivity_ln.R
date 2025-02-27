@@ -14,7 +14,8 @@ test_sensitivity_ln <- function(est_eff,
                                 nu,
                                 to_return,
                                 model_object,
-                                tested_variable) {
+                                tested_variable,
+                                raw_treatment_success = NULL) {
   
   ## error message if input is inappropriate
   if (!(std_err > 0)) {
@@ -303,6 +304,8 @@ test_sensitivity_ln <- function(est_eff,
     }
   }
 
+  if (!exists("p_destination_extra")) p_destination_extra <- NA
+  
   if (final_solution$needtworows) {
     total_switch <- final_solution$final_switch
     total_RIR <- RIR + RIR_extra
@@ -568,6 +571,274 @@ citation <- paste0(
     "Accuracy of results increases with the number of decimals entered.\n"
 )
 
+### Benchmarking RIR 
+benchmark_output_head <- paste0(
+    crayon::bold("Benchmarking RIR for Logistic Regression")
+)
+
+benchmark_output_intro1 <- paste0(
+    "The benchmark value helps interpret the RIR necessary to invalidate or sustain an inference\n",
+    "by comparing the change needed to nullify the inference with the changes in the estimated effect\n",
+    "due to observed covariates.\n\n",
+    "Benchmark = Bias to change inference / Bias due to observed covariates"
+)
+
+if (invalidate_ob) {
+    # Invalidate scenario
+    if (is.null(raw_treatment_success)) {
+        # Range-based benchmark calculation
+        benchmark_output_intro2 <- paste0(
+            "\nTo calculate this benchmark value, a range of treatment success values is automatically \n",
+            "generated based on the assumption that the marginals are constant between the implied table \n",
+            "and the raw unadjusted table. The benchmark value is visualized as a graph, allowing the \n",
+            "user to interpret how the benchmark changes with hypothesized treatment success values.\n"
+        )
+    } else {
+        # Single-value benchmark calculation
+        benchmark_output_intro2 <- ""
+    }
+} else {
+    # !invalidate_ob (no invalidation scenario)
+    benchmark_output_intro2 <- paste0(
+        "\nThe treatment is not statistically significant in the implied table and would also not\n",
+        "be statistically significant in the raw table (before covariates were added). In this scenario,\n",
+        "there is no clear interpretation of the benchmark and therefore the benchmark calculation is not reported.\n"
+    )
+}
+
+
+if (invalidate_ob) {
+    
+    if (is.null(raw_treatment_success)) {
+    #############################
+    # 1) Range-based Benchmark Calculation (no raw_treatment_success; default)
+    #############################
+    # Extract totals
+    control_total_start <- sum(final_solution$table_start[1, ])
+    treatment_total_start <- sum(final_solution$table_start[2, ])
+    fail_total_start <- sum(final_solution$table_start[, 1])
+    success_total_start <- sum(final_solution$table_start[, 2])
+
+    implied_treatment_success <- final_solution$table_start[2, 2]        
+    
+    # Calculate min and max treatment success
+    min_treatment_success <- treatment_total_start - (fail_total_start - final_solution$table_start[1, 1])
+    max_treatment_success <- treatment_total_start
+    
+    # Generate the range
+    treatment_success_range <- seq(min_treatment_success, max_treatment_success, by = 1)
+    
+    # Initialize a data frame to store results
+    results <- data.frame(
+        treatment_success = treatment_success_range,
+        benchmark = NA
+    )
+    
+    # Loop through the treatment success range to calculate benchmarks
+    for (i in seq_along(treatment_success_range)) {
+        treatment_success_new <- treatment_success_range[i]
+        treatment_fail_new <- treatment_total_start - treatment_success_new
+        control_fail_new <- fail_total_start - treatment_fail_new
+        control_success_new <- control_total_start - control_fail_new
+        
+        # Skip invalid configurations
+        if (control_fail_new <= 0 || treatment_fail_new <= 0 || 
+            control_success_new <= 0 || treatment_success_new <= 0) {
+            results$benchmark[i] <- NA
+            next
+        }
+        
+        # Calculate odds and log odds
+        odds_control_new <- control_success_new / control_fail_new
+        odds_treatment_new <- treatment_success_new / treatment_fail_new
+        odds_ratio_new <- odds_treatment_new / odds_control_new
+        
+        # Skip invalid odds ratio
+        if (is.nan(odds_ratio_new) || odds_ratio_new <= 0) {
+            results$benchmark[i] <- NA
+            next
+        }
+        
+        log_odds_new <- log(odds_ratio_new)
+        
+        change_log_odds_obs_cov <- log_odds_new - est_eff
+        change_with_unobserved_cov <- est_eff - final_solution$est_eff_final
+        
+        # Calculate and store benchmark value
+        if (!is.na(change_log_odds_obs_cov) && abs(change_log_odds_obs_cov) > 0) {
+            results$benchmark[i] <- abs(change_with_unobserved_cov / change_log_odds_obs_cov)
+        } else {
+            results$benchmark[i] <- NA
+        }
+    }
+    
+    # Clean results (remove NA rows)
+    results <- na.omit(results)
+    
+    if (nrow(results) == 0) {
+        message("No valid benchmark values found in range-based calculation.")
+    } else {
+        # Identify the peak point
+        peak_point <- which.max(results$benchmark)
+        
+        # Filter for points on both sides of the peak that meet the dynamic threshold
+        dynamic_threshold <- 0.05 * max(results$benchmark)  # dynamic threshold (5% of max)
+        
+        # Ensure we handle indexing carefully
+        # find row index of the peak
+        peak_index <- peak_point  
+        
+        # define lower and upper bounds for subsetting
+        lower_bound <- max(1, peak_index - 10)
+        upper_bound <- min(nrow(results), peak_index + 10)
+        
+        filtered_results <- results[
+            results$benchmark > dynamic_threshold &
+                seq_len(nrow(results)) >= lower_bound &
+                seq_len(nrow(results)) <= upper_bound, ]
+        
+        implied_benchmark_value <- filtered_results$benchmark[
+            filtered_results$treatment_success == implied_treatment_success
+        ]
+        
+    }
+    
+    benchmark_output_outro <- paste0(
+        "To calculate a specific benchmark value, provide the treatment success value from the raw unadjusted table."
+    )
+    
+    #############################
+    # 2) Plotting based on Range-based Calculation
+    #############################
+    benchmark_plot <- ggplot(filtered_results, aes(x = treatment_success, y = benchmark)) +
+        # 1) Blue line: "Benchmark Value vs. Treatment Success"
+        geom_line(
+            aes(color = "Benchmark Value vs. \nTreatment Success"), 
+            size = 1
+        ) +
+        
+        # 2) Dark green vertical line: "Implied Treatment Success"
+        geom_vline(
+            data = data.frame(x = implied_treatment_success),
+            aes(xintercept = x, color = "Implied Treatment Success"),
+            size = 1,
+            show.legend = TRUE
+        ) +
+        
+        # 3) Red dot: "Benchmark Value from Implied Treatment Success"
+        geom_point(
+            data = data.frame(
+                x = implied_treatment_success,
+                y = implied_benchmark_value
+            ),
+            aes(
+                x = x,
+                y = y,
+                color = "Benchmark Value from \nImplied Treatment Success"
+            ),
+            size = 3,
+            show.legend = TRUE
+        ) +
+        
+        # Manually define which colors go with which legend label
+        scale_color_manual(
+            name = "Plot Legend", 
+            values = c(
+                "Benchmark Value vs. \nTreatment Success" = "blue",
+                "Implied Treatment Success" = "darkgreen",
+                "Benchmark Value from \nImplied Treatment Success" = "red"
+            )
+        ) +
+        theme(
+            legend.spacing.y = unit(0.6, "cm"),  
+            legend.key.size = unit(0.8, "cm")  
+        ) +
+        # Optional text annotation (not in the legend)
+        annotate(
+            "text", 
+            x = implied_treatment_success, 
+            y = max(filtered_results$benchmark), 
+            label = paste0("Benchmark Value: ", round(implied_benchmark_value, 2)), 
+            color = "black", 
+            vjust = 0.7, 
+            hjust = -0.1, 
+            size = 5
+        ) +
+        
+        labs(
+            title = "Benchmark Values from Hypothesized Treatment Success",
+            subtitle = "Derived from the hypothesized range of treatment success values in the raw unadjusted table",
+            x = "Count of Hypothesized Raw Unadjusted Treatment Success",
+            y = "Benchmark Value"
+        ) +
+        theme_minimal() +
+        theme(
+            plot.title = element_text(size = 16, face = "bold"),
+            plot.subtitle = element_text(size = 14),
+            axis.title.x = element_text(size = 14),
+            axis.title.y = element_text(size = 14),
+            axis.text = element_text(size = 12)
+        )    
+    
+    } else if (!is.null(raw_treatment_success)) {
+   
+        ##############################
+        # 3) Single-Value Calculation (user provides raw_treatment_success)
+        #############################
+        
+        # Perform calculations based on the provided `raw_treatment_success`
+        
+        # Extract totals
+        control_total_start <- sum(final_solution$table_start[1, ])
+        treatment_total_start <- sum(final_solution$table_start[2, ])
+        fail_total_start <- sum(final_solution$table_start[, 1])
+        success_total_start <- sum(final_solution$table_start[, 2])
+        
+        # Ensure raw_treatment_success is within valid range
+        if (raw_treatment_success <= 0 || raw_treatment_success > treatment_total_start) {
+            stop("Invalid raw_treatment_success: must be greater than zero and less than or equal to treatment_total_start.")
+        }
+        
+        # Calculate remaining cell values for the raw table
+        treatment_fail_new <- treatment_total_start - raw_treatment_success
+        control_fail_new <- fail_total_start - treatment_fail_new
+        control_success_new <- control_total_start - control_fail_new
+        
+        if (control_fail_new <= 0 || treatment_fail_new <= 0 || control_success_new <= 0) {
+            stop("Invalid configuration: cell values must be greater than zero.")
+        }
+        
+        # Calculate odds and log odds for the raw table
+        odds_control_new <- control_success_new / control_fail_new
+        odds_treatment_new <- raw_treatment_success / treatment_fail_new
+        odds_ratio_new <- odds_treatment_new / odds_control_new
+        
+        if (is.nan(odds_ratio_new) || odds_ratio_new <= 0) {
+            stop("Invalid configuration: odds ratio must be greater than zero.")
+        }
+        
+        log_odds_new <- log(odds_ratio_new)
+        
+        # Calculate benchmark values
+        change_log_odds_obs_cov <- log_odds_new - est_eff
+        change_with_unobserved_cov <- est_eff - final_solution$est_eff_final
+        
+        # Prevent division by zero or invalid values
+        if (!is.na(change_log_odds_obs_cov) && abs(change_log_odds_obs_cov) > 0) {
+            benchmark_value <- abs(change_with_unobserved_cov / change_log_odds_obs_cov)
+            
+            benchmark_output_specified <- paste0(
+                "Benchmark Value for specified treatment success data points from raw unadjusted table: ",
+                sprintf("%.4f\n", benchmark_value)
+            )
+            
+        } else {
+            stop("Invalid calculation: change in log odds due to observed covariates is zero or NA.")
+        }
+    }        
+} 
+
+
   # output dispatch
   if (to_return == "raw_output") {
       return(output_list(obs_r = NA, act_r = NA,
@@ -595,7 +866,14 @@ citation <- paste0(
                   Fig_ITCV = NA,
                   Fig_RIR = NA,
                   cond_RIRpi_null = NA, cond_RIRpi_fixedY = NA, cond_RIRpi_rxyz = NA,
-                  cond_RIR_null = NA, cond_RIR_fixedY = NA, cond_RIR_rxyz = NA
+                  cond_RIR_null = NA, cond_RIR_fixedY = NA, cond_RIR_rxyz = NA,
+                  # added to fully grab variables in printed output
+                  est_eff = est_eff, user_std_err = user_std_err, p_start = p_start,
+                  est_eff_final = final_solution$est_eff_final, std_err_final = final_solution$std_err_final, p_final = p_final,
+                  p_destination = p_destination, p_destination_extra = p_destination_extra,
+                  total_RIR = total_RIR, total_switch = total_switch,
+                  # values from implied/transferred table
+                  table_start_3x3 = table_start_3x3, table_final_3x3 = table_final_3x3   
                   ))
 
   } else  if (to_return == "print") {
@@ -635,7 +913,25 @@ citation <- paste0(
     cat(estimates_summary2)
     cat("\n")
     cat("\n")
+    cat(benchmark_output_head)
+    if (!is.null(raw_treatment_success) && invalidate_ob) {
+        cat("\n")
+        cat(benchmark_output_specified)
+    }
+    cat("\n")
+    cat(benchmark_output_intro1)
+    cat("\n")
+    cat(benchmark_output_intro2)
+    cat("\n")
+    
+    if (invalidate_ob) {
+        if (is.null(raw_treatment_success)){
+            cat(benchmark_output_outro)
+            cat("\n")
+            print(benchmark_plot)
+        }
+    }
+    
     cat(citation)
-
   }
 }
