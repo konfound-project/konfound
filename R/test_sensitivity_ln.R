@@ -1,7 +1,7 @@
 # Main function to test sensitivity for non-linear models to be wrapped
 # with pkonfound(), konfound(), and mkonfound()
 
-#' @importFrom stats pt
+#' @importFrom stats pt na.omit
 test_sensitivity_ln <- function(est_eff,
                                 std_err,
                                 n_obs,
@@ -750,7 +750,6 @@ calc_RIR_uncond_implied_pkonfound <- function(
     )
 }
 
-
 if (invalidate_ob) {
     if (is.null(raw_treatment_success)) {
     #############################
@@ -856,24 +855,24 @@ if (invalidate_ob) {
     #############################
     benchmark_plot <- ggplot(filtered_results, aes(x = treatment_success, y = benchmark)) +
         # 1) Blue line: "Benchmark Value vs. Treatment Success"
-        geom_line(
-            aes(color = "Benchmark Value vs. \nTreatment Success"), 
+        ggplot2::geom_line(
+            ggplot2::aes(color = "Benchmark Value vs. \nTreatment Success"), 
             size = 1
         ) +
         # 2) Dark green vertical line: "Implied Treatment Success"
-        geom_vline(
+        ggplot2::geom_vline(
             data = data.frame(x = implied_treatment_success),
-            aes(xintercept = x, color = "Implied Treatment Success"),
+            ggplot2::aes(xintercept = x, color = "Implied Treatment Success"),
             size = 1,
             show.legend = TRUE
         ) +
         # 3) Red dot: "Benchmark Value from Implied Treatment Success"
-        geom_point(
+        ggplot2::geom_point(
             data = data.frame(
                 x = implied_treatment_success,
                 y = implied_benchmark_value
             ),
-            aes(
+            ggplot2::aes(
                 x = x,
                 y = y,
                 color = "Benchmark Value from \nImplied Treatment Success"
@@ -882,7 +881,7 @@ if (invalidate_ob) {
             show.legend = TRUE
         ) +
         # define which colors go with which legend label
-        scale_color_manual(
+        ggplot2::scale_color_manual(
             name = "Plot Legend", 
             values = c(
                 "Benchmark Value vs. \nTreatment Success" = "blue",
@@ -890,7 +889,7 @@ if (invalidate_ob) {
                 "Benchmark Value from \nImplied Treatment Success" = "red"
             )
         ) +
-        annotate(
+        ggplot2::annotate(
             "text", 
             x = implied_treatment_success, 
             y = max(filtered_results$benchmark), 
@@ -900,36 +899,36 @@ if (invalidate_ob) {
             hjust = -0.1, 
             size = 6
         ) +
-        labs(
+        ggplot2::labs(
             title = "Benchmark Values from Hypothesized Treatment Success",
             subtitle = "Derived from the hypothesized range of treatment success values in the raw unadjusted table",
             x = "Count of Hypothesized Raw Unadjusted Treatment Success",
             y = "Log-odds Ratio Benchmark Value"
         ) +
-        theme_minimal() +
-        theme(
+        ggplot2::theme_minimal() +
+        ggplot2::theme(
             # Position legend in the top-right corner inside the plot
             legend.position = c(0.95, 0.95),
             legend.justification = c("right", "top"),
             legend.box.just = "right",
             
             # Increase spacing between legend items and key size
-            legend.spacing.y = unit(0.6, "cm"),
-            legend.key.size = unit(0.8, "cm"),
+            legend.spacing.y = grid::unit(0.6, "cm"),
+            legend.key.size = grid::unit(0.8, "cm"),
             
             # Increase legend text and legend title sizes
-            legend.text = element_text(size = 13),
-            legend.title = element_text(size = 14),
+            legend.text = ggplot2::element_text(size = 13),
+            legend.title = ggplot2::element_text(size = 14),
             
             # Add a rectangular background to the legend with a border
-            legend.background = element_rect(fill = "white", color = "black"),
+            legend.background = ggplot2::element_rect(fill = "white", color = "black"),
             
             # Adjust other theme elements
-            plot.title = element_text(size = 16, face = "bold"),
-            plot.subtitle = element_text(size = 14),
-            axis.title.x = element_text(size = 14),
-            axis.title.y = element_text(size = 14),
-            axis.text = element_text(size = 12)
+            plot.title = ggplot2::element_text(size = 16, face = "bold"),
+            plot.subtitle = ggplot2::element_text(size = 14),
+            axis.title.x = ggplot2::element_text(size = 14),
+            axis.title.y = ggplot2::element_text(size = 14),
+            axis.text = ggplot2::element_text(size = 12)
         )    
     
     } else if (!is.null(raw_treatment_success)) {

@@ -32,7 +32,8 @@ pkonfound(
   FR2max_multiplier = 1.3,
   to_return = "print",
   upper_bound = NULL,
-  lower_bound = NULL
+  lower_bound = NULL,
+  raw_treatment_success = NULL
 )
 }
 \arguments{
@@ -91,6 +92,8 @@ pkonfound(
 \item{upper_bound}{optional (replaces the est_eff); the upper bound of the confidence interval}
 
 \item{lower_bound}{optional (replaces the est_eff); the lowerxw bound of the confidence interval}
+
+\item{raw_treatment_success}{optional; the unadjusted count of successful outcomes in the treatment group, used when calculating the specific RIR benchmark.}
 }
 \value{
 pkonfound prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to nullify the inference. If to_return = "raw_output," a list will be given with the following components:
