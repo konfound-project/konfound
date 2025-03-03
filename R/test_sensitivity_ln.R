@@ -958,7 +958,7 @@ if (invalidate_ob) {
             stop("Invalid configuration: cell values must be greater than zero.")
         }
         
-        # Create a 3×3 table for the user-defined raw unadjusted scenario
+        # Create a 3by3 table for the user-defined raw unadjusted scenario
         # Calculate success rates for Control and Treatment
         success_percent_control_new <- (control_success_new / (control_fail_new + control_success_new)) * 100
         success_percent_treatment_new <- (raw_treatment_success / (treatment_fail_new + raw_treatment_success)) * 100
@@ -1051,8 +1051,8 @@ if (invalidate_ob) {
                 
                 "Log-odds Ratio Benchmark\n",
                 "Bias to change inference / bias due to observed covariates:\n",
-                "   = (log odds of implied − log odds of transfer)\n",
-                "     / (log odds of raw − log odds of implied)\n",
+                "   = (log odds of implied - log odds of transfer)\n",
+                "     / (log odds of raw - log odds of implied)\n",
                 "   = (", 
                 formatC(est_eff, format = "f", digits = 3), " - ",
                 formatC(final_solution$est_eff_final, format = "f", digits = 3), 
