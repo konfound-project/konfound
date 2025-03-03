@@ -1,5 +1,6 @@
 # Main function to test sensitivity for non-linear models to be wrapped
 # with pkonfound(), konfound(), and mkonfound()
+utils::globalVariables(c("treatment_success", "benchmark", "x", "y"))
 
 #' @importFrom stats pt na.omit
 test_sensitivity_ln <- function(est_eff,
@@ -16,7 +17,7 @@ test_sensitivity_ln <- function(est_eff,
                                 model_object,
                                 tested_variable,
                                 raw_treatment_success = NULL) {
-  
+    
   ## error message if input is inappropriate
   if (!(std_err > 0)) {
   stop("Did not run! Standard error needs to be greater than zero.")}
@@ -529,11 +530,11 @@ conclusion2 <- if (replace == "control") {
 if (!final_solution$needtworows) {
     conclusion3 <- paste0(
         "\n\nNote that RIR = Fragility/P(destination) = ",
-        final_primary, "/", sprintf("%.3f", p_destination/100), " ≈ ", RIR, ".\n")
+        final_primary, "/", sprintf("%.3f", p_destination/100), " ~ ", RIR, ".\n")
 } else{
     conclusion3 <- paste0(
         "\n\nNote that RIR = primary RIR + supplemental RIR = (",
-        final_primary, "/", sprintf("%.3f", p_destination/100), ") + (", final_extra, "/", sprintf("%.3f", p_destination_extra/100), ") ≈ ", total_RIR, ".\n",
+        final_primary, "/", sprintf("%.3f", p_destination/100), ") + (", final_extra, "/", sprintf("%.3f", p_destination_extra/100), ") ~ ", total_RIR, ".\n",
         "based on the calculation RIR = Fragility/P(destination).\n"
     )
 }
@@ -1040,11 +1041,11 @@ if (invalidate_ob) {
             benchmark_value_rir <- rir_implied_transferred / rir_uncond_implied$total_RIR
             benchmark_output_rir <- paste0(
                 "RIR Ratio Benchmark\n",
-                "Benchmark value (RIR ratio) = RIR(implied→transfer) / RIR(raw→implied)\n",
+                "Benchmark value (RIR ratio) = RIR(implied->transfer) / RIR(raw->implied)\n",
                 "   = ",
                 sprintf("%.0f", rir_implied_transferred), "/",
                 sprintf("%.0f", rir_uncond_implied$total_RIR),
-                " ≈ ",
+                " = ",
                 sprintf("%.3f", benchmark_value_rir),
                 "\n\n",
                 
@@ -1058,7 +1059,7 @@ if (invalidate_ob) {
                 ") / (",
                 formatC(log_odds_new, format = "f", digits = 3), " - ",
                 formatC(est_eff, format = "f", digits = 3),
-                ") ≈ ",
+                ") ~ ",
                 formatC(benchmark_value, format = "f", digits = 3), "\n"
                 )
         } else {
