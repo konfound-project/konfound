@@ -476,20 +476,22 @@ conclusion_sum <- if (!final_solution$needtworows) {
 }
 
 ### Table output
-table_header1 <- "The table implied by the parameter estimates and sample sizes you entered:\n"
+table_header1 <- paste(
+    sprintf("You entered: log odds = %.3f, SE = %.3f, with p-value = %.3f.", 
+            est_eff, user_std_err, p_start),
+    "\nThe table implied by the parameter estimates and sample sizes you entered:\n"
+    )
 
 # The summary of the estimates of implied table
 if (changeSE) {
     estimates_summary1 <- paste(
-        sprintf("The reported log odds = %.3f, SE = %.3f, and p-value = %.3f.", est_eff, user_std_err, p_start),
-        sprintf("\nThe SE has been adjusted to %.3f to generate real numbers in the implied table", final_solution$std_err_start),
+        sprintf("The SE has been adjusted to %.3f to generate real numbers in the implied table", final_solution$std_err_start),
         sprintf("\nfor which the p-value would be %.3f. Numbers in the table cells have been rounded", p_start),
         sprintf("\nto integers, which may slightly alter the estimated effect from the value originally entered.\n\n")
     )
 } else if (!changeSE){
     estimates_summary1 <- paste(
-        sprintf("The reported log odds = %.3f, SE = %.3f, and p-value = %.3f.", est_eff, user_std_err, p_start),
-        "\nValues in the table have been rounded to the nearest integer. This may cause",
+        "Values in the table have been rounded to the nearest integer. This may cause",
         "\na small change to the estimated effect for the table.\n\n"
     )
 }
@@ -498,21 +500,21 @@ if (changeSE) {
 estimates_summary2 <- paste0(
     sprintf("The log odds (estimated effect) = %.3f, SE = %.3f, p-value = %.3f.", 
             final_solution$est_eff_final, final_solution$std_err_final, p_final),
-    "\nThis is based on t = estimated effect/standard error"
+    "\nThis p-value is based on t = estimated effect/standard error"
 )
 
 if (invalidate_ob) {
-    change <- sprintf("To invalidate the inference that the effect is different from 0 (alpha = %.3f),", alpha)
-    change_t <- sprintf("to invalidate the inference, ")
+    change <- sprintf("To nullify the inference that the effect is different from 0 (alpha = %.3f), one would", alpha)
+    change_t <- sprintf("to nullify the inference, ")
 } else if (!invalidate_ob){
-    change <- sprintf("To sustain an inference that the effect is different from 0 (alpha = %.3f),", alpha)
+    change <- sprintf("To sustain an inference that the effect is different from 0 (alpha = %.3f), one would", alpha)
     change_t <- sprintf("to sustain an inference, ")
 }
 
 if (!final_solution$needtworows) {
     conclusion1 <- paste0(
         change, 
-        sprintf("\none would need to transfer %d data points from ", final),
+        sprintf("\nneed to transfer %d data points from ", final),
         sprintf("%s (Fragility = %d).\n", transferway, total_switch),
         sprintf("This is equivalent to replacing %g (%.3f%%) %s data points with data points", total_RIR, RIR_pi, RIRway)
     )
@@ -524,9 +526,17 @@ conclusion2 <- if (replace == "control") {
     paste0(sprintf("\nfor which the probability of %s in the entire sample (%.3f%%) applies (RIR = %d).", prob_indicator, p_destination, total_RIR))
 }
 
-conclusion3 <- paste0(
-    "\n\nNote that RIR = Fragility/P(destination)\n"
-)
+if (!final_solution$needtworows) {
+    conclusion3 <- paste0(
+        "\n\nNote that RIR = Fragility/P(destination) = ",
+        final_primary, "/", sprintf("%.3f", p_destination/100), " ≈ ", RIR, ".\n")
+} else{
+    conclusion3 <- paste0(
+        "\n\nNote that RIR = primary RIR + supplemental RIR = (",
+        final_primary, "/", sprintf("%.3f", p_destination/100), ") + (", final_extra, "/", sprintf("%.3f", p_destination_extra/100), ") ≈ ", total_RIR, ".\n",
+        "based on the calculation RIR = Fragility/P(destination).\n"
+    )
+}
 
 conclusion4 <- sprintf("\nThe transfer of %d data points yields the following table:\n", total_switch)
 
@@ -558,7 +568,9 @@ if (final_solution$needtworows) {
     
     conclusion_twoway_3 <- paste0(
         "Therefore, the total RIR is ", RIR + RIR_extra, ".\n\n",
-        "RIR = Fragility/P(destination)\n"
+        "RIR = primary RIR + supplemental RIR = (",
+        final_primary, "/", sprintf("%.3f", p_destination/100), ") + (", final_extra, "/", sprintf("%.3f", p_destination_extra/100), ")\n",
+        "based on the calculation RIR = Fragility/P(destination).\n"
     )
 }
 
@@ -577,10 +589,14 @@ benchmark_output_head <- paste0(
 )
 
 benchmark_output_intro1 <- paste0(
-    "The benchmark value helps interpret the RIR necessary to invalidate or sustain an inference\n",
-    "by comparing the change needed to nullify the inference with the changes in the estimated effect\n",
-    "due to observed covariates.\n\n",
-    "Benchmark = Bias to change inference / Bias due to observed covariates"
+    "The benchmark value helps interpret the RIR necessary to nullify an inference by comparing\n",
+    "the change needed to nullify the inference with the changes in the estimated effect due to\n",
+    "observed covariates. Currently this feature is available only when the reported results are\n",
+    "statistically significant.\n\n",
+    
+    "The benchmark is used to compare the bias needed to nullify the inference / bias reduction due\n",
+    "to observed covariates. Specifically, change in data from implied to transfer table / change in\n",
+    "data from unconditional table to implied table\n"
 )
 
 if (invalidate_ob) {
@@ -588,7 +604,7 @@ if (invalidate_ob) {
     if (is.null(raw_treatment_success)) {
         # Range-based benchmark calculation
         benchmark_output_intro2 <- paste0(
-            "\nTo calculate this benchmark value, a range of treatment success values is automatically \n",
+            "To calculate this benchmark value, a range of treatment success values is automatically \n",
             "generated based on the assumption that the marginals are constant between the implied table \n",
             "and the raw unadjusted table. The benchmark value is visualized as a graph, allowing the \n",
             "user to interpret how the benchmark changes with hypothesized treatment success values.\n"
@@ -600,15 +616,142 @@ if (invalidate_ob) {
 } else {
     # !invalidate_ob (no invalidation scenario)
     benchmark_output_intro2 <- paste0(
-        "\nThe treatment is not statistically significant in the implied table and would also not\n",
-        "be statistically significant in the raw table (before covariates were added). In this scenario,\n",
-        "there is no clear interpretation of the benchmark and therefore the benchmark calculation is not reported.\n"
+        "The treatment is not statistically significant in the implied table and would also not be\n",
+        "statistically significant in the raw table (before covariates were added). In this scenario, we\n",
+        "do not yet have a clear interpretation of the benchmark and therefore the benchmark calculation\n",
+        "is not reported.\n\n"
+    )
+}
+
+calc_RIR_uncond_implied_pkonfound <- function(
+        uncond_table,
+        implied_table,
+        replace_u = replace,
+        switch_trm_u = switch_trm
+        ) {
+    # Unconditional table counts
+    a_u <- uncond_table$control_fail
+    b_u <- uncond_table$control_success
+    c_u <- uncond_table$treatment_fail
+    d_u <- uncond_table$treatment_success
+    
+    # Implied table counts
+    a_i <- implied_table$control_fail
+    b_i <- implied_table$control_success
+    c_i <- implied_table$treatment_fail
+    d_i <- implied_table$treatment_success
+    
+    # Compute total sample, fail, success from unconditional table
+    total_fail_u <- a_u + c_u
+    total_success_u <- b_u + d_u
+    total_sample_u <- total_fail_u + total_success_u
+    
+    # Determine p_fail, p_success based on 'replace' argument
+    if (replace_u == "entire") {
+        # Probability references from the entire unconditional sample
+        p_fail <- total_fail_u / total_sample_u    
+        p_success <- total_success_u / total_sample_u
+    } else if (replace_u == "control") {
+        # Probability references from the unconditional control group
+        control_total <- a_u + b_u
+        p_fail <- a_u / control_total     
+        p_success <- b_u / control_total
+    }
+    
+    # Determine how many changes are needed in each row
+    # Switches in the treatment row:
+    #   if c_i > c_u => success->fail in the treatment row
+    #   if c_i < c_u => fail->success in the treatment row
+    # Then if that alone doesn't fully convert unconditional->implied, we do control row next.
+    
+    # define a function to handle a row:
+    row_switch_RIR <- function(
+        uncond_fail, uncond_success,
+        implied_fail, implied_success,
+        p_fail, p_success) {
+        # Calculate how many "fail" changes are needed
+        delta_fail <- implied_fail - uncond_fail
+       
+         # partial_RIR = number_of_switches / p(destination)
+        if (delta_fail > 0) {
+            # success->fail
+            number_of_switches <- delta_fail
+            partial_RIR <- number_of_switches / p_fail
+        } else if (delta_fail < 0) {
+            # fail->success
+            number_of_switches <- abs(delta_fail)
+            partial_RIR <- number_of_switches / p_success
+        } else {
+            number_of_switches <- 0
+            partial_RIR <- 0
+        }
+        
+        list(
+            switches = number_of_switches,
+            partial_RIR = partial_RIR
+        )
+    }
+    
+    # Based on switch_trm option, we try to fix the treatment/control row first.
+    if (switch_trm_u) {
+        # treatment row first
+        treat_res <- row_switch_RIR(
+            uncond_fail = c_u,
+            uncond_success = d_u,
+            implied_fail = c_i,
+            implied_success = d_i,
+            p_fail = p_fail,
+            p_success = p_success
+        )
+        # control row second
+        control_res <- row_switch_RIR(
+            uncond_fail = a_u,
+            uncond_success = b_u,
+            implied_fail = a_i,
+            implied_success = b_i,
+            p_fail = p_fail,
+            p_success = p_success
+        )
+    } else {
+        # control row first
+        control_res <- row_switch_RIR(
+            uncond_fail = a_u,
+            uncond_success = b_u,
+            implied_fail = a_i,
+            implied_success = b_i,
+            p_fail = p_fail,
+            p_success = p_success
+        )
+        # treatment row second
+        treat_res <- row_switch_RIR(
+            uncond_fail = c_u,
+            uncond_success = d_u,
+            implied_fail = c_i,
+            implied_success = d_i,
+            p_fail = p_fail,
+            p_success = p_success
+        )
+    }
+    
+    # Sum partial RIR and switches
+    total_switches <- treat_res$switches + control_res$switches
+    total_RIR <- treat_res$partial_RIR + control_res$partial_RIR
+    
+    # Return a summary
+    list(
+        treatment_switches = treat_res$switches,
+        control_switches = control_res$switches,
+        partial_RIR_treatment = treat_res$partial_RIR,
+        partial_RIR_control = control_res$partial_RIR,
+        total_switches = total_switches,
+        total_RIR = total_RIR,
+        p_fail_used = p_fail,
+        p_success_used = p_success
     )
 }
 
 
 if (invalidate_ob) {
-    
     if (is.null(raw_treatment_success)) {
     #############################
     # 1) Range-based Benchmark Calculation (no raw_treatment_success; default)
@@ -664,7 +807,7 @@ if (invalidate_ob) {
         change_log_odds_obs_cov <- log_odds_new - est_eff
         change_with_unobserved_cov <- est_eff - final_solution$est_eff_final
         
-        # Calculate and store benchmark value
+        # Calculate and store benchmark value (log odds-based)
         if (!is.na(change_log_odds_obs_cov) && abs(change_log_odds_obs_cov) > 0) {
             results$benchmark[i] <- abs(change_with_unobserved_cov / change_log_odds_obs_cov)
         } else {
@@ -704,7 +847,8 @@ if (invalidate_ob) {
     }
     
     benchmark_output_outro <- paste0(
-        "To calculate a specific benchmark value, provide the treatment success value from the raw unadjusted table."
+        "To calculate a specific benchmark value, locate the number of treatment successes in the raw data\n",
+        "on the graph below.\n"
     )
     
     #############################
@@ -716,7 +860,6 @@ if (invalidate_ob) {
             aes(color = "Benchmark Value vs. \nTreatment Success"), 
             size = 1
         ) +
-        
         # 2) Dark green vertical line: "Implied Treatment Success"
         geom_vline(
             data = data.frame(x = implied_treatment_success),
@@ -724,7 +867,6 @@ if (invalidate_ob) {
             size = 1,
             show.legend = TRUE
         ) +
-        
         # 3) Red dot: "Benchmark Value from Implied Treatment Success"
         geom_point(
             data = data.frame(
@@ -739,8 +881,7 @@ if (invalidate_ob) {
             size = 3,
             show.legend = TRUE
         ) +
-        
-        # Manually define which colors go with which legend label
+        # define which colors go with which legend label
         scale_color_manual(
             name = "Plot Legend", 
             values = c(
@@ -749,11 +890,6 @@ if (invalidate_ob) {
                 "Benchmark Value from \nImplied Treatment Success" = "red"
             )
         ) +
-        theme(
-            legend.spacing.y = unit(0.6, "cm"),  
-            legend.key.size = unit(0.8, "cm")  
-        ) +
-        # Optional text annotation (not in the legend)
         annotate(
             "text", 
             x = implied_treatment_success, 
@@ -762,17 +898,33 @@ if (invalidate_ob) {
             color = "black", 
             vjust = 0.7, 
             hjust = -0.1, 
-            size = 5
+            size = 6
         ) +
-        
         labs(
             title = "Benchmark Values from Hypothesized Treatment Success",
             subtitle = "Derived from the hypothesized range of treatment success values in the raw unadjusted table",
             x = "Count of Hypothesized Raw Unadjusted Treatment Success",
-            y = "Benchmark Value"
+            y = "Log-odds Ratio Benchmark Value"
         ) +
         theme_minimal() +
         theme(
+            # Position legend in the top-right corner inside the plot
+            legend.position = c(0.95, 0.95),
+            legend.justification = c("right", "top"),
+            legend.box.just = "right",
+            
+            # Increase spacing between legend items and key size
+            legend.spacing.y = unit(0.6, "cm"),
+            legend.key.size = unit(0.8, "cm"),
+            
+            # Increase legend text and legend title sizes
+            legend.text = element_text(size = 13),
+            legend.title = element_text(size = 14),
+            
+            # Add a rectangular background to the legend with a border
+            legend.background = element_rect(fill = "white", color = "black"),
+            
+            # Adjust other theme elements
             plot.title = element_text(size = 16, face = "bold"),
             plot.subtitle = element_text(size = 14),
             axis.title.x = element_text(size = 14),
@@ -785,8 +937,6 @@ if (invalidate_ob) {
         ##############################
         # 3) Single-Value Calculation (user provides raw_treatment_success)
         #############################
-        
-        # Perform calculations based on the provided `raw_treatment_success`
         
         # Extract totals
         control_total_start <- sum(final_solution$table_start[1, ])
@@ -807,6 +957,29 @@ if (invalidate_ob) {
         if (control_fail_new <= 0 || treatment_fail_new <= 0 || control_success_new <= 0) {
             stop("Invalid configuration: cell values must be greater than zero.")
         }
+        
+        # Create a 3×3 table for the user-defined raw unadjusted scenario
+        # Calculate success rates for Control and Treatment
+        success_percent_control_new <- (control_success_new / (control_fail_new + control_success_new)) * 100
+        success_percent_treatment_new <- (raw_treatment_success / (treatment_fail_new + raw_treatment_success)) * 100
+        
+        # Calculate totals
+        total_fail_new <- control_fail_new + treatment_fail_new
+        total_success_new <- control_success_new + raw_treatment_success
+        total_percentage_new <- (total_success_new / (total_fail_new + total_success_new)) * 100
+        
+        # Convert them to nicely formatted strings with "%"
+        success_rate_control_new <- paste0(sprintf("%.2f", success_percent_control_new), "%")
+        success_rate_treatment_new <- paste0(sprintf("%.2f", success_percent_treatment_new), "%")
+        total_rate_new <- paste0(sprintf("%.2f", total_percentage_new), "%")
+        
+        # Build the 3x3 table
+        table_raw_3x3 <- data.frame(
+            Fail = c(control_fail_new, treatment_fail_new, total_fail_new),
+            Success = c(control_success_new, raw_treatment_success, total_success_new),
+            `Success_Rate` = c(success_rate_control_new, success_rate_treatment_new, total_rate_new),
+            row.names = c("Control", "Treatment", "Total")
+        )
         
         # Calculate odds and log odds for the raw table
         odds_control_new <- control_success_new / control_fail_new
@@ -835,6 +1008,64 @@ if (invalidate_ob) {
         } else {
             stop("Invalid calculation: change in log odds due to observed covariates is zero or NA.")
         }
+        
+        # Calculate RIR-based benchmark
+        # Create an unconditional table object from the raw user input
+        uncond_table <- list(
+            control_fail = control_fail_new,
+            control_success = control_success_new,
+            treatment_fail = treatment_fail_new,
+            treatment_success = raw_treatment_success
+        )
+        
+        # Create an implied table object
+        implied_table <- list(
+            control_fail = final_solution$table_start[1,1],
+            control_success = final_solution$table_start[1,2],
+            treatment_fail = final_solution$table_start[2,1],
+            treatment_success = final_solution$table_start[2,2]
+        )
+        
+        # Compute RIR from uncond -> implied
+        rir_uncond_implied <- calc_RIR_uncond_implied_pkonfound(
+            uncond_table,
+            implied_table,
+            replace = "entire"  # or "control" if that's your setting
+        )
+        
+        # RIR from implied -> final is final_solution$total_RIR
+        rir_implied_transferred <- total_RIR
+        
+        # The RIR-based, Log-odds-based Benchmark Value
+        if (rir_uncond_implied$total_RIR > 0) {
+            benchmark_value_rir <- rir_implied_transferred / rir_uncond_implied$total_RIR
+            benchmark_output_rir <- paste0(
+                "RIR Ratio Benchmark\n",
+                "Benchmark value (RIR ratio) = RIR(implied→transfer) / RIR(raw→implied)\n",
+                "   = ",
+                sprintf("%.0f", rir_implied_transferred), "/",
+                sprintf("%.0f", rir_uncond_implied$total_RIR),
+                " ≈ ",
+                sprintf("%.3f", benchmark_value_rir),
+                "\n\n",
+                
+                "Log-odds Ratio Benchmark\n",
+                "Bias to change inference / bias due to observed covariates:\n",
+                "   = (log odds of implied − log odds of transfer)\n",
+                "     / (log odds of raw − log odds of implied)\n",
+                "   = (", 
+                formatC(est_eff, format = "f", digits = 3), " - ",
+                formatC(final_solution$est_eff_final, format = "f", digits = 3), 
+                ") / (",
+                formatC(log_odds_new, format = "f", digits = 3), " - ",
+                formatC(est_eff, format = "f", digits = 3),
+                ") ≈ ",
+                formatC(benchmark_value, format = "f", digits = 3), "\n"
+                )
+        } else {
+            benchmark_output_rir <- "Cannot compute RIR ratio: RIR from uncond->implied is zero.\n"
+        }
+        
     }        
 } 
 
@@ -873,7 +1104,8 @@ if (invalidate_ob) {
                   p_destination = p_destination, p_destination_extra = p_destination_extra,
                   total_RIR = total_RIR, total_switch = total_switch,
                   # values from implied/transferred table
-                  table_start_3x3 = table_start_3x3, table_final_3x3 = table_final_3x3   
+                  table_start_3x3 = table_start_3x3, table_final_3x3 = table_final_3x3, invalidate_ob = invalidate_ob,
+                  benchmark_plot = if (invalidate_ob && is.null(raw_treatment_success)) benchmark_plot else NULL
                   ))
 
   } else  if (to_return == "print") {
@@ -882,7 +1114,6 @@ if (invalidate_ob) {
 
     cat(conclusion_sum)
     cat(table_header1)
-    cat(crayon::underline("User-entered Table:\n"))
     print(table_start_3x3)
     cat("\n")
     cat(estimates_summary1)
@@ -914,18 +1145,32 @@ if (invalidate_ob) {
     cat("\n")
     cat("\n")
     cat(benchmark_output_head)
+    
     if (!is.null(raw_treatment_success) && invalidate_ob) {
-        cat("\n")
-        cat(benchmark_output_specified)
+        #cat("\n")
+        #cat(benchmark_output_specified)
     }
-    cat("\n")
-    cat(benchmark_output_intro1)
-    cat("\n")
-    cat(benchmark_output_intro2)
+    
     cat("\n")
     
     if (invalidate_ob) {
+        cat(benchmark_output_intro1)
+        cat("\n")
+    }
+    
+    cat(benchmark_output_intro2)
+
+    if (!is.null(raw_treatment_success) && invalidate_ob) {
+        cat(crayon::underline("Raw-unadjusted Table:\n"))
+        print(table_raw_3x3)
+        cat("\n")
+        cat(benchmark_output_rir)
+        cat("\n")
+    }
+    
+    if (invalidate_ob) {
         if (is.null(raw_treatment_success)){
+            cat("\n")
             cat(benchmark_output_outro)
             cat("\n")
             print(benchmark_plot)

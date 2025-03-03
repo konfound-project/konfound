@@ -361,7 +361,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   }
   
   if (p_ob < alpha) {
-    change <- paste0("To invalidate the inference that the effect is different from 0 (alpha = ", alpha, "),\n")
+    change <- paste0("To nullify the inference that the effect is different from 0 (alpha = ", alpha, "),\n")
   } else {
     change <- paste0("To sustain an inference that the effect is different from 0 (alpha = ", alpha, "),\n")
   }
@@ -465,7 +465,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   }
 
   info1 <- "This function calculates the number of data points that would have to be replaced with"
-  info2 <- "zero effect data points (RIR) to invalidate the inference made about the association"
+  info2 <- "zero effect data points (RIR) to nullify the inference made about the association"
   info3 <- "between the rows and columns in a 2x2 table."
   info4 <- "One can also interpret this as switches (Fragility) from one cell to another, such as from the"
   info5 <- "treatment success cell to the treatment failure cell."

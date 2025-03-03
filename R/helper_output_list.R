@@ -17,9 +17,10 @@ output_list <- function(obs_r, act_r,
                         est_eff_final = NA, std_err_final = NA, p_final = NA,
                         p_destination = NA, p_destination_extra = NA,
                         total_RIR = NA, total_switch = NA,
-                        table_start_3x3 = NA, table_final_3x3 = NA,
+                        table_start_3x3 = NA, table_final_3x3 = NA, invalidate_ob = NA,
                         fisher_ob = NA, chisq_ob = NA, 
-                        fisher_final = NA, chisq_final = NA
+                        fisher_final = NA, chisq_final = NA,
+                        benchmark_plot = NULL
                         ) {
   result <- list(obs_r = obs_r,
                  act_r = act_r, 
@@ -66,9 +67,10 @@ output_list <- function(obs_r, act_r,
                  est_eff_final = est_eff_final, std_err_final = std_err_final, p_final = p_final,
                  p_destination = p_destination, p_destination_extra = p_destination_extra,
                  total_RIR = total_RIR, total_switch = total_switch,
-                 table_start_3x3 = table_start_3x3, table_final_3x3 = table_final_3x3,
+                 table_start_3x3 = table_start_3x3, table_final_3x3 = table_final_3x3, invalidate_ob = invalidate_ob,
                  fisher_ob = fisher_ob, chisq_ob = chisq_ob, 
-                 fisher_final = fisher_final, chisq_final = chisq_final
+                 fisher_final = fisher_final, chisq_final = chisq_final,
+                 benchmark_plot = benchmark_plot
                  )
   result <- result[!is.na(result)]
   message("For interpretation, check out to_return = 'print'.")
