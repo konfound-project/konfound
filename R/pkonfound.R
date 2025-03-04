@@ -28,6 +28,7 @@
 #' @param to_return whether to return a data.frame (by specifying this argument to equal "raw_output" for use in other analyses) or a plot ("plot"); default is to print ("print") the output to the console; can specify a vector of output to return
 #' @param upper_bound optional (replaces the est_eff); the upper bound of the confidence interval
 #' @param lower_bound optional (replaces the est_eff); the lowerxw bound of the confidence interval
+#' @param raw_treatment_success optional; the unadjusted count of successful outcomes in the treatment group, used when calculating the specific RIR benchmark.
 #' @importFrom stats fisher.test
 #' @importFrom dplyr select
 #' @return pkonfound prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to nullify the inference. If to_return = "raw_output," a list will be given with the following components:
@@ -135,7 +136,8 @@
                       FR2max_multiplier = 1.3,
                       to_return = "print",
                       upper_bound = NULL,
-                      lower_bound = NULL
+                      lower_bound = NULL,
+                      raw_treatment_success = NULL
                       ) {
   if ("table" %in% to_return) stop("a table can only be
                                    output when using konfound")
@@ -205,7 +207,8 @@
       to_return = to_return,
       n_treat = n_treat,
       switch_trm = switch_trm,
-      replace = replace
+      replace = replace,
+      raw_treatment_success = raw_treatment_success
     )
   } else if(!is.null(a)) {
     # error handling

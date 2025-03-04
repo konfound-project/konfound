@@ -347,9 +347,21 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
       }
   }
   
+  # Define default values for newly added output variables
+  if (test == "fisher") {
+      chisq_ob <- NA
+      chisq_final <- NA
+  }
+  if (test == "chisq") {
+      fisher_ob <- NA
+      fisher_final <- NA
+  }
+  if (!exists("p_destination_extra") || is.na(p_destination_extra)) {
+      p_destination_extra <- NA
+  }
   
   if (p_ob < alpha) {
-    change <- paste0("To invalidate the inference that the effect is different from 0 (alpha = ", alpha, "),\n")
+    change <- paste0("To nullify the inference that the effect is different from 0 (alpha = ", alpha, "),\n")
   } else {
     change <- paste0("To sustain an inference that the effect is different from 0 (alpha = ", alpha, "),\n")
   }
@@ -453,7 +465,7 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
   }
 
   info1 <- "This function calculates the number of data points that would have to be replaced with"
-  info2 <- "zero effect data points (RIR) to invalidate the inference made about the association"
+  info2 <- "zero effect data points (RIR) to nullify the inference made about the association"
   info3 <- "between the rows and columns in a 2x2 table."
   info4 <- "One can also interpret this as switches (Fragility) from one cell to another, such as from the"
   info5 <- "treatment success cell to the treatment failure cell."
@@ -488,7 +500,12 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
                      cond_RIRpi_rxyz = NA,
                      cond_RIR_null = NA, 
                      cond_RIR_fixedY = NA, 
-                     cond_RIR_rxyz = NA
+                     cond_RIR_rxyz = NA,
+                     # additional output list for 2by2
+                     p_destination = p_destination,
+                     p_destination_extra = p_destination_extra,
+                     fisher_ob = fisher_ob, chisq_ob = chisq_ob, p_start = p_ob,
+                     fisher_final = fisher_final, chisq_final = chisq_final, p_final = p_final
                      ))
     result <- list(info1,
                    info2,

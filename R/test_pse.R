@@ -138,6 +138,8 @@ test_pse <- function(est_eff,
                        "correlation between X and CV" = rxcv, 
                        "correlation between Y and CV" = rycv,
                        "covariance matrix" = cov_pse, 
+                       "eff_M3" = eff_x_M3,
+                       "se_M3" = se_x_M3,
                        "Table" = fTable)
         return(output)
     }
