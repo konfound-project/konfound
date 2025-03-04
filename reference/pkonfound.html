@@ -71,7 +71,8 @@
 <span>  FR2max_multiplier <span class="op">=</span> <span class="fl">1.3</span>,</span>
 <span>  to_return <span class="op">=</span> <span class="st">"print"</span>,</span>
 <span>  upper_bound <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  lower_bound <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  lower_bound <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  raw_treatment_success <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -189,6 +190,10 @@
 
 <dt id="arg-lower-bound">lower_bound<a class="anchor" aria-label="anchor" href="#arg-lower-bound"></a></dt>
 <dd><p>optional (replaces the est_eff); the lowerxw bound of the confidence interval</p></dd>
+
+
+<dt id="arg-raw-treatment-success">raw_treatment_success<a class="anchor" aria-label="anchor" href="#arg-raw-treatment-success"></a></dt>
+<dd><p>optional; the unadjusted count of successful outcomes in the treatment group, used when calculating the specific RIR benchmark.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -320,10 +325,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 60</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference of an effect using the threshold of 0.794 for</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference of an effect using the threshold of 0.794 for</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> statistical significance (with null hypothesis = 0 and alpha = 0.05), 60.295%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> of the (2) estimate would have to be due to bias. This implies that to</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> invalidate the inference one would expect to have to replace 60 (60.295%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nullify the inference one would expect to have to replace 60 (60.295%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> observations with data points for which the effect is 0 (RIR = 60).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
@@ -342,10 +347,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 83</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference of an effect using the threshold of -1.282 for</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference of an effect using the threshold of -1.282 for</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> statistical significance (with null hypothesis = 0 and alpha = 0.05), 41.73%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> of the (-2.2) estimate would have to be due to bias. This implies that to</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> invalidate the inference one would expect to have to replace 83 (41.73%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nullify the inference one would expect to have to replace 83 (41.73%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> observations with data points for which the effect is 0 (RIR = 83).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
@@ -387,23 +392,22 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fragility = 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> You entered: log odds = -0.200, SE = 0.103, with p-value = 0.052. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The table implied by the parameter estimates and sample sizes you entered:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">User-entered Table:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Fail Success Success_Rate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control    2882     118        3.93%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Treatment 17308     580        3.24%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total     20190     698        3.34%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The reported log odds = -0.200, SE = 0.103, and p-value = 0.052. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Values in the table have been rounded to the nearest integer. This may cause </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> a small change to the estimated effect for the table.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To sustain an inference that the effect is different from 0 (alpha = 0.050),</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> one would need to transfer 1 data points from treatment success to treatment failure (Fragility = 1).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To sustain an inference that the effect is different from 0 (alpha = 0.050), one would</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> need to transfer 1 data points from treatment success to treatment failure (Fragility = 1).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to replacing 2 (0.345%) treatment success data points with data points </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> for which the probability of failure in the control group (96.067%) applies (RIR = 2). </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Note that RIR = Fragility/P(destination)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note that RIR = Fragility/P(destination) = 1/0.961 ~ 2.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The transfer of 1 data points yields the following table:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Transfer Table:</span></span>
@@ -413,7 +417,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total     20191     697        3.34%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The log odds (estimated effect) = -0.202, SE = 0.103, p-value = 0.050.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This is based on t = estimated effect/standard error</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This p-value is based on t = estimated effect/standard error</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Benchmarking RIR for Logistic Regression</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The treatment is not statistically significant in the implied table and would also not be</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> statistically significant in the raw table (before covariates were added). In this scenario, we</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> do not yet have a clear interpretation of the benchmark and therefore the benchmark calculation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> is not reported.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2021) for a description of the methods.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -431,10 +441,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference of an effect using the threshold of 1 for</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference of an effect using the threshold of 1 for</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> statistical significance (with null hypothesis = 0 and alpha = 0.05), 49.987%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> of the (2) estimate would have to be due to bias. This implies that to</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> invalidate the inference one would expect to have to replace 50 (49.987%)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> nullify the inference one would expect to have to replace 50 (49.987%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> observations with data points for which the effect is 0 (RIR = 50).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
@@ -462,12 +472,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fragility = 9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of data points that would have to be replaced with</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> zero effect data points (RIR) to invalidate the inference made about the association</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> zero effect data points (RIR) to nullify the inference made about the association</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> between the rows and columns in a 2x2 table.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> One can also interpret this as switches (Fragility) from one cell to another, such as from the</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> treatment success cell to the treatment failure cell.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference that the effect is different from 0 (alpha = 0.05),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference that the effect is different from 0 (alpha = 0.05),</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> one would need to transfer 9 data points from treatment success to treatment failure as shown,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> from the User-entered Table to the Transfer Table (Fragility = 9).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to replacing 14 (36.842%) treatment success data points with data points</span>
@@ -505,12 +515,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fragility = 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of data points that would have to be replaced with</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> zero effect data points (RIR) to invalidate the inference made about the association</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> zero effect data points (RIR) to nullify the inference made about the association</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> between the rows and columns in a 2x2 table.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> One can also interpret this as switches (Fragility) from one cell to another, such as from the</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> treatment success cell to the treatment failure cell.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference that the effect is different from 0 (alpha = 0.01),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference that the effect is different from 0 (alpha = 0.01),</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> one would need to transfer 6 data points from treatment success to treatment failure as shown,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> from the User-entered Table to the Transfer Table (Fragility = 6).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to replacing 9 (23.684%) treatment success data points with data points</span>
@@ -548,12 +558,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fragility = 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of data points that would have to be replaced with</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> zero effect data points (RIR) to invalidate the inference made about the association</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> zero effect data points (RIR) to nullify the inference made about the association</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> between the rows and columns in a 2x2 table.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> One can also interpret this as switches (Fragility) from one cell to another, such as from the</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> treatment success cell to the treatment failure cell.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference that the effect is different from 0 (alpha = 0.01),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference that the effect is different from 0 (alpha = 0.01),</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> one would need to transfer 6 data points from control failure to control success as shown,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> from the User-entered Table to the Transfer Table (Fragility = 6).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to replacing 19 (54.286%) control failure data points with data points</span>
@@ -591,12 +601,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fragility = 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of data points that would have to be replaced with</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> zero effect data points (RIR) to invalidate the inference made about the association</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> zero effect data points (RIR) to nullify the inference made about the association</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> between the rows and columns in a 2x2 table.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> One can also interpret this as switches (Fragility) from one cell to another, such as from the</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> treatment success cell to the treatment failure cell.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To invalidate the inference that the effect is different from 0 (alpha = 0.05),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference that the effect is different from 0 (alpha = 0.05),</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> one would need to transfer 10 data points from treatment success to treatment failure as shown,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> from the User-entered Table to the Transfer Table (Fragility = 10).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to replacing 15 (39.474%) treatment success data points with data points</span>
@@ -667,6 +677,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`var(CV)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $eff_x_M3_oster</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.538308</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $eff_x_M3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.114065e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Table</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 M1:X    M2:X,Z M3(delta_exact):X,Z,CV M3(delta*):X,Z,CV</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> R2         0.1097571 0.7008711           8.006897e-01         0.8006897</span>
@@ -714,6 +730,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> X  0.07773579 0.04840000 0.1105826 0.04716155</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Z  0.53940306 0.11058258 1.0000000 0.00000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CV 0.31340398 0.04716155 0.0000000 1.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $eff_M3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.09740386</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $se_M3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.05397058</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Table</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                   M1:X      M2:X,Z   M3:X,Z,CV</span>
