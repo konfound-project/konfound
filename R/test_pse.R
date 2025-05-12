@@ -145,10 +145,10 @@ test_pse <- function(est_eff,
     }
     
     if (to_return == "print") {
-        cat("This function calculates the correlations associated with the confound that \ngenerate an estimated effect that is approximately equal to the threshold \nwhile preserving the standard error.\n\n")
+        cat("This function calculates the correlations associated with an omitted confounding \nvariable (CV) that generate an estimated effect that is approximately equal to \nthe threshold while preserving the originally reported standard error.\n\n")
         cat(sprintf("The correlation between X and CV is %.3f, and the correlation between\nY and CV is %.3f.\n\n", rxcv, rycv))
         cat(sprintf("Conditional on the covariates, the correlation between X and CV is %.3f,\nand the correlation between Y and CV is %.3f.\n\n", rxcvGz, rycvGz))
-        cat(sprintf("Including such a CV, the coefficient changes to %.3f, with standard error\nof %.3f.\n\n", eff_x_M3, se_x_M3))
+        cat(sprintf("Including such a CV, the coefficient would change to %.3f, with standard error\nof %.3f.\n\n", eff_x_M3, se_x_M3))
         cat("Use to_return = \"raw_output\" to see more specific results.")
     }
         

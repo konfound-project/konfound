@@ -436,8 +436,8 @@ total_rate_final <- total_success_final / (total_fail_final + total_success_fina
           "in the ", replace, " sample (", p_destination_extra, "%) applies.\n"
       )
       conclusion1d <- paste0(
-          "Therefore, the total RIR is ", RIR + RIR_extra, ".\n\n",
-          "RIR = Fragility/P(destination)"
+          "RIR = Fragility/P(destination)\n\n",
+          "Therefore, the total RIR is ", RIR, " + ", RIR_extra, " = ", RIR + RIR_extra
       )
       
   }

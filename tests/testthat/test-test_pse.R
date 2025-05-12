@@ -78,9 +78,9 @@ test_that("test_pse print output is correct", {
     
     # Expected string
     expected_output <- c(
-        "This function calculates the correlations associated with the confound that ",
-        "generate an estimated effect that is approximately equal to the threshold ",
-        "while preserving the standard error.",
+        "This function calculates the correlations associated with an omitted confounding ",
+        "variable (CV) that generate an estimated effect that is approximately equal to ",
+        "the threshold while preserving the originally reported standard error.",
         "",
         "The correlation between X and CV is 0.214, and the correlation between",
         "Y and CV is 0.313.",
@@ -88,7 +88,7 @@ test_that("test_pse print output is correct", {
         "Conditional on the covariates, the correlation between X and CV is 0.248,",
         "and the correlation between Y and CV is 0.372.",
         "",
-        "Including such a CV, the coefficient changes to 0.097, with standard error",
+        "Including such a CV, the coefficient would change to 0.097, with standard error",
         "of 0.054.",
         "",
         "Use to_return = \"raw_output\" to see more specific results."
