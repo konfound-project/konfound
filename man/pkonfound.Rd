@@ -97,6 +97,7 @@ pkonfound(
 }
 \description{
 For published studies, this command calculates (1) how much bias there must be in an estimate to nullify/sustain an inference; (2) the impact of an omitted variable necessary to nullify/sustain an inference for a regression coefficient.
+For a full description of the command’s usage and additional examples, please refer to our \href{https://konfound-it.org/page/guide/}{practical guide}.
 }
 \details{
 The function accepts arguments depending on the type of model:
@@ -118,6 +119,13 @@ The function accepts arguments depending on the type of model:
 \itemize{
   \item a, b, c, d, two_by_two_table, test, replace, switch_trm
 }
+}
+\note{
+For a thoughtful background on benchmark options for ITCV, see 
+\href{https://academic.oup.com/jrsssb/article-abstract/82/1/39/7056023}{Cinelli & Hazlett (2020)}, 
+\href{https://journals.sagepub.com/doi/pdf/10.1177/01492063241293126}{Lonati & Wulff (2024)}, 
+and 
+\href{https://journals.sagepub.com/doi/10.1177/0049124100029002001}{Frank (2000)}.
 }
 \section{Values}{
 
@@ -229,6 +237,9 @@ pkonfound(a = 35, b = 17, c = 17, d = 38, alpha = 0.01, switch_trm = FALSE)
 pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
 
 ## Advanced examples
+# Calculating unconditional ITCV and benchmark correlation for ITCV
+pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, sdx = 0.22, sdy = 1, R2 = .3,
+          index = "IT", to_return = "print")
 # Calculating delta* and delta_exact 
 pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
          eff_thr = 0, FR2max = .8, index = "COP", to_return = "raw_output")

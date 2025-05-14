@@ -42,8 +42,8 @@ test_cRIR <- function(est_eff, std_err, n_obs, n_covariates = 1,
   # Return results based on user's preference
   if (to_return == "print") {
     cat(crayon::bold("Robustness of Inference to Replacement (RIR):\n"))
-    cat("This application of RIR quantifies how much data we expect to have to replace when the properties of the replacement data are specified as conditional on other terms already in the model.")  
-    cat(sprintf("If the replacement data points satisfy rxy|Z = 0 (the correlation between the focal predictor and the outcome conditional on the covariates), then RIR = %.3f.\n", cond_RIR_rxyz))
+    cat("This application of RIR quantifies how much data we expect to have to replace when \nthe properties of the replacement data are specified as conditional on other terms \nalready in the model.\n\n")  
+    cat(sprintf("If the replacement data points satisfy rxy|Z = 0 (the correlation between the \nfocal predictor and the outcome conditional on the covariates), then RIR = %.3f.\n", cond_RIR_rxyz))
     if (!is.na(cond_RIR_fixedY)) cat(sprintf("If the replacement data points have a fixed or constant value, then RIR = %.3f.\n", cond_RIR_fixedY))
     if (!is.na(cond_RIR_null)) cat(sprintf("If the replacement data points follow a null distribution, then RIR = %.3f.\n", cond_RIR_null))
     if (!is.na(R2) & abs(ryxGz) < abs(critical_r)) cat(sprintf("When the inference is not significant, the RIR calculation is under development for scenarios where the replacement data points either have a fixed or constant value or follow a null distribution.")) 
