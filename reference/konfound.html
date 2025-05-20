@@ -134,7 +134,7 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference of an effect using the threshold of -1.294 for</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> statistical significance (with null hypothesis = 0 and alpha = 0.05), 66.629%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> of the (-3.878) estimate would have to be due to bias. This implies that to</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> of the estimate of -3.878 would have to be due to bias. This implies that to</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> nullify the inference one would expect to have to replace 21 (66.629%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> observations with data points for which the effect is 0 (RIR = 21).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -193,7 +193,7 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference of an effect using the threshold of 0.002 for</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> statistical significance (with null hypothesis = 0 and alpha = 0.05), 84.006%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> of the (0.01) estimate would have to be due to bias. This implies that to</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> of the estimate of 0.01 would have to be due to bias. This implies that to</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> nullify the inference one would expect to have to replace 17983 (84.006%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> observations with data points for which the effect is 0 (RIR = 17983).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -219,7 +219,7 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference of an effect using the threshold of 1.588 for</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> statistical significance (with null hypothesis = 0 and alpha = 0.05), 84.826%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> of the (10.467) estimate would have to be due to bias. This implies that to</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> of the estimate of 10.467 would have to be due to bias. This implies that to</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> nullify the inference one would expect to have to replace 137 (84.826%)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> observations with data points for which the effect is 0 (RIR = 137).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -250,6 +250,8 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> You entered: log odds = 1.527, SE = 0.415, with p-value = 0.000. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The table implied by the parameter estimates and sample sizes you entered:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Implied Table:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Fail Success Success_Rate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control     36      16       30.77%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Treatment   18      37       67.27%</span>
@@ -266,6 +268,7 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note that RIR = Fragility/P(destination) = 10/0.692 ~ 15.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The transfer of 10 data points yields the following table:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Transfer Table:</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Fail Success Success_Rate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control     36      16       30.77%</span>
@@ -275,7 +278,7 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The log odds (estimated effect) = 0.775, SE = 0.404, p-value = 0.058.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> This p-value is based on t = estimated effect/standard error</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Benchmarking RIR for Logistic Regression</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Benchmarking RIR for Logistic Regression (Beta Version)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The benchmark value helps interpret the RIR necessary to nullify an inference by comparing</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> the change needed to nullify the inference with the changes in the estimated effect due to</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> observed covariates. Currently this feature is available only when the reported results are</span>
@@ -291,7 +294,7 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> user to interpret how the benchmark changes with hypothesized treatment success values.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> To calculate a specific benchmark value, locate the number of treatment successes in the raw data</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> on the graph below.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> on the graph below, on the horizontal axis and interpret the corresponding value on the vertical axis.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_line()`: Each group consists of only one observation.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Do you need to adjust the <span style="color: #00BB00;">group</span> aesthetic?</span>
@@ -317,7 +320,7 @@ or a summary table.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>
