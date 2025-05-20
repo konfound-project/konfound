@@ -1,10 +1,11 @@
-# konfound 1.0.3 (IN DEVELOPMENT)
+# konfound 1.0.3
 
 * fix sign problems in print output for some cases 
 * separate out conditional RIR from COP
-* add the ability to enter a confidence interval instead of an estimeted effect
-* add calculation code and print output for ITCV benchmark (pkonfound)
+* add the ability to enter a confidence interval instead of an estimated effect
+* add calculation code and print output for RIR/ITCV benchmark (pkonfound)
 * add impact table for konfound
+* update help file for pkonfound
   
 # konfound 1.0.2
 

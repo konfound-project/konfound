@@ -84,8 +84,8 @@ test_that("test_cop outputs the correct language and values when to_return is 'p
     expected_lines <- c(
         "Coefficient of Proportionality (COP):",
         "",
-        "This function calculates a correlation-based coefficient of",
-        "proportionality (delta) as well as Oster's delta*.",
+        "This function calculates a correlation-based coefficient of proportionality (delta)",
+        "which is exact even in finite samples as well as Oster's delta*.",
         "",
         "Delta* is 0.387 (assuming no covariates in the baseline model M1),", 
         "the correlation-based delta is 1.172, with a bias of -66.980%.",

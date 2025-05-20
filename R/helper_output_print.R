@@ -71,7 +71,7 @@ output_print <- function(n_covariates,
       cat("\n")
       cat(paste0("statistical significance (with null hypothesis = ", nu, " and alpha = ", alpha, "), ", round(bias, 3), "%"))
       cat("\n")
-      cat(paste0("of the (", round(est_eff, 3), ") estimate would have to be due to bias. This implies that to"))
+      cat(paste0("of the estimate of ", round(est_eff, 3), " would have to be due to bias. This implies that to"))
       cat("\n")
       cat(paste0("nullify the inference one would expect to have to replace ", round(recase, 3), " (", round(bias, 3), "%)"))
       cat("\n")
@@ -92,9 +92,9 @@ output_print <- function(n_covariates,
           cat("The threshold used takes the same sign as the estimated effect. See comment above.")
           cat("\n")
       }
-      cat(paste0("To nullify the inference based on your estimate, ", round(bias, 3), "% of the (", round(est_eff, 3), ")"))
+      cat(paste0("To nullify the inference based on your estimate, ", round(bias, 3), "% of the"))
       cat("\n")
-      cat(paste0("estimate would have to be due to bias. This implies that to nullify"))
+      cat(paste0("estimate of ", round(est_eff, 3), " would have to be due to bias. This implies that to nullify"))
       cat("\n")
       cat(paste0("the inference one would expect to have to replace ", round(recase, 3), " (", round(bias, 3), "%) observation"))
       cat("\n")
@@ -107,7 +107,7 @@ output_print <- function(n_covariates,
       cat("\n")
       cat(paste0("is ", round(beta_threshhold, 3), " (with null hypothesis = ", nu, " and alpha = ", alpha, "). To reach that threshold,"))
       cat("\n")
-      cat(paste0(round(sustain, 3), "% of the (", round(est_eff, 3), ") estimate would have to be due to bias. This implies to sustain"))
+      cat(paste0(round(sustain, 3), "% of the estimate of ", round(est_eff, 3), " would have to be due to bias. This implies to sustain"))
       cat("\n")
       cat(paste0("an inference one would expect to have to replace ", round(recase, 3), " (", round(sustain, 3), "%) observations with"))
       cat("\n")
@@ -128,7 +128,7 @@ output_print <- function(n_covariates,
           cat("The threshold used takes the same sign as the estimated effect. See comment above.")
           cat("\n")
       }
-      cat(paste0("To reach that threshold, ", round(sustain, 3), "% of the (", round(est_eff, 3), ") estimate would have to be due"))
+      cat(paste0("To reach that threshold, ", round(sustain, 3), "% of the estimate of ", round(est_eff, 3), " would have to be due"))
       cat("\n")
       cat(paste0("to bias. This implies that to sustain an inference one would expect to have"))
       cat("\n")
@@ -204,7 +204,7 @@ output_print <- function(n_covariates,
       cat("\n")
       cat(paste0("This is based on a threshold effect of ", round(critical_r, 3), " for statistical significance (alpha = ", alpha, ").\n"))
       cat("\n")
-      cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ") 
+      cat("Correspondingly the conditional impact of an omitted variable (as defined in Frank 2000) must be ") 
       cat("\n")
       cat(paste0(round(rycvGz, 3), " X ", round(rxcvGz, 3), " = ", round(rycvGz*rxcvGz, 3), " to nullify an inference for a null hypothesis of an effect of ", nu, " (nu).\n", sep = ""))
       
@@ -244,7 +244,7 @@ output_print <- function(n_covariates,
       cat("\n")
       cat(paste0("effect of ", round(critical_r, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = ""))
       cat("\n")
-      cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be") 
+      cat("Correspondingly the conditional impact of an omitted variable (as defined in Frank 2000) must be") 
       cat("\n")
       cat(paste0(round(rycvGz, 3), " X ", round(rxcvGz, 3), " = ", round(rycvGz*rxcvGz, 3), " to nullify an inference for a null hypothesis of an effect of ", nu, " (nu).\n", sep = ""))
       
@@ -264,7 +264,7 @@ output_print <- function(n_covariates,
             cat("\n")
             cat(paste0("effect of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = ""))
             cat("\n")
-            cat("Correspondingly the UNCONDITIONAL impact of an omitted variable (as defined in Frank 2000) must be ")
+            cat("Correspondingly the UNCONDITIONAL maximum impact of an omitted variable (as defined in Frank 2000) is ")
             cat("\n")
             cat(paste0(round(rycv, 3), " X ", round(rxcv, 3), " = ", round(rycv * rxcv, 3), " to sustain an inference for a null hypothesis of an effect of ", nu, " (nu).\n", sep = ""))
             cat("\n")
@@ -283,7 +283,7 @@ output_print <- function(n_covariates,
       cat("\n")
       cat(paste0("based on a threshold effect of ", round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n", sep = ""))
       cat("\n")
-      cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ")
+      cat("Correspondingly the maximum impact of an omitted variable (as defined in Frank 2000) is ")
       cat("\n")
       cat(paste0(round(rycvGz, 3), " X ", round(rxcvGz, 3), " = ", round(rycvGz*rxcvGz, 3), " to sustain an inference for a null hypothesis of an effect of ", nu, " (nu).\n", sep = ""))
       
@@ -303,7 +303,7 @@ output_print <- function(n_covariates,
             cat("\n")
             cat(paste0("for statistical significance (alpha = ", alpha, ").\n"))
             cat("\n")
-            cat("Correspondingly the UNCONDITIONAL impact of an omitted variable (as defined in Frank 2000) must be ")
+            cat("Correspondingly the UNCONDITIONAL maximum impact of an omitted variable (as defined in Frank 2000) is ")
             cat("\n")
             cat(paste0(round(rycv, 3), " X ", round(rxcv, 3), " = ", round(rycv * rxcv, 3), " to sustain an inference for a null hypothesis of an effect of ", nu, " (nu).\n", sep = ""))
             cat("\n")
@@ -322,7 +322,7 @@ output_print <- function(n_covariates,
       cat("\n")
       cat(paste0(round(beta_threshhold, 3), " for statistical significance (alpha = ", alpha, ").\n"))
       cat("\n")
-      cat("Correspondingly the impact of an omitted variable (as defined in Frank 2000) must be ")
+      cat("Correspondingly the maximum impact of an omitted variable (as defined in Frank 2000) is ")
       cat("\n")
       cat(paste0(round(rycvGz, 3), " X ", round(rxcvGz, 3), " = ", round(rycvGz*rxcvGz, 3), " to sustain an inference for a null hypothesis of an effect of ", nu, " (nu).\n", sep = ""))
       
@@ -357,8 +357,7 @@ output_print <- function(n_covariates,
         cat("\n")
         cat(paste0("The ratio ('itcv_ratio_to_benchmark') is unconditional ITCV/Benchmark = ", formatC(abs(rycv * rxcv), format = "f", digits = 4), "/",
                    formatC(benchmark_corr_product, format = "f", digits = 4), " = ",
-                   formatC(itcv_ratio_to_benchmark, format = "f", digits = 4), ",\n",
-                   "indicating the robustness of inference.\n"))
+                   formatC(itcv_ratio_to_benchmark, format = "f", digits = 4), ".\n"))
         cat("\n")
         cat("The larger the ratio the stronger must be the unobserved impact relative to the")
         cat("\n")
