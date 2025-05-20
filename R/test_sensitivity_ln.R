@@ -584,7 +584,7 @@ citation <- paste0(
 
 ### Benchmarking RIR 
 benchmark_output_head <- paste0(
-    crayon::bold("Benchmarking RIR for Logistic Regression")
+    crayon::bold("Benchmarking RIR for Logistic Regression (Beta Version)")
 )
 
 benchmark_output_intro1 <- paste0(
