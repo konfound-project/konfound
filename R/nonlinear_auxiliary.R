@@ -1085,4 +1085,3 @@ check_starting_table <- function(n_cnt, n_treat, a, b, c, d){
     } 
     return(check)
 }
-

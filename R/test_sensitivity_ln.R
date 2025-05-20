@@ -554,9 +554,8 @@ if (final_solution$needtworows) {
     conclusion_twoway_1 <- paste0(
         "In terms of Fragility, ", change_t, "transferring ", final_primary, " data points from\n", 
         transferway, " is not enough to change the inference.\n",
-        "One would also need to transfer ", final_extra, " data points from ", transferway_extra, "\n",
-        "as shown, from the User-entered Table to the Transfer Table.\n\n"
-    )
+        "One would also need to transfer ", final_extra, " data points from ", transferway_extra, "\n\n"
+        )
     
     conclusion_twoway_2 <- paste0(
         "In terms of RIR, generating the ", final_primary, " switches from ", transferway, "\n",
@@ -568,9 +567,8 @@ if (final_solution$needtworows) {
     )
     
     conclusion_twoway_3 <- paste0(
-        "Therefore, the total RIR is ", RIR + RIR_extra, ".\n\n",
-        "RIR = primary RIR + supplemental RIR = (",
-        final_primary, "/", sprintf("%.3f", p_destination/100), ") + (", final_extra, "/", sprintf("%.3f", p_destination_extra/100), ")\n",
+        "Total RIR = primary RIR + supplemental RIR = (",
+        final_primary, "/", sprintf("%.3f", p_destination/100), ") + (", final_extra, "/", sprintf("%.3f", p_destination_extra/100), ") = ", RIR, " + ", RIR_extra, " = ", total_RIR, "\n",
         "based on the calculation RIR = Fragility/P(destination).\n"
     )
 }
@@ -586,7 +584,7 @@ citation <- paste0(
 
 ### Benchmarking RIR 
 benchmark_output_head <- paste0(
-    crayon::bold("Benchmarking RIR for Logistic Regression")
+    crayon::bold("Benchmarking RIR for Logistic Regression (Beta Version)")
 )
 
 benchmark_output_intro1 <- paste0(
@@ -624,13 +622,12 @@ if (invalidate_ob) {
     )
 }
 
-calc_RIR_uncond_implied_pkonfound <- function(
+calc_RIR_raw_to_implied <- function(
         uncond_table,
         implied_table,
-        replace_u = replace,
-        switch_trm_u = switch_trm
-        ) {
-    # Unconditional table counts
+        replace_u = replace
+) {
+    # Unconditional (raw) table counts
     a_u <- uncond_table$control_fail
     b_u <- uncond_table$control_success
     c_u <- uncond_table$treatment_fail
@@ -642,108 +639,81 @@ calc_RIR_uncond_implied_pkonfound <- function(
     c_i <- implied_table$treatment_fail
     d_i <- implied_table$treatment_success
     
-    # Compute total sample, fail, success from unconditional table
+    # Compute totals from the unconditional table
     total_fail_u <- a_u + c_u
     total_success_u <- b_u + d_u
     total_sample_u <- total_fail_u + total_success_u
     
-    # Determine p_fail, p_success based on 'replace' argument
+    # Determine p_fail, p_success based on the 'replace_u' argument
+    replace_u <- match.arg(replace_u)
     if (replace_u == "entire") {
         # Probability references from the entire unconditional sample
-        p_fail <- total_fail_u / total_sample_u    
+        p_fail    <- total_fail_u / total_sample_u
         p_success <- total_success_u / total_sample_u
     } else if (replace_u == "control") {
         # Probability references from the unconditional control group
         control_total <- a_u + b_u
-        p_fail <- a_u / control_total     
+        p_fail    <- a_u / control_total
         p_success <- b_u / control_total
     }
     
-    # Determine how many changes are needed in each row
-    # Switches in the treatment row:
-    #   if c_i > c_u => success->fail in the treatment row
-    #   if c_i < c_u => fail->success in the treatment row
-    # Then if that alone doesn't fully convert unconditional->implied, we do control row next.
-    
-    # define a function to handle a row:
-    row_switch_RIR <- function(
-        uncond_fail, uncond_success,
-        implied_fail, implied_success,
-        p_fail, p_success) {
-        # Calculate how many "fail" changes are needed
+    # Define a helper function to compute RIR for one row
+    # uncond_fail -> implied_fail
+    # uncond_success -> implied_success
+    row_switch_RIR <- function(uncond_fail, uncond_success,
+                               implied_fail, implied_success,
+                               p_fail, p_success) {
+        # delta_fail = how many additional fails in implied vs. raw
+        # if delta_fail > 0 => we turned success into fail
+        # if delta_fail < 0 => we turned fail into success
+        
         delta_fail <- implied_fail - uncond_fail
-       
-         # partial_RIR = number_of_switches / p(destination)
         if (delta_fail > 0) {
-            # success->fail
+            # success -> fail
             number_of_switches <- delta_fail
             partial_RIR <- number_of_switches / p_fail
         } else if (delta_fail < 0) {
-            # fail->success
+            # fail -> success
             number_of_switches <- abs(delta_fail)
             partial_RIR <- number_of_switches / p_success
         } else {
             number_of_switches <- 0
             partial_RIR <- 0
         }
-        
-        list(
-            switches = number_of_switches,
-            partial_RIR = partial_RIR
-        )
+        list(switches = number_of_switches, partial_RIR = partial_RIR)
     }
     
-    # Based on switch_trm option, we try to fix the treatment/control row first.
-    if (switch_trm_u) {
-        # treatment row first
-        treat_res <- row_switch_RIR(
-            uncond_fail = c_u,
-            uncond_success = d_u,
-            implied_fail = c_i,
-            implied_success = d_i,
-            p_fail = p_fail,
-            p_success = p_success
-        )
-        # control row second
-        control_res <- row_switch_RIR(
-            uncond_fail = a_u,
-            uncond_success = b_u,
-            implied_fail = a_i,
-            implied_success = b_i,
-            p_fail = p_fail,
-            p_success = p_success
-        )
-    } else {
-        # control row first
-        control_res <- row_switch_RIR(
-            uncond_fail = a_u,
-            uncond_success = b_u,
-            implied_fail = a_i,
-            implied_success = b_i,
-            p_fail = p_fail,
-            p_success = p_success
-        )
-        # treatment row second
-        treat_res <- row_switch_RIR(
-            uncond_fail = c_u,
-            uncond_success = d_u,
-            implied_fail = c_i,
-            implied_success = d_i,
-            p_fail = p_fail,
-            p_success = p_success
-        )
-    }
+    # Calculate row-by-row changes for both control and treatment
+    # Control row
+    control_res <- row_switch_RIR(
+        uncond_fail = a_u,
+        uncond_success = b_u,
+        implied_fail = a_i,
+        implied_success = b_i,
+        p_fail = p_fail,
+        p_success = p_success
+    )
     
-    # Sum partial RIR and switches
-    total_switches <- treat_res$switches + control_res$switches
-    total_RIR <- treat_res$partial_RIR + control_res$partial_RIR
+    # Treatment row
+    treatment_res <- row_switch_RIR(
+        uncond_fail = c_u,
+        uncond_success = d_u,
+        implied_fail = c_i,
+        implied_success = d_i,
+        p_fail = p_fail,
+        p_success = p_success
+    )
+    
+    # Combine results
+    total_switches <- control_res$switches + treatment_res$switches
+    total_RIR      <- control_res$partial_RIR + treatment_res$partial_RIR
     
     # Return a summary
     list(
-        treatment_switches = treat_res$switches,
         control_switches = control_res$switches,
-        partial_RIR_treatment = treat_res$partial_RIR,
+        treatment_switches = treatment_res$switches,
         partial_RIR_control = control_res$partial_RIR,
+        partial_RIR_treatment = treatment_res$partial_RIR,
         total_switches = total_switches,
         total_RIR = total_RIR,
         p_fail_used = p_fail,
@@ -848,7 +818,7 @@ if (invalidate_ob) {
     
     benchmark_output_outro <- paste0(
         "To calculate a specific benchmark value, locate the number of treatment successes in the raw data\n",
-        "on the graph below.\n"
+        "on the graph below, on the horizontal axis and interpret the corresponding value on the vertical axis.\n"
     )
     
     #############################
@@ -1027,10 +997,10 @@ if (invalidate_ob) {
         )
         
         # Compute RIR from uncond -> implied
-        rir_uncond_implied <- calc_RIR_uncond_implied_pkonfound(
+        rir_uncond_implied <- calc_RIR_raw_to_implied(
             uncond_table,
             implied_table,
-            replace = "entire"  # or "control" if that's your setting
+            replace_u = replace  
         )
         
         # RIR from implied -> final is final_solution$total_RIR
@@ -1041,7 +1011,7 @@ if (invalidate_ob) {
             benchmark_value_rir <- rir_implied_transferred / rir_uncond_implied$total_RIR
             benchmark_output_rir <- paste0(
                 "RIR Ratio Benchmark\n",
-                "Benchmark value (RIR ratio) = RIR(implied->transfer) / RIR(raw->implied)\n",
+                "RIR ratio = RIR(implied->transfer) / RIR(raw->implied)\n",
                 "   = ",
                 sprintf("%.0f", rir_implied_transferred), "/",
                 sprintf("%.0f", rir_uncond_implied$total_RIR),
@@ -1060,7 +1030,9 @@ if (invalidate_ob) {
                 formatC(log_odds_new, format = "f", digits = 3), " - ",
                 formatC(est_eff, format = "f", digits = 3),
                 ") ~ ",
-                formatC(benchmark_value, format = "f", digits = 3), "\n"
+                formatC(benchmark_value, format = "f", digits = 3), "\n\n",
+                "Note that switches in the control row and treatment row required to generate the implied table\n", 
+                "from the unadjusted table are used to define the benchmark RIR.\n"
                 )
         } else {
             benchmark_output_rir <- "Cannot compute RIR ratio: RIR from uncond->implied is zero.\n"
@@ -1114,6 +1086,8 @@ if (invalidate_ob) {
 
     cat(conclusion_sum)
     cat(table_header1)
+    cat("\n")
+    cat(crayon::underline("Implied Table:\n"))
     print(table_start_3x3)
     cat("\n")
     cat(estimates_summary1)
@@ -1138,6 +1112,7 @@ if (invalidate_ob) {
     }
     
     cat(conclusion4) 
+    cat("\n")
     cat(crayon::underline("Transfer Table:\n"))
     print(table_final_3x3)
     cat("\n")    

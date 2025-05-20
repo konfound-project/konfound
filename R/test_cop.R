@@ -337,7 +337,7 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
   
   if (to_return == "print") {
     cat(crayon::bold("Coefficient of Proportionality (COP):\n\n"))
-    cat("This function calculates a correlation-based coefficient of\nproportionality (delta) as well as Oster's delta*.")
+    cat("This function calculates a correlation-based coefficient of proportionality (delta)\nwhich is exact even in finite samples as well as Oster's delta*.")
     cat("\n")
     if (negest == 1) {
       cat("Using the absolute value of the estimated effect, result can be interpreted\nby symmetry.\n")
