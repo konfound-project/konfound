@@ -142,10 +142,10 @@
 #'
 #' @note 
 #' For a thoughtful background on benchmark options for ITCV, see 
-#' \href{https://academic.oup.com/jrsssb/article-abstract/82/1/39/7056023}{Cinelli & Hazlett (2020)}, 
-#' \href{https://journals.sagepub.com/doi/pdf/10.1177/01492063241293126}{Lonati & Wulff (2024)}, 
+#' \href{https://doi.org/10.1111/rssb.12348}{Cinelli & Hazlett (2020)}, 
+#' \href{https://doi.org/10.1177/01492063241293126}{Lonati & Wulff (2024)}, 
 #' and 
-#' \href{https://journals.sagepub.com/doi/10.1177/0049124100029002001}{Frank (2000)}.
+#' \href{https://doi.org/10.1177/0049124100029002001}{Frank (2000)}.
 #' 
 #' @examples
 #' ## Linear models
