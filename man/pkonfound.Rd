@@ -122,10 +122,10 @@ The function accepts arguments depending on the type of model:
 }
 \note{
 For a thoughtful background on benchmark options for ITCV, see 
-\href{https://academic.oup.com/jrsssb/article-abstract/82/1/39/7056023}{Cinelli & Hazlett (2020)}, 
-\href{https://journals.sagepub.com/doi/pdf/10.1177/01492063241293126}{Lonati & Wulff (2024)}, 
+\href{https://doi.org/10.1111/rssb.12348}{Cinelli & Hazlett (2020)}, 
+\href{https://doi.org/10.1177/01492063241293126}{Lonati & Wulff (2024)}, 
 and 
-\href{https://journals.sagepub.com/doi/10.1177/0049124100029002001}{Frank (2000)}.
+\href{https://doi.org/10.1177/0049124100029002001}{Frank (2000)}.
 }
 \section{Values}{
 
@@ -220,10 +220,11 @@ pkonfound prints the bias and the number of cases that would have to be replaced
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
-# using a confidence interval
-pkonfound(upper_bound = 3, lower_bound = 1, n_obs = 100, n_covariates = 3)   
+pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 
-## Plot examples
+# using a confidence interval 
+pkonfound(upper_bound = 3, lower_bound = 1, n_obs = 100, n_covariates = 3)
+
 pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 pkonfound(2, .4, 100, 3, to_return = "corr_plot")
 
