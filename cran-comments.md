@@ -4,4 +4,4 @@
 
 * This is a new release.
 
-This is a patch due to the margins package being removed from CRAN.
+We have addressed the issue with a prohibited academia.edu URL.
