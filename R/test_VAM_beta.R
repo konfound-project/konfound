@@ -4,7 +4,8 @@ test_VAM <- function(
     replace_stu,         # numeric: hypothetical "average" student score
     n_obs,               # integer: number of students in the class
     eff_thr,             # numeric: effectiveness threshold
-    peer_effect_pi = 0.5 # numeric in [0,0.5]: proportion of students exerting peer effects
+    peer_effect_pi = 0.5, # numeric in [0,0.5]: proportion of students exerting peer effects
+    to_return
 ) {
   # 1) Input validation
   if (!is.numeric(est_eff)   || length(est_eff)   != 1) stop("est_eff must be a single numeric value.")
@@ -34,6 +35,7 @@ test_VAM <- function(
   else                (est_eff  - eff_thr)/ (n_obs * peer_effect_pi * (1 - peer_effect_pi))
   peer_signed <- if (below) -abs(raw_peer) else abs(raw_peer)
   
+  if (to_return == "print") {
   # 4) Header and narrative
   cat("This is beta version of the VAM function.\n")
   cat("\n")
@@ -90,18 +92,14 @@ test_VAM <- function(
   par(mar = old_mar)
   
   invisible(NULL)
+  } else if (to_return == "raw_output") {
+      output <- list(
+          RIR = rir_count,
+          RIR_perc = pi_replace,
+          peer_effect = peer_signed
+      )
+      return(output)
+  }
 }
 
-# ---- Examples ----
 
-# 1) VAM below threshold
-# test_VAM(0.14, 0.16, 20, 0.15, 0.3)
-
-# 2) VAM above threshold
-# test_VAM(0.16, 0.14, 20, 0.15, 0.4)
-
-# 3) Invalid peer_effect_pi → error
-# test_VAM(0.14, 0.16, 20, 0.15, 0.6)
-
-# 4) Larger numbers so RIR ≠ 0
-# test_VAM(1.20, 0.20, 30, 0.50, 0.5)

@@ -241,7 +241,9 @@
                       to_return = "print",
                       upper_bound = NULL,
                       lower_bound = NULL,
-                      raw_treatment_success = NULL
+                      raw_treatment_success = NULL, 
+                      replace_stu = NULL,
+                      peer_effect_pi = 0.5
                       ) {
   if ("table" %in% to_return) stop("a table can only be
                                    output when using konfound")
@@ -299,7 +301,16 @@
     tails = tails,
     to_return = to_return
   )
-}else if (model_type == "logistic" & !is.null(n_treat)) {
+   } else if (index == "VAM") {
+   out <- test_VAM(
+       est_eff = est_eff,
+       replace_stu = replace_stu,
+       n_obs = n_obs,
+       eff_thr = eff_thr,
+       peer_effect_pi = peer_effect_pi,
+       to_return = to_return
+   )
+   } else if (model_type == "logistic" & !is.null(n_treat)) {
     out <- test_sensitivity_ln(
       est_eff = est_eff,
       std_err = std_err,
