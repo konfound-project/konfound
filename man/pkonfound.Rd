@@ -96,6 +96,10 @@ pkonfound(
 \item{lower_bound}{optional (replaces \code{est_eff}); the lower bound of the confidence interval.}
 
 \item{raw_treatment_success}{optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark.}
+
+\item{replace_stu}{score of the hypothetical average student who replaces the original student.}
+
+\item{peer_effect_pi}{proportion of students exerting peer effects on the others.}
 }
 \description{
 For published studies, this command calculates (1) how much bias there must be in an estimate to nullify/sustain an inference; (2) the impact of an omitted variable necessary to nullify/sustain an inference for a regression coefficient.
@@ -215,6 +219,14 @@ pkonfound prints the bias and the number of cases that would have to be replaced
   \item{\code{needtworows}}{indicator whether extra switches were needed}
 }
 }
+
+#' \subsection{RIR for VAM model (beta)}{
+\describe{
+  \item{\code{RIR}}{Robustness of Inference to Replacement (RIR): number of students needed to be replaced.}
+  \item{\code{RIR_perc}}{RIR as \% of students needed to be replaced.}
+  \item{\code{peer_effect}}{Peer effect of each replaced student (compared to their replacements) on each of the non-replaced students.}
+}
+}
 }
 
 \examples{
@@ -248,5 +260,7 @@ pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
 # Calculating rxcv and rycv when preserving standard error
 pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
          sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
-
+# VAM beta
+# pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
+          peer_effect_pi = 0.3, index = "VAM")
 }

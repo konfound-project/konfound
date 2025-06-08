@@ -40,7 +40,7 @@ test_VAM <- function(
   cat("This is beta version of the VAM function.\n")
   cat("\n")
   cat(sprintf(
-    "The reported VAM score is %.3f with threshold for evaluation is %.2f. ",
+    "The reported VAM score is %.3f with evaluation threshold of %.2f. ",
     est_eff, eff_thr
   ))
   cat(sprintf(
@@ -68,15 +68,15 @@ test_VAM <- function(
   cat("\n")
   
   # 7) Additional narrative
-  cat("Each replaced student had a ", sprintf("%.3f", abs(peer_signed)), 
-      " effect (compared to their replacements) on each of the non-replaced students.\n", sep="")
-  cat("\n")
+  # cat("Each replaced student had a ", sprintf("%.3f", abs(peer_signed)), 
+  #    " effect (compared to their replacements) on each of the non-replaced students.\n", sep="")
+  # cat("\n")
   cat("See the figure for combinations of size of peer effect by proportion to be replaced (pi) to change the evaluation. The red point marks the value reported above.\n")
   cat("\n")
   cat("The calculations and interpretation depend on your VAM model specification and estimation. See the paper for more details.\n\n")
   
   # 8) Plot with revised axis labels
-  p_seq <- seq(0.01, 0.49, length.out = 100)
+  p_seq <- seq(0.01, 0.4999, length.out = 200)
   y_seq <- if (below) (eff_thr - est_eff) / (n_obs * p_seq * (1 - p_seq)) 
   else                (est_eff  - eff_thr)/ (n_obs * p_seq * (1 - p_seq))
   
