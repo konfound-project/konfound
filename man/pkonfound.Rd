@@ -125,6 +125,11 @@ The function accepts arguments depending on the type of model:
 \itemize{
   \item a, b, c, d, two_by_two_table, test, replace, switch_trm
 }
+
+\strong{VAM model (beta)}
+\itemize{
+  \item est_eff, replace_stu, n_obs, eff_thr, peer_effect_pi
+}
 }
 \note{
 For a thoughtful background on benchmark options for ITCV, see 
@@ -220,7 +225,7 @@ pkonfound prints the bias and the number of cases that would have to be replaced
 }
 }
 
-#' \subsection{RIR for VAM model (beta)}{
+\subsection{RIR for VAM model (beta)}{
 \describe{
   \item{\code{RIR}}{Robustness of Inference to Replacement (RIR): number of students needed to be replaced.}
   \item{\code{RIR_perc}}{RIR as \% of students needed to be replaced.}
