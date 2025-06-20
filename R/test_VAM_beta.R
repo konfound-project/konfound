@@ -23,7 +23,7 @@ test_VAM <- function(
     action_text    <- "increase" # “must replace … to increase the VAM above…”
     move_text      <- "above"
   } else {
-    pi_replace <- (est_eff - eff_thr) / (est_eff - replace_stu)
+    pi_replace <- (est_eff - eff_thr) / (replace_stu - eff_thr)
     direction_text <- "above"
     action_text    <- "reduce"
     move_text      <- "below"
@@ -50,11 +50,21 @@ test_VAM <- function(
   cat("\n")
   
   # 5) Replacement scenario summary
-  cat(sprintf(
-    "If there are no peer effects, then %d (%d%%) students must be replaced with students whose score is %.2f (as specified) to move the VAM %s the threshold (RIR = %d%% * %d = %d).\n",
-    rir_count, round(100*pi_replace), replace_stu, move_text,
-    round(100*pi_replace), n_obs, rir_count
-  ))
+  if (below) {
+      cat(sprintf(
+          "If there are no peer effects, then %d (%d%%) students must be replaced with students whose score is %.2f (as specified) to move the VAM %s the threshold (RIR = %d%% * %d = %d).\n",
+          rir_count, round(100*pi_replace), replace_stu, move_text,
+          round(100*pi_replace), n_obs, rir_count
+      ))
+  } else {
+      cat(sprintf(
+          "If there are no peer effects, then %d (%d%%) students whose score is %.2f (as specified) must be replaced with students whose score is at the threshold level %.2f to move the VAM %s the threshold (RIR = %d%% * %d = %d).\n",
+          rir_count, round(100*pi_replace), 
+          replace_stu, eff_thr, 
+          move_text,
+          round(100*pi_replace), n_obs, rir_count
+      ))
+  }
   cat("\n")
   
   # 6) Peer‐effect scenario summary
