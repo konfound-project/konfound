@@ -194,7 +194,7 @@
 #' pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
 #'          sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
 #' # VAM beta
-#' # pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
+#' pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
 #'           peer_effect_pi = 0.3, index = "VAM")
 #' @export
 #' 
