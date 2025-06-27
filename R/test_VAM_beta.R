@@ -14,7 +14,7 @@ test_VAM <- function(
   if (!is.numeric(eff_thr)   || length(eff_thr)   != 1) stop("eff_thr must be a single numeric value.")
   if (!is.numeric(peer_effect_pi) || length(peer_effect_pi) != 1 ||
       peer_effect_pi < 0 || peer_effect_pi > 0.5) stop("peer_effect_pi must be between 0 and 0.5.")
-  if ((est_eff >= replace_stu) & (replace_stu > eff_thr)) stop("Undefined in this scenario because the resulting RIR_perc >= 1.")
+  if ((est_eff >= replace_stu) & (replace_stu > eff_thr)) stop("The est_eff >= replace_stu > eff_thr. Therefore, one would have to replace more than the entire sample to reduce the VAM below the threshold. In this context the replacement % is greater than 1 and is under identified.")
   
   # 2) Replacement proportion π and direction
   below <- est_eff < eff_thr
@@ -45,7 +45,7 @@ test_VAM <- function(
     est_eff, eff_thr
   ))
   cat(sprintf(
-    "The VAM score is %s the threshold. RIR indicates replacement required to %s the VAM %s the threshold.\n",
+    "The VAM score is %s the threshold. Therefore, the RIR indicates replacement required to %s the VAM %s the threshold.\n",
     direction_text, action_text, move_text
   ))
   cat("\n")
