@@ -14,6 +14,7 @@ test_VAM <- function(
   if (!is.numeric(eff_thr)   || length(eff_thr)   != 1) stop("eff_thr must be a single numeric value.")
   if (!is.numeric(peer_effect_pi) || length(peer_effect_pi) != 1 ||
       peer_effect_pi < 0 || peer_effect_pi > 0.5) stop("peer_effect_pi must be between 0 and 0.5.")
+  if ((est_eff >= replace_stu) & (replace_stu > eff_thr)) stop("Undefined in this scenario because the resulting RIR_perc >= 1.")
   
   # 2) Replacement proportion π and direction
   below <- est_eff < eff_thr
@@ -69,7 +70,7 @@ test_VAM <- function(
   
   # 6) Peer‐effect scenario summary
   cat(sprintf(
-    "If all of the bias comes from peer spillover effects, and we assume %d%% (as specified) students are %s the others, then a peer effect of %.3f is needed to change the evaluation. Each replaced student had a %+.3f effect (compared to their replacements) on each of the non-replaced students.\n",
+    "If all of the bias comes from peer spillover effects, and we assume %d%% (as specified) students are %s the others, then a peer effect of %.3f is needed to change the evaluation. Each replaced student must have a %+.3f effect (compared to their replacements) on each of the non-replaced students to cross the threshold for evaluation.\n",
     round(100*peer_effect_pi),
     if (below) "distracting" else "supporting",
     abs(peer_signed),
