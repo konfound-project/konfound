@@ -1,3 +1,4 @@
+#' @importFrom graphics par points
 # test_VAM: beta version of VAM function with exact output format and spacing
 test_VAM <- function(
     est_eff,             # numeric: teacher's observed VAM
