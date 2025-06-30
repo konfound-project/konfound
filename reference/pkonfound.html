@@ -75,7 +75,9 @@ For a full description of the command’s usage and additional examples, please 
 <span>  to_return <span class="op">=</span> <span class="st">"print"</span>,</span>
 <span>  upper_bound <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lower_bound <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  raw_treatment_success <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  raw_treatment_success <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  replace_stu <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  peer_effect_pi <span class="op">=</span> <span class="fl">0.5</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -198,6 +200,14 @@ For a full description of the command’s usage and additional examples, please 
 <dt id="arg-raw-treatment-success">raw_treatment_success<a class="anchor" aria-label="anchor" href="#arg-raw-treatment-success"></a></dt>
 <dd><p>optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark.</p></dd>
 
+
+<dt id="arg-replace-stu">replace_stu<a class="anchor" aria-label="anchor" href="#arg-replace-stu"></a></dt>
+<dd><p>score of the hypothetical average student who replaces the original student.</p></dd>
+
+
+<dt id="arg-peer-effect-pi">peer_effect_pi<a class="anchor" aria-label="anchor" href="#arg-peer-effect-pi"></a></dt>
+<dd><p>proportion of students exerting peer effects on the others.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -208,14 +218,15 @@ For a full description of the command’s usage and additional examples, please 
 </ul><p><strong>Logistic Regression Model</strong></p><ul><li><p>est_eff, std_err, n_obs, n_covariates, n_treat, alpha, tails, nu</p></li>
 <li><p>replace, switch_trm, raw_treatment_success, model_type</p></li>
 </ul><p><strong>2x2 Table Model (Non-linear)</strong></p><ul><li><p>a, b, c, d, two_by_two_table, test, replace, switch_trm</p></li>
+</ul><p><strong>VAM model (beta)</strong></p><ul><li><p>est_eff, replace_stu, n_obs, eff_thr, peer_effect_pi</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>For a thoughtful background on benchmark options for ITCV, see
-<a href="https://academic.oup.com/jrsssb/article-abstract/82/1/39/7056023" class="external-link">Cinelli &amp; Hazlett (2020)</a>,
-<a href="https://journals.sagepub.com/doi/pdf/10.1177/01492063241293126" class="external-link">Lonati &amp; Wulff (2024)</a>,
+<a href="https://doi.org/10.1111/rssb.12348" class="external-link">Cinelli &amp; Hazlett (2020)</a>,
+<a href="https://doi.org/10.1177/01492063241293126" class="external-link">Lonati &amp; Wulff (2024)</a>,
 and
-<a href="https://journals.sagepub.com/doi/10.1177/0049124100029002001" class="external-link">Frank (2000)</a>.</p>
+<a href="https://doi.org/10.1177/0049124100029002001" class="external-link">Frank (2000)</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="values">Values<a class="anchor" aria-label="anchor" href="#values"></a></h2>
@@ -424,6 +435,21 @@ and
 
   <dt><code>needtworows</code></dt>
 <dd><p>indicator whether extra switches were needed</p></dd>
+
+
+</dl></div>
+
+<div class="section">
+<h3 id="rir-for-vam-model-beta-">RIR for VAM model (beta)<a class="anchor" aria-label="anchor" href="#rir-for-vam-model-beta-"></a></h3>
+
+<dl><dt><code>RIR</code></dt>
+<dd><p>Robustness of Inference to Replacement (RIR): number of students needed to be replaced.</p></dd>
+
+  <dt><code>RIR_perc</code></dt>
+<dd><p>RIR as % of students needed to be replaced.</p></dd>
+
+  <dt><code>peer_effect</code></dt>
+<dd><p>Peer effect of each replaced student (compared to their replacements) on each of the non-replaced students.</p></dd>
 
 
 </dl></div>
@@ -922,7 +948,26 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> SE_CV               NA          NA  0.01026456</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> t_CV                NA          NA 30.08509668</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># VAM beta</span></span></span>
+<span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">0.14</span>, replace_stu <span class="op">=</span> <span class="fl">0.16</span>, n_obs <span class="op">=</span> <span class="fl">20</span>, eff_thr <span class="op">=</span> <span class="fl">0.15</span>,</span></span>
+<span class="r-in"><span>          peer_effect_pi <span class="op">=</span> <span class="fl">0.3</span>, index <span class="op">=</span> <span class="st">"VAM"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This is beta version of the VAM function.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The reported VAM score is 0.140 with evaluation threshold of 0.15. The VAM score is below the threshold. Therefore, the RIR indicates replacement required to increase the VAM above the threshold.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> If there are no peer effects, then 10 (50%) students must be replaced with students whose score is 0.16 (as specified) to move the VAM above the threshold (RIR = 50% * 20 = 10).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> If all of the bias comes from peer spillover effects, and we assume 30% (as specified) students are distracting the others, then a peer effect of 0.002 is needed to change the evaluation. Each replaced student must have a -0.002 effect (compared to their replacements) on each of the non-replaced students to cross the threshold for evaluation.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> See the figure for combinations of size of peer effect by proportion to be replaced (pi) to change the evaluation. The red point marks the value reported above.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The calculations and interpretation depend on your VAM model specification and estimation. See the paper for more details.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-plt img"><img src="pkonfound-4.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -934,7 +979,7 @@ and
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
