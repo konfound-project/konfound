@@ -30,6 +30,8 @@
 #' @param c the number of cases in the treatment group showing unsuccessful results (2x2 table model).
 #' @param d the number of cases in the treatment group showing successful results (2x2 table model).
 #' @param two_by_two_table a table (matrix, data.frame, tibble, etc.) from which \code{a}, \code{b}, \code{c}, and \code{d} can be extracted.
+#' @param replace_stu score of the hypothetical average student who replaces the original student.
+#' @param peer_effect_pi proportion of students exerting peer effects on the others.  
 #' @param test specifies whether to use Fisher's Exact Test (\code{"fisher"}) or a chi-square test (\code{"chisq"}); defaults to \code{"fisher"}.
 #' @param to_return specifies the output format: \code{"print"} (default) to display output, \code{"plot"} for a plot, or \code{"raw_output"} to return a data.frame for further analysis.
 
@@ -52,6 +54,11 @@
 #' \strong{2x2 Table Model (Non-linear)}
 #' \itemize{
 #'   \item a, b, c, d, two_by_two_table, test, replace, switch_trm
+#' }
+#' 
+#' \strong{VAM model (beta)}
+#' \itemize{
+#'   \item est_eff, replace_stu, n_obs, eff_thr, peer_effect_pi
 #' }
 #'
 #' @section Values:
@@ -140,6 +147,14 @@
 #' }
 #' }
 #'
+#' \subsection{RIR for VAM model (beta)}{
+#' \describe{
+#'   \item{\code{RIR}}{Robustness of Inference to Replacement (RIR): number of students needed to be replaced.}
+#'   \item{\code{RIR_perc}}{RIR as \% of students needed to be replaced.}
+#'   \item{\code{peer_effect}}{Peer effect of each replaced student (compared to their replacements) on each of the non-replaced students.}
+#' }
+#' }
+#' 
 #' @note 
 #' For a thoughtful background on benchmark options for ITCV, see 
 #' \href{https://doi.org/10.1111/rssb.12348}{Cinelli & Hazlett (2020)}, 
@@ -178,7 +193,9 @@
 #' # Calculating rxcv and rycv when preserving standard error
 #' pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
 #'          sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
-#' 
+#' # VAM beta
+#' pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
+#'           peer_effect_pi = 0.3, index = "VAM")
 #' @export
 #' 
 #' @param est_eff the estimated effect (e.g., an unstandardized beta coefficient or a group mean difference).
@@ -241,7 +258,9 @@
                       to_return = "print",
                       upper_bound = NULL,
                       lower_bound = NULL,
-                      raw_treatment_success = NULL
+                      raw_treatment_success = NULL, 
+                      replace_stu = NULL,
+                      peer_effect_pi = 0.5
                       ) {
   if ("table" %in% to_return) stop("a table can only be
                                    output when using konfound")
@@ -299,7 +318,16 @@
     tails = tails,
     to_return = to_return
   )
-}else if (model_type == "logistic" & !is.null(n_treat)) {
+   } else if (index == "VAM") {
+   out <- test_VAM(
+       est_eff = est_eff,
+       replace_stu = replace_stu,
+       n_obs = n_obs,
+       eff_thr = eff_thr,
+       peer_effect_pi = peer_effect_pi,
+       to_return = to_return
+   )
+   } else if (model_type == "logistic" & !is.null(n_treat)) {
     out <- test_sensitivity_ln(
       est_eff = est_eff,
       std_err = std_err,
