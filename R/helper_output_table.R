@@ -27,6 +27,10 @@ output_table <- function(model_object, tested_variable) {
   cat("Dependent variable is", p, "\n")
   model_output <- broom::tidy(model_object) # tidying output
   
+  if (inherits(model_object, "lmerMod")) {
+    model_output <- model_output |> dplyr::filter(effect == "fixed")
+  }
+  
   model_output$itcv <- NA
   
   var_row <- model_output$term == tested_variable
