@@ -18,7 +18,11 @@
 #' @importFrom dplyr select filter mutate arrange
 #' @importFrom rlang !! enquo
 output_table <- function(model_object, tested_variable) {
-  p <- all.vars(model_object$call)[1]
+  if (isS4(model_object)) {
+    p <- all.vars(model_object@call)[1]
+  } else {
+    p <- all.vars(model_object$call)[1]
+  }
   cat("Dependent variable is", p, "\n")
   model_output <- broom::tidy(model_object) # tidying output
   
