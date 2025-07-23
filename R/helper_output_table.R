@@ -39,6 +39,7 @@ output_table <- function(model_object, tested_variable) {
 
   mod <- cbind(model.response(model.frame(model_object)), model.matrix(model_object))
   colnames(mod)[1] <- p
+  mod <- mod[, colnames(mod) != "(Intercept)"]
   for (i in seq(covariate_names)) {
     cov_row <- model_output$term == covariate_names[i]
     d <- mod
