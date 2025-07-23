@@ -18,7 +18,8 @@
 #' @importFrom dplyr select filter mutate arrange
 #' @importFrom rlang !! enquo
 output_table <- function(model_object, tested_variable) {
-  if (isS4(model_object)) {
+  model_s4 <- isS4(model_object)
+  if (model_s4) {
     p <- all.vars(model_object@call)[1]
   } else {
     p <- all.vars(model_object$call)[1]
@@ -37,9 +38,15 @@ output_table <- function(model_object, tested_variable) {
     !(model_output$term %in% c("(Intercept)", tested_variable))]
 
   
+  
+  if (model_s4){
+    mod <- model_object@model
+  } else {
+    mod <- model_object$model
+  }
   for (i in seq(covariate_names)) {
     cov_row <- model_output$term == covariate_names[i]
-    d <- model_object$model
+    d <- mod
     cor_df <- as.data.frame(stats::cor(d))
     model_output$itcv[cov_row] <- round(
       abs(cor_df[cov_row, 1]) * abs(cor_df[cov_row, tested_variable]), 
@@ -85,8 +92,8 @@ output_table <- function(model_object, tested_variable) {
   for (i in seq_along(covariate_names)) {
       covariate <- covariate_names[i]
       tryCatch({
-          pcor_vx <- suppressWarnings(ppcor::pcor(model_object$model[, c(covariate, tested_variable, covariate_names)])$estimate[1, 2])
-          pcor_vy <- suppressWarnings(ppcor::pcor(model_object$model[, c(covariate, p, covariate_names)])$estimate[1, 2])
+          pcor_vx <- suppressWarnings(ppcor::pcor(mod[, c(covariate, tested_variable, covariate_names)])$estimate[1, 2])
+          pcor_vy <- suppressWarnings(ppcor::pcor(mod[, c(covariate, p,               covariate_names)])$estimate[1, 2])
           partial_impact <- pcor_vx * pcor_vy
           impact_table_partial$`Partial Cor(vX)`[i] <- round(pcor_vx, 4)
           impact_table_partial$`Partial Cor(vY)`[i] <- round(pcor_vy, 4)
