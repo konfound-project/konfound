@@ -19,15 +19,15 @@
 #' @importFrom rlang !! enquo
 output_table <- function(model_object, tested_variable) {
   p <- all.vars(model_object$call)[1]
-  cat("Dependent variable is", p, "\n")
+  cat("Dependent variable is", p)
   model_output <- broom::tidy(model_object) # tidying output
   
   model_output$itcv <- NA
   
   var_row <- model_output$term == tested_variable
-  model_output$itcv[var_row] <- abs(konfound(model_object, 
+  model_output$itcv[var_row] <- abs(suppressMessages(konfound(model_object, 
                                              !!tested_variable, 
-                                             to_return = "raw_output")$itcv)
+                                             to_return = "raw_output")$itcv))
 
   covariate_names <- model_output$term[
     !(model_output$term %in% c("(Intercept)", tested_variable))]
@@ -98,7 +98,7 @@ output_table <- function(model_object, tested_variable) {
   cat(paste0("X represents ", tested_variable, ", Y represents ", p, 
              ", v represents each covariate.\n",
              "First table is based on unconditional correlations, second table is based on\n",
-             "partial correlations.\n\n"))
+             "partial correlations.\n"))
   
   # Check if any row has all Partial Correlation components as NA
   if (any(is.na(impact_table_partial$`Partial Cor(vX)`) &

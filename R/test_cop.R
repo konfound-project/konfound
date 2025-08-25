@@ -351,7 +351,6 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
               eff_x_M3_oster, eff_x_M3))
     cat("\n")
     cat("Use to_return = \"raw_output\" to see more specific results and graphic\npresentation of the result.\n")
-    cat("\n")
   }
   
 }

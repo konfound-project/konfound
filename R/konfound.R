@@ -5,7 +5,9 @@
 #' and linear mixed-effects models (`lmerMod`).
 #' It calculates the amount of bias required to invalidate or
 #' sustain an inference,and the impact of an omitted variable
-#' necessary to affect the inference.
+#' necessary to affect the inference. For a full description of 
+#' the command’s usage and additional examples, please refer to 
+#' our \href{https://konfound-it.org/page/guide/}{practical guide}.
 #'
 #' @param model_object A model object produced by `lm`, `glm`, or `lme4::lmer`.
 #' @param tested_variable Variable associated with the coefficient to be tested.
@@ -90,7 +92,7 @@ konfound <- function(model_object,
       to_return = to_return
     )
     
-    return(output)
+    #return(output)
   }
   
   if (inherits(model_object, "glm") & two_by_two == FALSE) {
@@ -105,7 +107,7 @@ konfound <- function(model_object,
       to_return = to_return
     )
     
-    return(output)
+    #return(output)
   } 
   
   if (inherits(model_object, "glm") & two_by_two == TRUE) {
@@ -124,7 +126,7 @@ konfound <- function(model_object,
       replace = replace
     )
     
-    return(output)
+    #return(output)
     
   }
   
@@ -148,11 +150,23 @@ konfound <- function(model_object,
             You can then enter degrees of freedom obtained from another method along with the coefficient,
             number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.")
     
-    return(output)
+    #return(output)
   }
   
   if (!("table" %in% to_return)) {
+    cat("\n")
     message("For more detailed output, consider setting `to_return` to table")
   }
-
+  
+  cat("\n")
+  message("For more information, visit https://konfound-it.org")
+  message(paste0("To explore examples and interpretation tips,\n",
+                 "see our Practical Guide at https://konfound-it.org/page/guide/")
+          )
+  
+  if (to_return == "table") {
+      return(output)        # Allow output to display in console
+  } else {
+      return(invisible(output))  # Don't print NULL for print mode
+  }  
 }
