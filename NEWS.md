@@ -5,7 +5,7 @@
 * add RIR index calculation for the PSE (component correlation) function
 * include a global message linking to the konfound website and practical guide
 * fix issue where "NULL" appeared at the end of printed output for konfound commands
-* (pending) add statistical significance calculation for COP function
+* add delta threshold for statistical significance calculation and printed text for COP function
 
 # konfound 1.0.3
 
