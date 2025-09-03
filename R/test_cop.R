@@ -34,6 +34,7 @@ test_cop <- function(est_eff, # unstandardized
   
   ## prepare input
   df <- n_obs - n_covariates - 3 ## df of M3
+  df_sig <- n_obs - n_covariates - 2     # df for M2 (model without CV)
   var_x <- sdx^2
   var_y <- sdy^2
   
@@ -229,6 +230,35 @@ test_cop <- function(est_eff, # unstandardized
                         "M3(delta_exact):X,Z,CV",
                         "M3(delta*):X,Z,CV")
   
+  ## statistical significance COP
+  sig_out <- tryCatch(
+      delta_statsig(
+          r_xy_z = abs(ryxGz),               # partial r_XY|Z from M2
+          R_max  = rycvGz_exact^2,           # target total R^2 after adding CV
+          r_xz   = rxz,                      # X–Z correlation
+          df     = df_sig,
+          alpha  = alpha
+      ),
+      error = function(e) list(
+          delta_statsig = NA_real_, 
+          rxcvGz = NA_real_, rycvGz = NA_real_, 
+          error = conditionMessage(e)
+      )
+  )
+  
+  # Std. coefficient of X in model with Z and CV at the boundary:
+  beta_x_M3_sig <- (abs(ryxGz) - sig_out$rxcvGz*sig_out$rycvGz) / (1 - sig_out$rxcvGz^2)
+  
+  # Unstandardized coefficient and SE at the boundary:
+  est_eff_sig  <- (sdyGz/sdxGz) * beta_x_M3_sig
+  R2_partial_sig  <- (abs(ryxGz)^2 + sig_out$rycvGz^2 - 2*abs(ryxGz)*sig_out$rycvGz*sig_out$rxcvGz) / (1 - sig_out$rxcvGz^2)      
+  se_sig  <- (sdyGz/sdxGz) * sqrt((1 - R2_partial_sig)/df_sig) / sqrt(1 - sig_out$rxcvGz^2)
+  
+  R2_full_sig <- ryz^2 + (1 - ryz^2) * R2_partial_sig
+  
+  # Sanity check: should equal the critical t
+  t_sig <- est_eff_sig / se_sig     # ≈ tcrit
+  
   ## figure
   figTable <- matrix(c("Baseline(M1)", eff_x_M1, R2_M1, "exact", 
                              "Intermediate(M2)", eff_x_M2, R2, "exact", 
@@ -314,6 +344,9 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
                    "delta*restricted" = delta_star_restricted,
                    "delta_exact" = delta_exact, 
                    "delta_pctbias" = delta_pctbias,
+                   "delta_sig"  = sig_out$delta_statsig,
+                   "rxcvGz_sig" = sig_out$rxcvGz,
+                   "rycvGz_sig" = sig_out$rycvGz,
                    #"cov_oster" = cov_oster,
                    #"cov_exact" = cov_exact,
                    "cor_oster" = cor_oster,
@@ -335,23 +368,57 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
     return(output)
   }
   
-  if (to_return == "print") {
+if (to_return == "print") {
     cat(crayon::bold("Coefficient of Proportionality (COP):\n\n"))
-    cat("This function calculates a correlation-based coefficient of proportionality (delta)\nwhich is exact even in finite samples as well as Oster's delta*.")
-    cat("\n")
+    cat("This function calculates a correlation-based coefficient of proportionality (delta_exact)\n")
+    cat("which is exact even in finite samples as well as Oster's delta*.\n\n")
+    
     if (negest == 1) {
-      cat("Using the absolute value of the estimated effect, result can be interpreted\nby symmetry.\n")
+        cat("Using the absolute value of the estimated effect, result can be interpreted\nby symmetry.\n\n")
     }
-    cat("\n")
-    cat(sprintf("Delta* is %.3f (assuming no covariates in the baseline model M1),\nthe correlation-based delta is %.3f, with a bias of %.3f%%.\n", 
-              delta_star, delta_exact, delta_pctbias))
-    cat("Note that %bias = (delta* - delta) / delta.\n")
-    cat("\n")
-    cat(sprintf("With delta*, the coefficient in the final model will be %.3f.\nWith the correlation-based delta, the coefficient will be %.3f.\n",  
-              eff_x_M3_oster, eff_x_M3))
-    cat("\n")
+    
+    cat(sprintf(
+        "The correlation-based delta (delta_exact) is %.3f, and delta* is %.3f \n(assuming no covariates in the baseline model M1), indicating a relative bias of %.3f%%.\n",
+        delta_exact, delta_star, delta_pctbias
+    ))
+    cat("Note that %bias = (delta* - delta) / delta.\n\n")
+    
+    if (is.null(sig_out$error)) {
+        cat(sprintf(
+            "Using alpha = %.2f and df = %s (so critical r = %.4f), the delta threshold \nfor statistical significance is %.3f.\n",
+            alpha, format(df_sig, big.mark=","), sig_out$r_crit, sig_out$delta_statsig
+        ))
+        cat("This corresponds to a CV (omitted confounder) with partial correlations\n")
+        cat(sprintf(
+            "r_xcv|z ~ %.4f (between X and CV given Z) and r_ycv|z ~ %.4f (between Y and CV given Z).\n\n",
+            sig_out$rxcvGz, sig_out$rycvGz
+        ))
+    } else {
+        cat(sprintf(
+            "Statistical-significance COP could not be computed (%s).\n\n",
+            sig_out$error
+        ))
+    }
+    
+    cat(sprintf(
+        "With the correlation-based delta, the coefficient of X in the final model will be %.3f.\nWith delta*, the coefficient of X in the final model will be %.3f.\n\n",
+        eff_x_M3, eff_x_M3_oster
+    ))
+    
+    if (is.null(sig_out$error)) {
+        se_sig <- est_eff_sig / t_sig
+        cat("Using the delta threshold for statistical significance and the corresponding partial correlations,\n")
+        cat(sprintf(
+            "the coefficient of X in the final model will be %.4f with standard error of %.4f\n",
+            est_eff_sig, se_sig
+        ))
+        cat(sprintf(
+            "with t-ratio of %.4f and the final R2 will be %.3f.\n\n",
+            t_sig, R2_full_sig
+        ))
+    }
+    
     cat("Use to_return = \"raw_output\" to see more specific results and graphic\npresentation of the result.\n")
-    cat("\n")
-  }
+}
   
 }

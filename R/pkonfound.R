@@ -401,9 +401,15 @@ if (!is.null(out)) { # dealing with a strange print issue
 }
 
 if (to_return == "print") {
-  cat("\n")
-  message("For other forms of output, run
-          ?pkonfound and inspect the to_return argument")
+    cat("\n")
+    message("For more information, visit https://konfound-it.org")
+    message(paste0("To explore examples and interpretation tips,\n",
+    "see our Practical Guide at https://konfound-it.org/page/guide/"))
+    cat("\n")
+    message(paste0(
+        "For other forms of output, run\n",
+        "?pkonfound and inspect the to_return argument"
+    ))
 }
 
 message("For models fit in R, consider use of konfound().")

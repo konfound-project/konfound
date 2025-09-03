@@ -374,7 +374,7 @@ test_sensitivity <- function(est_eff,
                           sdx, sdy, R2, uncond_rxcv, uncond_rycv, rxcvGz, rycvGz,
                           benchmark_corr_product, itcv_ratio_to_benchmark))
   } else if (to_return == "table") {
-    return(output_table(model_object, tested_variable))
+    return(suppressMessages(output_table(model_object, tested_variable)))
   } else {
     stop("to_return must be set to 'raw_output', 'print', 'table', 'thresh_plot', or 'corr_plot' or some combination thereof")
   }

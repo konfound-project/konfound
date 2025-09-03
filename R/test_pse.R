@@ -33,6 +33,14 @@ test_pse <- function(est_eff,
       stop("Did not run! Entered values produced Rxz^2 <=0,
            consider adding more significant digits to your entered values.")}
     
+    ## test boundary for PSE RIR
+    alpha = 0.05; tails = 2 # default for PSE
+    if (est_eff < 0) {
+        thr_t <- qt(1 - alpha / tails, df) * -1
+    } else {
+        thr_t <- qt(1 - alpha / tails, df)
+    }
+    
     ## now standardize 
     beta_thr <- eff_thr * sdx / sdy
     beta <- est_eff * sdx / sdy
@@ -132,6 +140,18 @@ test_pse <- function(est_eff,
     
     colnames(fTable) <- c("M1:X", "M2:X,Z", "M3:X,Z,CV")
     
+    # compute PSE-RIR results
+    pse_rir_result <- se_preserve_replacement(
+        est_eff = est_eff,
+        std_err = std_err,       
+        n_obs = n_obs,
+        n_covariates = n_covariates,
+        sd_x = sdx,
+        sd_y_obs = sdy
+    )
+    
+    invalidate_ob <- isinvalidate(thr_t, tyxGz)
+    
     if (to_return == "raw_output") {
         output <- list("correlation between X and CV conditional on Z" = rxcvGz, 
                        "correlation between Y and CV conditional on Z" = rycvGz, 
@@ -140,16 +160,46 @@ test_pse <- function(est_eff,
                        "covariance matrix" = cov_pse, 
                        "eff_M3" = eff_x_M3,
                        "se_M3" = se_x_M3,
-                       "Table" = fTable)
+                       "Table" = fTable,
+                       "RIR_perc" = pse_rir_result$pi,
+                       "standard deviation of unobserved Y" = pse_rir_result$sd_y_unobs
+)
         return(output)
     }
     
     if (to_return == "print") {
+        cat(crayon::bold("Component Correlations (fixed standard error):\n"))
         cat("This function calculates the correlations associated with an omitted confounding \nvariable (CV) that generate an estimated effect that is approximately equal to \nthe threshold while preserving the originally reported standard error.\n\n")
-        cat(sprintf("The correlation between X and CV is %.3f, and the correlation between\nY and CV is %.3f.\n\n", rxcv, rycv))
+        cat(sprintf("The correlation between X (focal predictor) and CV is %.3f, and the correlation between\nY (outcome) and CV is %.3f.\n\n", rxcv, rycv))
         cat(sprintf("Conditional on the covariates, the correlation between X and CV is %.3f,\nand the correlation between Y and CV is %.3f.\n\n", rxcvGz, rycvGz))
         cat(sprintf("Including such a CV, the coefficient would change to %.3f, with standard error\nof %.3f.\n\n", eff_x_M3, se_x_M3))
-        cat("Use to_return = \"raw_output\" to see more specific results.")
+        
+        cat(crayon::bold("Robustness of Inference to Replacement (fixed standard error)\n"))
+        
+        change <- if (invalidate_ob) "nullify the" else "sustain an"
+        
+        cat(sprintf(
+            "To %s inference while preserving the reported standard error,\napproximately pi = %.3f (%.1f%% of cases) of the data points would need to be replaced.\n",
+            change, pse_rir_result$pi, 100 * pse_rir_result$pi
+        ))
+        cat(sprintf(
+            "This corresponds to replacing about %.0f of %d observations.\n\n",
+            n_obs * pse_rir_result$pi, n_obs
+        ))
+        cat(sprintf(
+            "The replacement cases would need to have a standard deviation of Y equal to %.2f\nin order to maintain the same standard error of beta.\n\n",
+            pse_rir_result$sd_y_unobs
+        ))
+        cat(sprintf(
+            paste0(
+                "Therefore, if %.0f%% of the cases are replaced with cases for which the effect \n",
+                "is modified as above, the estimated effect will be %.2f with standard error \n",
+                "of %.2f associated with p = %.2f.\n\n"
+            ),
+            100 * pse_rir_result$pi, pse_rir_result$est_eff_new, std_err, alpha
+        ))
+        
+        cat("Use to_return = \"raw_output\" to see more specific results.\n")
     }
         
     
