@@ -342,7 +342,7 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
     }
     output <- list("delta*" = delta_star,
                    "delta*restricted" = delta_star_restricted,
-                   "delta_exact" = delta_exact, 
+                   "delta_Correlation" = delta_exact, 
                    "delta_pctbias" = delta_pctbias,
                    "delta_sig"  = sig_out$delta_statsig,
                    "rxcvGz_sig" = sig_out$rxcvGz,
