@@ -172,6 +172,9 @@ pkonfound prints the bias and the number of cases that would have to be replaced
   \item{\code{delta*restricted}}{delta calculated using Oster’s restricted estimator}
   \item{\code{delta_exact}}{delta calculated using correlation-based approach}
   \item{\code{delta_pctbias}}{percent bias when comparing \code{delta*} to \code{delta_exact}}
+  \item{\code{delta_sig}}{delta threshold at which focal predictor loses statistical significance at the chosen \code{alpha} (default: 0.05)}
+  \item{\code{rxcvGz_sig}}{boundary partial correlation \eqn{r_{X,\mathrm{CV} | Z}} associated with \code{delta_sig}}
+  \item{\code{rycvGz_sig}}{boundary partial correlation \eqn{r_{Y,\mathrm{CV} | Z}} associated with \code{delta_sig}}
   \item{\code{var(Y)}}{variance of the dependent variable (\eqn{\sigma_Y^2})}
   \item{\code{var(X)}}{variance of the independent variable (\eqn{\sigma_X^2})}
   \item{\code{var(CV)}}{variance of the confounding variable (\eqn{\sigma_{CV}^2})}
