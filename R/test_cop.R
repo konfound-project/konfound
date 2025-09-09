@@ -246,18 +246,18 @@ test_cop <- function(est_eff, # unstandardized
       )
   )
   
-  # Std. coefficient of X in model with Z and CV at the boundary:
+  # std coefficient of X in model with Z and CV at the boundary
   beta_x_M3_sig <- (abs(ryxGz) - sig_out$rxcvGz*sig_out$rycvGz) / (1 - sig_out$rxcvGz^2)
   
-  # Unstandardized coefficient and SE at the boundary:
+  # unstandardized coefficient and SE at the boundary
   est_eff_sig  <- (sdyGz/sdxGz) * beta_x_M3_sig
   R2_partial_sig  <- (abs(ryxGz)^2 + sig_out$rycvGz^2 - 2*abs(ryxGz)*sig_out$rycvGz*sig_out$rxcvGz) / (1 - sig_out$rxcvGz^2)      
   se_sig  <- (sdyGz/sdxGz) * sqrt((1 - R2_partial_sig)/df_sig) / sqrt(1 - sig_out$rxcvGz^2)
   
   R2_full_sig <- ryz^2 + (1 - ryz^2) * R2_partial_sig
   
-  # Sanity check: should equal the critical t
-  t_sig <- est_eff_sig / se_sig     # ≈ tcrit
+  # check: should equal the critical t
+  t_sig <- est_eff_sig / se_sig     # ~ tcrit
   
   ## figure
   figTable <- matrix(c("Baseline(M1)", eff_x_M1, R2_M1, "exact", 
