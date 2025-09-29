@@ -32,6 +32,18 @@ se_preserve_replacement(
 
 \item{tails}{numeric, whether to use a two-tailed test}
 }
+\value{
+A list with components:
+\itemize{
+  \item `pi` replacement fraction in (0, 1) required to preserve SE.
+  \item `sd_y_unobs` SD of Y among replacement cases required to preserve SE.
+  \item `sd_yx` residual SD of Y given X implied by `std_err`.
+  \item `r_sharp` critical correlation r_critical at alpha and df.
+  \item `sd_y_combined` combined SD of Y that preserves `std_err`.
+  \item `r_xy` observed partial correlation between X and Y given Z.
+  \item `est_eff_new` estimate at the critical boundary, equal to `t_crit * std_err`.
+}
+}
 \description{
 SE-preserving RIR for Linear model
 }

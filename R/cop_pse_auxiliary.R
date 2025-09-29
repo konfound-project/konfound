@@ -382,6 +382,16 @@ verify_reg_uncond <- function(n_obs, sdx, sdy, rxy){
 #' @param sd_y_obs standard deviation of observed Y
 #' @param alpha significance level (default 0.05)
 #' @param tails numeric, whether to use a two-tailed test
+#' @return A list with components:
+#' \itemize{
+#'   \item `pi` replacement fraction in (0, 1) required to preserve SE.
+#'   \item `sd_y_unobs` SD of Y among replacement cases required to preserve SE.
+#'   \item `sd_yx` residual SD of Y given X implied by `std_err`.
+#'   \item `r_sharp` critical correlation r_critical at alpha and df.
+#'   \item `sd_y_combined` combined SD of Y that preserves `std_err`.
+#'   \item `r_xy` observed partial correlation between X and Y given Z.
+#'   \item `est_eff_new` estimate at the critical boundary, equal to `t_crit * std_err`.
+#' }
 se_preserve_replacement <- function(est_eff, std_err, n_obs, n_covariates,
                                     sd_x, sd_y_obs,
                                     alpha = 0.05, tails = 2) {
@@ -450,6 +460,16 @@ se_preserve_replacement <- function(est_eff, std_err, n_obs, n_covariates,
 #' @param df Residual degrees of freedom of the original regression
 #' @param alpha Two-sided alpha level (default 0.05)
 #' @param tol Numeric tolerance for equality checks (default 1e-8)
+#' @return A list with components:
+#' \itemize{
+#'   \item `delta_statsig` COP threshold for significance, or `NA` if `r_xz` is ~0.
+#'   \item `rxcvGz`, `rycvGz` admissible partial correlations of the confounder with X and Y given Z.
+#'   \item `rx_cv` marginal correlation of X and the confounder.
+#'   \item `r_crit`, `t_crit` critical values at `alpha` and `df`.
+#'   \item `r_check`, `R2_check` internal checks reproducing the boundary.
+#'   \item `p1`–`p5`, `disc`, `Q` intermediate quantities used to construct admissible roots.
+#'   \item `error` a message string if no admissible solution exists, otherwise `NULL`.
+#' }
 delta_statsig <- function(r_xy_z, 
                           R_max, 
                           r_xz, 

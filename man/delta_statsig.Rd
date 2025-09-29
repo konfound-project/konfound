@@ -19,6 +19,18 @@ delta_statsig(r_xy_z, R_max, r_xz, df, alpha = 0.05, tol = 1e-08)
 
 \item{tol}{Numeric tolerance for equality checks (default 1e-8)}
 }
+\value{
+A list with components:
+\itemize{
+  \item `delta_statsig` COP threshold for significance, or `NA` if `r_xz` is ~0.
+  \item `rxcvGz`, `rycvGz` admissible partial correlations of the confounder with X and Y given Z.
+  \item `rx_cv` marginal correlation of X and the confounder.
+  \item `r_crit`, `t_crit` critical values at `alpha` and `df`.
+  \item `r_check`, `R2_check` internal checks reproducing the boundary.
+  \item `p1`–`p5`, `disc`, `Q` intermediate quantities used to construct admissible roots.
+  \item `error` a message string if no admissible solution exists, otherwise `NULL`.
+}
+}
 \description{
 Statistical significance threshold of COP
 }
