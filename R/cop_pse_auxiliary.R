@@ -392,6 +392,8 @@ verify_reg_uncond <- function(n_obs, sdx, sdy, rxy){
 #'   \item `r_xy` observed partial correlation between X and Y given Z.
 #'   \item `est_eff_new` estimate at the critical boundary, equal to `t_crit * std_err`.
 #' }
+#' @keywords internal
+#' @noRd
 se_preserve_replacement <- function(est_eff, std_err, n_obs, n_covariates,
                                     sd_x, sd_y_obs,
                                     alpha = 0.05, tails = 2) {
@@ -470,6 +472,8 @@ se_preserve_replacement <- function(est_eff, std_err, n_obs, n_covariates,
 #'   \item `p1`–`p5`, `disc`, `Q` intermediate quantities used to construct admissible roots.
 #'   \item `error` a message string if no admissible solution exists, otherwise `NULL`.
 #' }
+#' @keywords internal
+#' @noRd
 delta_statsig <- function(r_xy_z, 
                           R_max, 
                           r_xz, 
