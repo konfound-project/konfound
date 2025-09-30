@@ -227,7 +227,7 @@ test_cop <- function(est_eff, # unstandardized
                         "coef_CV", "SE_CV", "t_CV")
   
   colnames(fTable) <- c("M1:X", "M2:X,Z", 
-                        "M3(delta_exact):X,Z,CV",
+                        "M3(delta_Correlation):X,Z,CV",
                         "M3(delta*):X,Z,CV")
   
   ## statistical significance COP
@@ -370,7 +370,7 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
   
 if (to_return == "print") {
     cat(crayon::bold("Coefficient of Proportionality (COP):\n\n"))
-    cat("This function calculates a correlation-based coefficient of proportionality (delta_exact)\n")
+    cat("This function calculates a correlation-based coefficient of proportionality (delta_Correlation)\n")
     cat("which is exact even in finite samples as well as Oster's delta*.\n\n")
     
     if (negest == 1) {
@@ -378,7 +378,7 @@ if (to_return == "print") {
     }
     
     cat(sprintf(
-        "The correlation-based delta (delta_exact) is %.3f, and delta* is %.3f \n(assuming no covariates in the baseline model M1), indicating a relative bias of %.3f%%.\n",
+        "The correlation-based delta (delta_Correlation) is %.3f, and delta* is %.3f \n(assuming no covariates in the baseline model M1), indicating a relative bias of %.3f%%.\n",
         delta_exact, delta_star, delta_pctbias
     ))
     cat("Note that %bias = (delta* - delta) / delta.\n\n")
