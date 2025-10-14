@@ -94,6 +94,9 @@
 #'   \item{\code{delta*restricted}}{delta calculated using Oster’s restricted estimator}
 #'   \item{\code{delta_exact}}{delta calculated using correlation-based approach}
 #'   \item{\code{delta_pctbias}}{percent bias when comparing \code{delta*} to \code{delta_exact}}
+#'   \item{\code{delta_sig}}{delta threshold at which focal predictor loses statistical significance at the chosen \code{alpha} (default: 0.05)}
+#'   \item{\code{rxcvGz_sig}}{boundary partial correlation \eqn{r_{X,\mathrm{CV} | Z}} associated with \code{delta_sig}}
+#'   \item{\code{rycvGz_sig}}{boundary partial correlation \eqn{r_{Y,\mathrm{CV} | Z}} associated with \code{delta_sig}}
 #'   \item{\code{var(Y)}}{variance of the dependent variable (\eqn{\sigma_Y^2})}
 #'   \item{\code{var(X)}}{variance of the independent variable (\eqn{\sigma_X^2})}
 #'   \item{\code{var(CV)}}{variance of the confounding variable (\eqn{\sigma_{CV}^2})}
@@ -401,9 +404,15 @@ if (!is.null(out)) { # dealing with a strange print issue
 }
 
 if (to_return == "print") {
-  cat("\n")
-  message("For other forms of output, run
-          ?pkonfound and inspect the to_return argument")
+    cat("\n")
+    message("For more information, visit https://konfound-it.org")
+    message(paste0("To explore examples and interpretation tips,\n",
+    "see our Practical Guide at https://konfound-it.org/page/guide/"))
+    cat("\n")
+    message(paste0(
+        "For other forms of output, run\n",
+        "?pkonfound and inspect the to_return argument"
+    ))
 }
 
 message("For models fit in R, consider use of konfound().")
