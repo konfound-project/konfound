@@ -242,10 +242,11 @@ pkonfound prints the bias and the number of cases that would have to be replaced
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
-# using a confidence interval
-pkonfound(upper_bound = 3, lower_bound = 1, n_obs = 100, n_covariates = 3)   
+pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 
-## Plot examples
+# using a confidence interval 
+pkonfound(upper_bound = 3, lower_bound = 1, n_obs = 100, n_covariates = 3)
+
 pkonfound(2, .4, 100, 3, to_return = "thresh_plot")
 pkonfound(2, .4, 100, 3, to_return = "corr_plot")
 
