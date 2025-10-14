@@ -313,6 +313,15 @@ and
   <dt><code>delta_pctbias</code></dt>
 <dd><p>percent bias when comparing <code>delta*</code> to <code>delta_exact</code></p></dd>
 
+  <dt><code>delta_sig</code></dt>
+<dd><p>delta threshold at which focal predictor loses statistical significance at the chosen <code>alpha</code> (default: 0.05)</p></dd>
+
+  <dt><code>rxcvGz_sig</code></dt>
+<dd><p>boundary partial correlation \(r_{X,\mathrm{CV} | Z}\) associated with <code>delta_sig</code></p></dd>
+
+  <dt><code>rycvGz_sig</code></dt>
+<dd><p>boundary partial correlation \(r_{Y,\mathrm{CV} | Z}\) associated with <code>delta_sig</code></p></dd>
+
   <dt><code>var(Y)</code></dt>
 <dd><p>variance of the dependent variable (\(\sigma_Y^2\))</p></dd>
 
@@ -478,8 +487,12 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals reported.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="op">-</span><span class="fl">2.2</span>, <span class="fl">.65</span>, <span class="fl">200</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
@@ -500,8 +513,12 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals reported.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">3</span>, <span class="fl">200</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
@@ -522,8 +539,12 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals reported.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="co"># using a confidence interval</span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>upper_bound <span class="op">=</span> <span class="fl">3</span>, lower_bound <span class="op">=</span> <span class="fl">1</span>, n_obs <span class="op">=</span> <span class="fl">100</span>, n_covariates <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>   </span></span>
@@ -545,8 +566,12 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals reported.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Plot examples</span></span></span>
@@ -606,8 +631,12 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals entered.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## 2x2 table examples</span></span></span>
@@ -651,8 +680,12 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> Epidemiology, 134, 150-159.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> *authors are listed alphabetically.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>a <span class="op">=</span> <span class="fl">35</span>, b <span class="op">=</span> <span class="fl">17</span>, c <span class="op">=</span> <span class="fl">17</span>, d <span class="op">=</span> <span class="fl">38</span>, alpha <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
@@ -694,8 +727,12 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> Epidemiology, 134, 150-159.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> *authors are listed alphabetically.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>a <span class="op">=</span> <span class="fl">35</span>, b <span class="op">=</span> <span class="fl">17</span>, c <span class="op">=</span> <span class="fl">17</span>, d <span class="op">=</span> <span class="fl">38</span>, alpha <span class="op">=</span> <span class="fl">0.01</span>, switch_trm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
@@ -737,8 +774,12 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> Epidemiology, 134, 150-159.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> *authors are listed alphabetically.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>a <span class="op">=</span> <span class="fl">35</span>, b <span class="op">=</span> <span class="fl">17</span>, c <span class="op">=</span> <span class="fl">17</span>, d <span class="op">=</span> <span class="fl">38</span>, test <span class="op">=</span> <span class="st">"chisq"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
@@ -780,8 +821,12 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> Epidemiology, 134, 150-159.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> *authors are listed alphabetically.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Advanced examples</span></span></span>
@@ -833,8 +878,12 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> The ITCV analysis was originally derived for OLS standard errors. If the</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> standard errors reported in the table were not based on OLS, some caution</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> should be used to interpret the ITCV.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="co"># Calculating delta* and delta_exact </span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">.4</span>, std_err <span class="op">=</span> <span class="fl">.1</span>, n_obs <span class="op">=</span> <span class="fl">290</span>, sdx <span class="op">=</span> <span class="fl">2</span>, sdy <span class="op">=</span> <span class="fl">6</span>, R2 <span class="op">=</span> <span class="fl">.7</span>,</span></span>
@@ -845,11 +894,20 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`delta*restricted`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.085172</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $delta_exact</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $delta_Correlation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.508536</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $delta_pctbias</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 143.1658</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $delta_sig</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9300026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $rxcvGz_sig</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2333602</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $rycvGz_sig</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6000109</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $cor_oster</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Y         X         Z        CV</span>
@@ -881,15 +939,15 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.114065e-16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Table</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 M1:X    M2:X,Z M3(delta_exact):X,Z,CV M3(delta*):X,Z,CV</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> R2         0.1097571 0.7008711           8.006897e-01         0.8006897</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> coef_X     0.9798418 0.3980344          -1.114065e-16        -1.5383085</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SE_X       0.1665047 0.0995086           8.775619e-02         0.1803006</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> std_coef_X 0.3266139 0.2297940           0.000000e+00        -0.5127695</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> t_X        5.8847685 4.0000000          -1.269500e-15        -8.5319081</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> coef_CV           NA        NA           2.049900e+00         4.2116492</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> SE_CV             NA        NA           1.702349e-01         0.3497584</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> t_CV              NA        NA           1.204159e+01        12.0415946</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 M1:X    M2:X,Z M3(delta_Correlation):X,Z,CV M3(delta*):X,Z,CV</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> R2         0.1097571 0.7008711                 8.006897e-01         0.8006897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> coef_X     0.9798418 0.3980344                -1.114065e-16        -1.5383085</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SE_X       0.1665047 0.0995086                 8.775619e-02         0.1803006</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> std_coef_X 0.3266139 0.2297940                 0.000000e+00        -0.5127695</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t_X        5.8847685 4.0000000                -1.269500e-15        -8.5319081</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> coef_CV           NA        NA                 2.049900e+00         4.2116492</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SE_CV             NA        NA                 1.702349e-01         0.3497584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t_CV              NA        NA                 1.204159e+01        12.0415946</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Figure</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Use of `figTable$coef_X` is discouraged.</span>
@@ -948,6 +1006,12 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> SE_CV               NA          NA  0.01026456</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> t_CV                NA          NA 30.08509668</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $RIR_perc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7861584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`standard deviation of unobserved Y`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9591486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># VAM beta</span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">0.14</span>, replace_stu <span class="op">=</span> <span class="fl">0.16</span>, n_obs <span class="op">=</span> <span class="fl">20</span>, eff_thr <span class="op">=</span> <span class="fl">0.15</span>,</span></span>
 <span class="r-in"><span>          peer_effect_pi <span class="op">=</span> <span class="fl">0.3</span>, index <span class="op">=</span> <span class="st">"VAM"</span><span class="op">)</span></span></span>
@@ -965,8 +1029,12 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-plt img"><img src="pkonfound-4.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>           ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 </code></pre></div>
     </div>

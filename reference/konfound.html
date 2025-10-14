@@ -4,12 +4,16 @@ linear models (`lm`), generalized linear models (`glm`),
 and linear mixed-effects models (`lmerMod`).
 It calculates the amount of bias required to invalidate or
 sustain an inference,and the impact of an omitted variable
-necessary to affect the inference."><meta property="og:description" content="Performs sensitivity analysis on fitted models including
+necessary to affect the inference. For a full description of
+the command’s usage and additional examples, please refer to
+our practical guide."><meta property="og:description" content="Performs sensitivity analysis on fitted models including
 linear models (`lm`), generalized linear models (`glm`),
 and linear mixed-effects models (`lmerMod`).
 It calculates the amount of bias required to invalidate or
 sustain an inference,and the impact of an omitted variable
-necessary to affect the inference."></head><body>
+necessary to affect the inference. For a full description of
+the command’s usage and additional examples, please refer to
+our practical guide."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -53,7 +57,9 @@ linear models (`lm`), generalized linear models (`glm`),
 and linear mixed-effects models (`lmerMod`).
 It calculates the amount of bias required to invalidate or
 sustain an inference,and the impact of an omitted variable
-necessary to affect the inference.</p>
+necessary to affect the inference. For a full description of
+the command’s usage and additional examples, please refer to
+our <a href="https://konfound-it.org/page/guide/" class="external-link">practical guide</a>.</p>
     </div>
 
     <div class="section level2">
@@ -146,14 +152,34 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals reported.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more detailed output, consider setting `to_return` to table</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
 <span class="r-in"><span><span class="fu">konfound</span><span class="op">(</span><span class="va">m1</span>, <span class="va">wt</span>, to_return <span class="op">=</span> <span class="st">"table"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dependent variable is mpg </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> For interpretation, check out to_return = 'print'.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dependent variable is mpg</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`aes_string()` was deprecated in ggplot2 3.0.0.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use tidy evaluation idioms with `aes()`.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> See also `vignette("ggplot2-in-packages")` for more information.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">konfound</span> package.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   Please report the issue at</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/konfound-project/konfound/issues&gt;</span>.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">konfound</span> package.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   Please report the issue at</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/konfound-project/konfound/issues&gt;</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> X represents wt, Y represents mpg, v represents each covariate.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> First table is based on unconditional correlations, second table is based on</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> partial correlations.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Main_Output</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   term        estimate std.error statistic p.value   itcv</span>
@@ -205,7 +231,12 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals reported.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more detailed output, consider setting `to_return` to table</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># using lme4 for mixed effects (or multi-level) models</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"lme4"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -240,7 +271,12 @@ or a summary table.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>             #why-doesnt-lme4-display-denominator-degrees-of-freedomp-values-what-other-options-do-i-have.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>             You can then enter degrees of freedom obtained from another method along with the coefficient,</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>             number of observations, and number of covariates to the pkonfound() function to quantify the robustness of the inference.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more detailed output, consider setting `to_return` to table</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">condition</span>, data <span class="op">=</span> <span class="va">binary_dummy_data</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">konfound</span><span class="op">(</span><span class="va">m4</span>, <span class="va">condition</span>, two_by_two <span class="op">=</span> <span class="cn">TRUE</span>, n_treat <span class="op">=</span> <span class="fl">55</span><span class="op">)</span></span></span>
@@ -307,7 +343,12 @@ or a summary table.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> *authors are listed alphabetically.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals entered.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more detailed output, consider setting `to_return` to table</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
