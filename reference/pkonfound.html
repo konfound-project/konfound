@@ -546,8 +546,66 @@ and
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
-<span class="r-in"><span><span class="co"># using a confidence interval</span></span></span>
-<span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>upper_bound <span class="op">=</span> <span class="fl">3</span>, lower_bound <span class="op">=</span> <span class="fl">1</span>, n_obs <span class="op">=</span> <span class="fl">100</span>, n_covariates <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>   </span></span>
+<span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.103</span>, <span class="fl">20888</span>, <span class="fl">3</span>, n_treat <span class="op">=</span> <span class="fl">17888</span>, model_type <span class="op">=</span> <span class="st">"logistic"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fragility = 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> You entered: log odds = -0.200, SE = 0.103, with p-value = 0.052. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The table implied by the parameter estimates and sample sizes you entered:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Implied Table:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Fail Success Success_Rate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Control    2882     118        3.93%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Treatment 17308     580        3.24%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total     20190     698        3.34%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Values in the table have been rounded to the nearest integer. This may cause </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a small change to the estimated effect for the table.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To sustain an inference that the effect is different from 0 (alpha = 0.050), one would</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> need to transfer 1 data points from treatment success to treatment failure (Fragility = 1).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to replacing 2 (0.345%) treatment success data points with data points </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> for which the probability of failure in the control group (96.067%) applies (RIR = 2). </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note that RIR = Fragility/P(destination) = 1/0.961 ~ 2.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The transfer of 1 data points yields the following table:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Transfer Table:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Fail Success Success_Rate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Control    2882     118        3.93%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Treatment 17309     579        3.24%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total     20191     697        3.34%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The log odds (estimated effect) = -0.202, SE = 0.103, p-value = 0.050.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This p-value is based on t = estimated effect/standard error</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Benchmarking RIR for Logistic Regression (Beta Version)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The treatment is not statistically significant in the implied table and would also not be</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> statistically significant in the raw table (before covariates were added). In this scenario, we</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> do not yet have a clear interpretation of the benchmark and therefore the benchmark calculation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> is not reported.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2021) for a description of the methods.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> *Frank, K. A., *Lin, Q., *Maroulis, S., *Mueller, A. S., Xu, R., Rosenberg, J. M., ... &amp; Zhang, L. (2021).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Hypothetical case replacement can be used to quantify the robustness of trial results. <span style="font-style: italic;">Journal of Clinical</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Epidemiology, 134</span>, 150-159.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> *authors are listed alphabetically.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals entered.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># using a confidence interval </span></span></span>
+<span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>upper_bound <span class="op">=</span> <span class="fl">3</span>, lower_bound <span class="op">=</span> <span class="fl">1</span>, n_obs <span class="op">=</span> <span class="fl">100</span>, n_covariates <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -574,7 +632,6 @@ and
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Plot examples</span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">.4</span>, <span class="fl">100</span>, <span class="fl">3</span>, to_return <span class="op">=</span> <span class="st">"thresh_plot"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="pkonfound-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">.4</span>, <span class="fl">100</span>, <span class="fl">3</span>, to_return <span class="op">=</span> <span class="st">"corr_plot"</span><span class="op">)</span></span></span>

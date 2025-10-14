@@ -3,7 +3,7 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   introduction-to-konfound: introduction-to-konfound.html
-last_built: 2025-10-14T17:57Z
+last_built: 2025-10-14T18:00Z
 urls:
   reference: https://konfound-it.org/konfound/reference
   article: https://konfound-it.org/konfound/articles
