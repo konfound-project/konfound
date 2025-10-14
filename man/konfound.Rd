@@ -50,7 +50,9 @@ linear models (`lm`), generalized linear models (`glm`),
 and linear mixed-effects models (`lmerMod`).
 It calculates the amount of bias required to invalidate or
 sustain an inference,and the impact of an omitted variable
-necessary to affect the inference.
+necessary to affect the inference. For a full description of 
+the command’s usage and additional examples, please refer to 
+our \href{https://konfound-it.org/page/guide/}{practical guide}.
 }
 \examples{
 # using lm() for linear models

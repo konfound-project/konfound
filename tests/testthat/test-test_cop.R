@@ -66,15 +66,7 @@ test_that("test_cop outputs the correct language and values when to_return is 'p
     alpha <- 0.05
     tails <- 2
     to_return <- "print"
-    delta_star <- 0.1  # example values
-    delta_exact <- 0.2
-    delta_pctbias <- 10.5
-    eff_x_M3_oster <- 0.15
-    eff_x_M3 <- 0.12
-    cond_RIR_fixedY <- 0.95
-    cond_RIR_null <- 0.85
-    cond_RIR_rxyz <- 0.75
-    
+
     # Capture the output
     output <- capture.output(
         test_cop(est_eff, std_err, n_obs, n_covariates, sdx, sdy, R2, eff_thr, FR2max_multiplier, FR2max, alpha, tails, to_return)
@@ -84,24 +76,27 @@ test_that("test_cop outputs the correct language and values when to_return is 'p
     expected_lines <- c(
         "Coefficient of Proportionality (COP):",
         "",
-        "This function calculates a correlation-based coefficient of proportionality (delta)",
+        "This function calculates a correlation-based coefficient of proportionality (delta_Correlation)",
         "which is exact even in finite samples as well as Oster's delta*.",
         "",
-        "Delta* is 0.387 (assuming no covariates in the baseline model M1),", 
-        "the correlation-based delta is 1.172, with a bias of -66.980%.",
+        "The correlation-based delta (delta_Correlation) is 1.172, and delta* is 0.387 ",
+        "(assuming no covariates in the baseline model M1), indicating a relative bias of -66.980%.",
         "Note that %bias = (delta* - delta) / delta.",
         "",
-        "With delta*, the coefficient in the final model will be 0.453.",     
-        "With the correlation-based delta, the coefficient will be 0.300.",
+        "Using alpha = 0.05 and df = 96 (so critical r = 0.1986), the delta threshold ",
+        "for statistical significance is 1.578.",
+        "This corresponds to a CV (omitted confounder) with partial correlations",
+        "r_xcv|z ~ 0.8350 (between X and CV given Z) and r_ycv|z ~ 0.4260 (between Y and CV given Z).",
         "",
-        "Use to_return = \"raw_output\" to see more specific results and graphic",             
-        "presentation of the result.",                     
-        ""                                                                    
-#        "This function also calculates conditional RIR that invalidates the statistical inference.",  
-#        "",                                                                    
-#        "If the replacement data points have a fixed value, then RIR = 80.035.",  
-#        "If the replacement data points follow a null distribution, then RIR = 55.317.",                                       
-#        "If the replacement data points satisfy rxy|Z = 0, then RIR = 56.317."
+        "With the correlation-based delta, the coefficient of X in the final model will be 0.300.",
+        "With delta*, the coefficient of X in the final model will be 0.453.",
+        "",
+        "Using the delta threshold for statistical significance and the corresponding partial correlations,",
+        "the coefficient of X in the final model will be 0.3591 with standard error of 0.1809",
+        "with t-ratio of 1.9850 and the final R2 will be 0.257.",
+        "",
+        "Use to_return = \"raw_output\" to see more specific results and graphic",
+        "presentation of the result."
     )
     
     # Check each line against expected

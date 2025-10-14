@@ -371,3 +371,200 @@ verify_reg_uncond <- function(n_obs, sdx, sdy, rxy){
         stop("Error!")
     }
 }
+
+#' SE-preserving RIR for Linear model
+#'
+#' @param est_eff estimated coefficient (beta-hat)
+#' @param std_err standard error of the coefficient
+#' @param n_obs number of observations
+#' @param n_covariates number of covariates in the model
+#' @param sd_x standard deviation of X (residualized)
+#' @param sd_y_obs standard deviation of observed Y
+#' @param alpha significance level (default 0.05)
+#' @param tails numeric, whether to use a two-tailed test
+#' @return A list with components:
+#' \itemize{
+#'   \item `pi` replacement fraction in (0, 1) required to preserve SE.
+#'   \item `sd_y_unobs` SD of Y among replacement cases required to preserve SE.
+#'   \item `sd_yx` residual SD of Y given X implied by `std_err`.
+#'   \item `r_sharp` critical correlation r_critical at alpha and df.
+#'   \item `sd_y_combined` combined SD of Y that preserves `std_err`.
+#'   \item `r_xy` observed partial correlation between X and Y given Z.
+#'   \item `est_eff_new` estimate at the critical boundary, equal to `t_crit * std_err`.
+#' }
+#' @keywords internal
+#' @noRd
+se_preserve_replacement <- function(est_eff, std_err, n_obs, n_covariates,
+                                    sd_x, sd_y_obs,
+                                    alpha = 0.05, tails = 2) {
+    df <- n_obs - n_covariates - 3
+    
+    stopifnot(is.finite(std_err), std_err > 0,
+              is.finite(sd_x), sd_x > 0,
+              is.finite(df), df  > 0,
+              is.finite(sd_y_obs), sd_y_obs > 0,
+              is.finite(est_eff))
+    
+    t_hat <- est_eff / std_err
+    
+    # (B1) sd_{y|x} = se(delta_hat) * sd_x * sqrt(df)
+    sd_yx <- std_err * sd_x * sqrt(df)
+    
+    # critical t (signed to match the sign of the estimate);
+    # Appendix uses r# built from the critical t.
+    t_crit_abs <- if (tails == 2) stats::qt(1 - alpha/2, df) else stats::qt(1 - alpha, df)
+    t_crit     <- sign(est_eff) * abs(t_crit_abs)
+    
+    # (B3) r# = t_crit / sqrt(t_crit^2 + df)
+    r_sharp <- t_crit / sqrt(t_crit^2 + df)
+    
+    # (B2) sd_y_combined from sd_yx and r#
+    sd_y_combined <- sd_yx / sqrt(1 - r_sharp^2)
+    
+    # r_xy from the observed t (standard identity)
+    # r_xy = t / sqrt(t^2 + df)
+    r_xy <- t_hat / sqrt(t_hat^2 + df)
+    
+    # (B4) pi = 1 - ( r# * sd_y^{combined} / sd_y^{obs} ) / r_xy
+    pi <- 1 - (r_sharp * sd_y_combined / sd_y_obs) / r_xy
+    
+    # Some error messages for unusual values
+    if (!is.finite(pi)) stop("pi is not finite. Check inputs.")
+    if (pi <= 0 || pi >= 1) warning(sprintf("pi=%.4f is outside (0,1). Interpretation may be unstable.", pi))
+    
+    # (B5) solve for sd_y_unobs
+    # sd_y_combined^2 = (1 - pi) * s_y_obs^2 + pi * s_y_unobs^2
+    # hence, sd_y_unobs = sqrt( (sd_y_combined^2 - (1 - pi) * s_y_obs^2) / pi )
+    num <- sd_y_combined^2 - (1 - pi) * sd_y_obs^2
+    if (num <= 0) warning("The quantity under the square root for sd_y_unobs is non-positive. Check rounding and inputs.")
+    
+    sd_y_unobs <- sqrt(num / pi)
+    
+    est_eff_new <- t_crit * std_err
+    
+    list(
+        pi = pi,
+        sd_y_unobs = sd_y_unobs,
+        sd_yx = sd_yx,
+        r_sharp = r_sharp,
+        sd_y_combined = sd_y_combined,
+        r_xy = r_xy,
+        est_eff_new = est_eff_new
+    )
+}
+
+
+#' Statistical significance threshold of COP
+#' 
+#' @param r_xy_z Partial correlation between X and Y given Z 
+#' @param R_max Maximum allowable total R2 after adding CV 
+#' @param r_xz Correlation between X and Z 
+#' @param df Residual degrees of freedom of the original regression
+#' @param alpha Two-sided alpha level (default 0.05)
+#' @param tol Numeric tolerance for equality checks (default 1e-8)
+#' @return A list with components:
+#' \itemize{
+#'   \item `delta_statsig` COP threshold for significance, or `NA` if `r_xz` is ~0.
+#'   \item `rxcvGz`, `rycvGz` admissible partial correlations of the confounder with X and Y given Z.
+#'   \item `rx_cv` marginal correlation of X and the confounder.
+#'   \item `r_crit`, `t_crit` critical values at `alpha` and `df`.
+#'   \item `r_check`, `R2_check` internal checks reproducing the boundary.
+#'   \item `p1`–`p5`, `disc`, `Q` intermediate quantities used to construct admissible roots.
+#'   \item `error` a message string if no admissible solution exists, otherwise `NULL`.
+#' }
+#' @keywords internal
+#' @noRd
+delta_statsig <- function(r_xy_z, 
+                          R_max, 
+                          r_xz, 
+                          df, 
+                          alpha = .05, 
+                          tol = 1e-8) {
+    # 0) basic checks
+    if (!is.numeric(df) || df <= 0) stop("df must be non-negative")
+    if (!(alpha > 0 && alpha < 1)) stop("alpha must be in (0,1).")
+    if (!(abs(r_xy_z) < 1)) stop("r_xy_z must be in (-1,1).")
+    if (!(abs(r_xz) < 1)) stop("r_xz must be in (-1,1).")
+    
+    # 1) critical values
+    t_crit <- stats::qt(1 - alpha/2, df)
+    r_crit <- t_crit / sqrt(t_crit^2 + df)
+    
+    out <- list(delta_statsig = NA_real_, rxcvGz = NA_real_, rycvGz = NA_real_,
+                r_crit = r_crit, t_crit = t_crit,
+                p1 = NA_real_, p2 = NA_real_, p3 = NA_real_, p4 = NA_real_, p5 = NA_real_,
+                disc = NA_real_, Q = NA_real_, rx_cv = NA_real_,
+                r_check = NA_real_, R2_check = NA_real_, error = NULL)
+    
+    # 1a) not significant case
+    if (r_xy_z < r_crit - tol) {
+        out$error <- "The estimated effect is less than the critical value, meaning it is not statistically significant. The Coefficient of Proportionality for statistical significance has not yet been conceptualized for this scenario."
+        return(out)
+    }
+    
+    # 1b) R_max ~ 1 case
+    if (1 - R_max < tol) {
+        out$error <- "For Rmax = 1, the standard error for the estimated effect is 0. The t-ratio and statistical significance are not defined. Consider running the analysis with Rmax < 1."
+        return(out)
+    }
+    
+    # 2) aliases
+    a <- r_xy_z; m <- R_max; r <- r_crit
+    
+    # 3) pieces
+    den1 <- (m*(r^2 - 1))^2
+    num1 <- a^2*(2*r^4 - m*r^4 - 2*r^2 + m)
+    p1 <- num1/den1
+    p2 <- (2*(r^2-1) * (a^2*(m*r^2 + m - 2*r^2) - (m-1)*m*r^2))^2
+    p3 <- 4 * den1 * (a^4*r^4 - 2*a^4*r^2 + a^4 - 2*a^2*m*r^4 + 2*a^2*m*r^2 +
+                          2*a^2*r^4 - 2*a^2*r^2 + m^2*r^4 - 2*m*r^4 + r^4)
+    p4 <- 2*den1
+    p5 <- (r^2/(1-r^2)) / (m/(1-m))
+    
+    out$p1 <- p1; out$p2 <- p2; out$p3 <- p3; out$p4 <- p4; out$p5 <- p5
+    
+    # 4) discriminant
+    disc <- p2 - p3
+    out$disc <- disc
+    if (disc < -tol) { 
+        out$error <- "Discriminant < 0; no real solution."; return(out) 
+    }
+    if (abs(disc) <= tol) disc <- 0
+    Q <- sqrt(disc)/p4
+    out$Q <- Q
+    
+    # roots -> candidates
+    roots <- c(p1 - sqrt(disc)/p4 + p5, p1 + sqrt(disc)/p4 + p5)
+    rx_cand <- sqrt(roots[roots > tol & roots < 1 - tol])
+    if (!length(rx_cand)) { 
+        out$error <- "No admissible root for r_xcvz in (0,1)."; return(out) 
+    }
+    
+    # 5) choose (rx, ry) that reproduces r_crit & R_max
+    keepers <- list()
+    for (rx in rx_cand) for (sgn in c(1, -1)) {
+        ry <- a*rx + sgn*sqrt((m - a^2)*(1 - rx^2))
+        if (ry < -1 - tol || ry > 1 + tol) next
+        r_check <- (a - rx*ry) / sqrt((1 - rx^2)*(1 - ry^2))
+        R2_check <- (a^2 + ry^2 - 2*a*ry*rx) / (1 - rx^2)
+        if (abs(r_check - r) < tol && abs(R2_check - m) < tol)
+            keepers[[length(keepers)+1]] <- list(rx = rx, ry = ry, r_check = r_check, R2_check = R2_check)
+    }
+    if (!length(keepers)) { 
+        out$error <- "No (rx, ry) pair reproduces both R_max and r_crit."; return(out) 
+    }
+    
+    k <- if (length(keepers)==1) 1 else which.min(sapply(keepers, \(z) abs(z$rx)))
+    rx <- keepers[[k]]$rx; ry <- keepers[[k]]$ry
+    
+    # 6) delta
+    rx_cv <- sqrt(1 - r_xz^2) * rx
+    delta <- if (abs(r_xz) < tol) NA_real_ else rx_cv / r_xz
+    
+    out$rxcvGz <- rx; out$rycvGz <- ry; out$rx_cv <- rx_cv
+    out$r_check <- keepers[[k]]$r_check; out$R2_check <- keepers[[k]]$R2_check
+    out$delta_statsig <- delta
+    out
+}
+
+

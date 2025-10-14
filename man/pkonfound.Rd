@@ -33,7 +33,9 @@ pkonfound(
   to_return = "print",
   upper_bound = NULL,
   lower_bound = NULL,
-  raw_treatment_success = NULL
+  raw_treatment_success = NULL,
+  replace_stu = NULL,
+  peer_effect_pi = 0.5
 )
 }
 \arguments{
@@ -94,6 +96,10 @@ pkonfound(
 \item{lower_bound}{optional (replaces \code{est_eff}); the lower bound of the confidence interval.}
 
 \item{raw_treatment_success}{optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark.}
+
+\item{replace_stu}{score of the hypothetical average student who replaces the original student.}
+
+\item{peer_effect_pi}{proportion of students exerting peer effects on the others.}
 }
 \description{
 For published studies, this command calculates (1) how much bias there must be in an estimate to nullify/sustain an inference; (2) the impact of an omitted variable necessary to nullify/sustain an inference for a regression coefficient.
@@ -119,13 +125,18 @@ The function accepts arguments depending on the type of model:
 \itemize{
   \item a, b, c, d, two_by_two_table, test, replace, switch_trm
 }
+
+\strong{VAM model (beta)}
+\itemize{
+  \item est_eff, replace_stu, n_obs, eff_thr, peer_effect_pi
+}
 }
 \note{
 For a thoughtful background on benchmark options for ITCV, see 
-\href{https://academic.oup.com/jrsssb/article-abstract/82/1/39/7056023}{Cinelli & Hazlett (2020)}, 
-\href{https://journals.sagepub.com/doi/pdf/10.1177/01492063241293126}{Lonati & Wulff (2024)}, 
+\href{https://doi.org/10.1111/rssb.12348}{Cinelli & Hazlett (2020)}, 
+\href{https://doi.org/10.1177/01492063241293126}{Lonati & Wulff (2024)}, 
 and 
-\href{https://journals.sagepub.com/doi/10.1177/0049124100029002001}{Frank (2000)}.
+\href{https://doi.org/10.1177/0049124100029002001}{Frank (2000)}.
 }
 \section{Values}{
 
@@ -161,6 +172,9 @@ pkonfound prints the bias and the number of cases that would have to be replaced
   \item{\code{delta*restricted}}{delta calculated using Oster’s restricted estimator}
   \item{\code{delta_exact}}{delta calculated using correlation-based approach}
   \item{\code{delta_pctbias}}{percent bias when comparing \code{delta*} to \code{delta_exact}}
+  \item{\code{delta_sig}}{delta threshold at which focal predictor loses statistical significance at the chosen \code{alpha} (default: 0.05)}
+  \item{\code{rxcvGz_sig}}{boundary partial correlation \eqn{r_{X,\mathrm{CV} | Z}} associated with \code{delta_sig}}
+  \item{\code{rycvGz_sig}}{boundary partial correlation \eqn{r_{Y,\mathrm{CV} | Z}} associated with \code{delta_sig}}
   \item{\code{var(Y)}}{variance of the dependent variable (\eqn{\sigma_Y^2})}
   \item{\code{var(X)}}{variance of the independent variable (\eqn{\sigma_X^2})}
   \item{\code{var(CV)}}{variance of the confounding variable (\eqn{\sigma_{CV}^2})}
@@ -213,6 +227,14 @@ pkonfound prints the bias and the number of cases that would have to be replaced
   \item{\code{needtworows}}{indicator whether extra switches were needed}
 }
 }
+
+\subsection{RIR for VAM model (beta)}{
+\describe{
+  \item{\code{RIR}}{Robustness of Inference to Replacement (RIR): number of students needed to be replaced.}
+  \item{\code{RIR_perc}}{RIR as \% of students needed to be replaced.}
+  \item{\code{peer_effect}}{Peer effect of each replaced student (compared to their replacements) on each of the non-replaced students.}
+}
+}
 }
 
 \examples{
@@ -246,5 +268,7 @@ pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
 # Calculating rxcv and rycv when preserving standard error
 pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
          sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
-
+# VAM beta
+pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
+          peer_effect_pi = 0.3, index = "VAM")
 }
