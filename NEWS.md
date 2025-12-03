@@ -6,6 +6,7 @@
 * include a global message linking to the konfound website and practical guide
 * fix issue where "NULL" appeared at the end of printed output for konfound commands
 * add delta threshold for statistical significance calculation and printed text for COP function
+* add correlation-based RIR for logistic regression with continuous focal predictor
 
 # konfound 1.0.3
 
