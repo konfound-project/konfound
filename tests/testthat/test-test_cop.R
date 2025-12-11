@@ -77,7 +77,7 @@ test_that("test_cop outputs the correct language and values when to_return is 'p
         "Coefficient of Proportionality (COP):",
         "",
         "This function calculates a correlation-based coefficient of proportionality (delta_Correlation)",
-        "along with Oster's delta*. The correlation-based COP provides an exact measure even in finite ",
+        "along with Oster's delta*. The correlation-based COP provides an exact measure even in finite",
         "samples and does not depend on the specification of a baseline model.",
         "",
         "The correlation-based delta (delta_Correlation) is 1.172, and delta* is 0.387 ",
