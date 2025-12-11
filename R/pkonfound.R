@@ -331,6 +331,16 @@
        peer_effect_pi = peer_effect_pi,
        to_return = to_return
    )
+   } else if (index == "corr_RIR") {
+       out <- test_correlation_rir(
+           est_eff = est_eff,
+           std_err = std_err,
+           n_obs = n_obs,
+           n_covariates = n_covariates,
+           alpha = alpha,
+           tails = tails,
+           to_return = to_return
+       )
    } else if (model_type == "logistic" & !is.null(n_treat)) {
     out <- test_sensitivity_ln(
       est_eff = est_eff,
@@ -399,9 +409,13 @@
     to_return = to_return
   )
 } 
-      
-if (!is.null(out)) { # dealing with a strange print issue
-  return(out)
+
+if (!is.null(out)) {
+    if (to_return == "print") {
+        return(invisible(out))   # suppress console echo of the list
+    } else {
+        return(out)              # raw_output or plot -> visible return
+    }
 }
 
 if (to_return == "print") {
