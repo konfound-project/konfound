@@ -343,14 +343,14 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
     output <- list("delta*" = delta_star,
                    "delta*restricted" = delta_star_restricted,
                    "delta_Correlation" = delta_exact, 
-                   "delta_pctbias" = delta_pctbias,
+                   #"delta_pctbias" = delta_pctbias,
                    "delta_sig"  = sig_out$delta_statsig,
                    "rxcvGz_sig" = sig_out$rxcvGz,
                    "rycvGz_sig" = sig_out$rycvGz,
                    #"cov_oster" = cov_oster,
                    #"cov_exact" = cov_exact,
                    "cor_oster" = cor_oster,
-                   "cor_exact" = cor_exact,
+                   "cor_correlation" = cor_exact,
                    "var(Y)" = sdy^2,
                    "var(X)" = sdx^2,
                   #"var(Z)" = sdz^2,
@@ -371,19 +371,18 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
 if (to_return == "print") {
     cat(crayon::bold("Coefficient of Proportionality (COP):\n\n"))
     cat("This function calculates a correlation-based coefficient of proportionality (delta_Correlation)\n")
-    cat("along with Oster's delta*. The correlation-based COP provides an exact measure even in finite\n")
-    cat("samples and does not depend on the specification of a baseline model.\n\n")
+    cat("along with Oster's delta*. The correlation-based COP does not depend on the specification of\n")
+    cat("a baseline model.\n\n")
     
     if (negest == 1) {
         cat("Using the absolute value of the estimated effect, result can be interpreted\nby symmetry.\n\n")
     }
     
     cat(sprintf(
-        "The correlation-based delta (delta_Correlation) is %.3f, and delta* is %.3f \n(assuming no covariates in the baseline model M1), indicating a relative bias of %.3f%%.\n",
-        delta_exact, delta_star, delta_pctbias
+        "The correlation-based delta (delta_Correlation) is %.3f, and delta* is %.3f \n(assuming no covariates in the baseline model M1).\n\n",
+        delta_exact, delta_star
     ))
-    cat("Note that %bias = (delta* - delta) / delta.\n\n")
-    
+
     if (is.null(sig_out$error)) {
         cat(sprintf(
             "Using alpha = %.2f and df = %s (so critical r = %.4f), the delta threshold \nfor statistical significance is %.3f.\n",
@@ -402,8 +401,8 @@ if (to_return == "print") {
     }
     
     cat(sprintf(
-        "With the correlation-based delta, the coefficient of X in the final model will be %.3f.\nWith delta*, the coefficient of X in the final model will be %.3f.\n\n",
-        eff_x_M3, eff_x_M3_oster
+        "With the correlation-based delta, the coefficient of X in the final model will be %.3f.\n\n",
+        eff_x_M3
     ))
     
     if (is.null(sig_out$error)) {
