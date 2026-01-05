@@ -227,7 +227,7 @@ test_cop <- function(est_eff, # unstandardized
                         "coef_CV", "SE_CV", "t_CV")
   
   colnames(fTable) <- c("M1:X", "M2:X,Z", 
-                        "M3(delta_Correlation):X,Z,CV",
+                        "M3(delta_Corr):X,Z,CV",
                         "M3(delta*):X,Z,CV")
   
   ## statistical significance COP
@@ -281,31 +281,107 @@ test_cop <- function(est_eff, # unstandardized
   figTable$coef_X <- as.numeric(figTable$coef_X)
   figTable$R2 <- as.numeric(figTable$R2)
 
-scale <- 1/(round(max(figTable$coef_X)*10)/10)
-
-fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
-    ggplot2::geom_point(ggplot2::aes(y = figTable$coef_X, group = cat, shape = cat), color = "blue", size = 3) + 
-    ggplot2::scale_shape_manual(values = c(16, 1)) +
-    ggplot2::geom_point(ggplot2::aes(y = R2/scale), color = "#7CAE00", shape = 18, size = 4) + 
-    # scale_linetype_manual(values=c("solid", "dotted")) +
-    ggplot2::geom_line(ggplot2::aes(y = R2/scale, group = cat), linetype = "solid", color = "#7CAE00") + 
-    ggplot2::geom_line(ggplot2::aes(y = figTable$coef_X, group = cat, linetype = cat), color = "blue") + 
-    ggplot2::scale_y_continuous(
-      # Features of the first axis
-      name = "Coeffcient (X)",
-      # Add a second axis and specify its features
-      sec.axis = ggplot2::sec_axis(~.* scale, 
-                          name="R2")) +
-    ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-          legend.position = "none",
-          axis.line.y.right = ggplot2::element_line(color = "#7CAE00"),
-          axis.title.y.right = ggplot2::element_text(color = "#7CAE00"),
-          axis.text.y.right = ggplot2::element_text(color = "#7CAE00"),
-          axis.line.y.left = ggplot2::element_line(color = "blue"),
-          axis.title.y.left = ggplot2::element_text(color = "blue"),
-          axis.text.y.left = ggplot2::element_text(color = "blue"),
-          axis.line.x.bottom = ggplot2::element_line(color = "black"),
-          axis.text.x.bottom = ggplot2::element_text(color = "black"))
+  ## scale factor for the secondary axis
+  r2_scale <- 1 / (round(max(figTable$coef_X) * 10) / 10)
+  
+  ## data used for R2 (avoid duplicated rows coming from cat == "star")
+  figR2 <- subset(figTable, cat == "exact", select = c(ModelLabel, R2))
+  
+  fig <- ggplot(figTable, aes(x = ModelLabel)) +
+      
+      ## coef_x (delta_Corr): blue points (legend shows a blue dot)
+      geom_point(data = subset(figTable, cat == "exact"),
+                 aes(y = coef_X, color = "coef_x (delta_Corr)", linetype = "coef_x (delta_Corr)"),
+                 size = 3
+                 ) +
+      ## keep the solid blue line for the exact series, but do not put it in legend
+      geom_line(data = subset(figTable, cat == "exact"),
+                aes(y = coef_X, group = 1),
+                color = "blue",
+                linetype = "solid",
+                linewidth = 0.8,
+                show.legend = FALSE
+                ) +
+      
+      ## coef_x (delta*): blue dotted line + open-circle points (legend shows dotted line)
+      geom_line(data = subset(figTable, cat == "star"),
+                aes(y = coef_X, group = 1, color = "coef_x (delta*)", linetype = "coef_x (delta*)"),
+                linewidth = 0.8
+                ) +
+      geom_point(data = subset(figTable, cat == "star"),
+                 aes(y = coef_X),
+                 color = "blue",
+                 shape = 1,
+                 size = 3,
+                 show.legend = FALSE
+                 ) +
+      
+      ## R2 (scaled): green solid line (legend shows solid green line)
+      geom_line(data = figR2,
+                aes(y = R2 / r2_scale, group = 1, color = "R2 (scaled)", linetype = "R2 (scaled)"),
+                linewidth = 0.8
+                ) +
+      ## keep the green diamonds on the plot, but do not put them in legend
+      geom_point(data = figR2,
+                 aes(y = R2 / r2_scale),
+                 color = "#7CAE00",
+                 shape = 18,
+                 size = 4,
+                 show.legend = FALSE
+                 ) +
+      
+      ## axis settings
+      scale_y_continuous(name = "Coeffcient (X)",
+                         sec.axis = sec_axis(~ . * r2_scale, name = "R2")
+                         ) +
+      
+      ## legend styling and exact legend glyph control
+      scale_color_manual(
+          values = c("coef_x (delta_Corr)" = "blue",
+                     "coef_x (delta*)"     = "blue",
+                     "R2 (scaled)"         = "#7CAE00"
+                     ),
+          breaks = c("coef_x (delta_Corr)", "coef_x (delta*)", "R2 (scaled)")
+          ) +
+      scale_linetype_manual(values = c(
+          "coef_x (delta_Corr)" = "blank",   # point-only in legend
+          "coef_x (delta*)"     = "dotted",
+          "R2 (scaled)"         = "solid"
+          ),
+          breaks = c("coef_x (delta_Corr)", "coef_x (delta*)", "R2 (scaled)")
+          ) +
+      guides(linetype = "none",
+             color = guide_legend(
+                 title = NULL,
+                 override.aes = list(
+                     shape    = c(16, NA, NA),              
+                     linetype = c("blank", "dotted", "solid"),
+                     linewidth = c(0, 0.8, 0.8),
+                     size     = c(3, NA, NA)
+                     )
+                 )
+             ) +
+      
+      ## theme, including legend inside top-right
+      theme(
+          axis.title.x = element_blank(),
+          
+          legend.position = c(0.98, 0.98),
+          legend.justification = c(1, 1),
+          legend.background = element_rect(fill = "white", color = "grey80"),
+          legend.key = element_rect(fill = "white", color = NA),
+          
+          axis.line.y.right = element_line(color = "#7CAE00"),
+          axis.title.y.right = element_text(color = "#7CAE00"),
+          axis.text.y.right = element_text(color = "#7CAE00"),
+          
+          axis.line.y.left = element_line(color = "blue"),
+          axis.title.y.left = element_text(color = "blue"),
+          axis.text.y.left = element_text(color = "blue"),
+          
+          axis.line.x.bottom = element_line(color = "black"),
+          axis.text.x.bottom = element_text(color = "black")
+      )
     
   ##############################################
   ######### conditional RIR ####################
@@ -350,7 +426,7 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
                    #"cov_oster" = cov_oster,
                    #"cov_exact" = cov_exact,
                    "cor_oster" = cor_oster,
-                   "cor_correlation" = cor_exact,
+                   "cor_Corr" = cor_exact,
                    "var(Y)" = sdy^2,
                    "var(X)" = sdx^2,
                   #"var(Z)" = sdz^2,
