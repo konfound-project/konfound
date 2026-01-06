@@ -292,18 +292,18 @@ test_cop <- function(est_eff, # unstandardized
   lab_star <- "coef_x based on delta*"
   lab_r2   <- "R2 (scaled)"
   
-  fig <- ggplot(figTable, aes(x = ModelLabel)) +
+  fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = ModelLabel)) +
       
       ## coef_x (delta_Corr): blue dot
-      geom_point(
+      ggplot2::geom_point(
           data = subset(figTable, cat == "exact"),
-          aes(y = coef_X, color = lab_corr),
+          ggplot2::aes(y = coef_X, color = lab_corr),
           size = 3
       ) +
       ## solid blue line for exact (no legend)
-      geom_line(
+      ggplot2::geom_line(
           data = subset(figTable, cat == "exact"),
-          aes(y = coef_X, group = 1),
+          ggplot2::aes(y = coef_X, group = 1),
           color = "blue",
           linetype = "solid",
           linewidth = 0.8,
@@ -311,16 +311,16 @@ test_cop <- function(est_eff, # unstandardized
       ) +
       
       ## coef_x (delta*): blue dotted line (legend entry via color)
-      geom_line(
+      ggplot2::geom_line(
           data = subset(figTable, cat == "star"),
-          aes(y = coef_X, group = 1, color = lab_star),
+          ggplot2::aes(y = coef_X, group = 1, color = lab_star),
           linetype = "dotted",
           linewidth = 0.8
       ) +
       ## open-circle points for star (no legend)
-      geom_point(
+      ggplot2::geom_point(
           data = subset(figTable, cat == "star"),
-          aes(y = coef_X),
+          ggplot2::aes(y = coef_X),
           color = "blue",
           shape = 1,
           size = 3,
@@ -328,16 +328,16 @@ test_cop <- function(est_eff, # unstandardized
       ) +
       
       ## R2 (scaled): green solid line (legend entry via color)
-      geom_line(
+      ggplot2::geom_line(
           data = figR2,
-          aes(y = R2 / r2_scale, group = 1, color = lab_r2),
+          ggplot2::aes(y = R2 / r2_scale, group = 1, color = lab_r2),
           linetype = "solid",
           linewidth = 0.8
       ) +
       ## green diamonds (no legend)
-      geom_point(
+      ggplot2::geom_point(
           data = figR2,
-          aes(y = R2 / r2_scale),
+          ggplot2::aes(y = R2 / r2_scale),
           color = "#7CAE00",
           shape = 18,
           size = 4,
@@ -345,20 +345,20 @@ test_cop <- function(est_eff, # unstandardized
       ) +
       
       ## axis settings
-      scale_y_continuous(
-          name = "Coeffcient (X)",
+      ggplot2::scale_y_continuous(
+          name = "Coefficient (X)",
           sec.axis = ggplot2::sec_axis(~ . * r2_scale, name = "R2")
       ) +
       
       ## legend colors + order
-      scale_color_manual(
-          values = setNames(c("blue", "blue", "#7CAE00"), c(lab_corr, lab_star, lab_r2)),
+      ggplot2::scale_color_manual(
+          values = stats::setNames(c("blue", "blue", "#7CAE00"), c(lab_corr, lab_star, lab_r2)),
           breaks = c(lab_corr, lab_star, lab_r2)
       ) +
       
       ## legend keys: dot, dotted line, solid line
-      guides(
-          color = guide_legend(
+      ggplot2::guides(
+          color = ggplot2::guide_legend(
               title = NULL,
               override.aes = list(
                   shape = c(16, NA, NA),
@@ -370,24 +370,24 @@ test_cop <- function(est_eff, # unstandardized
       ) +
       
       ## theme incl. legend inside plot
-      theme(
-          axis.title.x = element_blank(),
+      ggplot2::theme(
+          axis.title.x = ggplot2::element_blank(),
           
           legend.position = c(0.98, 0.98),
           legend.justification = c(1, 1),
-          legend.background = element_rect(fill = "white", color = "grey80"),
-          legend.key = element_rect(fill = "white", color = NA),
+          legend.background = ggplot2::element_rect(fill = "white", color = "grey80"),
+          legend.key = ggplot2::element_rect(fill = "white", color = NA),
           
-          axis.line.y.right = element_line(color = "#7CAE00"),
-          axis.title.y.right = element_text(color = "#7CAE00"),
-          axis.text.y.right = element_text(color = "#7CAE00"),
+          axis.line.y.right = ggplot2::element_line(color = "#7CAE00"),
+          axis.title.y.right = ggplot2::element_text(color = "#7CAE00"),
+          axis.text.y.right = ggplot2::element_text(color = "#7CAE00"),
           
-          axis.line.y.left = element_line(color = "blue"),
-          axis.title.y.left = element_text(color = "blue"),
-          axis.text.y.left = element_text(color = "blue"),
+          axis.line.y.left = ggplot2::element_line(color = "blue"),
+          axis.title.y.left = ggplot2::element_text(color = "blue"),
+          axis.text.y.left = ggplot2::element_text(color = "blue"),
           
-          axis.line.x.bottom = element_line(color = "black"),
-          axis.text.x.bottom = element_text(color = "black")
+          axis.line.x.bottom = ggplot2::element_line(color = "black"),
+          axis.text.x.bottom = ggplot2::element_text(color = "black")
       )
     
   ##############################################
