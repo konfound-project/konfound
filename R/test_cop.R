@@ -287,82 +287,89 @@ test_cop <- function(est_eff, # unstandardized
   ## data used for R2 (avoid duplicated rows coming from cat == "star")
   figR2 <- subset(figTable, cat == "exact", select = c(ModelLabel, R2))
   
+  ## legend labels (these are the actual legend text)
+  lab_corr <- "coef_x based on delta_Corr"
+  lab_star <- "coef_x based on delta*"
+  lab_r2   <- "R2 (scaled)"
+  
   fig <- ggplot(figTable, aes(x = ModelLabel)) +
       
-      ## coef_x (delta_Corr): blue points (legend shows a blue dot)
-      geom_point(data = subset(figTable, cat == "exact"),
-                 aes(y = coef_X, color = "coef_x (delta_Corr)", linetype = "coef_x (delta_Corr)"),
-                 size = 3
-                 ) +
-      ## keep the solid blue line for the exact series, but do not put it in legend
-      geom_line(data = subset(figTable, cat == "exact"),
-                aes(y = coef_X, group = 1),
-                color = "blue",
-                linetype = "solid",
-                linewidth = 0.8,
-                show.legend = FALSE
-                ) +
+      ## coef_x (delta_Corr): blue dot
+      geom_point(
+          data = subset(figTable, cat == "exact"),
+          aes(y = coef_X, color = lab_corr),
+          size = 3
+      ) +
+      ## solid blue line for exact (no legend)
+      geom_line(
+          data = subset(figTable, cat == "exact"),
+          aes(y = coef_X, group = 1),
+          color = "blue",
+          linetype = "solid",
+          linewidth = 0.8,
+          show.legend = FALSE
+      ) +
       
-      ## coef_x (delta*): blue dotted line + open-circle points (legend shows dotted line)
-      geom_line(data = subset(figTable, cat == "star"),
-                aes(y = coef_X, group = 1, color = "coef_x (delta*)", linetype = "coef_x (delta*)"),
-                linewidth = 0.8
-                ) +
-      geom_point(data = subset(figTable, cat == "star"),
-                 aes(y = coef_X),
-                 color = "blue",
-                 shape = 1,
-                 size = 3,
-                 show.legend = FALSE
-                 ) +
+      ## coef_x (delta*): blue dotted line (legend entry via color)
+      geom_line(
+          data = subset(figTable, cat == "star"),
+          aes(y = coef_X, group = 1, color = lab_star),
+          linetype = "dotted",
+          linewidth = 0.8
+      ) +
+      ## open-circle points for star (no legend)
+      geom_point(
+          data = subset(figTable, cat == "star"),
+          aes(y = coef_X),
+          color = "blue",
+          shape = 1,
+          size = 3,
+          show.legend = FALSE
+      ) +
       
-      ## R2 (scaled): green solid line (legend shows solid green line)
-      geom_line(data = figR2,
-                aes(y = R2 / r2_scale, group = 1, color = "R2 (scaled)", linetype = "R2 (scaled)"),
-                linewidth = 0.8
-                ) +
-      ## keep the green diamonds on the plot, but do not put them in legend
-      geom_point(data = figR2,
-                 aes(y = R2 / r2_scale),
-                 color = "#7CAE00",
-                 shape = 18,
-                 size = 4,
-                 show.legend = FALSE
-                 ) +
+      ## R2 (scaled): green solid line (legend entry via color)
+      geom_line(
+          data = figR2,
+          aes(y = R2 / r2_scale, group = 1, color = lab_r2),
+          linetype = "solid",
+          linewidth = 0.8
+      ) +
+      ## green diamonds (no legend)
+      geom_point(
+          data = figR2,
+          aes(y = R2 / r2_scale),
+          color = "#7CAE00",
+          shape = 18,
+          size = 4,
+          show.legend = FALSE
+      ) +
       
       ## axis settings
-      scale_y_continuous(name = "Coeffcient (X)",
-                         sec.axis = sec_axis(~ . * r2_scale, name = "R2")
-                         ) +
+      scale_y_continuous(
+          name = "Coeffcient (X)",
+          sec.axis = ggplot2::sec_axis(~ . * r2_scale, name = "R2")
+      ) +
       
-      ## legend styling and exact legend glyph control
+      ## legend colors + order
       scale_color_manual(
-          values = c("coef_x (delta_Corr)" = "blue",
-                     "coef_x (delta*)"     = "blue",
-                     "R2 (scaled)"         = "#7CAE00"
-                     ),
-          breaks = c("coef_x (delta_Corr)", "coef_x (delta*)", "R2 (scaled)")
-          ) +
-      scale_linetype_manual(values = c(
-          "coef_x (delta_Corr)" = "blank",   # point-only in legend
-          "coef_x (delta*)"     = "dotted",
-          "R2 (scaled)"         = "solid"
-          ),
-          breaks = c("coef_x (delta_Corr)", "coef_x (delta*)", "R2 (scaled)")
-          ) +
-      guides(linetype = "none",
-             color = guide_legend(
-                 title = NULL,
-                 override.aes = list(
-                     shape    = c(16, NA, NA),              
-                     linetype = c("blank", "dotted", "solid"),
-                     linewidth = c(0, 0.8, 0.8),
-                     size     = c(3, NA, NA)
-                     )
-                 )
-             ) +
+          values = setNames(c("blue", "blue", "#7CAE00"), c(lab_corr, lab_star, lab_r2)),
+          breaks = c(lab_corr, lab_star, lab_r2)
+      ) +
       
-      ## theme, including legend inside top-right
+      ## legend keys: dot, dotted line, solid line
+      guides(
+          color = guide_legend(
+              title = NULL,
+              override.aes = list(
+                  shape = c(16, NA, NA),
+                  linetype = c("blank", "dotted", "solid"),
+                  linewidth = c(0, 0.8, 0.8),
+                  size = c(3, NA, NA)
+              )
+          )
+      ) +
+      
+      ## theme incl. legend inside plot
       theme(
           axis.title.x = element_blank(),
           
@@ -451,7 +458,7 @@ if (to_return == "print") {
     cat("a baseline model.\n\n")
     
     if (negest == 1) {
-        cat("Using the absolute value of the estimated effect, result can be interpreted\nby symmetry.\n\n")
+        cat("Using the absolute value of the estimated effect, result can be interpreted by symmetry.\n\n")
     }
     
     cat(sprintf(
@@ -475,12 +482,7 @@ if (to_return == "print") {
             sig_out$error
         ))
     }
-    
-    cat(sprintf(
-        "With the correlation-based delta, the coefficient of X in the final model will be %.3f.\n\n",
-        eff_x_M3
-    ))
-    
+
     if (is.null(sig_out$error)) {
         se_sig <- est_eff_sig / t_sig
         cat("Using the delta threshold for statistical significance and the corresponding partial correlations,\n")
