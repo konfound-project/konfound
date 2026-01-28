@@ -23,7 +23,7 @@
 #' @param replace Replacement method for treatment cases ('control' by default).
 #' @return Depending on `to_return`, prints the result, returns a raw output,
 #' or a summary table.
-#' @importFrom rlang enquo quo_name
+#' @importFrom rlang enquo quo_name .data
 #' @importFrom lme4 fixef lmer
 #' @importFrom broom tidy glance
 #' @importFrom dplyr filter select bind_cols

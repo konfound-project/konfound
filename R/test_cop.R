@@ -285,25 +285,25 @@ test_cop <- function(est_eff, # unstandardized
   r2_scale <- 1 / (round(max(figTable$coef_X) * 10) / 10)
   
   ## data used for R2 (avoid duplicated rows coming from cat == "star")
-  figR2 <- subset(figTable, cat == "exact", select = c(ModelLabel, R2))
+  figR2 <- figTable[figTable$cat == "exact", c("ModelLabel", "R2"), drop = FALSE]
   
   ## legend labels (these are the actual legend text)
   lab_corr <- "coef_x based on delta_Corr"
   lab_star <- "coef_x based on delta*"
   lab_r2   <- "R2 (scaled)"
   
-  fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = ModelLabel)) +
+  fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = .data$ModelLabel)) +
       
       ## coef_x (delta_Corr): blue dot
       ggplot2::geom_point(
           data = subset(figTable, cat == "exact"),
-          ggplot2::aes(y = coef_X, color = lab_corr),
+          ggplot2::aes(y = .data$coef_X, color = lab_corr),
           size = 3
       ) +
       ## solid blue line for exact (no legend)
       ggplot2::geom_line(
           data = subset(figTable, cat == "exact"),
-          ggplot2::aes(y = coef_X, group = 1),
+          ggplot2::aes(y = .data$coef_X, group = 1),
           color = "blue",
           linetype = "solid",
           linewidth = 0.8,
@@ -313,14 +313,14 @@ test_cop <- function(est_eff, # unstandardized
       ## coef_x (delta*): blue dotted line (legend entry via color)
       ggplot2::geom_line(
           data = subset(figTable, cat == "star"),
-          ggplot2::aes(y = coef_X, group = 1, color = lab_star),
+          ggplot2::aes(y = .data$coef_X, group = 1, color = lab_star),
           linetype = "dotted",
           linewidth = 0.8
       ) +
       ## open-circle points for star (no legend)
       ggplot2::geom_point(
           data = subset(figTable, cat == "star"),
-          ggplot2::aes(y = coef_X),
+          ggplot2::aes(y = .data$coef_X),
           color = "blue",
           shape = 1,
           size = 3,
@@ -330,14 +330,14 @@ test_cop <- function(est_eff, # unstandardized
       ## R2 (scaled): green solid line (legend entry via color)
       ggplot2::geom_line(
           data = figR2,
-          ggplot2::aes(y = R2 / r2_scale, group = 1, color = lab_r2),
+          ggplot2::aes(y = .data$R2 / r2_scale, group = 1, color = lab_r2),
           linetype = "solid",
           linewidth = 0.8
       ) +
       ## green diamonds (no legend)
       ggplot2::geom_point(
           data = figR2,
-          ggplot2::aes(y = R2 / r2_scale),
+          ggplot2::aes(y = .data$R2 / r2_scale),
           color = "#7CAE00",
           shape = 18,
           size = 4,
