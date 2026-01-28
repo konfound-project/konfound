@@ -1023,9 +1023,6 @@ pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
 #> $delta_Correlation
 #> [1] 1.508536
 #> 
-#> $delta_pctbias
-#> [1] 143.1658
-#> 
 #> $delta_sig
 #> [1] 0.9300026
 #> 
@@ -1042,7 +1039,7 @@ pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
 #> Z  0.8266047 0.2433792 1.0000000 0.0000000
 #> CV 0.2579193 0.8659296 0.0000000 1.0000000
 #> 
-#> $cor_exact
+#> $cor_Corr
 #>            Y         X         Z        CV
 #> Y  1.0000000 0.3266139 0.8266047 0.3416500
 #> X  0.3266139 1.0000000 0.2433792 0.3671463
@@ -1065,29 +1062,17 @@ pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
 #> [1] -1.114065e-16
 #> 
 #> $Table
-#>                 M1:X    M2:X,Z M3(delta_Correlation):X,Z,CV M3(delta*):X,Z,CV
-#> R2         0.1097571 0.7008711                 8.006897e-01         0.8006897
-#> coef_X     0.9798418 0.3980344                -1.114065e-16        -1.5383085
-#> SE_X       0.1665047 0.0995086                 8.775619e-02         0.1803006
-#> std_coef_X 0.3266139 0.2297940                 0.000000e+00        -0.5127695
-#> t_X        5.8847685 4.0000000                -1.269500e-15        -8.5319081
-#> coef_CV           NA        NA                 2.049900e+00         4.2116492
-#> SE_CV             NA        NA                 1.702349e-01         0.3497584
-#> t_CV              NA        NA                 1.204159e+01        12.0415946
+#>                 M1:X    M2:X,Z M3(delta_Corr):X,Z,CV M3(delta*):X,Z,CV
+#> R2         0.1097571 0.7008711          8.006897e-01         0.8006897
+#> coef_X     0.9798418 0.3980344         -1.114065e-16        -1.5383085
+#> SE_X       0.1665047 0.0995086          8.775619e-02         0.1803006
+#> std_coef_X 0.3266139 0.2297940          0.000000e+00        -0.5127695
+#> t_X        5.8847685 4.0000000         -1.269500e-15        -8.5319081
+#> coef_CV           NA        NA          2.049900e+00         4.2116492
+#> SE_CV             NA        NA          1.702349e-01         0.3497584
+#> t_CV              NA        NA          1.204159e+01        12.0415946
 #> 
 #> $Figure
-#> Warning: Use of `figTable$coef_X` is discouraged.
-#> ℹ Use `coef_X` instead.
-#> Warning: Use of `figTable$ModelLabel` is discouraged.
-#> ℹ Use `ModelLabel` instead.
-#> Warning: Use of `figTable$ModelLabel` is discouraged.
-#> ℹ Use `ModelLabel` instead.
-#> Warning: Use of `figTable$ModelLabel` is discouraged.
-#> ℹ Use `ModelLabel` instead.
-#> Warning: Use of `figTable$coef_X` is discouraged.
-#> ℹ Use `coef_X` instead.
-#> Warning: Use of `figTable$ModelLabel` is discouraged.
-#> ℹ Use `ModelLabel` instead.
 
 #> 
 # Calculating rxcv and rycv when preserving standard error

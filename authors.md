@@ -31,14 +31,14 @@
 Source:
 [`DESCRIPTION`](https://github.com/konfound-project/konfound/blob/master/DESCRIPTION)
 
-Rosenberg JM (2025). *konfound: Quantify the Robustness of Causal
+Rosenberg JM (2026). *konfound: Quantify the Robustness of Causal
 Inferences*. R package version 1.0.4,
 <https://github.com/konfound-project/konfound>.
 
     @Manual{,
       title = {konfound: Quantify the Robustness of Causal Inferences},
       author = {Joshua M Rosenberg},
-      year = {2025},
+      year = {2026},
       note = {R package version 1.0.4},
       url = {https://github.com/konfound-project/konfound},
     }
