@@ -227,7 +227,7 @@ test_cop <- function(est_eff, # unstandardized
                         "coef_CV", "SE_CV", "t_CV")
   
   colnames(fTable) <- c("M1:X", "M2:X,Z", 
-                        "M3(delta_Correlation):X,Z,CV",
+                        "M3(delta_Corr):X,Z,CV",
                         "M3(delta*):X,Z,CV")
   
   ## statistical significance COP
@@ -281,31 +281,114 @@ test_cop <- function(est_eff, # unstandardized
   figTable$coef_X <- as.numeric(figTable$coef_X)
   figTable$R2 <- as.numeric(figTable$R2)
 
-scale <- 1/(round(max(figTable$coef_X)*10)/10)
-
-fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
-    ggplot2::geom_point(ggplot2::aes(y = figTable$coef_X, group = cat, shape = cat), color = "blue", size = 3) + 
-    ggplot2::scale_shape_manual(values = c(16, 1)) +
-    ggplot2::geom_point(ggplot2::aes(y = R2/scale), color = "#7CAE00", shape = 18, size = 4) + 
-    # scale_linetype_manual(values=c("solid", "dotted")) +
-    ggplot2::geom_line(ggplot2::aes(y = R2/scale, group = cat), linetype = "solid", color = "#7CAE00") + 
-    ggplot2::geom_line(ggplot2::aes(y = figTable$coef_X, group = cat, linetype = cat), color = "blue") + 
-    ggplot2::scale_y_continuous(
-      # Features of the first axis
-      name = "Coeffcient (X)",
-      # Add a second axis and specify its features
-      sec.axis = ggplot2::sec_axis(~.* scale, 
-                          name="R2")) +
-    ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-          legend.position = "none",
+  ## scale factor for the secondary axis
+  r2_scale <- 1 / (round(max(figTable$coef_X) * 10) / 10)
+  
+  ## data used for R2 (avoid duplicated rows coming from cat == "star")
+  figR2 <- figTable[figTable$cat == "exact", c("ModelLabel", "R2"), drop = FALSE]
+  
+  ## legend labels (these are the actual legend text)
+  lab_corr <- "coef_x based on delta_Corr"
+  lab_star <- "coef_x based on delta*"
+  lab_r2   <- "R2 (scaled)"
+  
+  fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = .data$ModelLabel)) +
+      
+      ## coef_x (delta_Corr): blue dot
+      ggplot2::geom_point(
+          data = subset(figTable, cat == "exact"),
+          ggplot2::aes(y = .data$coef_X, color = lab_corr),
+          size = 3
+      ) +
+      ## solid blue line for exact (no legend)
+      ggplot2::geom_line(
+          data = subset(figTable, cat == "exact"),
+          ggplot2::aes(y = .data$coef_X, group = 1),
+          color = "blue",
+          linetype = "solid",
+          linewidth = 0.8,
+          show.legend = FALSE
+      ) +
+      
+      ## coef_x (delta*): blue dotted line (legend entry via color)
+      ggplot2::geom_line(
+          data = subset(figTable, cat == "star"),
+          ggplot2::aes(y = .data$coef_X, group = 1, color = lab_star),
+          linetype = "dotted",
+          linewidth = 0.8
+      ) +
+      ## open-circle points for star (no legend)
+      ggplot2::geom_point(
+          data = subset(figTable, cat == "star"),
+          ggplot2::aes(y = .data$coef_X),
+          color = "blue",
+          shape = 1,
+          size = 3,
+          show.legend = FALSE
+      ) +
+      
+      ## R2 (scaled): green solid line (legend entry via color)
+      ggplot2::geom_line(
+          data = figR2,
+          ggplot2::aes(y = .data$R2 / r2_scale, group = 1, color = lab_r2),
+          linetype = "solid",
+          linewidth = 0.8
+      ) +
+      ## green diamonds (no legend)
+      ggplot2::geom_point(
+          data = figR2,
+          ggplot2::aes(y = .data$R2 / r2_scale),
+          color = "#7CAE00",
+          shape = 18,
+          size = 4,
+          show.legend = FALSE
+      ) +
+      
+      ## axis settings
+      ggplot2::scale_y_continuous(
+          name = "Coefficient (X)",
+          sec.axis = ggplot2::sec_axis(~ . * r2_scale, name = "R2")
+      ) +
+      
+      ## legend colors + order
+      ggplot2::scale_color_manual(
+          values = stats::setNames(c("blue", "blue", "#7CAE00"), c(lab_corr, lab_star, lab_r2)),
+          breaks = c(lab_corr, lab_star, lab_r2)
+      ) +
+      
+      ## legend keys: dot, dotted line, solid line
+      ggplot2::guides(
+          color = ggplot2::guide_legend(
+              title = NULL,
+              override.aes = list(
+                  shape = c(16, NA, NA),
+                  linetype = c("blank", "dotted", "solid"),
+                  linewidth = c(0, 0.8, 0.8),
+                  size = c(3, NA, NA)
+              )
+          )
+      ) +
+      
+      ## theme incl. legend inside plot
+      ggplot2::theme(
+          axis.title.x = ggplot2::element_blank(),
+          
+          legend.position = c(0.98, 0.98),
+          legend.justification = c(1, 1),
+          legend.background = ggplot2::element_rect(fill = "white", color = "grey80"),
+          legend.key = ggplot2::element_rect(fill = "white", color = NA),
+          
           axis.line.y.right = ggplot2::element_line(color = "#7CAE00"),
           axis.title.y.right = ggplot2::element_text(color = "#7CAE00"),
           axis.text.y.right = ggplot2::element_text(color = "#7CAE00"),
+          
           axis.line.y.left = ggplot2::element_line(color = "blue"),
           axis.title.y.left = ggplot2::element_text(color = "blue"),
           axis.text.y.left = ggplot2::element_text(color = "blue"),
+          
           axis.line.x.bottom = ggplot2::element_line(color = "black"),
-          axis.text.x.bottom = ggplot2::element_text(color = "black"))
+          axis.text.x.bottom = ggplot2::element_text(color = "black")
+      )
     
   ##############################################
   ######### conditional RIR ####################
@@ -343,14 +426,14 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
     output <- list("delta*" = delta_star,
                    "delta*restricted" = delta_star_restricted,
                    "delta_Correlation" = delta_exact, 
-                   "delta_pctbias" = delta_pctbias,
+                   #"delta_pctbias" = delta_pctbias,
                    "delta_sig"  = sig_out$delta_statsig,
                    "rxcvGz_sig" = sig_out$rxcvGz,
                    "rycvGz_sig" = sig_out$rycvGz,
                    #"cov_oster" = cov_oster,
                    #"cov_exact" = cov_exact,
                    "cor_oster" = cor_oster,
-                   "cor_exact" = cor_exact,
+                   "cor_Corr" = cor_exact,
                    "var(Y)" = sdy^2,
                    "var(X)" = sdx^2,
                   #"var(Z)" = sdz^2,
@@ -371,19 +454,18 @@ fig <- ggplot2::ggplot(figTable, ggplot2::aes(x = figTable$ModelLabel)) +
 if (to_return == "print") {
     cat(crayon::bold("Coefficient of Proportionality (COP):\n\n"))
     cat("This function calculates a correlation-based coefficient of proportionality (delta_Correlation)\n")
-    cat("along with Oster's delta*. The correlation-based COP provides an exact measure even in finite\n")
-    cat("samples and does not depend on the specification of a baseline model.\n\n")
+    cat("along with Oster's delta*. The correlation-based COP does not depend on the specification of\n")
+    cat("a baseline model.\n\n")
     
     if (negest == 1) {
-        cat("Using the absolute value of the estimated effect, result can be interpreted\nby symmetry.\n\n")
+        cat("Using the absolute value of the estimated effect, result can be interpreted by symmetry.\n\n")
     }
     
     cat(sprintf(
-        "The correlation-based delta (delta_Correlation) is %.3f, and delta* is %.3f \n(assuming no covariates in the baseline model M1), indicating a relative bias of %.3f%%.\n",
-        delta_exact, delta_star, delta_pctbias
+        "The correlation-based delta (delta_Correlation) is %.3f, and delta* is %.3f \n(assuming no covariates in the baseline model M1).\n\n",
+        delta_exact, delta_star
     ))
-    cat("Note that %bias = (delta* - delta) / delta.\n\n")
-    
+
     if (is.null(sig_out$error)) {
         cat(sprintf(
             "Using alpha = %.2f and df = %s (so critical r = %.4f), the delta threshold \nfor statistical significance is %.3f.\n",
@@ -400,12 +482,7 @@ if (to_return == "print") {
             sig_out$error
         ))
     }
-    
-    cat(sprintf(
-        "With the correlation-based delta, the coefficient of X in the final model will be %.3f.\nWith delta*, the coefficient of X in the final model will be %.3f.\n\n",
-        eff_x_M3, eff_x_M3_oster
-    ))
-    
+
     if (is.null(sig_out$error)) {
         se_sig <- est_eff_sig / t_sig
         cat("Using the delta threshold for statistical significance and the corresponding partial correlations,\n")
