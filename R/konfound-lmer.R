@@ -5,13 +5,19 @@
 #' @param model_object The mixed-effects model object produced by lme4::lmer.
 #' @return A vector containing degrees of freedom for the fixed effects in the model.
 #' @importFrom lme4 fixef
-#' @importFrom pbkrtest get_Lb_ddf
+#' @importFrom pbkrtest Lb_ddf
+#' @importFrom pbkrtest vcovAdj
 #' @importFrom purrr map_dbl
 get_kr_df <- function(model_object) {
     L <- diag(rep(1, length(lme4::fixef(model_object))))
     L <- as.data.frame(L)
-    out <- suppressWarnings(purrr::map_dbl(L, pbkrtest::get_Lb_ddf, 
-                                           object = model_object))
+    vcov_adj <- pbkrtest::vcovAdj(model_object)
+    vcov_0 <- vcov(model_object)
+    out <- suppressWarnings(purrr::map_dbl(
+      L,
+      pbkrtest::Lb_ddf,
+      V0 = vcov_0, Vadj = vcov_adj
+    ))
     names(out) <- names(lme4::fixef(model_object))
     out
 }
