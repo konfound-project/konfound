@@ -7,6 +7,7 @@
 * fix issue where "NULL" appeared at the end of printed output for konfound commands
 * add delta threshold for statistical significance calculation and printed text for COP function
 * revise text output and output naming, and refine plots for the COP function
+* add impact of unobserved covariate to COP function
 * add correlation-based RIR for logistic regression with continuous focal predictor
 
 # konfound 1.0.3

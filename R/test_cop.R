@@ -159,6 +159,13 @@ test_cop <- function(est_eff, # unstandardized
   rxcv_exact <- sqrt(1 - rxz^2) * rxcvGz_exact
   delta_exact <- rxcv_exact / rxz
 
+  ## Impact of the unobserved CV (Frank, 2000)
+  impact_cv <- abs(rxcv_exact * rycv_exact)
+  ## Impact of the observed covariates (Z block)
+  impact_obs <- abs(rxz * ryz)
+  ## Ratio: how large is the CV impact relative to observed impact?
+  impact_ratio <- impact_cv / impact_obs
+  
   ## previous approach - comment out, but could find in cop_pse_auxiliary
   ## exact_result <- cal_delta_exact(ryx, ryz, rxz, beta_thr, FR2max, R2, sdx, sdz)
   ## rxcv_exact <- rcvx_exact <- as.numeric(exact_result[1])
@@ -440,14 +447,17 @@ test_cop <- function(est_eff, # unstandardized
                    "var(CV)" = sdcv^2,
                   "eff_x_M3_oster" = eff_x_M3_oster,
                   "eff_x_M3" = eff_x_M3,
-                   "Table" = fTable,
-                   "Figure" = fig)
-#                   "conditional RIR pi (fixed y)" = cond_RIRpi_fixedY,
-#                   "conditional RIR (fixed y)" = cond_RIR_fixedY,
-#                   "conditional RIR pi (null)" = cond_RIRpi_null,
-#                   "conditional RIR (null)" = cond_RIR_null,
-#                   "conditional RIR pi (rxyGz)" = cond_RIRpi_rxyz,
-#                   "conditional RIR (rxyGz)" = cond_RIR_rxyz
+                  "impact_cv (r_xcv*r_ycv)" = impact_cv,
+                  "impact_obs (r_xz*r_yz)" = impact_obs,
+                  "impact_ratio" = impact_ratio,
+                  "Table" = fTable,
+                  "Figure" = fig)
+#                 "conditional RIR pi (fixed y)" = cond_RIRpi_fixedY,
+#                 "conditional RIR (fixed y)" = cond_RIR_fixedY,
+#                 "conditional RIR pi (null)" = cond_RIRpi_null,
+#                 "conditional RIR (null)" = cond_RIR_null,
+#                 "conditional RIR pi (rxyGz)" = cond_RIRpi_rxyz,
+#                 "conditional RIR (rxyGz)" = cond_RIR_rxyz
     return(output)
   }
   
@@ -466,6 +476,38 @@ if (to_return == "print") {
         delta_exact, delta_star
     ))
 
+    ## Impact paragraph (Frank, 2000)
+    cat(sprintf(
+        "The corresponding impact (Frank, 2000) of the unobserved covariate(s) necessary\n"
+    ))
+    cat(sprintf(
+        "to satisfy the specified conditions (eff_thr = %g and FR2max = %.2f) is\n",
+        eff_thr, FR2max
+    ))
+    
+    ## Guard: skip ratio when observed covariates have near-zero impact (avoids Inf%)
+    if (impact_obs < 1e-10) {
+        cat(sprintf(
+            "r_xcv * r_ycv = %.4f * %.4f = %.4f.\n",
+            abs(rxcv_exact), abs(rycv_exact), impact_cv
+        ))
+        cat("The impact of observed covariates is near zero; ratio not reported.\n\n")
+    } else {
+        cat(sprintf(
+            "r_xcv * r_ycv = %.4f * %.4f = %.4f, which is %.0f%% of the impact of the\n",
+            abs(rxcv_exact), abs(rycv_exact), impact_cv, impact_ratio * 100
+        ))
+        cat(sprintf(
+            "observed covariates (r_xz * r_yz = %.4f * %.4f = %.4f).\n\n",
+            abs(rxz), abs(ryz), impact_obs
+        ))
+    }
+    
+    cat("Through the product r_xcv * r_ycv, Frank's impact accounts for the relationship\n")
+    cat("of the covariate to the outcome (Y) as well as the focal predictor (X).\n")
+    cat("See the konfound command with index = \"IT\" for details of the Impact Threshold\n")
+    cat("for a Confounding Variable (ITCV).\n\n")
+    
     if (is.null(sig_out$error)) {
         cat(sprintf(
             "Using alpha = %.2f and df = %s (so critical r = %.4f), the delta threshold \nfor statistical significance is %.3f.\n",
