@@ -25,6 +25,7 @@
 #' @param switch_trm indicates whether to switch the treatment and control cases; defaults to \code{FALSE}.
 #' @param raw_treatment_success optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark.
 #' @param model_type the type of model being estimated; defaults to \code{"ols"} for a linear regression model or \code{"logistic"} for a logistic regression model.
+#' @param link GLM link function for \code{index = "corr_RIR"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM (t-based) pathway is used.
 #' @param a the number of cases in the control group showing unsuccessful results (2x2 table model).
 #' @param b the number of cases in the control group showing successful results (2x2 table model).
 #' @param c the number of cases in the treatment group showing unsuccessful results (2x2 table model).
@@ -231,7 +232,8 @@
 #' @param upper_bound optional (replaces \code{est_eff}); the upper bound of the confidence interval.
 #' @param lower_bound optional (replaces \code{est_eff}); the lower bound of the confidence interval.
 #' @param raw_treatment_success optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark.
-#' 
+#' @param link GLM link function for \code{index = "corr_RIR"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM (t-based) pathway is used.
+
  pkonfound <- function(est_eff,
                       std_err,
                       n_obs,
@@ -264,7 +266,8 @@
                       lower_bound = NULL,
                       raw_treatment_success = NULL, 
                       replace_stu = NULL,
-                      peer_effect_pi = 0.5
+                      peer_effect_pi = 0.5,
+                      link = NULL  # for corr_RIR with GLM: "logit" or "probit"; NULL = LM (default)
                       ) {
   if ("table" %in% to_return) stop("a table can only be
                                    output when using konfound")
@@ -332,6 +335,8 @@
        to_return = to_return
    )
    } else if (index == "corr_RIR") {
+       # link = NULL -> LM (t-based); link = "logit"/"probit" -> GLM (z-based)
+       internal_model <- if (is.null(link)) "lm" else "glm"
        out <- test_correlation_rir(
            est_eff = est_eff,
            std_err = std_err,
@@ -339,6 +344,9 @@
            n_covariates = n_covariates,
            alpha = alpha,
            tails = tails,
+           nu = nu,
+           model_type = internal_model,
+           link = link,
            to_return = to_return
        )
    } else if (model_type == "logistic" & !is.null(n_treat)) {

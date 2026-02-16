@@ -462,21 +462,29 @@ test_cop <- function(est_eff, # unstandardized
   }
   
 if (to_return == "print") {
-    cat(crayon::bold("Coefficient of Proportionality (COP):\n\n"))
-    cat("This function calculates a correlation-based coefficient of proportionality (delta_Correlation)\n")
-    cat("along with Oster's delta*. The correlation-based COP does not depend on the specification of\n")
-    cat("a baseline model.\n\n")
+    cat(crayon::bold("Coefficient of Proportionality (COP):"), "\n\n")
+    
+    ## --- Background ---
+    cat(crayon::bold("Background"), "\n")
+    cat("This function calculates a correlation-based coefficient of\n")
+    cat("proportionality (delta_Correlation) along with Oster's delta*.\n")
+    cat("The correlation-based COP does not depend on the specification\n")
+    cat("of a baseline model.\n\n")
     
     if (negest == 1) {
-        cat("Using the absolute value of the estimated effect, result can be interpreted by symmetry.\n\n")
+        cat("Using the absolute value of the estimated effect, result\n")
+        cat("can be interpreted by symmetry.\n\n")
     }
     
+    ## --- COP ---
+    cat(crayon::bold("COP"), "\n")
     cat(sprintf(
         "The correlation-based delta (delta_Correlation) is %.3f, and delta* is %.3f \n(assuming no covariates in the baseline model M1).\n\n",
         delta_exact, delta_star
     ))
-
-    ## Impact paragraph (Frank, 2000)
+    
+    ## --- Corresponding Impact of a Confounding Variable ---
+    cat(crayon::bold("Corresponding Impact of a Confounding Variable"), "\n")
     cat(sprintf(
         "The corresponding impact (Frank, 2000) of the unobserved covariate(s) necessary\n"
     ))
@@ -498,7 +506,7 @@ if (to_return == "print") {
             abs(rxcv_exact), abs(rycv_exact), impact_cv, impact_ratio * 100
         ))
         cat(sprintf(
-            "observed covariates (r_xz * r_yz = %.4f * %.4f = %.4f).\n\n",
+            "observed covariates (R_XZ * R_YZ = %.4f * %.4f = %.4f).\n\n",
             abs(rxz), abs(ryz), impact_obs
         ))
     }
@@ -508,14 +516,16 @@ if (to_return == "print") {
     cat("See the konfound command with index = \"IT\" for details of the Impact Threshold\n")
     cat("for a Confounding Variable (ITCV).\n\n")
     
+    ## --- Threshold Based on Statistical Significance ---
+    cat(crayon::bold("Threshold Based on Statistical Significance"), "\n")
     if (is.null(sig_out$error)) {
         cat(sprintf(
-            "Using alpha = %.2f and df = %s (so critical r = %.4f), the delta threshold \nfor statistical significance is %.3f.\n",
+            "Using alpha = %.2f and df = %s (so critical r = %.4f),\nthe delta threshold for statistical significance is %.3f.\n",
             alpha, format(df_sig, big.mark=","), sig_out$r_crit, sig_out$delta_statsig
         ))
-        cat("This corresponds to a CV (omitted confounder) with partial correlations\n")
+        cat("This requires a CV (omitted confounder) with partial correlations\n")
         cat(sprintf(
-            "r_xcv|z ~ %.4f (between X and CV given Z) and r_ycv|z ~ %.4f (between Y and CV given Z).\n\n",
+            "r_xcv|z ~ %.4f (between X and CV given Z) and\nr_ycv|z ~ %.4f (between Y and CV given Z).\n\n",
             sig_out$rxcvGz, sig_out$rycvGz
         ))
     } else {
@@ -524,17 +534,18 @@ if (to_return == "print") {
             sig_out$error
         ))
     }
-
+    
     if (is.null(sig_out$error)) {
         se_sig <- est_eff_sig / t_sig
-        cat("Using the delta threshold for statistical significance and the corresponding partial correlations,\n")
+        cat("Using the delta threshold for statistical significance\n")
+        cat("and the corresponding partial correlations,\n")
         cat(sprintf(
-            "the coefficient of X in the final model will be %.4f with standard error of %.4f\n",
-            est_eff_sig, se_sig
+            "the coefficient of X in the final model will be %.4f\nwith standard error of %.4f with t-ratio of %.4f\n",
+            est_eff_sig, se_sig, t_sig
         ))
         cat(sprintf(
-            "with t-ratio of %.4f and the final R2 will be %.3f.\n\n",
-            t_sig, R2_full_sig
+            "and the final R2 will be %.3f.\n\n",
+            R2_full_sig
         ))
     }
     
