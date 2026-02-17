@@ -466,14 +466,13 @@ if (to_return == "print") {
     
     ## --- Background ---
     cat(crayon::bold("Background"), "\n")
-    cat("This function calculates a correlation-based coefficient of\n")
-    cat("proportionality (delta_Correlation) along with Oster's delta*.\n")
-    cat("The correlation-based COP does not depend on the specification\n")
-    cat("of a baseline model.\n\n")
+    cat("This function calculates a correlation-based coefficient of proportionality\n")
+    cat("(delta_Correlation) along with Oster's delta*. The correlation-based COP\n")
+    cat("does not depend on the specification of a baseline model.\n\n")
     
     if (negest == 1) {
-        cat("Using the absolute value of the estimated effect, result\n")
-        cat("can be interpreted by symmetry.\n\n")
+        cat("Using the absolute value of the estimated effect, result can be interpreted\n")
+        cat("by symmetry.\n\n")
     }
     
     ## --- COP ---
@@ -520,12 +519,8 @@ if (to_return == "print") {
     cat(crayon::bold("Threshold Based on Statistical Significance"), "\n")
     if (is.null(sig_out$error)) {
         cat(sprintf(
-            "Using alpha = %.2f and df = %s (so critical r = %.4f),\nthe delta threshold for statistical significance is %.3f.\n",
-            alpha, format(df_sig, big.mark=","), sig_out$r_crit, sig_out$delta_statsig
-        ))
-        cat("This requires a CV (omitted confounder) with partial correlations\n")
-        cat(sprintf(
-            "r_xcv|z ~ %.4f (between X and CV given Z) and\nr_ycv|z ~ %.4f (between Y and CV given Z).\n\n",
+            "Using alpha = %.2f and df = %s (so critical r = %.4f), the delta threshold \nfor statistical significance is %.3f. This requires a CV (omitted confounder) \nwith partial correlations r_xcv|z ~ %.4f (between X and CV given Z) and\nr_ycv|z ~ %.4f (between Y and CV given Z).\n\n",
+            alpha, format(df_sig, big.mark=","), sig_out$r_crit, sig_out$delta_statsig,
             sig_out$rxcvGz, sig_out$rycvGz
         ))
     } else {
@@ -537,15 +532,9 @@ if (to_return == "print") {
     
     if (is.null(sig_out$error)) {
         se_sig <- est_eff_sig / t_sig
-        cat("Using the delta threshold for statistical significance\n")
-        cat("and the corresponding partial correlations,\n")
         cat(sprintf(
-            "the coefficient of X in the final model will be %.4f\nwith standard error of %.4f with t-ratio of %.4f\n",
-            est_eff_sig, se_sig, t_sig
-        ))
-        cat(sprintf(
-            "and the final R2 will be %.3f.\n\n",
-            R2_full_sig
+            "Using the delta threshold for statistical significance and the corresponding \npartial correlations, the coefficient of X in the final model will be %.4f\nwith standard error of %.4f with t-ratio of %.4f and the final R2 will be %.3f.\n\n",
+            est_eff_sig, se_sig, t_sig, R2_full_sig
         ))
     }
     
