@@ -261,14 +261,30 @@ test_correlation_rir <- function(
         z_ref_text <- ""
     }
     
+    # intro paragraph — LM fits on one line; GLM needs a break before the
+    if (model_type == "lm") {
+        intro_text <- paste0(
+            "This function calculates the number of data points that would need to be replaced\n",
+            "to ", action_clause, " based on ", model_desc, ".\n",
+            "Replacement is assumed to occur uniformly across the distribution of observations.\n\n"
+        )
+    } else {
+        intro_text <- paste0(
+            "This function calculates the number of data points that would need to be replaced\n",
+            "to ", action_clause, " based on a \n",
+            sprintf("generalized linear model (GLM, %s link). ", link),
+            "Replacement is assumed to occur uniformly\n",
+            "across the distribution of observations.\n\n"
+        )
+    }
+    
     # assemble the full message
     # Structure: title -> model context -> formula -> where-block ->
-    # plain-language summary -> interpretation -> [GLM z-ref if applicable]
+    #            plain-language summary -> interpretation -> [GLM z-ref if applicable]
     message_text <- paste0(
         crayon::bold("Correlation-Based Robustness of Inference to Replacement (RIR):"), "\n",
-        "This function calculates the number of data points that would need to be replaced\n",
-        "to ", action_clause, " based on ", model_desc, ".\n",
-        "Replacement is assumed to occur uniformly across the distribution of observations.\n\n",
+        
+        intro_text,
         
         "The closed-form fraction on the correlation scale is\n  ", frac_text_r, "\n",
         "where:\n",
@@ -283,8 +299,9 @@ test_correlation_rir <- function(
         sprintf(fmt, pct(pi_r)), "%) with ", replacement_phrase,
         "Thus, RIR = ", k_r, ".\n\n",
         interpretation_line,
-        z_ref_text  
+        z_ref_text   ## appended only for GLM; empty string for LM
     )
+    
     
     
     ## Full output list (returned invisibly on print)
@@ -313,11 +330,11 @@ test_correlation_rir <- function(
     
     ## Raw concise output branch 
     raw_out <- list(
-        model_type = model_type,    # [NEW]
-        link = link,          # [NEW] NULL for LM
-        stat_type = stat_label,    # [NEW] "t" or "z"
-        observed_stat = stat_obs,      # [CHANGE] was observed_t
-        critical_stat = stat_crit,     # [CHANGE] was critical_t
+        model_type = model_type,   
+        link = link,         
+        stat_type = stat_label,    
+        observed_stat = stat_obs,     
+        critical_stat = stat_crit,     
         observed_r = r_obs,
         critical_r = r_crit,
         p_value = p_obs,
