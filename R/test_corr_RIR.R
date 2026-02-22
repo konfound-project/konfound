@@ -227,13 +227,15 @@ test_correlation_rir <- function(
     # pi_r formula display (same logic as before, cleaner formatting)
     frac_text_r <- if (is_sig) {
         sprintf(
-            "pi_r = 1 - |r_crit| / |r_obs|\n     = 1 - %s / %s\n     = %s.",
+            "pi_r = (|r_obs| - |r_crit|) / |r_obs|\n     = (%s - %s) / %s\n     = %s.",
+            sprintf(fmt, abs(r_obs)),
             sprintf(fmt, abs(r_crit)),
             sprintf(fmt, abs(r_obs)),
             sprintf(fmt, pi_r))
     } else {
         sprintf(
-            "pi_r = 1 - |r_obs| / |r_crit|\n     = 1 - %s / %s\n     = %s.",
+            "pi_r = (|r_crit| - |r_obs|) / |r_crit|\n     = (%s - %s) / %s\n     = %s.",
+            sprintf(fmt, abs(r_crit)),
             sprintf(fmt, abs(r_obs)),
             sprintf(fmt, abs(r_crit)),
             sprintf(fmt, pi_r))
@@ -248,14 +250,16 @@ test_correlation_rir <- function(
         z_ref_text <- paste0(
             "\n\n",
             crayon::bold("z-Based Reference (conversion-quality diagnostic):"), "\n",
-            "For GLM, the correlation-equivalent index r is derived from the Wald z via a\n",
-            "nonlinear mapping that depends on effective degrees of freedom (df = ", df, ").\n",
+            "For generalized linear model (GLM), the correlation-equivalent index r\n",
+            "is derived from the Wald z via a nonlinear mapping that depends on\n",
+            "effective degrees of freedom (df = ", df, ").\n",
             "The z-based replacement fraction is free of this dependency:\n",
             "  pi_z = 1 - |z_crit| / |z_obs| = ", sprintf(fmt, pi_stat), ",  ",
             "RIR_z = ", k_stat, ".\n",
-            "The r-based and z-based fractions converge for large samples. A large gap\n",
-            "may indicate that the r-scale compression is substantively affecting the\n",
-            "RIR estimate, and that the Wald z may also be unreliable at this sample size."
+            "The r-based and z-based fractions converge for large samples. A large\n",
+            "gap may indicate that the r-scale compression is substantively affecting\n",
+            "the RIR estimate, and that the Wald z may also be unreliable at this\n",
+            "sample size, thus affecting the interpretation of both pi_z and pi_r."
         )
     } else {
         z_ref_text <- ""

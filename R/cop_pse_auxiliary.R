@@ -498,13 +498,20 @@ delta_statsig <- function(r_xy_z,
     
     # 1a) not significant case
     if (r_xy_z < r_crit - tol) {
-        out$error <- "The estimated effect is less than the critical value, meaning it is not statistically significant. The Coefficient of Proportionality for statistical significance has not yet been conceptualized for this scenario."
+        out$error <- paste0(
+            "The estimated effect is\n",
+            "less than the critical value, meaning it is not statistically significant.\n",
+            "The Coefficient of Proportionality for statistical significance has not yet\n",
+            "been conceptualized for this scenario.")
         return(out)
     }
     
     # 1b) R_max ~ 1 case
     if (1 - R_max < tol) {
-        out$error <- "For Rmax = 1, the standard error for the estimated effect is 0. The t-ratio and statistical significance are not defined. Consider running the analysis with Rmax < 1."
+        out$error <- paste0(
+            "For Rmax = 1, the standard error\n",
+            "for the estimated effect is 0. The t-ratio and statistical significance are not defined.\n",
+            "Consider running the analysis with Rmax < 1.\n")
         return(out)
     }
     
