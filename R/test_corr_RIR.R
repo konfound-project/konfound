@@ -87,7 +87,7 @@ test_correlation_rir <- function(
     ##   closed-form RIR calculation.
     if (model_type == "lm") {
         # LM pathway: t-distribution
-        df <- max(1L, as.integer(n_obs - n_covariates - 1)) # -1 accounts for the intercept
+        df <- max(1L, as.integer(n_obs - n_covariates - 2)) 
         stat_obs <- (est_eff - nu) / std_err # observed t
         stat_crit <- stats::qt(1 - alpha / tails, df = df) # critical t (positive)
         
@@ -109,7 +109,7 @@ test_correlation_rir <- function(
         # the standard normal. It only controls the r = z/sqrt(z^2 + df)
         # mapping so that r remains bounded in [0,1] and comparable to
         # the LM case.
-        df <- max(1L, as.integer(n_obs - n_covariates - 1))
+        df <- max(1L, as.integer(n_obs - n_covariates - 2))
         stat_obs <- (est_eff - nu) / std_err # observed z (Wald)
         stat_crit <- stats::qnorm(1 - alpha / tails) # critical z (positive)
         
