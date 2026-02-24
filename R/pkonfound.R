@@ -9,7 +9,7 @@
 #' @param n_covariates the number of covariates in the regression model.
 #' @param alpha the probability of rejecting the null hypothesis (defaults to 0.05).
 #' @param tails integer indicating if the test is one-tailed (1) or two-tailed (2; defaults to 2).
-#' @param index specifies whether output is RIR or IT (impact threshold); defaults to \code{"RIR"}.
+#' @param index specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), \code{"corr_RIR"} (correlation-based RIR), or \code{"VAM"} (value-added model).
 #' @param nu specifies the hypothesis to be tested; defaults to testing whether \code{est_eff} is significantly different from 0.
 #' @param sdx the standard deviation of X (used for unconditional ITCV).
 #' @param sdy the standard deviation of Y (used for unconditional ITCV).
@@ -62,6 +62,12 @@
 #'   \item est_eff, replace_stu, n_obs, eff_thr, peer_effect_pi
 #' }
 #'
+#' \strong{Correlation-based RIR (index: corr_RIR)}
+#' \itemize{
+#'   \item est_eff, std_err, n_obs, n_covariates, alpha, tails, nu
+#'   \item link (NULL for LM; "logit" or "probit" for GLM)
+#' }
+#' 
 #' @section Values:
 #' pkonfound prints the bias and the number of cases that would have to be replaced with cases for which there is no effect to nullify the inference. If \code{to_return = "raw_output"}, a list is returned with the following components:
 #' \subsection{RIR & ITCV for linear model}{
@@ -93,8 +99,7 @@
 #' \describe{
 #'   \item{\code{delta*}}{delta calculated using Oster’s unrestricted estimator}
 #'   \item{\code{delta*restricted}}{delta calculated using Oster’s restricted estimator}
-#'   \item{\code{delta_exact}}{delta calculated using correlation-based approach}
-#'   \item{\code{delta_pctbias}}{percent bias when comparing \code{delta*} to \code{delta_exact}}
+#'   \item{\code{delta_Correlation}}{delta calculated using correlation-based approach}
 #'   \item{\code{delta_sig}}{delta threshold at which focal predictor loses statistical significance at the chosen \code{alpha} (default: 0.05)}
 #'   \item{\code{rxcvGz_sig}}{boundary partial correlation \eqn{r_{X,\mathrm{CV} | Z}} associated with \code{delta_sig}}
 #'   \item{\code{rycvGz_sig}}{boundary partial correlation \eqn{r_{Y,\mathrm{CV} | Z}} associated with \code{delta_sig}}
@@ -102,9 +107,12 @@
 #'   \item{\code{var(X)}}{variance of the independent variable (\eqn{\sigma_X^2})}
 #'   \item{\code{var(CV)}}{variance of the confounding variable (\eqn{\sigma_{CV}^2})}
 #'   \item{\code{cor_oster}}{correlation matrix implied by \code{delta*}}
-#'   \item{\code{cor_exact}}{correlation matrix implied by \code{delta_exact}}
-#'   \item{\code{eff_x_M3_oster}}{effect estimate for X under the Oster‑PSE variant}
+#'   \item{\code{cor_Corr}}{correlation matrix implied by \code{delta_Correlation}}
+#'   \item{\code{eff_x_M3_oster}}{effect estimate for X under the Oster-PSE variant}
 #'   \item{\code{eff_x_M3}}{effect estimate for X under the PSE adjustment}
+#'   \item{\code{impact_cv (r_xcv*r_ycv)}}{impact of the unobserved confounding variable}
+#'   \item{\code{impact_obs (r_xz*r_yz)}}{impact of the observed covariates}
+#'   \item{\code{impact_ratio}}{ratio of confounding variable impact to observed covariate impact}
 #'   \item{\code{Table}}{formatted results table}
 #'   \item{\code{Figure}}{COP diagnostic plot}
 #' }
@@ -159,6 +167,23 @@
 #' }
 #' }
 #' 
+#' \subsection{Correlation-based RIR}{
+#' \describe{
+#'   \item{\code{model_type}}{\code{"lm"} or \code{"glm"}}
+#'   \item{\code{link}}{GLM link function (\code{"logit"} or \code{"probit"}); \code{NULL} for LM}
+#'   \item{\code{stat_type}}{\code{"t"} for LM or \code{"z"} for GLM}
+#'   \item{\code{observed_stat}}{observed test statistic (t or z)}
+#'   \item{\code{critical_stat}}{critical test statistic at the chosen alpha}
+#'   \item{\code{observed_r}}{observed effect on the correlation scale}
+#'   \item{\code{critical_r}}{critical correlation threshold}
+#'   \item{\code{p_value}}{p-value of the observed test statistic}
+#'   \item{\code{RIR_perc}}{replacement fraction on the correlation scale (pi_r)}
+#'   \item{\code{RIR}}{number of observations to replace}
+#'   \item{\code{RIR_z_perc}}{z-based replacement fraction, free of effective-df dependency (GLM only; \code{NA} for LM)}
+#'   \item{\code{RIR_z}}{z-based RIR count (GLM only; \code{NA} for LM)}
+#' }
+#' }
+#' 
 #' @note 
 #' For a thoughtful background on benchmark options for ITCV, see 
 #' \href{https://doi.org/10.1111/rssb.12348}{Cinelli & Hazlett (2020)}, 
@@ -192,15 +217,27 @@
 #' # Calculating unconditional ITCV and benchmark correlation for ITCV
 #' pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, sdx = 0.22, sdy = 1, R2 = .3,
 #'           index = "IT", to_return = "print")
-#' # Calculating delta* and delta_exact 
+#'           
+#' # Calculating delta* and delta_Correlation 
 #' pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
 #'          eff_thr = 0, FR2max = .8, index = "COP", to_return = "raw_output")
+#'          
 #' # Calculating rxcv and rycv when preserving standard error
 #' pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
 #'          sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
+#'          
 #' # VAM beta
 #' pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
 #'           peer_effect_pi = 0.3, index = "VAM")
+#'           
+#' # Correlation-based RIR (LM, default)
+#' pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
+#'           n_covariates = 3, index = "corr_RIR")
+#'           
+#' # Correlation-based RIR (GLM, logistic)
+#' pkonfound(est_eff = -0.2, std_err = 0.103, n_obs = 20888,
+#'           n_covariates = 3, index = "corr_RIR", link = "logit")
+#'           
 #' @export
 #' 
 #' @param est_eff the estimated effect (e.g., an unstandardized beta coefficient or a group mean difference).
@@ -209,7 +246,7 @@
 #' @param n_covariates the number of covariates in the regression model.
 #' @param alpha the probability of rejecting the null hypothesis (defaults to 0.05).
 #' @param tails integer indicating if the test is one-tailed (1) or two-tailed (2; defaults to 2).
-#' @param index specifies whether output is RIR or IT (impact threshold); defaults to \code{"RIR"}.
+#' @param index specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), \code{"corr_RIR"} (correlation-based RIR), or \code{"VAM"} (value-added model).
 #' @param nu specifies the hypothesis to be tested; defaults to testing whether \code{est_eff} is significantly different from 0.
 #' @param n_treat the number of cases associated with the treatment condition (for logistic regression models).
 #' @param switch_trm indicates whether to switch the treatment and control cases; defaults to \code{FALSE}.
