@@ -65,7 +65,6 @@ Suggests:
     mice,
     roxygen2,
     testthat,
-    ggrepel,
     Matrix (>= 1.6-2)
 VignetteBuilder: 
     knitr
