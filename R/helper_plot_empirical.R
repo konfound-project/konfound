@@ -746,6 +746,8 @@ plot_rir_dist_internal <- function(rir_infl, title_str) {
 #' @param verbose If TRUE, prints a description of the plot to the console.
 #'   Default is FALSE.
 #' @param ... Passed to the underlying plot function
+#' @keywords internal
+#' @export
 plot_hist <- function(result, type = c("stacked", "shape"),
                       verbose = FALSE, ...) {
   if (!inherits(result, "konfound_empdist")) {
@@ -800,6 +802,8 @@ plot_hist <- function(result, type = c("stacked", "shape"),
 #' @param verbose If TRUE, prints a description of the plot to the console.
 #'   Default is FALSE.
 #' @param ... Passed to the underlying plot function
+#' @keywords internal
+#' @export
 plot_partial <- function(result, show_rir_labels = NULL, top_n = 10,
                          verbose = FALSE, ...) {
   if (!inherits(result, "konfound_empdist")) {
@@ -857,6 +861,8 @@ plot_partial <- function(result, show_rir_labels = NULL, top_n = 10,
 #' @param verbose If TRUE, prints a description of the plot to the console.
 #'   Default is FALSE.
 #' @param ... Passed to the underlying plot function
+#' @keywords internal
+#' @export
 plot_comp <- function(result, type = c("ci", "rir"),
                       verbose = FALSE, ...) {
   if (!inherits(result, "konfound_empdist")) {
@@ -923,6 +929,8 @@ plot_comp <- function(result, type = c("ci", "rir"),
 #' @param verbose If TRUE, prints a description of the plot to the console.
 #'   Default is FALSE.
 #' @param ... Passed to the underlying plot function
+#' @keywords internal
+#' @export
 plot_rir_dist <- function(result, verbose = FALSE, ...) {
   if (!inherits(result, "konfound_empdist")) {
     stop("result must be a konfound_empdist object.", call. = FALSE)

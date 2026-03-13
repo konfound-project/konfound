@@ -93,6 +93,8 @@ label_cases <- function(fit, focal_var, high_q = 0.90) {
 #' @param verbose Print detailed progress messages
 #' @param progress Print progress every 100 reps
 #' @return Object of class "konfound_empdist"
+#' @keywords internal
+#' @export
 konfound_empdist <- function(model, target_var,
                              reps = 1000,
                              method = c("search", "direct"),
