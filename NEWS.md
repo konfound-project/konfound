@@ -1,5 +1,7 @@
+# konfound 1.0.5 (IN DEVELOPMENT)
+* add beta version of empirical RIR based on resampling, providing a distribution of RIR values
 
-# konfound 1.0.4 (IN DEVELOPMENT)
+# konfound 1.0.4 
 
 * add beta version for the VAM model
 * add RIR index calculation for the PSE (component correlation) function

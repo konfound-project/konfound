@@ -13,7 +13,10 @@
 #' @param tested_variable Variable associated with the coefficient to be tested.
 #' @param alpha Significance level for hypothesis testing.
 #' @param tails Number of tails for the test (1 or 2).
-#' @param index Type of sensitivity analysis ('RIR' by default).
+#' @param index Type of sensitivity analysis: \code{"RIR"} (default),
+#' \code{"IT"}, or \code{"empirical_RIR"} to run the resampling-based
+#' empirical RIR. Note that \code{"empirical_RIR"} requires the model to be 
+#' fit with \code{model = TRUE}.
 #' @param to_return Type of output to return ('print', 'raw_output', 'table').
 #' @param two_by_two Boolean; if `TRUE`, uses a 2x2 table approach
 #' for `glm` dichotomous variables.
@@ -21,6 +24,14 @@
 #' (used only if `two_by_two` is `TRUE`).
 #' @param switch_trm Boolean; switch treatment and control in the analysis.
 #' @param replace Replacement method for treatment cases ('control' by default).
+#' @param reps Number of resampling replications for \code{index = "emp_RIR"} (default 1000).
+#' @param emp_method Method for empirical RIR: \code{"search"} (default, supports lm and glm)
+#' or \code{"direct"} (FWL-based, faster, and lm only).
+#' @param seed Random seed for reproducibility in empirical RIR.
+#' @param sign_flip_nullifies If \code{TRUE}, sign reversal counts as nullification
+#' in empirical RIR.
+#' @param engine Engine for the search method: \code{"auto"}, \code{"fast"} (cached QR), 
+#' or \code{"slow"} (full refit).
 #' @return Depending on `to_return`, prints the result, returns a raw output,
 #' or a summary table.
 #' @importFrom rlang enquo quo_name .data
@@ -67,7 +78,12 @@ konfound <- function(model_object,
                      two_by_two = FALSE,
                      n_treat = NULL,
                      switch_trm = TRUE,
-                     replace = "control") {
+                     replace = "control",
+                     reps = 1000,
+                     emp_method = "search",
+                     seed = 123,
+                     sign_flip_nullifies = FALSE,
+                     engine = "slow") {
   
   # Stop messages
   if (!(class(model_object)[1] %in% c("lm", "glm", "lmerMod"))) {
@@ -75,6 +91,19 @@ konfound <- function(model_object,
          lm(), glm(), and lme4::lmer(); consider using pkonfound() instead")
   }
   
+  # Stop messages for empirical RIR option    
+  if (index == "emp_RIR") {
+      if (!(class(model_object)[1] %in% c("lm", "glm"))) {
+          stop("empirical RIR is currently only supported for lm() and glm() objects")
+      }
+      if (is.null(model_object$model)) {
+          stop(
+              "Empirical RIR requires the model to be fit with model = TRUE.\n",
+              "Please refit with: lm(..., model = TRUE) or glm(..., model = TRUE)"
+          )
+      }
+  }
+    
   # Dealing with non-standard evaluation
   tested_variable_enquo <- rlang::enquo(tested_variable)
   # dealing with non-standard evaluation
@@ -82,6 +111,32 @@ konfound <- function(model_object,
   tested_variable_string <- rlang::quo_name(tested_variable_enquo)
   
   # Dispatching based on class
+  if (index == "emp_RIR") {
+      emp_method <- match.arg(emp_method)
+      output <- konfound_empdist(
+          model      = model_object,
+          target_var = tested_variable_string,
+          reps       = reps,
+          method     = emp_method,
+          alpha      = alpha,
+          seed       = seed,
+          sign_flip_nullifies = sign_flip_nullifies,
+          engine     = engine
+      )
+      if (to_return == "raw_output") {
+          return(list(
+              k_cf       = output$k_cf,
+              desc       = output$desc,
+              n          = output$n,
+              alpha      = output$alpha,
+              crit       = output$crit,
+              target_var = output$target_var
+          ))
+      }
+      print(output)
+      return(invisible(output))
+  }
+  
   if (class(model_object)[1] == "lm") {
     output <- konfound_lm(
       model_object = model_object,

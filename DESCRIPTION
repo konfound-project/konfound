@@ -55,7 +55,8 @@ Imports:
     tibble,
     ggrepel,
     pbkrtest,
-    ppcor
+    ppcor,
+    ggtext
 Suggests: 
     covr,
     devtools,
