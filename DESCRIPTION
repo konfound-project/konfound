@@ -53,7 +53,6 @@ Imports:
     tidyr,
     lme4 (>= 1.1-35.1),
     tibble,
-    ggrepel,
     pbkrtest,
     ppcor,
     ggtext
@@ -66,6 +65,7 @@ Suggests:
     mice,
     roxygen2,
     testthat,
+    ggrepel,
     Matrix (>= 1.6-2)
 VignetteBuilder: 
     knitr
