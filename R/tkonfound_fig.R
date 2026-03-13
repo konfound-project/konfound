@@ -277,9 +277,7 @@ fig1 <- ggplot2::ggplot(meta, ggplot2::aes(x=meta$RIR, y=meta$pdif))+
         axis.line = ggplot2::element_line(colour = "black"),
         legend.position = "none")
 
-if (requireNamespace("ggrepel", quietly = TRUE)) {
-    fig1 <- fig1 + ggrepel::geom_label_repel(ggplot2::aes(label=meta$currentlabel))
-}
+fig1 <- fig1 + ggplot2::geom_label(ggplot2::aes(label=meta$currentlabel), na.rm = TRUE)
 
 zoom <- meta[meta$switch<=zoom_upper & meta$switch>=zoom_lower,]
 zoom <- zoom[zoom$switch>=0,]
@@ -330,9 +328,7 @@ fig2 <- ggplot2::ggplot(zoom, ggplot2::aes_string(x="RIR",y="pdif"))+
                  axis.line = ggplot2::element_line(colour = "black"),
                  legend.position = "none")
 
-if (requireNamespace("ggrepel", quietly = TRUE)) {
-    fig2 <- fig2 + ggrepel::geom_label_repel(ggplot2::aes_string(label="label"))
-}
+fig2 <- fig2 + ggplot2::geom_label(ggplot2::aes_string(label="label"), na.rm = TRUE)
 
 if (pos_thr_pdif <= max(zoom$pdif) && pos_thr_pdif >= min(zoom$pdif)) {
   fig2 <- fig2 + ggplot2::geom_hline(yintercept = pos_thr_pdif, 

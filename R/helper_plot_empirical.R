@@ -29,7 +29,7 @@
 #   All public wrappers accept verbose = TRUE to print a plain-text
 #   description of the plot to the console (stderr via message()).
 #
-# Dependencies: ggplot2 (required), ggtext (subtitle rendering), ggrepel (labels)
+# Dependencies: ggplot2 (required), ggtext (subtitle rendering)
 # ============================================================================
 #' @importFrom stats density aggregate median sd quantile IQR
 #' @importFrom utils head
@@ -421,12 +421,6 @@ plot_comp_stacked <- function(emp_res, case_info, title_str) {
   # --- Add RIR-influence labels if requested ---
   if (show_rir_labels && !is.null(rir_infl)) {
     
-    if (!requireNamespace("ggrepel", quietly = TRUE)) {
-      warning("ggrepel package required for RIR-influence labels. ",
-              "Install with install.packages('ggrepel').", call. = FALSE)
-      return(p)
-    }
-    
     infl_vals <- rir_infl$influence
     
     # Determine which cases to label
@@ -452,22 +446,16 @@ plot_comp_stacked <- function(emp_res, case_info, title_str) {
     label_df$label_color <- ifelse(label_df$infl >= 0, "#08519C", "#A50F15")
     
     p <- p +
-      ggrepel::geom_text_repel(
-        data = label_df,
-        ggplot2::aes(x = r_x, y = r_y, label = label_text),
-        inherit.aes = FALSE,
-        color = label_df$label_color,
-        size = 2.8,
-        fontface = "bold",
-        segment.color = "gray60",
-        segment.size = 0.3,
-        segment.alpha = 0.5,
-        min.segment.length = 0.3,
-        box.padding = 0.4,
-        point.padding = 0.3,
-        max.overlaps = 20,
-        seed = 42
-      )
+        ggplot2::geom_text(
+            data = label_df,
+            ggplot2::aes(x = r_x, y = r_y, label = label_text),
+            inherit.aes = FALSE,
+            color = label_df$label_color,
+            size = 2.8,
+            fontface = "bold",
+            vjust = -0.8,
+            hjust = 0.5
+        )
   }
   
   p
