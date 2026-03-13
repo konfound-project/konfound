@@ -20,7 +20,6 @@
 #' @importFrom ggplot2 ggplot aes_string geom_line geom_point scale_fill_manual
 #'            scale_shape_manual geom_hline scale_y_continuous
 #'            scale_x_continuous theme element_blank element_line
-#' @importFrom ggrepel geom_label_repel
 #'
 #' @return Returns two plots showing the effect of hypothetical case switches 
 #'         on the effect size in a 2x2 table.
@@ -262,7 +261,6 @@ fig1 <- ggplot2::ggplot(meta, ggplot2::aes(x=meta$RIR, y=meta$pdif))+
     ggplot2::geom_point(ggplot2::aes(y=meta$pdif, shape = meta$current, fill = meta$sigpoint)) +
   ggplot2::scale_fill_manual(values=fillcol)+
   ggplot2::scale_shape_manual(values=pointshape)+
-  ggrepel::geom_label_repel(ggplot2::aes(label=meta$currentlabel))+
   ggplot2::geom_hline(yintercept = pos_thr_pdif, linetype = "dashed", color="green4", size = 1)+
   ggplot2::geom_hline(yintercept = neg_thr_pdif, linetype = "dashed", color="red", size = 1)+
   ggplot2::scale_y_continuous(name="Difference in probability of successful outcome (treatment - control)")+
@@ -278,6 +276,10 @@ fig1 <- ggplot2::ggplot(meta, ggplot2::aes(x=meta$RIR, y=meta$pdif))+
         panel.background = ggplot2::element_blank(), 
         axis.line = ggplot2::element_line(colour = "black"),
         legend.position = "none")
+
+if (requireNamespace("ggrepel", quietly = TRUE)) {
+    fig1 <- fig1 + ggrepel::geom_label_repel(ggplot2::aes(label=meta$currentlabel))
+}
 
 zoom <- meta[meta$switch<=zoom_upper & meta$switch>=zoom_lower,]
 zoom <- zoom[zoom$switch>=0,]
@@ -312,7 +314,6 @@ fig2 <- ggplot2::ggplot(zoom, ggplot2::aes_string(x="RIR",y="pdif"))+
                                           shape = "current",
                                           fill = "sigpoint"), 
                       size = 1)+
-  ggrepel::geom_label_repel(ggplot2::aes_string(label="label"))+
   ggplot2::scale_fill_manual(values=fillcol)+
   ggplot2::scale_shape_manual(values=pointshape)+
   ggplot2::scale_y_continuous(name="Difference in probability of successful outcome (treatment - control)")+
@@ -328,6 +329,10 @@ fig2 <- ggplot2::ggplot(zoom, ggplot2::aes_string(x="RIR",y="pdif"))+
                  panel.background = ggplot2::element_blank(), 
                  axis.line = ggplot2::element_line(colour = "black"),
                  legend.position = "none")
+
+if (requireNamespace("ggrepel", quietly = TRUE)) {
+    fig2 <- fig2 + ggrepel::geom_label_repel(ggplot2::aes_string(label="label"))
+}
 
 if (pos_thr_pdif <= max(zoom$pdif) && pos_thr_pdif >= min(zoom$pdif)) {
   fig2 <- fig2 + ggplot2::geom_hline(yintercept = pos_thr_pdif, 
