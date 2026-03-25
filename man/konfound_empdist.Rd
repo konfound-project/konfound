@@ -55,3 +55,4 @@ Object of class "konfound_empdist"
 \description{
 Empirical RIR Distribution
 }
+\keyword{internal}

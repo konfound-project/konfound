@@ -9,8 +9,9 @@
 #' @param n_covariates the number of covariates in the regression model.
 #' @param alpha the probability of rejecting the null hypothesis (defaults to 0.05).
 #' @param tails integer indicating if the test is one-tailed (1) or two-tailed (2; defaults to 2).
-#' @param index specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), \code{"corr_RIR"} (correlation-based RIR), or \code{"VAM"} (value-added model).
+#' @param index specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), or \code{"VAM"} (value-added model). For \code{"RIR"}, use the \code{scale} argument to select the r-scale (default) or t-scale variant.
 #' @param nu specifies the hypothesis to be tested; defaults to testing whether \code{est_eff} is significantly different from 0.
+#' @param scale for \code{index = "RIR"}: \code{"r"} (default) computes RIR on the correlation scale and supports both LM and GLM; \code{"t"} computes RIR on the t-statistic scale (LM only). Ignored for all other indices.
 #' @param sdx the standard deviation of X (used for unconditional ITCV).
 #' @param sdy the standard deviation of Y (used for unconditional ITCV).
 #' @param R2 the unadjusted, original \eqn{R^2} in the observed function (used for unconditional ITCV).
@@ -25,7 +26,7 @@
 #' @param switch_trm indicates whether to switch the treatment and control cases; defaults to \code{FALSE}.
 #' @param raw_treatment_success optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark.
 #' @param model_type the type of model being estimated; defaults to \code{"ols"} for a linear regression model or \code{"logistic"} for a logistic regression model.
-#' @param link GLM link function for \code{index = "corr_RIR"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM (t-based) pathway is used.
+#' @param link GLM link function for \code{index = "RIR", scale = "r"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM pathway is used.
 #' @param a the number of cases in the control group showing unsuccessful results (2x2 table model).
 #' @param b the number of cases in the control group showing successful results (2x2 table model).
 #' @param c the number of cases in the treatment group showing unsuccessful results (2x2 table model).
@@ -62,10 +63,11 @@
 #'   \item est_eff, replace_stu, n_obs, eff_thr, peer_effect_pi
 #' }
 #'
-#' \strong{Correlation-based RIR (index: corr_RIR)}
+#' \strong{RIR with scale argument (index: RIR, scale: "t" or "r")}
 #' \itemize{
-#'   \item est_eff, std_err, n_obs, n_covariates, alpha, tails, nu
-#'   \item link (NULL for LM; "logit" or "probit" for GLM)
+#'   \item est_eff, std_err, n_obs, n_covariates, alpha, tails, nu, scale
+#'   \item scale = "r" (default): correlation scale, LM or GLM; link = "logit" or "probit" for GLM
+#'   \item scale = "t": t-statistic scale, LM only
 #' }
 #' 
 #' @section Values:
@@ -167,20 +169,21 @@
 #' }
 #' }
 #' 
-#' \subsection{Correlation-based RIR}{
+#' \subsection{RIR with scale = "r" (correlation scale)}{
 #' \describe{
+#'   \item{\code{scale}}{\code{"r"} or \code{"t"}}
 #'   \item{\code{model_type}}{\code{"lm"} or \code{"glm"}}
 #'   \item{\code{link}}{GLM link function (\code{"logit"} or \code{"probit"}); \code{NULL} for LM}
 #'   \item{\code{stat_type}}{\code{"t"} for LM or \code{"z"} for GLM}
-#'   \item{\code{observed_stat}}{observed test statistic (t or z)}
-#'   \item{\code{critical_stat}}{critical test statistic at the chosen alpha}
-#'   \item{\code{observed_r}}{observed effect on the correlation scale}
-#'   \item{\code{critical_r}}{critical correlation threshold}
+#'   \item{\code{observed_t} or \code{observed_z}}{observed test statistic (named by type)}
+#'   \item{\code{critical_t} or \code{critical_z}}{critical test statistic (named by type)}
+#'   \item{\code{observed_r}}{observed effect on the correlation scale (\code{NA} for scale = "t")}
+#'   \item{\code{critical_r}}{critical correlation threshold (\code{NA} for scale = "t")}
 #'   \item{\code{p_value}}{p-value of the observed test statistic}
-#'   \item{\code{RIR_perc}}{replacement fraction on the correlation scale (pi_r)}
+#'   \item{\code{RIR_perc}}{primary replacement fraction (pi_t or pi_r depending on scale)}
 #'   \item{\code{RIR}}{number of observations to replace}
-#'   \item{\code{RIR_z_perc}}{z-based replacement fraction, free of effective-df dependency (GLM only; \code{NA} for LM)}
-#'   \item{\code{RIR_z}}{z-based RIR count (GLM only; \code{NA} for LM)}
+#'   \item{\code{RIR_z_perc}}{z-based replacement fraction, free of effective-df dependency (GLM, scale = "r" only; \code{NA} otherwise)}
+#'   \item{\code{RIR_z}}{z-based RIR count (GLM, scale = "r" only; \code{NA} otherwise)}
 #' }
 #' }
 #' 
@@ -196,7 +199,6 @@
 #' pkonfound(2, .4, 100, 3)
 #' pkonfound(-2.2, .65, 200, 3)
 #' pkonfound(.5, 3, 200, 3)
-#' pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 #'
 #' # using a confidence interval 
 #' pkonfound(upper_bound = 3, lower_bound = 1, n_obs = 100, n_covariates = 3)
@@ -230,13 +232,17 @@
 #' pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
 #'           peer_effect_pi = 0.3, index = "VAM")
 #'           
-#' # Correlation-based RIR (LM, default)
+#' # RIR on the t-scale
 #' pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
-#'           n_covariates = 3, index = "corr_RIR")
+#'           n_covariates = 3, index = "RIR", scale = "t")
 #'           
-#' # Correlation-based RIR (GLM, logistic)
+#' # RIR on the r-scale (LM; default)
+#' pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
+#'           n_covariates = 3, index = "RIR")
+#'           
+#' # RIR on the r-scale (GLM, logistic)
 #' pkonfound(est_eff = -0.2, std_err = 0.103, n_obs = 20888,
-#'           n_covariates = 3, index = "corr_RIR", link = "logit")
+#'           n_covariates = 3, index = "RIR", scale = "r", link = "logit")
 #'           
 #' @export
 #' 
@@ -246,7 +252,7 @@
 #' @param n_covariates the number of covariates in the regression model.
 #' @param alpha the probability of rejecting the null hypothesis (defaults to 0.05).
 #' @param tails integer indicating if the test is one-tailed (1) or two-tailed (2; defaults to 2).
-#' @param index specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), \code{"corr_RIR"} (correlation-based RIR), or \code{"VAM"} (value-added model).
+#' @param index specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), or \code{"VAM"} (value-added model). For \code{"RIR"}, use the \code{scale} argument to select the r-scale (default) or t-scale variant.
 #' @param nu specifies the hypothesis to be tested; defaults to testing whether \code{est_eff} is significantly different from 0.
 #' @param n_treat the number of cases associated with the treatment condition (for logistic regression models).
 #' @param switch_trm indicates whether to switch the treatment and control cases; defaults to \code{FALSE}.
@@ -269,9 +275,10 @@
 #' @param upper_bound optional (replaces \code{est_eff}); the upper bound of the confidence interval.
 #' @param lower_bound optional (replaces \code{est_eff}); the lower bound of the confidence interval.
 #' @param raw_treatment_success optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark.
-#' @param link GLM link function for \code{index = "corr_RIR"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM (t-based) pathway is used.
+#' @param scale for \code{index = "RIR"}: \code{"r"} (default) computes RIR on the correlation scale and supports both LM and GLM; \code{"t"} computes RIR on the t-statistic scale (LM only). Ignored for all other indices.
+#' @param link GLM link function for \code{index = "RIR", scale = "r"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM pathway is used.
 
- pkonfound <- function(est_eff,
+pkonfound <- function(est_eff,
                       std_err,
                       n_obs,
                       n_covariates = 1,
@@ -304,176 +311,192 @@
                       raw_treatment_success = NULL, 
                       replace_stu = NULL,
                       peer_effect_pi = 0.5,
-                      link = NULL  # for corr_RIR with GLM: "logit" or "probit"; NULL = LM (default)
-                      ) {
-  if ("table" %in% to_return) stop("a table can only be
+                      scale = "r",  # for index = "RIR": "r" (default, LM/GLM) or "t" (LM only)
+                      link = NULL   # for index = "RIR", scale = "r" with GLM: "logit" or "probit"
+) {
+    if ("table" %in% to_return) stop("a table can only be
                                    output when using konfound")
-     
-     
+    
+    
     if (!is.null(upper_bound) & !is.null(lower_bound)) {
-      est_eff = (upper_bound + lower_bound) / 2
-      std_err = (est_eff - lower_bound) / qt(alpha / tails, n_obs - n_covariates, lower.tail = FALSE)
+        est_eff = (upper_bound + lower_bound) / 2
+        std_err = (est_eff - lower_bound) / qt(alpha / tails, n_obs - n_covariates, lower.tail = FALSE)
     }
-  
-   if (index == "COP") {
-     
-     # if user does not specify eff_thr then set default as 0 
-     if (is.na(eff_thr)) {eff_thr <- 0}  
-     
-     out <- test_cop(
-       est_eff = est_eff, # unstandardized
-       std_err = std_err, # unstandardized
-       n_obs = n_obs,
-       n_covariates, # the number of z 
-       sdx = sdx,
-       sdy = sdy,
-       R2 = R2, # NOT the adjusted R2, should be the original R2
-       eff_thr = eff_thr, # this is the unstandardized version
-       FR2max_multiplier = FR2max_multiplier,
-       FR2max = FR2max, # NOT the adjusted R2, should be the original R2
-       alpha = alpha, 
-       tails = tails, 
-       to_return = to_return)
-  
-   } else if (index == "PSE") {
-     
-     out <- test_pse(
-       est_eff = est_eff,
-       std_err = std_err,
-       n_obs = n_obs,
-       n_covariates = n_covariates, # the number of z
-       sdx = sdx,
-       sdy = sdy,
-       R2 = R2,
-       eff_thr = eff_thr,
-       to_return = to_return
-     )
-     
-   } else if (index == "cRIR") {
-  out <- test_cRIR(
-    est_eff = est_eff,
-    std_err = std_err,
-    n_obs = n_obs,
-    n_covariates = n_covariates,
-    # sdx = sdx,
-    # sdy = sdy,
-    R2 = R2,
-    alpha = alpha,
-    tails = tails,
-    to_return = to_return
-  )
-   } else if (index == "VAM") {
-   out <- test_VAM(
-       est_eff = est_eff,
-       replace_stu = replace_stu,
-       n_obs = n_obs,
-       eff_thr = eff_thr,
-       peer_effect_pi = peer_effect_pi,
-       to_return = to_return
-   )
-   } else if (index == "corr_RIR") {
-       # link = NULL -> LM (t-based); link = "logit"/"probit" -> GLM (z-based)
-       internal_model <- if (is.null(link)) "lm" else "glm"
-       out <- test_correlation_rir(
-           est_eff = est_eff,
-           std_err = std_err,
-           n_obs = n_obs,
-           n_covariates = n_covariates,
-           alpha = alpha,
-           tails = tails,
-           nu = nu,
-           model_type = internal_model,
-           link = link,
-           to_return = to_return
-       )
-   } else if (model_type == "logistic" & !is.null(n_treat)) {
-    out <- test_sensitivity_ln(
-      est_eff = est_eff,
-      std_err = std_err,
-      n_obs = n_obs,
-      n_covariates = n_covariates,
-      alpha = alpha,
-      tails = tails,
-      nu = nu,
-      to_return = to_return,
-      n_treat = n_treat,
-      switch_trm = switch_trm,
-      replace = replace,
-      raw_treatment_success = raw_treatment_success
-    )
-  } else if(!is.null(a)) {
-    # error handling
-    if (is.null(a) | is.null(b) | is.null(c) | is.null(d)) {
-      stop("Please enter values for a, b, c,
+    
+    if (index == "COP") {
+        
+        # if user does not specify eff_thr then set default as 0 
+        if (is.na(eff_thr)) {eff_thr <- 0}  
+        
+        out <- test_cop(
+            est_eff = est_eff, # unstandardized
+            std_err = std_err, # unstandardized
+            n_obs = n_obs,
+            n_covariates, # the number of z 
+            sdx = sdx,
+            sdy = sdy,
+            R2 = R2, # NOT the adjusted R2, should be the original R2
+            eff_thr = eff_thr, # this is the unstandardized version
+            FR2max_multiplier = FR2max_multiplier,
+            FR2max = FR2max, # NOT the adjusted R2, should be the original R2
+            alpha = alpha, 
+            tails = tails, 
+            to_return = to_return)
+        
+    } else if (index == "PSE") {
+        
+        out <- test_pse(
+            est_eff = est_eff,
+            std_err = std_err,
+            n_obs = n_obs,
+            n_covariates = n_covariates, # the number of z
+            sdx = sdx,
+            sdy = sdy,
+            R2 = R2,
+            eff_thr = eff_thr,
+            to_return = to_return
+        )
+        
+    } else if (index == "cRIR") {
+        out <- test_cRIR(
+            est_eff = est_eff,
+            std_err = std_err,
+            n_obs = n_obs,
+            n_covariates = n_covariates,
+            # sdx = sdx,
+            # sdy = sdy,
+            R2 = R2,
+            alpha = alpha,
+            tails = tails,
+            to_return = to_return
+        )
+    } else if (index == "VAM") {
+        out <- test_VAM(
+            est_eff = est_eff,
+            replace_stu = replace_stu,
+            n_obs = n_obs,
+            eff_thr = eff_thr,
+            peer_effect_pi = peer_effect_pi,
+            to_return = to_return
+        )
+    } else if (model_type == "logistic" & !is.null(n_treat)) {
+        out <- test_sensitivity_ln(
+            est_eff = est_eff,
+            std_err = std_err,
+            n_obs = n_obs,
+            n_covariates = n_covariates,
+            alpha = alpha,
+            tails = tails,
+            nu = nu,
+            to_return = to_return,
+            n_treat = n_treat,
+            switch_trm = switch_trm,
+            replace = replace,
+            raw_treatment_success = raw_treatment_success
+        )
+    } else if (!is.null(a)) {
+        if (is.null(a) | is.null(b) | is.null(c) | is.null(d)) {
+            stop("Please enter values for a, b, c,
            and d to use the 2 x 2 table functionality")
+        }
+        out <- tkonfound(a = a,
+                         b = b,
+                         c = c,
+                         d = d,
+                         alpha = alpha,
+                         switch_trm = switch_trm,
+                         test = test,
+                         replace = replace,
+                         to_return = to_return)
+    } else if (!is.null(two_by_two_table)) {
+        a <- dplyr::pull(two_by_two_table[1, 1])
+        b <- dplyr::pull(two_by_two_table[1, 2])
+        c <- dplyr::pull(two_by_two_table[2, 1])
+        d <- dplyr::pull(two_by_two_table[2, 2])
+        out <- tkonfound(a = a,
+                         b = b,
+                         c = c,
+                         d = d,
+                         alpha = alpha,
+                         switch_trm = switch_trm,
+                         test = test,
+                         replace = replace,
+                         to_return = to_return)
+    } else if (index == "RIR") {
+        # thresh_plot/corr_plot require test_sensitivity; fall through for those
+        if (to_return %in% c("thresh_plot", "corr_plot")) {
+            out <- test_sensitivity(
+                est_eff = est_eff,
+                std_err = std_err,
+                n_obs = n_obs,
+                n_covariates = n_covariates,
+                sdx = sdx, sdy = sdy, R2 = R2,
+                alpha = alpha, tails = tails,
+                index = index, nu = nu,
+                far_bound = far_bound, eff_thr = eff_thr,
+                to_return = to_return
+            )
+        } else {
+            # scale = "r" (default, LM/GLM) or "t" (LM only)
+            scale <- match.arg(scale, choices = c("t", "r"))
+            if (scale == "t" && !is.null(link)) {
+                warning("link is ignored when scale = 't'. The t-scale is LM only.")
+                link <- NULL
+            }
+            internal_model <- if (scale == "r" && !is.null(link)) "glm" else "lm"
+            out <- test_correlation_rir(
+                est_eff = est_eff,
+                std_err = std_err,
+                n_obs = n_obs,
+                n_covariates = n_covariates,
+                alpha = alpha,
+                tails = tails,
+                nu = nu,
+                scale = scale,
+                model_type = internal_model,
+                link = link,
+                to_return = to_return
+            )
+        }
+    } else if (model_type == "ols") {
+        
+        out <- test_sensitivity(
+            est_eff = est_eff,
+            std_err = std_err,
+            n_obs = n_obs,
+            n_covariates = n_covariates,
+            sdx = sdx,
+            sdy = sdy,
+            R2 = R2,
+            alpha = alpha,
+            tails = tails,
+            index = index,
+            nu = nu,
+            far_bound = far_bound,
+            eff_thr = eff_thr,
+            to_return = to_return
+        )
+    } 
+    
+    if (!is.null(out)) {
+        if (to_return == "print") {
+            return(invisible(out))   # suppress console echo of the list
+        } else {
+            return(out)              # raw_output or plot -> visible return
+        }
     }
     
-    out <- tkonfound(a = a, 
-                     b = b, 
-                     c =c, 
-                     d = d, 
-                     alpha = alpha, 
-                     switch_trm = switch_trm,
-                     test = test, 
-                     replace = replace,
-                     to_return = to_return)
-    
-  } else if(!is.null(two_by_two_table)) {
-    
-    a <- dplyr::pull(two_by_two_table[1, 1])
-    b <- dplyr::pull(two_by_two_table[1, 2])
-    c <- dplyr::pull(two_by_two_table[2, 1])
-    d <- dplyr::pull(two_by_two_table[2, 2])
-    
-    out <- tkonfound(a = a, 
-                     b = b, 
-                     c = c, 
-                     d = d, 
-                     alpha = alpha, 
-                     switch_trm = switch_trm,
-                     test = test, 
-                     replace = replace,
-                     to_return = to_return)
-  
-  } else if (model_type == "ols") {
-    
-  out <- test_sensitivity(
-    est_eff = est_eff,
-    std_err = std_err,
-    n_obs = n_obs,
-    n_covariates = n_covariates,
-    sdx = sdx,
-    sdy = sdy,
-    R2 = R2,
-    alpha = alpha,
-    tails = tails,
-    index = index,
-    nu = nu,
-    far_bound = far_bound,
-    eff_thr = eff_thr,
-    to_return = to_return
-  )
-} 
-
-if (!is.null(out)) {
     if (to_return == "print") {
-        return(invisible(out))   # suppress console echo of the list
-    } else {
-        return(out)              # raw_output or plot -> visible return
+        cat("\n")
+        message("For more information, visit https://konfound-it.org")
+        message(paste0("To explore examples and interpretation tips,\n",
+                       "see our Practical Guide at https://konfound-it.org/page/guide/"))
+        cat("\n")
+        message(paste0(
+            "For other forms of output, run\n",
+            "?pkonfound and inspect the to_return argument"
+        ))
     }
-}
-
-if (to_return == "print") {
-    cat("\n")
-    message("For more information, visit https://konfound-it.org")
-    message(paste0("To explore examples and interpretation tips,\n",
-    "see our Practical Guide at https://konfound-it.org/page/guide/"))
-    cat("\n")
-    message(paste0(
-        "For other forms of output, run\n",
-        "?pkonfound and inspect the to_return argument"
-    ))
-}
-
-message("For models fit in R, consider use of konfound().")
+    
+    message("For models fit in R, consider use of konfound().")
 }

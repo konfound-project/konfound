@@ -1,20 +1,23 @@
 ## test_corr_RIR.R
-## Correlation-based Robustness of Inference to Replacement (RIR)
-## Unified framework for LM (t-based) and GLM (z-based, logistic/probit)
+## Robustness of Inference to Replacement (RIR) — t-scale and r-scale
+## Unified handler for pkonfound(index = "RIR", scale = "t"/"r")
 ##
 ## WHAT THIS FUNCTION DOES:
-##   Converts a regression coefficient and its SE into a correlation-scale
-##   effect size (r_obs), compares it to a critical correlation (r_crit),
-##   and computes the fraction of observations (pi_r) that would need to be
-##   replaced to nullify or sustain the inference.
+##   Computes the fraction of observations that would need to be replaced
+##   to nullify or sustain an inference, expressed on either the
+##   t-statistic scale (scale = "t", LM only) or the correlation scale
+##   (scale = "r", LM or GLM).
 ##
-## WHY THIS WORKS FOR BOTH LM AND GLM:
-##   The RIR fraction pi_r = 1 - |r_crit|/|r_obs| depends only on the
-##   monotonic mapping from the test statistic to [0,1]. The mapping
-##   r = stat / sqrt(stat^2 + df) is valid for any Wald-type statistic;
-##   it yields a partial correlation for LM and a normalized effect-size
-##   index for GLM. The fraction pi_r is invariant to which monotonic
-##   scale we use — only the ratio matters.
+## SCALE CHOICE:
+##   scale = "r" (default): converts the test statistic to a correlation via
+##     r = stat / sqrt(stat^2 + df), then computes pi_r = 1 - |r_crit|/|r_obs|.
+##     Accounts for SE inflation due to replacement. Supports LM and GLM.
+##   scale = "t": pi_t = 1 - |t_crit|/|t_obs|. Algebraically
+##     identical to the beta-metric RIR (ratio cancels via t = beta/SE).
+##     Available for LM only.
+##
+## TODO: rename to test_sensitivity_rir.R / test_sensitivity_rir() once
+##   the RIR refactor is complete and corr_RIR is fully retired.
 
 test_correlation_rir <- function(
         est_eff,            # coefficient estimate for the focal predictor
@@ -24,6 +27,7 @@ test_correlation_rir <- function(
         alpha = 0.05,       # significance level
         tails = 2,          # 1 or 2
         nu   = 0,           # null value (non-zero supported for both LM/GLM)
+        scale = "r",        # "r" (default, LM/GLM) or "t" (LM only)
         model_type = "lm",  # "lm" for linear models, "glm" for generalized
         link = NULL,        # NULL for LM; "logit" or "probit" for GLM
         to_return = c("print", "raw_output")
@@ -53,6 +57,13 @@ test_correlation_rir <- function(
         link <- NULL
     }
     
+    # scale validation and GLM gate
+    scale <- match.arg(scale, choices = c("t", "r"))
+    if (scale == "t" && model_type == "glm") {
+        stop("scale = 't' is only available for linear models (model_type = 'lm'). ",
+             "For GLM, use scale = 'r' (z-based).")
+    }
+    
     digits <- 3
     to_return <- match.arg(to_return)
     
@@ -63,7 +74,7 @@ test_correlation_rir <- function(
     pct <- function(x) round(100 * x, digits) # proportion -> percentage
     fmt <- paste0("%.", digits, "f") # format string for sprintf
     
-
+    
     ## Degrees of freedom and test statistic 
     ## LM uses t; GLM uses z.
     ##
@@ -186,168 +197,256 @@ test_correlation_rir <- function(
     }
     
     replacement_phrase <- if (is_sig) {
-        "zero-effect data points.\n"
+        paste0("data points for which the effect is ", nu, ".")
     } else {
-        "data points at the\nthreshold for statistical significance."
+        paste0("data points at\nthe threshold for statistical significance.")
     }
     
     interpretation_line <- if (is_sig) {
         paste0(
-            "This RIR value represents the proportion of the data that would have to be\n",
-            "replaced with zero-effect data points for the observed relationship to lose\n",
-            "statistical significance.")
+            "That is, the RIR value represents the proportion of the data that\n",
+            "would have to be replaced with data points for which the effect is ",
+            nu, "\n",
+            "for the observed relationship to lose statistical significance.")
     } else {
         paste0(
-            "This RIR value represents the proportion of the data that would have to be\n",
-            "replaced with data points at the threshold for statistical significance for\n",
-            "the result to become statistically significant.")
+            "This RIR value represents the proportion of the data that would\n",
+            "have to be replaced with data points at the threshold for\n",
+            "statistical significance for the result to become statistically\n",
+            "significant.")
     }
     
     thr_r <- abs(r_crit)
     
-    # model-type description for the header 
-    if (model_type == "lm") {
-        model_desc <- "a linear model (OLS)"
-        stat_detail <- sprintf(
-            "  r_obs = observed partial correlation implied by %s (df = %d):\n          r_obs = %s_obs / sqrt(%s_obs^2 + df) = %s;",
-            stat_label, df, stat_label, stat_label, sprintf(fmt, abs(r_obs)))
-        crit_detail <- sprintf(
-            "  r_crit = critical partial correlation at alpha = %s (%s-distribution, df = %d):\n           r_crit = %s_crit / sqrt(%s_crit^2 + df) = %s.",
-            alpha, stat_label, df, stat_label, stat_label, sprintf(fmt, abs(r_crit)))
-    } else {
-        model_desc <- sprintf("a generalized linear model (GLM, %s link)", link)
-        stat_detail <- sprintf(
-            "  r_obs = observed %s implied by the Wald %s-statistic (eff. df = %d):\n          r_obs = %s_obs / sqrt(%s_obs^2 + df) = %s;",
-            r_interp, stat_label, df, stat_label, stat_label, sprintf(fmt, abs(r_obs)))
-        crit_detail <- sprintf(
-            "  r_crit = critical %s at alpha = %s (standard normal):\n           r_crit = %s_crit / sqrt(%s_crit^2 + df) = %s.",
-            r_interp, alpha, stat_label, stat_label, sprintf(fmt, abs(r_crit)))
-    }
+    # model-type description (shared)
+    model_desc <- if (model_type == "lm") "a linear model (OLS)" else
+        sprintf("a generalized linear model (GLM, %s link)", link)
     
-    # pi_r formula display (same logic as before, cleaner formatting)
-    frac_text_r <- if (is_sig) {
-        sprintf(
-            "pi_r = (|r_obs| - |r_crit|) / |r_obs|\n     = (%s - %s) / %s\n     = %s.",
-            sprintf(fmt, abs(r_obs)),
-            sprintf(fmt, abs(r_crit)),
-            sprintf(fmt, abs(r_obs)),
-            sprintf(fmt, pi_r))
-    } else {
-        sprintf(
-            "pi_r = (|r_crit| - |r_obs|) / |r_crit|\n     = (%s - %s) / %s\n     = %s.",
-            sprintf(fmt, abs(r_crit)),
-            sprintf(fmt, abs(r_obs)),
-            sprintf(fmt, abs(r_crit)),
-            sprintf(fmt, pi_r))
-    }
-    
-    # z-based reference for GLM (conversion-quality diagnostic)
-    # For GLM only, we append a reference line showing the z-based RIR
-    # (which is free of the effective-df dependency) so users can assess how
-    # much the r-scale compression affects their estimate.
-    # For LM, this block produces an empty string (not shown in output).
-    if (model_type == "glm") {
-        z_ref_text <- paste0(
-            "\n\n",
-            crayon::bold("z-Based Reference (conversion-quality diagnostic):"), "\n",
-            "For generalized linear model (GLM), the correlation-equivalent index r\n",
-            "is derived from the Wald z via a nonlinear mapping that depends on\n",
-            "effective degrees of freedom (df = ", df, ").\n",
-            "The z-based replacement fraction is free of this dependency:\n",
-            "  pi_z = 1 - |z_crit| / |z_obs| = ", sprintf(fmt, pi_stat), ",  ",
-            "RIR_z = ", k_stat, ".\n",
-            "The r-based and z-based fractions converge for large samples. A large\n",
-            "gap may indicate that the r-scale compression is substantively affecting\n",
-            "the RIR estimate, and that the Wald z may also be unreliable at this\n",
-            "sample size, thus affecting the interpretation of both pi_z and pi_r."
-        )
-    } else {
+    if (scale == "t") {
+        # ── t-scale path ────────────────────────────────────────────────────
+        # Primary metric: pi_stat / k_stat (t-based, identical to beta-metric RIR)
+        frac_text <- if (is_sig) {
+            sprintf(
+                "pi_t = (|t_obs| - |t_crit|) / |t_obs|\n     = (%s - %s) / %s\n     = %s.",
+                sprintf(fmt, abs(stat_obs)), sprintf(fmt, abs(stat_crit)),
+                sprintf(fmt, abs(stat_obs)), sprintf(fmt, pi_stat))
+        } else {
+            sprintf(
+                "pi_t = (|t_crit| - |t_obs|) / |t_crit|\n     = (%s - %s) / %s\n     = %s.",
+                sprintf(fmt, abs(stat_crit)), sprintf(fmt, abs(stat_obs)),
+                sprintf(fmt, abs(stat_crit)), sprintf(fmt, pi_stat))
+        }
+        stat_detail <- sprintf(
+            "  t_obs = observed t-statistic (df = %d):\n          t_obs = (est_eff - nu) / std_err = %s;",
+            df, sprintf(fmt, stat_obs))
+        crit_detail <- sprintf(
+            "  t_crit = critical t-value at alpha = %s (t-distribution, df = %d):\n           t_crit = %s.",
+            alpha, df, sprintf(fmt, stat_crit))
+        thr_val    <- abs(stat_crit)
+        pi_primary <- pi_stat
+        k_primary  <- k_stat
+        pi_label   <- "pi_t"
         z_ref_text <- ""
+        
+    } else {
+        # ── r-scale path ────────────────────────────────────────────────────
+        # Primary metric: pi_r / k_r (correlation scale)
+        frac_text <- if (is_sig) {
+            sprintf(
+                "pi_r = (|r_obs| - |r_crit|) / |r_obs|\n     = (%s - %s) / %s\n     = %s.",
+                sprintf(fmt, abs(r_obs)), sprintf(fmt, abs(r_crit)),
+                sprintf(fmt, abs(r_obs)), sprintf(fmt, pi_r))
+        } else {
+            sprintf(
+                "pi_r = (|r_crit| - |r_obs|) / |r_crit|\n     = (%s - %s) / %s\n     = %s.",
+                sprintf(fmt, abs(r_crit)), sprintf(fmt, abs(r_obs)),
+                sprintf(fmt, abs(r_crit)), sprintf(fmt, pi_r))
+        }
+        if (model_type == "lm") {
+            stat_detail <- sprintf(
+                "  r_obs = observed partial correlation implied by %s (df = %d):\n          r_obs = %s_obs / sqrt(%s_obs^2 + df) = %s;",
+                stat_label, df, stat_label, stat_label, sprintf(fmt, abs(r_obs)))
+            crit_detail <- sprintf(
+                "  r_crit = critical partial correlation at alpha = %s (%s-distribution, df = %d):\n           r_crit = %s_crit / sqrt(%s_crit^2 + df) = %s.",
+                alpha, stat_label, df, stat_label, stat_label, sprintf(fmt, abs(r_crit)))
+        } else {
+            stat_detail <- sprintf(
+                "  r_obs = observed %s implied by the Wald %s-statistic (eff. df = %d):\n          r_obs = %s_obs / sqrt(%s_obs^2 + df) = %s;",
+                r_interp, stat_label, df, stat_label, stat_label, sprintf(fmt, abs(r_obs)))
+            crit_detail <- sprintf(
+                "  r_crit = critical %s at alpha = %s (standard normal):\n           r_crit = %s_crit / sqrt(%s_crit^2 + df) = %s.",
+                r_interp, alpha, stat_label, stat_label, sprintf(fmt, abs(r_crit)))
+        }
+        thr_val    <- abs(r_crit)
+        pi_primary <- pi_r
+        k_primary  <- k_r
+        pi_label   <- "pi_r"
+        # z-based reference for GLM only (conversion-quality diagnostic)
+        if (model_type == "glm") {
+            z_ref_text <- paste0(
+                "\n\n",
+                crayon::bold(
+                    "z-Based Reference (conversion-quality diagnostic):"), "\n",
+                "For GLM, the correlation-equivalent index r is derived from\n",
+                "the Wald z via a nonlinear mapping that depends on effective\n",
+                "degrees of freedom (df = ", df, ").\n",
+                "The z-based replacement fraction is free of this dependency:\n",
+                "  pi_z = 1 - |z_crit| / |z_obs| = ",
+                sprintf(fmt, pi_stat), ",  RIR_z = ", k_stat, ".\n",
+                "The r-based and z-based fractions converge for large samples.\n",
+                "A large gap may indicate that the r-scale compression is\n",
+                "substantively affecting the RIR estimate and that the Wald z\n",
+                "may also be unreliable at this sample size, affecting the\n",
+                "interpretation of both pi_z and pi_r."
+            )
+        } else {
+            z_ref_text <- ""
+        }
     }
     
-    # intro paragraph — LM fits on one line; GLM needs a break before the
+    # intro paragraph (shared; model_type-conditional only)
     if (model_type == "lm") {
         intro_text <- paste0(
-            "This function calculates the number of data points that would need to be replaced\n",
-            "to ", action_clause, " based on ", model_desc, ".\n",
-            "Replacement is assumed to occur uniformly across the distribution of observations.\n\n"
+            "This function calculates the number of data points that would need\n",
+            "to be replaced to ", action_clause, ",\n",
+            "based on ", model_desc, ". Replacement is assumed to occur\n",
+            "uniformly across the distribution of observations.\n\n"
         )
     } else {
         intro_text <- paste0(
-            "This function calculates the number of data points that would need to be replaced\n",
-            "to ", action_clause, " based on a \n",
-            sprintf("generalized linear model (GLM, %s link). ", link),
-            "Replacement is assumed to occur uniformly\n",
-            "across the distribution of observations.\n\n"
+            "This function calculates the number of data points that would need\n",
+            "to be replaced to ", action_clause, ",\n",
+            "based on a generalized linear model (GLM, ", link, " link).\n",
+            "Replacement is assumed to occur uniformly across the\n",
+            "distribution of observations.\n\n"
         )
     }
+    
+    # title (scale-dependent)
+    title_text <- if (scale == "t") {
+        crayon::bold("Robustness of Inference to Replacement (RIR):")
+    } else {
+        crayon::bold("Correlation-Based Robustness of Inference to Replacement (RIR):")
+    }
+    
+    # scale note and citation (appended after interpretation_line)
+    scale_note <- if (scale == "t") {
+        paste0(
+            "\n\nNote: This RIR is computed via the t-statistic, which assumes\n",
+            "a constant standard error (SE) across replacement. For an RIR\n",
+            "that accounts for SE inflation due to replacement, use scale = \"r\".")
+    } else if (model_type == "glm") {
+        paste0(
+            "\n\nNote: This RIR is computed by converting the Wald z-statistic\n",
+            "to the correlation scale. It accounts for SE inflation due to\n",
+            "replacement. The z-based reference above provides the unconverted\n",
+            "RIR for comparison.")
+    } else {
+        paste0(
+            "\n\nNote: This RIR is computed via the correlation scale and does\n",
+            "not assume a constant standard error (SE). It accounts for SE\n",
+            "inflation due to replacement. For an RIR that assumes a constant\n",
+            "SE across replacement, use scale = \"t\".")
+    }
+    
+    cite_text <- paste0(
+        "\n\nSee Frank et al. (2013) for a description of the method.\n\n",
+        crayon::underline("Citation:"), "\n",
+        "Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).\n",
+        "What would it take to change an inference? Using Rubin's causal\n",
+        "model to interpret the robustness of causal inferences. ",
+        crayon::italic("Educational\nEvaluation and Policy Analysis, 35"),
+        "(4), 437-460."
+    )
     
     # assemble the full message
     # Structure: title -> model context -> formula -> where-block ->
-    #            plain-language summary -> interpretation -> [GLM z-ref if applicable]
+    #   plain-language summary -> interpretation ->
+    #   [GLM z-ref if scale="r" GLM] -> scale note -> citation
     message_text <- paste0(
-        crayon::bold("Correlation-Based Robustness of Inference to Replacement (RIR):"), "\n",
-        
+        title_text, "\n",
         intro_text,
-        
-        "The closed-form fraction on the correlation scale is\n  ", frac_text_r, "\n",
+        "The closed-form fraction on the ",
+        if (scale == "t") "t-statistic" else "correlation",
+        " scale is\n  ", frac_text, "\n",
         "where:\n",
-        "  pi_r = replacement fraction on the correlation scale;\n",
+        "  ", pi_label, " = replacement fraction on the ",
+        if (scale == "t") "t-statistic" else "correlation", " scale;\n",
         stat_detail, "\n",
         crit_detail, "\n\n",
-        
-        "Using a threshold of ", sf(thr_r), " for statistical significance (alpha = ", alpha, "),\n",
-        sprintf(fmt, pct(pi_r)), "% of the observed estimate of ", sf(est_eff),
-        if (is_sig) " would have to be due to bias.\n" else " would need to be strengthened by replacement.\n",
-        "This implies replacing ", k_r, " of ", n_obs, " observations (",
-        sprintf(fmt, pct(pi_r)), "%) with ", replacement_phrase,
-        "Thus, RIR = ", k_r, ".\n\n",
+        "Using a threshold of ", sf(thr_val),
+        " for statistical significance (alpha = ", alpha, "),\n",
+        sprintf(fmt, pct(pi_primary)),
+        "% of the observed estimate of ", sf(est_eff),
+        if (is_sig) " would have to be due to bias\n"
+        else " would need to be strengthened by replacement.\n",
+        if (is_sig) "to nullify the inference. " else "",
+        "This implies replacing ", k_primary, " of ", n_obs, " observations",
+        if (is_sig) "\n(" else " (",
+        sprintf(fmt, pct(pi_primary)), "%) with ", replacement_phrase,
+        " Thus, RIR = ", k_primary, ".\n\n",
         interpretation_line,
-        z_ref_text   ## appended only for GLM; empty string for LM
+        z_ref_text,
+        scale_note,
+        cite_text
     )
     
     
     
     ## Full output list (returned invisibly on print)
-    out <- list(
-        input = list(est_eff = est_eff, std_err = std_err, n_obs = n_obs,
-                     n_covariates = n_covariates, alpha = alpha, tails = tails,
-                     nu = nu, model_type = model_type, link = link),
-        df = df,
-        stat_type  = stat_label,
-        stat_obs   = stat_obs, 
-        stat_crit  = stat_crit,  
-        r_obs  = r_obs,
-        r_crit = r_crit,
-        p_obs  = p_obs,
-        is_sig = is_sig,
-        # r-based RIR (primary)
-        pi_r = pi_r, k_r = k_r,
-        # raw-statistic-based RIR (reference)
-        pi_stat = pi_stat, k_stat = k_stat,
-        # z-based reference (GLM only; conversion-quality diagnostic)
-        pi_z = if (model_type == "glm") pi_stat else NA,
-        k_z = if (model_type == "glm") k_stat else NA,
-        message = message_text
+    out <- c(
+        list(
+            input = list(est_eff = est_eff, std_err = std_err, n_obs = n_obs,
+                         n_covariates = n_covariates, alpha = alpha, tails = tails,
+                         nu = nu, scale = scale, model_type = model_type, link = link),
+            df        = df,
+            stat_type = stat_label
+        ),
+        structure(list(stat_obs, stat_crit),
+                  names = c(paste0(stat_label, "_obs"),
+                            paste0(stat_label, "_crit"))),
+        list(
+            r_obs  = if (scale == "r") r_obs  else NA,
+            r_crit = if (scale == "r") r_crit else NA,
+            p_obs  = p_obs,
+            is_sig = is_sig,
+            # primary RIR (scale-dependent)
+            pi_primary = pi_primary, k_primary = k_primary,
+            # t-based (always computed; primary for scale="t", reference for scale="r")
+            pi_stat = pi_stat, k_stat = k_stat,
+            # r-based (scale="r" only)
+            pi_r = if (scale == "r") pi_r else NA,
+            k_r  = if (scale == "r") k_r  else NA,
+            # z-based reference (GLM, scale="r" only; conversion-quality diagnostic)
+            pi_z = if (scale == "r" && model_type == "glm") pi_stat else NA,
+            k_z  = if (scale == "r" && model_type == "glm") k_stat  else NA,
+            message = message_text
+        )
     )
     
     
     ## Raw concise output branch 
-    raw_out <- list(
-        model_type = model_type,   
-        link = link,         
-        stat_type = stat_label,    
-        observed_stat = stat_obs,     
-        critical_stat = stat_crit,     
-        observed_r = r_obs,
-        critical_r = r_crit,
-        p_value = p_obs,
-        RIR_perc = pi_r,
-        RIR = k_r,
-        # z-based reference (GLM conversion-quality diagnostic)
-        RIR_z_perc = if (model_type == "glm") pi_stat else NA,
-        RIR_z = if (model_type == "glm") k_stat  else NA
-
+    # stat field names are dynamic: observed_t/critical_t for LM, observed_z/critical_z for GLM
+    raw_out <- c(
+        list(
+            scale      = scale,
+            model_type = model_type,
+            link       = link,
+            stat_type  = stat_label
+        ),
+        structure(list(stat_obs,  stat_crit),
+                  names = c(paste0("observed_", stat_label),
+                            paste0("critical_", stat_label))),
+        list(
+            observed_r = if (scale == "r") r_obs  else NA,
+            critical_r = if (scale == "r") r_crit else NA,
+            p_value    = p_obs,
+            RIR_perc   = pi_primary,
+            RIR        = k_primary,
+            # z-based reference (GLM, scale="r" only; conversion-quality diagnostic)
+            RIR_z_perc = if (scale == "r" && model_type == "glm") pi_stat else NA,
+            RIR_z      = if (scale == "r" && model_type == "glm") k_stat  else NA
+        )
     )
     
     
@@ -418,19 +517,24 @@ test_correlation_rir <- function(
 # )
 
 ## pkonfound integration examples
-# LM (default):
+# LM, r-scale (default):
 # pkonfound(est_eff = 0.03, std_err = 0.05,
 #           n_obs = 1200, n_covariates = 8,
-#           index = "corr_RIR", to_return = "print")
+#           index = "RIR", to_return = "print")
 
-# GLM logistic:
+# LM, t-scale:
+# pkonfound(est_eff = 0.03, std_err = 0.05,
+#           n_obs = 1200, n_covariates = 8,
+#           index = "RIR", scale = "t", to_return = "print")
+
+# GLM logistic, r-scale:
 # pkonfound(est_eff = -0.20, std_err = 0.103,
 #           n_obs = 20888, n_covariates = 3,
-#           index = "corr_RIR", link = "logit",
+#           index = "RIR", scale = "r", link = "logit",
 #           to_return = "print")
 
-# GLM probit:
+# GLM probit, r-scale:
 # pkonfound(est_eff = 0.05, std_err = 0.08,
 #           n_obs = 500, n_covariates = 5,
-#           index = "corr_RIR", link = "probit",
+#           index = "RIR", scale = "r", link = "probit",
 #           to_return = "print")

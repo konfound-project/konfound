@@ -17,3 +17,4 @@ Default is FALSE.}
 \description{
 Distribution of per-case RIR influence
 }
+\keyword{internal}

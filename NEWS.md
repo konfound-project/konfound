@@ -1,7 +1,4 @@
-# konfound 1.0.5 (IN DEVELOPMENT)
-* add beta version of empirical RIR based on resampling, providing a distribution of RIR values
-
-# konfound 1.0.4 
+# konfound 1.0.4 (IN DEVELOPMENT)
 
 * add beta version for the VAM model
 * add RIR index calculation for the PSE (component correlation) function
@@ -10,7 +7,8 @@
 * add delta threshold for statistical significance calculation and printed text for COP function
 * revise text output and output naming, and refine plots for the COP function
 * add impact of unobserved covariate to COP function
-* extend correlation-based RIR to support both linear and generalized linear models (logistic/probit)
+* merge correlation-based RIR into index = "RIR" via a scale argument (scale = "r", default; scale = "t" for the t-statistic-based version)
+* add beta version of empirical RIR based on resampling, providing a distribution of RIR values
 
 # konfound 1.0.3
 

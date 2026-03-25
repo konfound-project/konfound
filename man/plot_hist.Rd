@@ -19,3 +19,4 @@ Default is FALSE.}
 \description{
 Plot the empirical k* distribution
 }
+\keyword{internal}

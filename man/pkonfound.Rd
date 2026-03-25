@@ -36,6 +36,7 @@ pkonfound(
   raw_treatment_success = NULL,
   replace_stu = NULL,
   peer_effect_pi = 0.5,
+  scale = "r",
   link = NULL
 )
 }
@@ -52,7 +53,7 @@ pkonfound(
 
 \item{tails}{integer indicating if the test is one-tailed (1) or two-tailed (2; defaults to 2).}
 
-\item{index}{specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), \code{"corr_RIR"} (correlation-based RIR), or \code{"VAM"} (value-added model).}
+\item{index}{specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), or \code{"VAM"} (value-added model). For \code{"RIR"}, use the \code{scale} argument to select the r-scale (default) or t-scale variant.}
 
 \item{nu}{specifies the hypothesis to be tested; defaults to testing whether \code{est_eff} is significantly different from 0.}
 
@@ -102,7 +103,9 @@ pkonfound(
 
 \item{peer_effect_pi}{proportion of students exerting peer effects on the others.}
 
-\item{link}{GLM link function for \code{index = "corr_RIR"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM (t-based) pathway is used.}
+\item{scale}{for \code{index = "RIR"}: \code{"r"} (default) computes RIR on the correlation scale and supports both LM and GLM; \code{"t"} computes RIR on the t-statistic scale (LM only). Ignored for all other indices.}
+
+\item{link}{GLM link function for \code{index = "RIR", scale = "r"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM pathway is used.}
 }
 \description{
 For published studies, this command calculates (1) how much bias there must be in an estimate to nullify/sustain an inference; (2) the impact of an omitted variable necessary to nullify/sustain an inference for a regression coefficient.
@@ -134,10 +137,11 @@ The function accepts arguments depending on the type of model:
   \item est_eff, replace_stu, n_obs, eff_thr, peer_effect_pi
 }
 
-\strong{Correlation-based RIR (index: corr_RIR)}
+\strong{RIR with scale argument (index: RIR, scale: "t" or "r")}
 \itemize{
-  \item est_eff, std_err, n_obs, n_covariates, alpha, tails, nu
-  \item link (NULL for LM; "logit" or "probit" for GLM)
+  \item est_eff, std_err, n_obs, n_covariates, alpha, tails, nu, scale
+  \item scale = "r" (default): correlation scale, LM or GLM; link = "logit" or "probit" for GLM
+  \item scale = "t": t-statistic scale, LM only
 }
 }
 \note{
@@ -247,20 +251,21 @@ pkonfound prints the bias and the number of cases that would have to be replaced
 }
 }
 
-\subsection{Correlation-based RIR}{
+\subsection{RIR with scale = "r" (correlation scale)}{
 \describe{
+  \item{\code{scale}}{\code{"r"} or \code{"t"}}
   \item{\code{model_type}}{\code{"lm"} or \code{"glm"}}
   \item{\code{link}}{GLM link function (\code{"logit"} or \code{"probit"}); \code{NULL} for LM}
   \item{\code{stat_type}}{\code{"t"} for LM or \code{"z"} for GLM}
-  \item{\code{observed_stat}}{observed test statistic (t or z)}
-  \item{\code{critical_stat}}{critical test statistic at the chosen alpha}
-  \item{\code{observed_r}}{observed effect on the correlation scale}
-  \item{\code{critical_r}}{critical correlation threshold}
+  \item{\code{observed_t} or \code{observed_z}}{observed test statistic (named by type)}
+  \item{\code{critical_t} or \code{critical_z}}{critical test statistic (named by type)}
+  \item{\code{observed_r}}{observed effect on the correlation scale (\code{NA} for scale = "t")}
+  \item{\code{critical_r}}{critical correlation threshold (\code{NA} for scale = "t")}
   \item{\code{p_value}}{p-value of the observed test statistic}
-  \item{\code{RIR_perc}}{replacement fraction on the correlation scale (pi_r)}
+  \item{\code{RIR_perc}}{primary replacement fraction (pi_t or pi_r depending on scale)}
   \item{\code{RIR}}{number of observations to replace}
-  \item{\code{RIR_z_perc}}{z-based replacement fraction, free of effective-df dependency (GLM only; \code{NA} for LM)}
-  \item{\code{RIR_z}}{z-based RIR count (GLM only; \code{NA} for LM)}
+  \item{\code{RIR_z_perc}}{z-based replacement fraction, free of effective-df dependency (GLM, scale = "r" only; \code{NA} otherwise)}
+  \item{\code{RIR_z}}{z-based RIR count (GLM, scale = "r" only; \code{NA} otherwise)}
 }
 }
 }
@@ -304,12 +309,16 @@ pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
 pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
           peer_effect_pi = 0.3, index = "VAM")
           
-# Correlation-based RIR (LM, default)
+# RIR on the t-scale
 pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
-          n_covariates = 3, index = "corr_RIR")
+          n_covariates = 3, index = "RIR", scale = "t")
           
-# Correlation-based RIR (GLM, logistic)
+# RIR on the r-scale (LM; default)
+pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
+          n_covariates = 3, index = "RIR")
+          
+# RIR on the r-scale (GLM, logistic)
 pkonfound(est_eff = -0.2, std_err = 0.103, n_obs = 20888,
-          n_covariates = 3, index = "corr_RIR", link = "logit")
+          n_covariates = 3, index = "RIR", scale = "r", link = "logit")
           
 }

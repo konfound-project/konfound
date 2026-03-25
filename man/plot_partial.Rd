@@ -22,3 +22,4 @@ Default is FALSE.}
 \description{
 Partial regression plot with per-case influence coloring
 }
+\keyword{internal}

@@ -20,3 +20,4 @@ Default is FALSE.}
 \description{
 Replacement composition plot across k* bins
 }
+\keyword{internal}
