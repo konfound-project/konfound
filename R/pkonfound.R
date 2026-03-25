@@ -9,9 +9,9 @@
 #' @param n_covariates the number of covariates in the regression model.
 #' @param alpha the probability of rejecting the null hypothesis (defaults to 0.05).
 #' @param tails integer indicating if the test is one-tailed (1) or two-tailed (2; defaults to 2).
-#' @param index specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), or \code{"VAM"} (value-added model). For \code{"RIR"}, use the \code{scale} argument to select the r-scale (default) or t-scale variant.
+#' @param index specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), or \code{"VAM"} (value-added model). For \code{"RIR"}, use the \code{scale} argument to select the t-scale (default) or r-scale variant.
 #' @param nu specifies the hypothesis to be tested; defaults to testing whether \code{est_eff} is significantly different from 0.
-#' @param scale for \code{index = "RIR"}: \code{"r"} (default) computes RIR on the correlation scale and supports both LM and GLM; \code{"t"} computes RIR on the t-statistic scale (LM only). Ignored for all other indices.
+#' @param scale for \code{index = "RIR"}: \code{"t"} (default) computes RIR on the t-statistic scale (LM only); \code{"r"} computes RIR on the correlation scale, supports both LM and GLM, and relaxes the constant-SE assumption. Ignored for all other indices.
 #' @param sdx the standard deviation of X (used for unconditional ITCV).
 #' @param sdy the standard deviation of Y (used for unconditional ITCV).
 #' @param R2 the unadjusted, original \eqn{R^2} in the observed function (used for unconditional ITCV).
@@ -66,8 +66,8 @@
 #' \strong{RIR with scale argument (index: RIR, scale: "t" or "r")}
 #' \itemize{
 #'   \item est_eff, std_err, n_obs, n_covariates, alpha, tails, nu, scale
-#'   \item scale = "r" (default): correlation scale, LM or GLM; link = "logit" or "probit" for GLM
-#'   \item scale = "t": t-statistic scale, LM only
+#'   \item scale = "t" (default): t-statistic scale, LM only
+#'   \item scale = "r": correlation scale, LM or GLM; link = "logit" or "probit" for GLM
 #' }
 #' 
 #' @section Values:
@@ -169,9 +169,9 @@
 #' }
 #' }
 #' 
-#' \subsection{RIR with scale = "r" (correlation scale)}{
+#' \subsection{RIR with scale = "t" or "r"}{
 #' \describe{
-#'   \item{\code{scale}}{\code{"r"} or \code{"t"}}
+#'   \item{\code{scale}}{\code{"t"} or \code{"r"}}
 #'   \item{\code{model_type}}{\code{"lm"} or \code{"glm"}}
 #'   \item{\code{link}}{GLM link function (\code{"logit"} or \code{"probit"}); \code{NULL} for LM}
 #'   \item{\code{stat_type}}{\code{"t"} for LM or \code{"z"} for GLM}
@@ -232,13 +232,13 @@
 #' pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
 #'           peer_effect_pi = 0.3, index = "VAM")
 #'           
-#' # RIR on the t-scale
-#' pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
-#'           n_covariates = 3, index = "RIR", scale = "t")
-#'           
-#' # RIR on the r-scale (LM; default)
+#' # RIR on the t-scale (LM; default)
 #' pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
 #'           n_covariates = 3, index = "RIR")
+#'           
+#' # RIR on the r-scale 
+#' pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
+#'           n_covariates = 3, index = "RIR", scale = "r")
 #'           
 #' # RIR on the r-scale (GLM, logistic)
 #' pkonfound(est_eff = -0.2, std_err = 0.103, n_obs = 20888,
@@ -252,7 +252,7 @@
 #' @param n_covariates the number of covariates in the regression model.
 #' @param alpha the probability of rejecting the null hypothesis (defaults to 0.05).
 #' @param tails integer indicating if the test is one-tailed (1) or two-tailed (2; defaults to 2).
-#' @param index specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), or \code{"VAM"} (value-added model). For \code{"RIR"}, use the \code{scale} argument to select the r-scale (default) or t-scale variant.
+#' @param index specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), or \code{"VAM"} (value-added model). For \code{"RIR"}, use the \code{scale} argument to select the t-scale (default) or r-scale variant.
 #' @param nu specifies the hypothesis to be tested; defaults to testing whether \code{est_eff} is significantly different from 0.
 #' @param n_treat the number of cases associated with the treatment condition (for logistic regression models).
 #' @param switch_trm indicates whether to switch the treatment and control cases; defaults to \code{FALSE}.
@@ -275,7 +275,7 @@
 #' @param upper_bound optional (replaces \code{est_eff}); the upper bound of the confidence interval.
 #' @param lower_bound optional (replaces \code{est_eff}); the lower bound of the confidence interval.
 #' @param raw_treatment_success optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark.
-#' @param scale for \code{index = "RIR"}: \code{"r"} (default) computes RIR on the correlation scale and supports both LM and GLM; \code{"t"} computes RIR on the t-statistic scale (LM only). Ignored for all other indices.
+#' @param scale for \code{index = "RIR"}: \code{"t"} (default) computes RIR on the t-statistic scale (LM only); \code{"r"} computes RIR on the correlation scale, supports both LM and GLM, and relaxes the constant-SE assumption. Ignored for all other indices.
 #' @param link GLM link function for \code{index = "RIR", scale = "r"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM pathway is used.
 
 pkonfound <- function(est_eff,
@@ -311,7 +311,7 @@ pkonfound <- function(est_eff,
                       raw_treatment_success = NULL, 
                       replace_stu = NULL,
                       peer_effect_pi = 0.5,
-                      scale = "r",  # for index = "RIR": "r" (default, LM/GLM) or "t" (LM only)
+                      scale = "t",  # for index = "RIR": "t" (default, LM only) or "r" (LM/GLM)
                       link = NULL   # for index = "RIR", scale = "r" with GLM: "logit" or "probit"
 ) {
     if ("table" %in% to_return) stop("a table can only be
@@ -437,7 +437,7 @@ pkonfound <- function(est_eff,
                 to_return = to_return
             )
         } else {
-            # scale = "r" (default, LM/GLM) or "t" (LM only)
+            # scale = "t" (default, LM only) or "r" (LM/GLM)
             scale <- match.arg(scale, choices = c("t", "r"))
             if (scale == "t" && !is.null(link)) {
                 warning("link is ignored when scale = 't'. The t-scale is LM only.")

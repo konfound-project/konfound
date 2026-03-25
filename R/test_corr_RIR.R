@@ -9,12 +9,13 @@
 ##   (scale = "r", LM or GLM).
 ##
 ## SCALE CHOICE:
-##   scale = "r" (default): converts the test statistic to a correlation via
+##   scale = "t" (default): pi_t = 1 - |t_crit|/|t_obs|. Algebraically
+##     identical to the beta-metric RIR (ratio cancels via t = beta/SE).
+##     Assumes constant SE across replacement. Available for LM only.
+##     To relax the constant-SE assumption, use scale = "r".
+##   scale = "r": converts the test statistic to a correlation via
 ##     r = stat / sqrt(stat^2 + df), then computes pi_r = 1 - |r_crit|/|r_obs|.
 ##     Accounts for SE inflation due to replacement. Supports LM and GLM.
-##   scale = "t": pi_t = 1 - |t_crit|/|t_obs|. Algebraically
-##     identical to the beta-metric RIR (ratio cancels via t = beta/SE).
-##     Available for LM only.
 ##
 ## TODO: rename to test_sensitivity_rir.R / test_sensitivity_rir() once
 ##   the RIR refactor is complete and corr_RIR is fully retired.
@@ -27,7 +28,7 @@ test_correlation_rir <- function(
         alpha = 0.05,       # significance level
         tails = 2,          # 1 or 2
         nu   = 0,           # null value (non-zero supported for both LM/GLM)
-        scale = "r",        # "r" (default, LM/GLM) or "t" (LM only)
+        scale = "t",        # "t" (default, LM only) or "r" (LM/GLM)
         model_type = "lm",  # "lm" for linear models, "glm" for generalized
         link = NULL,        # NULL for LM; "logit" or "probit" for GLM
         to_return = c("print", "raw_output")
@@ -517,15 +518,15 @@ test_correlation_rir <- function(
 # )
 
 ## pkonfound integration examples
-# LM, r-scale (default):
+# LM, t-scale (default):
 # pkonfound(est_eff = 0.03, std_err = 0.05,
 #           n_obs = 1200, n_covariates = 8,
 #           index = "RIR", to_return = "print")
 
-# LM, t-scale:
+# LM, r-scale (relaxed constant-SE assumption):
 # pkonfound(est_eff = 0.03, std_err = 0.05,
 #           n_obs = 1200, n_covariates = 8,
-#           index = "RIR", scale = "t", to_return = "print")
+#           index = "RIR", scale = "r", to_return = "print")
 
 # GLM logistic, r-scale:
 # pkonfound(est_eff = -0.20, std_err = 0.103,
