@@ -36,7 +36,7 @@ pkonfound(
   raw_treatment_success = NULL,
   replace_stu = NULL,
   peer_effect_pi = 0.5,
-  scale = "r",
+  scale = "t",
   link = NULL
 )
 }
@@ -53,7 +53,7 @@ pkonfound(
 
 \item{tails}{integer indicating if the test is one-tailed (1) or two-tailed (2; defaults to 2).}
 
-\item{index}{specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), or \code{"VAM"} (value-added model). For \code{"RIR"}, use the \code{scale} argument to select the r-scale (default) or t-scale variant.}
+\item{index}{specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), or \code{"VAM"} (value-added model). For \code{"RIR"}, use the \code{scale} argument to select the t-scale (default) or r-scale variant.}
 
 \item{nu}{specifies the hypothesis to be tested; defaults to testing whether \code{est_eff} is significantly different from 0.}
 
@@ -103,7 +103,7 @@ pkonfound(
 
 \item{peer_effect_pi}{proportion of students exerting peer effects on the others.}
 
-\item{scale}{for \code{index = "RIR"}: \code{"r"} (default) computes RIR on the correlation scale and supports both LM and GLM; \code{"t"} computes RIR on the t-statistic scale (LM only). Ignored for all other indices.}
+\item{scale}{for \code{index = "RIR"}: \code{"t"} (default) computes RIR on the t-statistic scale (LM only); \code{"r"} computes RIR on the correlation scale, supports both LM and GLM, and relaxes the constant-SE assumption. Ignored for all other indices.}
 
 \item{link}{GLM link function for \code{index = "RIR", scale = "r"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM pathway is used.}
 }
@@ -140,8 +140,8 @@ The function accepts arguments depending on the type of model:
 \strong{RIR with scale argument (index: RIR, scale: "t" or "r")}
 \itemize{
   \item est_eff, std_err, n_obs, n_covariates, alpha, tails, nu, scale
-  \item scale = "r" (default): correlation scale, LM or GLM; link = "logit" or "probit" for GLM
-  \item scale = "t": t-statistic scale, LM only
+  \item scale = "t" (default): t-statistic scale, LM only
+  \item scale = "r": correlation scale, LM or GLM; link = "logit" or "probit" for GLM
 }
 }
 \note{
@@ -251,9 +251,9 @@ pkonfound prints the bias and the number of cases that would have to be replaced
 }
 }
 
-\subsection{RIR with scale = "r" (correlation scale)}{
+\subsection{RIR with scale = "t" or "r"}{
 \describe{
-  \item{\code{scale}}{\code{"r"} or \code{"t"}}
+  \item{\code{scale}}{\code{"t"} or \code{"r"}}
   \item{\code{model_type}}{\code{"lm"} or \code{"glm"}}
   \item{\code{link}}{GLM link function (\code{"logit"} or \code{"probit"}); \code{NULL} for LM}
   \item{\code{stat_type}}{\code{"t"} for LM or \code{"z"} for GLM}
@@ -275,7 +275,6 @@ pkonfound prints the bias and the number of cases that would have to be replaced
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
-pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 
 # using a confidence interval 
 pkonfound(upper_bound = 3, lower_bound = 1, n_obs = 100, n_covariates = 3)
@@ -309,13 +308,13 @@ pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
 pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
           peer_effect_pi = 0.3, index = "VAM")
           
-# RIR on the t-scale
-pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
-          n_covariates = 3, index = "RIR", scale = "t")
-          
-# RIR on the r-scale (LM; default)
+# RIR on the t-scale (LM; default)
 pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
           n_covariates = 3, index = "RIR")
+          
+# RIR on the r-scale 
+pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
+          n_covariates = 3, index = "RIR", scale = "r")
           
 # RIR on the r-scale (GLM, logistic)
 pkonfound(est_eff = -0.2, std_err = 0.103, n_obs = 20888,

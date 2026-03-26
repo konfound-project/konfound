@@ -2,29 +2,29 @@ context("Checking pkonfound")
 
 test_that("pkonfound test positive, significant coefficient works", {
     out <- pkonfound(2, .4, 100, 3, to_return = "raw_output")
-    expect_equal(out$RIR, 57)
-    expect_equal(out$RIR_perc, 0.563, tolerance = .001)
+    expect_equal(out$RIR, 61)
+    expect_equal(out$RIR_perc, 0.603, tolerance = .001)
     expect_equal(out$observed_t, 5.0,  tolerance = .001)
 })
 
 test_that("pkonfound test negative, significant coefficient works", {
     out <- pkonfound(-2, .4, 100, 3, to_return = "raw_output")
-    expect_equal(out$RIR, 57)
-    expect_equal(out$RIR_perc, 0.563, tolerance = .001)
+    expect_equal(out$RIR, 61)
+    expect_equal(out$RIR_perc, 0.603, tolerance = .001)
     expect_equal(out$observed_t, -5.0, tolerance = .001)
 })
 
 test_that("pkonfound test positive, not significant coefficient works", {
     out <- pkonfound(1, .4, 100, 3, to_return = "raw_output")
-    expect_equal(out$RIR, 20)
-    expect_equal(out$RIR_perc, 0.197, tolerance = .001)
+    expect_equal(out$RIR, 21)
+    expect_equal(out$RIR_perc, 0.206, tolerance = .001)
     expect_equal(out$observed_t, 2.5,  tolerance = .001)
 })
 
 test_that("pkonfound test negative, not significant coefficient works", {
     out <- pkonfound(-1, .4, 100, 3, to_return = "raw_output")
-    expect_equal(out$RIR, 20)
-    expect_equal(out$RIR_perc, 0.197, tolerance = .001)
+    expect_equal(out$RIR, 21)
+    expect_equal(out$RIR_perc, 0.206, tolerance = .001)
     expect_equal(out$observed_t, -2.5, tolerance = .001)
 })
 
@@ -229,5 +229,5 @@ test_that("pkonfound printed output works for a negative case", {
 })
 
 test_that("pkonfound works for a CI", {
-    expect_equal(pkonfound(upper_bound = 2, lower_bound = 1, n_obs = 200, n_covariates = 3, to_return = "raw_output")$RIR_perc, 0.642, tolerance = .001)
+    expect_equal(pkonfound(upper_bound = 2, lower_bound = 1, n_obs = 200, n_covariates = 3, to_return = "raw_output")$RIR_perc, 0.667, tolerance = .001)
 })
