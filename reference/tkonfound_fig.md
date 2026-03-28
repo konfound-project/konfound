@@ -66,6 +66,12 @@ the effect size in a 2x2 table.
 
 ``` r
 tkonfound_fig(14, 17, 6, 25, test = "chisq")
+#> Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
+#> ℹ Please use tidy evaluation idioms with `aes()`.
+#> ℹ See also `vignette("ggplot2-in-packages")` for more information.
+#> ℹ The deprecated feature was likely used in the konfound package.
+#>   Please report the issue at
+#>   <https://github.com/konfound-project/konfound/issues>.
 #> [[1]]
 #> Warning: Use of `meta$pdif` is discouraged.
 #> ℹ Use `pdif` instead.
@@ -85,16 +91,12 @@ tkonfound_fig(14, 17, 6, 25, test = "chisq")
 #> ℹ Use `RIR` instead.
 #> Warning: Use of `meta$pdif` is discouraged.
 #> ℹ Use `pdif` instead.
-#> Warning: Removed 58 rows containing missing values or values outside the scale range
-#> (`geom_label_repel()`).
 
 #> 
 #> [[2]]
 #> [1] "A bend in line indicates switches from the control \n  row because the treatment row was exhausted."
 #> 
 #> [[3]]
-#> Warning: Removed 11 rows containing missing values or values outside the scale range
-#> (`geom_label_repel()`).
 
 #> 
 ```

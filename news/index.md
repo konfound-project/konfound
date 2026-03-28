@@ -12,8 +12,11 @@
   printed text for COP function
 - revise text output and output naming, and refine plots for the COP
   function
-- add correlation-based RIR for logistic regression with continuous
-  focal predictor
+- add impact of unobserved covariate to COP function
+- merge correlation-based RIR into index = “RIR” via a scale argument
+  (scale = “r”, default; scale = “t” for the t-statistic-based version)
+- add beta version of empirical RIR based on resampling, providing a
+  distribution of RIR values
 
 ## konfound 1.0.3
 

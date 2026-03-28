@@ -41,7 +41,9 @@ pkonfound(
   lower_bound = NULL,
   raw_treatment_success = NULL,
   replace_stu = NULL,
-  peer_effect_pi = 0.5
+  peer_effect_pi = 0.5,
+  scale = "t",
+  link = NULL
 )
 ```
 
@@ -76,8 +78,11 @@ pkonfound(
 
 - index:
 
-  specifies whether output is RIR or IT (impact threshold); defaults to
-  `"RIR"`.
+  specifies the sensitivity analysis index: `"RIR"` (default), `"IT"`
+  (impact threshold), `"COP"` (coefficient of proportionality), `"PSE"`
+  (proportional selection effect), or `"VAM"` (value-added model). For
+  `"RIR"`, use the `scale` argument to select the t-scale (default) or
+  r-scale variant.
 
 - nu:
 
@@ -199,6 +204,18 @@ pkonfound(
 
   proportion of students exerting peer effects on the others.
 
+- scale:
+
+  for `index = "RIR"`: `"t"` (default) computes RIR on the t-statistic
+  scale (LM only); `"r"` computes RIR on the correlation scale, supports
+  both LM and GLM, and relaxes the constant-SE assumption. Ignored for
+  all other indices.
+
+- link:
+
+  GLM link function for `index = "RIR", scale = "r"`: `"logit"` or
+  `"probit"`. When `NULL` (default), the LM pathway is used.
+
 ## Details
 
 The function accepts arguments depending on the type of model:
@@ -224,6 +241,15 @@ The function accepts arguments depending on the type of model:
 **VAM model (beta)**
 
 - est_eff, replace_stu, n_obs, eff_thr, peer_effect_pi
+
+**RIR with scale argument (index: RIR, scale: "t" or "r")**
+
+- est_eff, std_err, n_obs, n_covariates, alpha, tails, nu, scale
+
+- scale = "t" (default): t-statistic scale, LM only
+
+- scale = "r": correlation scale, LM or GLM; link = "logit" or "probit"
+  for GLM
 
 ## Note
 
@@ -342,13 +368,9 @@ following components:
 
   delta calculated using Oster’s restricted estimator
 
-- `delta_exact`:
+- `delta_Correlation`:
 
   delta calculated using correlation-based approach
-
-- `delta_pctbias`:
-
-  percent bias when comparing `delta*` to `delta_exact`
 
 - `delta_sig`:
 
@@ -381,17 +403,29 @@ following components:
 
   correlation matrix implied by `delta*`
 
-- `cor_exact`:
+- `cor_Corr`:
 
-  correlation matrix implied by `delta_exact`
+  correlation matrix implied by `delta_Correlation`
 
 - `eff_x_M3_oster`:
 
-  effect estimate for X under the Oster‑PSE variant
+  effect estimate for X under the Oster-PSE variant
 
 - `eff_x_M3`:
 
   effect estimate for X under the PSE adjustment
+
+- `impact_cv (r_xcv*r_ycv)`:
+
+  impact of the unobserved confounding variable
+
+- `impact_obs (r_xz*r_yz)`:
+
+  impact of the observed covariates
+
+- `impact_ratio`:
+
+  ratio of confounding variable impact to observed covariate impact
 
 - `Table`:
 
@@ -533,28 +567,103 @@ following components:
   Peer effect of each replaced student (compared to their replacements)
   on each of the non-replaced students.
 
+### RIR with scale = "t" or "r"
+
+- `scale`:
+
+  `"t"` or `"r"`
+
+- `model_type`:
+
+  `"lm"` or `"glm"`
+
+- `link`:
+
+  GLM link function (`"logit"` or `"probit"`); `NULL` for LM
+
+- `stat_type`:
+
+  `"t"` for LM or `"z"` for GLM
+
+- `observed_t` or `observed_z`:
+
+  observed test statistic (named by type)
+
+- `critical_t` or `critical_z`:
+
+  critical test statistic (named by type)
+
+- `observed_r`:
+
+  observed effect on the correlation scale (`NA` for scale = "t")
+
+- `critical_r`:
+
+  critical correlation threshold (`NA` for scale = "t")
+
+- `p_value`:
+
+  p-value of the observed test statistic
+
+- `RIR_perc`:
+
+  primary replacement fraction (pi_t or pi_r depending on scale)
+
+- `RIR`:
+
+  number of observations to replace
+
+- `RIR_z_perc`:
+
+  z-based replacement fraction, free of effective-df dependency (GLM,
+  scale = "r" only; `NA` otherwise)
+
+- `RIR_z`:
+
+  z-based RIR count (GLM, scale = "r" only; `NA` otherwise)
+
 ## Examples
 
 ``` r
 ## Linear models
 pkonfound(2, .4, 100, 3)
 #> Robustness of Inference to Replacement (RIR):
-#> RIR = 60
+#> This function calculates the number of data points that would need
+#> to be replaced to nullify the inference (lose statistical significance),
+#> based on a linear model (OLS). Replacement is assumed to occur
+#> uniformly across the distribution of observations.
 #> 
-#> To nullify the inference of an effect using the threshold of 0.794 for
-#> statistical significance (with null hypothesis = 0 and alpha = 0.05), 60.295%
-#> of the estimate of 2 would have to be due to bias. This implies that to
-#> nullify the inference one would expect to have to replace 60 (60.295%)
-#> observations with data points for which the effect is 0 (RIR = 60).
+#> The closed-form fraction on the t-statistic scale is
+#>   pi_t = (|t_obs| - |t_crit|) / |t_obs|
+#>      = (5.000 - 1.985) / 5.000
+#>      = 0.603.
+#> where:
+#>   pi_t = replacement fraction on the t-statistic scale;
+#>   t_obs = observed t-statistic (df = 95):
+#>           t_obs = (est_eff - nu) / std_err = 5.000;
+#>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 95):
+#>            t_crit = 1.985.
+#> 
+#> Using a threshold of 1.99 for statistical significance (alpha = 0.05),
+#> 60.295% of the observed estimate of 2 would have to be due to bias
+#> to nullify the inference. This implies replacing 61 of 100 observations
+#> (60.295%) with data points for which the effect is 0. Thus, RIR = 61.
+#> 
+#> That is, the RIR value represents the proportion of the data that
+#> would have to be replaced with data points for which the effect is 0
+#> for the observed relationship to lose statistical significance.
+#> 
+#> Note: This RIR is computed via the t-statistic, which assumes
+#> a constant standard error (SE) across replacement. For an RIR
+#> that accounts for SE inflation due to replacement, use scale = "r".
 #> 
 #> See Frank et al. (2013) for a description of the method.
 #> 
-#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
-#> What would it take to change an inference?
-#> Using Rubin's causal model to interpret the robustness of causal inferences.
-#> Education, Evaluation and Policy Analysis, 35 437-460.
-#> 
-#> Accuracy of results increases with the number of decimals reported.
+#> Citation:
+#> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+#> What would it take to change an inference? Using Rubin's causal
+#> model to interpret the robustness of causal inferences. Educational
+#> Evaluation and Policy Analysis, 35(4), 437-460. 
 #> 
 #> For more information, visit https://konfound-it.org
 #> To explore examples and interpretation tips,
@@ -565,22 +674,42 @@ pkonfound(2, .4, 100, 3)
 #> For models fit in R, consider use of konfound().
 pkonfound(-2.2, .65, 200, 3)
 #> Robustness of Inference to Replacement (RIR):
-#> RIR = 83
+#> This function calculates the number of data points that would need
+#> to be replaced to nullify the inference (lose statistical significance),
+#> based on a linear model (OLS). Replacement is assumed to occur
+#> uniformly across the distribution of observations.
 #> 
-#> To nullify the inference of an effect using the threshold of -1.282 for
-#> statistical significance (with null hypothesis = 0 and alpha = 0.05), 41.73%
-#> of the estimate of -2.2 would have to be due to bias. This implies that to
-#> nullify the inference one would expect to have to replace 83 (41.73%)
-#> observations with data points for which the effect is 0 (RIR = 83).
+#> The closed-form fraction on the t-statistic scale is
+#>   pi_t = (|t_obs| - |t_crit|) / |t_obs|
+#>      = (3.385 - 1.972) / 3.385
+#>      = 0.417.
+#> where:
+#>   pi_t = replacement fraction on the t-statistic scale;
+#>   t_obs = observed t-statistic (df = 195):
+#>           t_obs = (est_eff - nu) / std_err = -3.385;
+#>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 195):
+#>            t_crit = 1.972.
+#> 
+#> Using a threshold of 1.97 for statistical significance (alpha = 0.05),
+#> 41.730% of the observed estimate of -2.2 would have to be due to bias
+#> to nullify the inference. This implies replacing 84 of 200 observations
+#> (41.730%) with data points for which the effect is 0. Thus, RIR = 84.
+#> 
+#> That is, the RIR value represents the proportion of the data that
+#> would have to be replaced with data points for which the effect is 0
+#> for the observed relationship to lose statistical significance.
+#> 
+#> Note: This RIR is computed via the t-statistic, which assumes
+#> a constant standard error (SE) across replacement. For an RIR
+#> that accounts for SE inflation due to replacement, use scale = "r".
 #> 
 #> See Frank et al. (2013) for a description of the method.
 #> 
-#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
-#> What would it take to change an inference?
-#> Using Rubin's causal model to interpret the robustness of causal inferences.
-#> Education, Evaluation and Policy Analysis, 35 437-460.
-#> 
-#> Accuracy of results increases with the number of decimals reported.
+#> Citation:
+#> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+#> What would it take to change an inference? Using Rubin's causal
+#> model to interpret the robustness of causal inferences. Educational
+#> Evaluation and Policy Analysis, 35(4), 437-460. 
 #> 
 #> For more information, visit https://konfound-it.org
 #> To explore examples and interpretation tips,
@@ -591,79 +720,43 @@ pkonfound(-2.2, .65, 200, 3)
 #> For models fit in R, consider use of konfound().
 pkonfound(.5, 3, 200, 3)
 #> Robustness of Inference to Replacement (RIR):
-#> RIR = 183
+#> This function calculates the number of data points that would need
+#> to be replaced to sustain an inference of an effect (reach statistical significance),
+#> based on a linear model (OLS). Replacement is assumed to occur
+#> uniformly across the distribution of observations.
 #> 
-#> The estimated effect is 0.5. The threshold value for statistical significance
-#> is 5.917 (with null hypothesis = 0 and alpha = 0.05). To reach that threshold,
-#> 91.549% of the estimate of 0.5 would have to be due to bias. This implies to sustain
-#> an inference one would expect to have to replace 183 (91.549%) observations with
-#> effect of 0 with data points with effect of 5.917 (RIR = 183).
+#> The closed-form fraction on the t-statistic scale is
+#>   pi_t = (|t_crit| - |t_obs|) / |t_crit|
+#>      = (1.972 - 0.167) / 1.972
+#>      = 0.915.
+#> where:
+#>   pi_t = replacement fraction on the t-statistic scale;
+#>   t_obs = observed t-statistic (df = 195):
+#>           t_obs = (est_eff - nu) / std_err = 0.167;
+#>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 195):
+#>            t_crit = 1.972.
+#> 
+#> Using a threshold of 1.97 for statistical significance (alpha = 0.05),
+#> 91.549% of the observed estimate of 0.5 would need to be strengthened by replacement.
+#> This implies replacing 184 of 200 observations (91.549%) with data points at
+#> the threshold for statistical significance. Thus, RIR = 184.
+#> 
+#> This RIR value represents the proportion of the data that would
+#> have to be replaced with data points at the threshold for
+#> statistical significance for the result to become statistically
+#> significant.
+#> 
+#> Note: This RIR is computed via the t-statistic, which assumes
+#> a constant standard error (SE) across replacement. For an RIR
+#> that accounts for SE inflation due to replacement, use scale = "r".
 #> 
 #> See Frank et al. (2013) for a description of the method.
 #> 
-#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
-#> What would it take to change an inference?
-#> Using Rubin's causal model to interpret the robustness of causal inferences.
-#> Education, Evaluation and Policy Analysis, 35 437-460.
-#> 
-#> Accuracy of results increases with the number of decimals reported.
-#> 
-#> For more information, visit https://konfound-it.org
-#> To explore examples and interpretation tips,
-#> see our Practical Guide at https://konfound-it.org/page/guide/
-#> 
-#> For other forms of output, run
-#> ?pkonfound and inspect the to_return argument
-#> For models fit in R, consider use of konfound().
-pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
-#> Robustness of Inference to Replacement (RIR):
-#> RIR = 2
-#> Fragility = 1
-#> 
-#> You entered: log odds = -0.200, SE = 0.103, with p-value = 0.052. 
-#> The table implied by the parameter estimates and sample sizes you entered:
-#> 
-#> Implied Table:
-#>            Fail Success Success_Rate
-#> Control    2882     118        3.93%
-#> Treatment 17308     580        3.24%
-#> Total     20190     698        3.34%
-#> 
-#> Values in the table have been rounded to the nearest integer. This may cause 
-#> a small change to the estimated effect for the table.
-#> 
-#> To sustain an inference that the effect is different from 0 (alpha = 0.050), one would
-#> need to transfer 1 data points from treatment success to treatment failure (Fragility = 1).
-#> This is equivalent to replacing 2 (0.345%) treatment success data points with data points 
-#> for which the probability of failure in the control group (96.067%) applies (RIR = 2). 
-#> 
-#> Note that RIR = Fragility/P(destination) = 1/0.961 ~ 2.
-#> 
-#> The transfer of 1 data points yields the following table:
-#> 
-#> Transfer Table:
-#>            Fail Success Success_Rate
-#> Control    2882     118        3.93%
-#> Treatment 17309     579        3.24%
-#> Total     20191     697        3.34%
-#> 
-#> The log odds (estimated effect) = -0.202, SE = 0.103, p-value = 0.050.
-#> This p-value is based on t = estimated effect/standard error
-#> 
-#> Benchmarking RIR for Logistic Regression (Beta Version)
-#> The treatment is not statistically significant in the implied table and would also not be
-#> statistically significant in the raw table (before covariates were added). In this scenario, we
-#> do not yet have a clear interpretation of the benchmark and therefore the benchmark calculation
-#> is not reported.
-#> 
-#> See Frank et al. (2021) for a description of the methods.
-#> 
-#> *Frank, K. A., *Lin, Q., *Maroulis, S., *Mueller, A. S., Xu, R., Rosenberg, J. M., ... & Zhang, L. (2021).
-#> Hypothetical case replacement can be used to quantify the robustness of trial results. Journal of Clinical
-#> Epidemiology, 134, 150-159.
-#> *authors are listed alphabetically.
-#> 
-#> Accuracy of results increases with the number of decimals entered.
+#> Citation:
+#> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+#> What would it take to change an inference? Using Rubin's causal
+#> model to interpret the robustness of causal inferences. Educational
+#> Evaluation and Policy Analysis, 35(4), 437-460. 
 #> 
 #> For more information, visit https://konfound-it.org
 #> To explore examples and interpretation tips,
@@ -676,22 +769,42 @@ pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 # using a confidence interval 
 pkonfound(upper_bound = 3, lower_bound = 1, n_obs = 100, n_covariates = 3)
 #> Robustness of Inference to Replacement (RIR):
-#> RIR = 50
+#> This function calculates the number of data points that would need
+#> to be replaced to nullify the inference (lose statistical significance),
+#> based on a linear model (OLS). Replacement is assumed to occur
+#> uniformly across the distribution of observations.
 #> 
-#> To nullify the inference of an effect using the threshold of 1 for
-#> statistical significance (with null hypothesis = 0 and alpha = 0.05), 49.987%
-#> of the estimate of 2 would have to be due to bias. This implies that to
-#> nullify the inference one would expect to have to replace 50 (49.987%)
-#> observations with data points for which the effect is 0 (RIR = 50).
+#> The closed-form fraction on the t-statistic scale is
+#>   pi_t = (|t_obs| - |t_crit|) / |t_obs|
+#>      = (3.969 - 1.985) / 3.969
+#>      = 0.500.
+#> where:
+#>   pi_t = replacement fraction on the t-statistic scale;
+#>   t_obs = observed t-statistic (df = 95):
+#>           t_obs = (est_eff - nu) / std_err = 3.969;
+#>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 95):
+#>            t_crit = 1.985.
+#> 
+#> Using a threshold of 1.99 for statistical significance (alpha = 0.05),
+#> 49.987% of the observed estimate of 2 would have to be due to bias
+#> to nullify the inference. This implies replacing 50 of 100 observations
+#> (49.987%) with data points for which the effect is 0. Thus, RIR = 50.
+#> 
+#> That is, the RIR value represents the proportion of the data that
+#> would have to be replaced with data points for which the effect is 0
+#> for the observed relationship to lose statistical significance.
+#> 
+#> Note: This RIR is computed via the t-statistic, which assumes
+#> a constant standard error (SE) across replacement. For an RIR
+#> that accounts for SE inflation due to replacement, use scale = "r".
 #> 
 #> See Frank et al. (2013) for a description of the method.
 #> 
-#> Citation: Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
-#> What would it take to change an inference?
-#> Using Rubin's causal model to interpret the robustness of causal inferences.
-#> Education, Evaluation and Policy Analysis, 35 437-460.
-#> 
-#> Accuracy of results increases with the number of decimals reported.
+#> Citation:
+#> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+#> What would it take to change an inference? Using Rubin's causal
+#> model to interpret the robustness of causal inferences. Educational
+#> Evaluation and Policy Analysis, 35(4), 437-460. 
 #> 
 #> For more information, visit https://konfound-it.org
 #> To explore examples and interpretation tips,
@@ -1011,7 +1124,8 @@ pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, sdx = 0.22, sdy = 1, R2 = 
 #> For other forms of output, run
 #> ?pkonfound and inspect the to_return argument
 #> For models fit in R, consider use of konfound().
-# Calculating delta* and delta_exact 
+          
+# Calculating delta* and delta_Correlation 
 pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
          eff_thr = 0, FR2max = .8, index = "COP", to_return = "raw_output")
 #> $`delta*`
@@ -1061,6 +1175,15 @@ pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
 #> $eff_x_M3
 #> [1] -1.114065e-16
 #> 
+#> $`impact_cv (r_xcv*r_ycv)`
+#> [1] 0.1254355
+#> 
+#> $`impact_obs (r_xz*r_yz)`
+#> [1] 0.2011784
+#> 
+#> $impact_ratio
+#> [1] 0.623504
+#> 
 #> $Table
 #>                 M1:X    M2:X,Z M3(delta_Corr):X,Z,CV M3(delta*):X,Z,CV
 #> R2         0.1097571 0.7008711          8.006897e-01         0.8006897
@@ -1075,6 +1198,7 @@ pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
 #> $Figure
 
 #> 
+         
 # Calculating rxcv and rycv when preserving standard error
 pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
          sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
@@ -1123,6 +1247,7 @@ pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
 #> $`standard deviation of unobserved Y`
 #> [1] 0.9591486
 #> 
+         
 # VAM beta
 pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
           peer_effect_pi = 0.3, index = "VAM")
@@ -1147,4 +1272,168 @@ pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
 #> For other forms of output, run
 #> ?pkonfound and inspect the to_return argument
 #> For models fit in R, consider use of konfound().
+          
+# RIR on the t-scale (LM; default)
+pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
+          n_covariates = 3, index = "RIR")
+#> Robustness of Inference to Replacement (RIR):
+#> This function calculates the number of data points that would need
+#> to be replaced to nullify the inference (lose statistical significance),
+#> based on a linear model (OLS). Replacement is assumed to occur
+#> uniformly across the distribution of observations.
+#> 
+#> The closed-form fraction on the t-statistic scale is
+#>   pi_t = (|t_obs| - |t_crit|) / |t_obs|
+#>      = (5.000 - 1.985) / 5.000
+#>      = 0.603.
+#> where:
+#>   pi_t = replacement fraction on the t-statistic scale;
+#>   t_obs = observed t-statistic (df = 95):
+#>           t_obs = (est_eff - nu) / std_err = 5.000;
+#>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 95):
+#>            t_crit = 1.985.
+#> 
+#> Using a threshold of 1.99 for statistical significance (alpha = 0.05),
+#> 60.295% of the observed estimate of 2 would have to be due to bias
+#> to nullify the inference. This implies replacing 61 of 100 observations
+#> (60.295%) with data points for which the effect is 0. Thus, RIR = 61.
+#> 
+#> That is, the RIR value represents the proportion of the data that
+#> would have to be replaced with data points for which the effect is 0
+#> for the observed relationship to lose statistical significance.
+#> 
+#> Note: This RIR is computed via the t-statistic, which assumes
+#> a constant standard error (SE) across replacement. For an RIR
+#> that accounts for SE inflation due to replacement, use scale = "r".
+#> 
+#> See Frank et al. (2013) for a description of the method.
+#> 
+#> Citation:
+#> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+#> What would it take to change an inference? Using Rubin's causal
+#> model to interpret the robustness of causal inferences. Educational
+#> Evaluation and Policy Analysis, 35(4), 437-460. 
+#> 
+#> For more information, visit https://konfound-it.org
+#> To explore examples and interpretation tips,
+#> see our Practical Guide at https://konfound-it.org/page/guide/
+#> 
+#> For other forms of output, run
+#> ?pkonfound and inspect the to_return argument
+#> For models fit in R, consider use of konfound().
+          
+# RIR on the r-scale 
+pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
+          n_covariates = 3, index = "RIR", scale = "r")
+#> Correlation-Based Robustness of Inference to Replacement (RIR):
+#> This function calculates the number of data points that would need
+#> to be replaced to nullify the inference (lose statistical significance),
+#> based on a linear model (OLS). Replacement is assumed to occur
+#> uniformly across the distribution of observations.
+#> 
+#> The closed-form fraction on the correlation scale is
+#>   pi_r = (|r_obs| - |r_crit|) / |r_obs|
+#>      = (0.456 - 0.200) / 0.456
+#>      = 0.563.
+#> where:
+#>   pi_r = replacement fraction on the correlation scale;
+#>   r_obs = observed partial correlation implied by t (df = 95):
+#>           r_obs = t_obs / sqrt(t_obs^2 + df) = 0.456;
+#>   r_crit = critical partial correlation at alpha = 0.05 (t-distribution, df = 95):
+#>            r_crit = t_crit / sqrt(t_crit^2 + df) = 0.200.
+#> 
+#> Using a threshold of 0.2 for statistical significance (alpha = 0.05),
+#> 56.273% of the observed estimate of 2 would have to be due to bias
+#> to nullify the inference. This implies replacing 57 of 100 observations
+#> (56.273%) with data points for which the effect is 0. Thus, RIR = 57.
+#> 
+#> That is, the RIR value represents the proportion of the data that
+#> would have to be replaced with data points for which the effect is 0
+#> for the observed relationship to lose statistical significance.
+#> 
+#> Note: This RIR is computed via the correlation scale and does
+#> not assume a constant standard error (SE). It accounts for SE
+#> inflation due to replacement. For an RIR that assumes a constant
+#> SE across replacement, use scale = "t".
+#> 
+#> See Frank et al. (2013) for a description of the method.
+#> 
+#> Citation:
+#> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+#> What would it take to change an inference? Using Rubin's causal
+#> model to interpret the robustness of causal inferences. Educational
+#> Evaluation and Policy Analysis, 35(4), 437-460. 
+#> 
+#> For more information, visit https://konfound-it.org
+#> To explore examples and interpretation tips,
+#> see our Practical Guide at https://konfound-it.org/page/guide/
+#> 
+#> For other forms of output, run
+#> ?pkonfound and inspect the to_return argument
+#> For models fit in R, consider use of konfound().
+          
+# RIR on the r-scale (GLM, logistic)
+pkonfound(est_eff = -0.2, std_err = 0.103, n_obs = 20888,
+          n_covariates = 3, index = "RIR", scale = "r", link = "logit")
+#> Correlation-Based Robustness of Inference to Replacement (RIR):
+#> This function calculates the number of data points that would need
+#> to be replaced to sustain an inference of an effect (reach statistical significance),
+#> based on a generalized linear model (GLM, logit link).
+#> Replacement is assumed to occur uniformly across the
+#> distribution of observations.
+#> 
+#> The closed-form fraction on the correlation scale is
+#>   pi_r = (|r_crit| - |r_obs|) / |r_crit|
+#>      = (0.014 - 0.013) / 0.014
+#>      = 0.009.
+#> where:
+#>   pi_r = replacement fraction on the correlation scale;
+#>   r_obs = observed correlation-equivalent index implied by the Wald z-statistic (eff. df = 20883):
+#>           r_obs = z_obs / sqrt(z_obs^2 + df) = 0.013;
+#>   r_crit = critical correlation-equivalent index at alpha = 0.05 (standard normal):
+#>            r_crit = z_crit / sqrt(z_crit^2 + df) = 0.014.
+#> 
+#> Using a threshold of 0.0136 for statistical significance (alpha = 0.05),
+#> 0.929% of the observed estimate of -0.2 would need to be strengthened by replacement.
+#> This implies replacing 195 of 20888 observations (0.929%) with data points at
+#> the threshold for statistical significance. Thus, RIR = 195.
+#> 
+#> This RIR value represents the proportion of the data that would
+#> have to be replaced with data points at the threshold for
+#> statistical significance for the result to become statistically
+#> significant.
+#> 
+#> z-Based Reference (conversion-quality diagnostic):
+#> For GLM, the correlation-equivalent index r is derived from
+#> the Wald z via a nonlinear mapping that depends on effective
+#> degrees of freedom (df = 20883).
+#> The z-based replacement fraction is free of this dependency:
+#>   pi_z = 1 - |z_crit| / |z_obs| = 0.009,  RIR_z = 195.
+#> The r-based and z-based fractions converge for large samples.
+#> A large gap may indicate that the r-scale compression is
+#> substantively affecting the RIR estimate and that the Wald z
+#> may also be unreliable at this sample size, affecting the
+#> interpretation of both pi_z and pi_r.
+#> 
+#> Note: This RIR is computed by converting the Wald z-statistic
+#> to the correlation scale. It accounts for SE inflation due to
+#> replacement. The z-based reference above provides the unconverted
+#> RIR for comparison.
+#> 
+#> See Frank et al. (2013) for a description of the method.
+#> 
+#> Citation:
+#> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).
+#> What would it take to change an inference? Using Rubin's causal
+#> model to interpret the robustness of causal inferences. Educational
+#> Evaluation and Policy Analysis, 35(4), 437-460. 
+#> 
+#> For more information, visit https://konfound-it.org
+#> To explore examples and interpretation tips,
+#> see our Practical Guide at https://konfound-it.org/page/guide/
+#> 
+#> For other forms of output, run
+#> ?pkonfound and inspect the to_return argument
+#> For models fit in R, consider use of konfound().
+          
 ```

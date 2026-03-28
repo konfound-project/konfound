@@ -9,6 +9,19 @@
 - [`mkonfound()`](https://konfound-it.org/konfound/reference/mkonfound.md)
   : Meta-Analysis and Sensitivity Analysis for Multiple Studies
 
+## Empirical RIR
+
+- [`konfound_empdist()`](https://konfound-it.org/konfound/reference/konfound_empdist.md)
+  : Empirical RIR Distribution
+- [`plot_hist()`](https://konfound-it.org/konfound/reference/plot_hist.md)
+  : Plot the empirical k\* distribution
+- [`plot_partial()`](https://konfound-it.org/konfound/reference/plot_partial.md)
+  : Partial regression plot with per-case influence coloring
+- [`plot_comp()`](https://konfound-it.org/konfound/reference/plot_comp.md)
+  : Replacement composition plot across k\* bins
+- [`plot_rir_dist()`](https://konfound-it.org/konfound/reference/plot_rir_dist.md)
+  : Distribution of per-case RIR influence
+
 ## Auxiliary
 
 - [`binary_dummy_data`](https://konfound-it.org/konfound/reference/binary_dummy_data.md)

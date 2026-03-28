@@ -77,7 +77,9 @@ For a full description of the command’s usage and additional examples, please 
 <span>  lower_bound <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  raw_treatment_success <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  replace_stu <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  peer_effect_pi <span class="op">=</span> <span class="fl">0.5</span></span>
+<span>  peer_effect_pi <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  scale <span class="op">=</span> <span class="st">"t"</span>,</span>
+<span>  link <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -110,7 +112,7 @@ For a full description of the command’s usage and additional examples, please 
 
 
 <dt id="arg-index">index<a class="anchor" aria-label="anchor" href="#arg-index"></a></dt>
-<dd><p>specifies whether output is RIR or IT (impact threshold); defaults to <code>"RIR"</code>.</p></dd>
+<dd><p>specifies the sensitivity analysis index: <code>"RIR"</code> (default), <code>"IT"</code> (impact threshold), <code>"COP"</code> (coefficient of proportionality), <code>"PSE"</code> (proportional selection effect), or <code>"VAM"</code> (value-added model). For <code>"RIR"</code>, use the <code>scale</code> argument to select the t-scale (default) or r-scale variant.</p></dd>
 
 
 <dt id="arg-nu">nu<a class="anchor" aria-label="anchor" href="#arg-nu"></a></dt>
@@ -208,6 +210,14 @@ For a full description of the command’s usage and additional examples, please 
 <dt id="arg-peer-effect-pi">peer_effect_pi<a class="anchor" aria-label="anchor" href="#arg-peer-effect-pi"></a></dt>
 <dd><p>proportion of students exerting peer effects on the others.</p></dd>
 
+
+<dt id="arg-scale">scale<a class="anchor" aria-label="anchor" href="#arg-scale"></a></dt>
+<dd><p>for <code>index = "RIR"</code>: <code>"t"</code> (default) computes RIR on the t-statistic scale (LM only); <code>"r"</code> computes RIR on the correlation scale, supports both LM and GLM, and relaxes the constant-SE assumption. Ignored for all other indices.</p></dd>
+
+
+<dt id="arg-link">link<a class="anchor" aria-label="anchor" href="#arg-link"></a></dt>
+<dd><p>GLM link function for <code>index = "RIR", scale = "r"</code>: <code>"logit"</code> or <code>"probit"</code>. When <code>NULL</code> (default), the LM pathway is used.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -219,6 +229,9 @@ For a full description of the command’s usage and additional examples, please 
 <li><p>replace, switch_trm, raw_treatment_success, model_type</p></li>
 </ul><p><strong>2x2 Table Model (Non-linear)</strong></p><ul><li><p>a, b, c, d, two_by_two_table, test, replace, switch_trm</p></li>
 </ul><p><strong>VAM model (beta)</strong></p><ul><li><p>est_eff, replace_stu, n_obs, eff_thr, peer_effect_pi</p></li>
+</ul><p><strong>RIR with scale argument (index: RIR, scale: "t" or "r")</strong></p><ul><li><p>est_eff, std_err, n_obs, n_covariates, alpha, tails, nu, scale</p></li>
+<li><p>scale = "t" (default): t-statistic scale, LM only</p></li>
+<li><p>scale = "r": correlation scale, LM or GLM; link = "logit" or "probit" for GLM</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -307,11 +320,8 @@ and
   <dt><code>delta*restricted</code></dt>
 <dd><p>delta calculated using Oster’s restricted estimator</p></dd>
 
-  <dt><code>delta_exact</code></dt>
+  <dt><code>delta_Correlation</code></dt>
 <dd><p>delta calculated using correlation-based approach</p></dd>
-
-  <dt><code>delta_pctbias</code></dt>
-<dd><p>percent bias when comparing <code>delta*</code> to <code>delta_exact</code></p></dd>
 
   <dt><code>delta_sig</code></dt>
 <dd><p>delta threshold at which focal predictor loses statistical significance at the chosen <code>alpha</code> (default: 0.05)</p></dd>
@@ -334,14 +344,23 @@ and
   <dt><code>cor_oster</code></dt>
 <dd><p>correlation matrix implied by <code>delta*</code></p></dd>
 
-  <dt><code>cor_exact</code></dt>
-<dd><p>correlation matrix implied by <code>delta_exact</code></p></dd>
+  <dt><code>cor_Corr</code></dt>
+<dd><p>correlation matrix implied by <code>delta_Correlation</code></p></dd>
 
   <dt><code>eff_x_M3_oster</code></dt>
-<dd><p>effect estimate for X under the Oster‑PSE variant</p></dd>
+<dd><p>effect estimate for X under the Oster-PSE variant</p></dd>
 
   <dt><code>eff_x_M3</code></dt>
 <dd><p>effect estimate for X under the PSE adjustment</p></dd>
+
+  <dt><code>impact_cv (r_xcv*r_ycv)</code></dt>
+<dd><p>impact of the unobserved confounding variable</p></dd>
+
+  <dt><code>impact_obs (r_xz*r_yz)</code></dt>
+<dd><p>impact of the observed covariates</p></dd>
+
+  <dt><code>impact_ratio</code></dt>
+<dd><p>ratio of confounding variable impact to observed covariate impact</p></dd>
 
   <dt><code>Table</code></dt>
 <dd><p>formatted results table</p></dd>
@@ -463,6 +482,51 @@ and
 
 </dl></div>
 
+<div class="section">
+<h3 id="rir-with-scale-t-or-r-">RIR with scale = "t" or "r"<a class="anchor" aria-label="anchor" href="#rir-with-scale-t-or-r-"></a></h3>
+
+<dl><dt><code>scale</code></dt>
+<dd><p><code>"t"</code> or <code>"r"</code></p></dd>
+
+  <dt><code>model_type</code></dt>
+<dd><p><code>"lm"</code> or <code>"glm"</code></p></dd>
+
+  <dt><code>link</code></dt>
+<dd><p>GLM link function (<code>"logit"</code> or <code>"probit"</code>); <code>NULL</code> for LM</p></dd>
+
+  <dt><code>stat_type</code></dt>
+<dd><p><code>"t"</code> for LM or <code>"z"</code> for GLM</p></dd>
+
+  <dt><code>observed_t</code> or <code>observed_z</code></dt>
+<dd><p>observed test statistic (named by type)</p></dd>
+
+  <dt><code>critical_t</code> or <code>critical_z</code></dt>
+<dd><p>critical test statistic (named by type)</p></dd>
+
+  <dt><code>observed_r</code></dt>
+<dd><p>observed effect on the correlation scale (<code>NA</code> for scale = "t")</p></dd>
+
+  <dt><code>critical_r</code></dt>
+<dd><p>critical correlation threshold (<code>NA</code> for scale = "t")</p></dd>
+
+  <dt><code>p_value</code></dt>
+<dd><p>p-value of the observed test statistic</p></dd>
+
+  <dt><code>RIR_perc</code></dt>
+<dd><p>primary replacement fraction (pi_t or pi_r depending on scale)</p></dd>
+
+  <dt><code>RIR</code></dt>
+<dd><p>number of observations to replace</p></dd>
+
+  <dt><code>RIR_z_perc</code></dt>
+<dd><p>z-based replacement fraction, free of effective-df dependency (GLM, scale = "r" only; <code>NA</code> otherwise)</p></dd>
+
+  <dt><code>RIR_z</code></dt>
+<dd><p>z-based RIR count (GLM, scale = "r" only; <code>NA</code> otherwise)</p></dd>
+
+
+</dl></div>
+
     </div>
 
     <div class="section level2">
@@ -470,22 +534,42 @@ and
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Linear models</span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">.4</span>, <span class="fl">100</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of data points that would need</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to be replaced to nullify the inference (lose statistical significance),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> based on a linear model (OLS). Replacement is assumed to occur</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> uniformly across the distribution of observations.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference of an effect using the threshold of 0.794 for</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> statistical significance (with null hypothesis = 0 and alpha = 0.05), 60.295%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> of the estimate of 2 would have to be due to bias. This implies that to</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> nullify the inference one would expect to have to replace 60 (60.295%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> observations with data points for which the effect is 0 (RIR = 60).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The closed-form fraction on the t-statistic scale is</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_t = (|t_obs| - |t_crit|) / |t_obs|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = (5.000 - 1.985) / 5.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = 0.603.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> where:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_t = replacement fraction on the t-statistic scale;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   t_obs = observed t-statistic (df = 95):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           t_obs = (est_eff - nu) / std_err = 5.000;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 95):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            t_crit = 1.985.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Using a threshold of 1.99 for statistical significance (alpha = 0.05),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60.295% of the observed estimate of 2 would have to be due to bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to nullify the inference. This implies replacing 61 of 100 observations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (60.295%) with data points for which the effect is 0. Thus, RIR = 61.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> That is, the RIR value represents the proportion of the data that</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> would have to be replaced with data points for which the effect is 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> for the observed relationship to lose statistical significance.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note: This RIR is computed via the t-statistic, which assumes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a constant standard error (SE) across replacement. For an RIR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> that accounts for SE inflation due to replacement, use scale = "r".</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Using Rubin's causal model to interpret the robustness of causal inferences.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals reported.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference? Using Rubin's causal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> model to interpret the robustness of causal inferences. <span style="font-style: italic;">Educational</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Evaluation and Policy Analysis, 35</span>(4), 437-460. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
@@ -496,22 +580,42 @@ and
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="op">-</span><span class="fl">2.2</span>, <span class="fl">.65</span>, <span class="fl">200</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 83</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of data points that would need</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to be replaced to nullify the inference (lose statistical significance),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> based on a linear model (OLS). Replacement is assumed to occur</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> uniformly across the distribution of observations.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference of an effect using the threshold of -1.282 for</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> statistical significance (with null hypothesis = 0 and alpha = 0.05), 41.73%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> of the estimate of -2.2 would have to be due to bias. This implies that to</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> nullify the inference one would expect to have to replace 83 (41.73%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> observations with data points for which the effect is 0 (RIR = 83).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The closed-form fraction on the t-statistic scale is</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_t = (|t_obs| - |t_crit|) / |t_obs|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = (3.385 - 1.972) / 3.385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = 0.417.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> where:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_t = replacement fraction on the t-statistic scale;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   t_obs = observed t-statistic (df = 195):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           t_obs = (est_eff - nu) / std_err = -3.385;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 195):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            t_crit = 1.972.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Using a threshold of 1.97 for statistical significance (alpha = 0.05),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41.730% of the observed estimate of -2.2 would have to be due to bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to nullify the inference. This implies replacing 84 of 200 observations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (41.730%) with data points for which the effect is 0. Thus, RIR = 84.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> That is, the RIR value represents the proportion of the data that</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> would have to be replaced with data points for which the effect is 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> for the observed relationship to lose statistical significance.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note: This RIR is computed via the t-statistic, which assumes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a constant standard error (SE) across replacement. For an RIR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> that accounts for SE inflation due to replacement, use scale = "r".</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Using Rubin's causal model to interpret the robustness of causal inferences.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals reported.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference? Using Rubin's causal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> model to interpret the robustness of causal inferences. <span style="font-style: italic;">Educational</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Evaluation and Policy Analysis, 35</span>(4), 437-460. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
@@ -522,79 +626,43 @@ and
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">3</span>, <span class="fl">200</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 183</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of data points that would need</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to be replaced to sustain an inference of an effect (reach statistical significance),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> based on a linear model (OLS). Replacement is assumed to occur</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> uniformly across the distribution of observations.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The estimated effect is 0.5. The threshold value for statistical significance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> is 5.917 (with null hypothesis = 0 and alpha = 0.05). To reach that threshold,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91.549% of the estimate of 0.5 would have to be due to bias. This implies to sustain</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> an inference one would expect to have to replace 183 (91.549%) observations with</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> effect of 0 with data points with effect of 5.917 (RIR = 183).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The closed-form fraction on the t-statistic scale is</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_t = (|t_crit| - |t_obs|) / |t_crit|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = (1.972 - 0.167) / 1.972</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = 0.915.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> where:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_t = replacement fraction on the t-statistic scale;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   t_obs = observed t-statistic (df = 195):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           t_obs = (est_eff - nu) / std_err = 0.167;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 195):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            t_crit = 1.972.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Using a threshold of 1.97 for statistical significance (alpha = 0.05),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91.549% of the observed estimate of 0.5 would need to be strengthened by replacement.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This implies replacing 184 of 200 observations (91.549%) with data points at</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the threshold for statistical significance. Thus, RIR = 184.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This RIR value represents the proportion of the data that would</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> have to be replaced with data points at the threshold for</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> statistical significance for the result to become statistically</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> significant.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note: This RIR is computed via the t-statistic, which assumes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a constant standard error (SE) across replacement. For an RIR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> that accounts for SE inflation due to replacement, use scale = "r".</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Using Rubin's causal model to interpret the robustness of causal inferences.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals reported.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
-<span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span><span class="op">-</span><span class="fl">0.2</span>, <span class="fl">0.103</span>, <span class="fl">20888</span>, <span class="fl">3</span>, n_treat <span class="op">=</span> <span class="fl">17888</span>, model_type <span class="op">=</span> <span class="st">"logistic"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Fragility = 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> You entered: log odds = -0.200, SE = 0.103, with p-value = 0.052. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The table implied by the parameter estimates and sample sizes you entered:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Implied Table:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            Fail Success Success_Rate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Control    2882     118        3.93%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Treatment 17308     580        3.24%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total     20190     698        3.34%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Values in the table have been rounded to the nearest integer. This may cause </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a small change to the estimated effect for the table.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To sustain an inference that the effect is different from 0 (alpha = 0.050), one would</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> need to transfer 1 data points from treatment success to treatment failure (Fragility = 1).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This is equivalent to replacing 2 (0.345%) treatment success data points with data points </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> for which the probability of failure in the control group (96.067%) applies (RIR = 2). </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Note that RIR = Fragility/P(destination) = 1/0.961 ~ 2.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The transfer of 1 data points yields the following table:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Transfer Table:</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            Fail Success Success_Rate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Control    2882     118        3.93%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Treatment 17309     579        3.24%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total     20191     697        3.34%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The log odds (estimated effect) = -0.202, SE = 0.103, p-value = 0.050.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> This p-value is based on t = estimated effect/standard error</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Benchmarking RIR for Logistic Regression (Beta Version)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The treatment is not statistically significant in the implied table and would also not be</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> statistically significant in the raw table (before covariates were added). In this scenario, we</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> do not yet have a clear interpretation of the benchmark and therefore the benchmark calculation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> is not reported.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2021) for a description of the methods.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> *Frank, K. A., *Lin, Q., *Maroulis, S., *Mueller, A. S., Xu, R., Rosenberg, J. M., ... &amp; Zhang, L. (2021).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Hypothetical case replacement can be used to quantify the robustness of trial results. <span style="font-style: italic;">Journal of Clinical</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Epidemiology, 134</span>, 150-159.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> *authors are listed alphabetically.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals entered.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference? Using Rubin's causal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> model to interpret the robustness of causal inferences. <span style="font-style: italic;">Educational</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Evaluation and Policy Analysis, 35</span>(4), 437-460. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
@@ -607,22 +675,42 @@ and
 <span class="r-in"><span><span class="co"># using a confidence interval </span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>upper_bound <span class="op">=</span> <span class="fl">3</span>, lower_bound <span class="op">=</span> <span class="fl">1</span>, n_obs <span class="op">=</span> <span class="fl">100</span>, n_covariates <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> RIR = 50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of data points that would need</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to be replaced to nullify the inference (lose statistical significance),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> based on a linear model (OLS). Replacement is assumed to occur</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> uniformly across the distribution of observations.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To nullify the inference of an effect using the threshold of 1 for</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> statistical significance (with null hypothesis = 0 and alpha = 0.05), 49.987%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> of the estimate of 2 would have to be due to bias. This implies that to</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> nullify the inference one would expect to have to replace 50 (49.987%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> observations with data points for which the effect is 0 (RIR = 50).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The closed-form fraction on the t-statistic scale is</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_t = (|t_obs| - |t_crit|) / |t_obs|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = (3.969 - 1.985) / 3.969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = 0.500.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> where:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_t = replacement fraction on the t-statistic scale;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   t_obs = observed t-statistic (df = 95):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           t_obs = (est_eff - nu) / std_err = 3.969;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 95):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            t_crit = 1.985.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Using a threshold of 1.99 for statistical significance (alpha = 0.05),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49.987% of the observed estimate of 2 would have to be due to bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to nullify the inference. This implies replacing 50 of 100 observations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (49.987%) with data points for which the effect is 0. Thus, RIR = 50.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> That is, the RIR value represents the proportion of the data that</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> would have to be replaced with data points for which the effect is 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> for the observed relationship to lose statistical significance.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note: This RIR is computed via the t-statistic, which assumes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a constant standard error (SE) across replacement. For an RIR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> that accounts for SE inflation due to replacement, use scale = "r".</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference?</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Using Rubin's causal model to interpret the robustness of causal inferences.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Education, Evaluation and Policy Analysis, 35</span> 437-460.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy of results increases with the number of decimals reported.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference? Using Rubin's causal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> model to interpret the robustness of causal inferences. <span style="font-style: italic;">Educational</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Evaluation and Policy Analysis, 35</span>(4), 437-460. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
@@ -942,7 +1030,8 @@ and
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
-<span class="r-in"><span><span class="co"># Calculating delta* and delta_exact </span></span></span>
+<span class="r-in"><span>          </span></span>
+<span class="r-in"><span><span class="co"># Calculating delta* and delta_Correlation </span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">.4</span>, std_err <span class="op">=</span> <span class="fl">.1</span>, n_obs <span class="op">=</span> <span class="fl">290</span>, sdx <span class="op">=</span> <span class="fl">2</span>, sdy <span class="op">=</span> <span class="fl">6</span>, R2 <span class="op">=</span> <span class="fl">.7</span>,</span></span>
 <span class="r-in"><span>         eff_thr <span class="op">=</span> <span class="fl">0</span>, FR2max <span class="op">=</span> <span class="fl">.8</span>, index <span class="op">=</span> <span class="st">"COP"</span>, to_return <span class="op">=</span> <span class="st">"raw_output"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`delta*`</span>
@@ -992,6 +1081,15 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> $eff_x_M3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.114065e-16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`impact_cv (r_xcv*r_ycv)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1254355</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`impact_obs (r_xz*r_yz)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2011784</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $impact_ratio</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.623504</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Table</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 M1:X    M2:X,Z M3(delta_Corr):X,Z,CV M3(delta*):X,Z,CV</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> R2         0.1097571 0.7008711          8.006897e-01         0.8006897</span>
@@ -1006,6 +1104,7 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Figure</span>
 <span class="r-plt img"><img src="pkonfound-3.png" alt="" width="700" height="433"></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span>         </span></span>
 <span class="r-in"><span><span class="co"># Calculating rxcv and rycv when preserving standard error</span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">.5</span>, std_err <span class="op">=</span> <span class="fl">.056</span>, n_obs <span class="op">=</span> <span class="fl">6174</span>, eff_thr <span class="op">=</span> <span class="fl">.1</span>,</span></span>
 <span class="r-in"><span>         sdx <span class="op">=</span> <span class="fl">0.22</span>, sdy <span class="op">=</span> <span class="fl">1</span>, R2 <span class="op">=</span> <span class="fl">.3</span>, index <span class="op">=</span> <span class="st">"PSE"</span>, to_return <span class="op">=</span> <span class="st">"raw_output"</span><span class="op">)</span></span></span>
@@ -1054,6 +1153,7 @@ and
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`standard deviation of unobserved Y`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9591486</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span>         </span></span>
 <span class="r-in"><span><span class="co"># VAM beta</span></span></span>
 <span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">0.14</span>, replace_stu <span class="op">=</span> <span class="fl">0.16</span>, n_obs <span class="op">=</span> <span class="fl">20</span>, eff_thr <span class="op">=</span> <span class="fl">0.15</span>,</span></span>
 <span class="r-in"><span>          peer_effect_pi <span class="op">=</span> <span class="fl">0.3</span>, index <span class="op">=</span> <span class="st">"VAM"</span><span class="op">)</span></span></span>
@@ -1078,6 +1178,170 @@ and
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
+<span class="r-in"><span>          </span></span>
+<span class="r-in"><span><span class="co"># RIR on the t-scale (LM; default)</span></span></span>
+<span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">2</span>, std_err <span class="op">=</span> <span class="fl">.4</span>, n_obs <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>          n_covariates <span class="op">=</span> <span class="fl">3</span>, index <span class="op">=</span> <span class="st">"RIR"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Robustness of Inference to Replacement (RIR):</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of data points that would need</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to be replaced to nullify the inference (lose statistical significance),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> based on a linear model (OLS). Replacement is assumed to occur</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> uniformly across the distribution of observations.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The closed-form fraction on the t-statistic scale is</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_t = (|t_obs| - |t_crit|) / |t_obs|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = (5.000 - 1.985) / 5.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = 0.603.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> where:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_t = replacement fraction on the t-statistic scale;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   t_obs = observed t-statistic (df = 95):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           t_obs = (est_eff - nu) / std_err = 5.000;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 95):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            t_crit = 1.985.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Using a threshold of 1.99 for statistical significance (alpha = 0.05),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60.295% of the observed estimate of 2 would have to be due to bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to nullify the inference. This implies replacing 61 of 100 observations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (60.295%) with data points for which the effect is 0. Thus, RIR = 61.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> That is, the RIR value represents the proportion of the data that</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> would have to be replaced with data points for which the effect is 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> for the observed relationship to lose statistical significance.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note: This RIR is computed via the t-statistic, which assumes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a constant standard error (SE) across replacement. For an RIR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> that accounts for SE inflation due to replacement, use scale = "r".</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference? Using Rubin's causal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> model to interpret the robustness of causal inferences. <span style="font-style: italic;">Educational</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Evaluation and Policy Analysis, 35</span>(4), 437-460. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
+<span class="r-in"><span>          </span></span>
+<span class="r-in"><span><span class="co"># RIR on the r-scale </span></span></span>
+<span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>est_eff <span class="op">=</span> <span class="fl">2</span>, std_err <span class="op">=</span> <span class="fl">.4</span>, n_obs <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>          n_covariates <span class="op">=</span> <span class="fl">3</span>, index <span class="op">=</span> <span class="st">"RIR"</span>, scale <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Correlation-Based Robustness of Inference to Replacement (RIR):</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of data points that would need</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to be replaced to nullify the inference (lose statistical significance),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> based on a linear model (OLS). Replacement is assumed to occur</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> uniformly across the distribution of observations.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The closed-form fraction on the correlation scale is</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_r = (|r_obs| - |r_crit|) / |r_obs|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = (0.456 - 0.200) / 0.456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = 0.563.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> where:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_r = replacement fraction on the correlation scale;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   r_obs = observed partial correlation implied by t (df = 95):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           r_obs = t_obs / sqrt(t_obs^2 + df) = 0.456;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   r_crit = critical partial correlation at alpha = 0.05 (t-distribution, df = 95):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            r_crit = t_crit / sqrt(t_crit^2 + df) = 0.200.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Using a threshold of 0.2 for statistical significance (alpha = 0.05),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56.273% of the observed estimate of 2 would have to be due to bias</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to nullify the inference. This implies replacing 57 of 100 observations</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (56.273%) with data points for which the effect is 0. Thus, RIR = 57.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> That is, the RIR value represents the proportion of the data that</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> would have to be replaced with data points for which the effect is 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> for the observed relationship to lose statistical significance.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note: This RIR is computed via the correlation scale and does</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> not assume a constant standard error (SE). It accounts for SE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> inflation due to replacement. For an RIR that assumes a constant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> SE across replacement, use scale = "t".</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference? Using Rubin's causal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> model to interpret the robustness of causal inferences. <span style="font-style: italic;">Educational</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Evaluation and Policy Analysis, 35</span>(4), 437-460. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
+<span class="r-in"><span>          </span></span>
+<span class="r-in"><span><span class="co"># RIR on the r-scale (GLM, logistic)</span></span></span>
+<span class="r-in"><span><span class="fu">pkonfound</span><span class="op">(</span>est_eff <span class="op">=</span> <span class="op">-</span><span class="fl">0.2</span>, std_err <span class="op">=</span> <span class="fl">0.103</span>, n_obs <span class="op">=</span> <span class="fl">20888</span>,</span></span>
+<span class="r-in"><span>          n_covariates <span class="op">=</span> <span class="fl">3</span>, index <span class="op">=</span> <span class="st">"RIR"</span>, scale <span class="op">=</span> <span class="st">"r"</span>, link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Correlation-Based Robustness of Inference to Replacement (RIR):</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This function calculates the number of data points that would need</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to be replaced to sustain an inference of an effect (reach statistical significance),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> based on a generalized linear model (GLM, logit link).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Replacement is assumed to occur uniformly across the</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> distribution of observations.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The closed-form fraction on the correlation scale is</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_r = (|r_crit| - |r_obs|) / |r_crit|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = (0.014 - 0.013) / 0.014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      = 0.009.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> where:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_r = replacement fraction on the correlation scale;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   r_obs = observed correlation-equivalent index implied by the Wald z-statistic (eff. df = 20883):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           r_obs = z_obs / sqrt(z_obs^2 + df) = 0.013;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   r_crit = critical correlation-equivalent index at alpha = 0.05 (standard normal):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            r_crit = z_crit / sqrt(z_crit^2 + df) = 0.014.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Using a threshold of 0.0136 for statistical significance (alpha = 0.05),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.929% of the observed estimate of -0.2 would need to be strengthened by replacement.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This implies replacing 195 of 20888 observations (0.929%) with data points at</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the threshold for statistical significance. Thus, RIR = 195.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> This RIR value represents the proportion of the data that would</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> have to be replaced with data points at the threshold for</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> statistical significance for the result to become statistically</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> significant.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">z-Based Reference (conversion-quality diagnostic):</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> For GLM, the correlation-equivalent index r is derived from</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the Wald z via a nonlinear mapping that depends on effective</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> degrees of freedom (df = 20883).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The z-based replacement fraction is free of this dependency:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pi_z = 1 - |z_crit| / |z_obs| = 0.009,  RIR_z = 195.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The r-based and z-based fractions converge for large samples.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A large gap may indicate that the r-scale compression is</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> substantively affecting the RIR estimate and that the Wald z</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> may also be unreliable at this sample size, affecting the</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> interpretation of both pi_z and pi_r.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Note: This RIR is computed by converting the Wald z-statistic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> to the correlation scale. It accounts for SE inflation due to</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> replacement. The z-based reference above provides the unconverted</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> RIR for comparison.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> See Frank et al. (2013) for a description of the method.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="text-decoration: underline;">Citation:</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Frank, K.A., Maroulis, S., Duong, M., and Kelcey, B. (2013).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> What would it take to change an inference? Using Rubin's causal</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> model to interpret the robustness of causal inferences. <span style="font-style: italic;">Educational</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-style: italic;">Evaluation and Policy Analysis, 35</span>(4), 437-460. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For more information, visit https://konfound-it.org</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> To explore examples and interpretation tips,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see our Practical Guide at https://konfound-it.org/page/guide/</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For other forms of output, run</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ?pkonfound and inspect the to_return argument</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> For models fit in R, consider use of konfound().</span>
+<span class="r-in"><span>          </span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

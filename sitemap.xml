@@ -19,6 +19,7 @@
 <url><loc>https://konfound-it.org/konfound/reference/get_kr_df.html</loc></url>
 <url><loc>https://konfound-it.org/konfound/reference/index.html</loc></url>
 <url><loc>https://konfound-it.org/konfound/reference/konfound.html</loc></url>
+<url><loc>https://konfound-it.org/konfound/reference/konfound_empdist.html</loc></url>
 <url><loc>https://konfound-it.org/konfound/reference/konfound_glm.html</loc></url>
 <url><loc>https://konfound-it.org/konfound/reference/konfound_glm_dichotomous.html</loc></url>
 <url><loc>https://konfound-it.org/konfound/reference/konfound_lm.html</loc></url>
@@ -29,7 +30,11 @@
 <url><loc>https://konfound-it.org/konfound/reference/output_print.html</loc></url>
 <url><loc>https://konfound-it.org/konfound/reference/output_table.html</loc></url>
 <url><loc>https://konfound-it.org/konfound/reference/pkonfound.html</loc></url>
+<url><loc>https://konfound-it.org/konfound/reference/plot_comp.html</loc></url>
 <url><loc>https://konfound-it.org/konfound/reference/plot_correlation.html</loc></url>
+<url><loc>https://konfound-it.org/konfound/reference/plot_hist.html</loc></url>
+<url><loc>https://konfound-it.org/konfound/reference/plot_partial.html</loc></url>
+<url><loc>https://konfound-it.org/konfound/reference/plot_rir_dist.html</loc></url>
 <url><loc>https://konfound-it.org/konfound/reference/plot_threshold.html</loc></url>
 <url><loc>https://konfound-it.org/konfound/reference/tkonfound.html</loc></url>
 <url><loc>https://konfound-it.org/konfound/reference/tkonfound_fig.html</loc></url>

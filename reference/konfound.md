@@ -21,7 +21,12 @@ konfound(
   two_by_two = FALSE,
   n_treat = NULL,
   switch_trm = TRUE,
-  replace = "control"
+  replace = "control",
+  reps = 1000,
+  emp_method = "search",
+  seed = 123,
+  sign_flip_nullifies = FALSE,
+  engine = "slow"
 )
 ```
 
@@ -45,7 +50,9 @@ konfound(
 
 - index:
 
-  Type of sensitivity analysis ('RIR' by default).
+  Type of sensitivity analysis: `"RIR"` (default), `"IT"`, or
+  `"empirical_RIR"` to run the resampling-based empirical RIR. Note that
+  `"empirical_RIR"` requires the model to be fit with `model = TRUE`.
 
 - to_return:
 
@@ -67,6 +74,29 @@ konfound(
 - replace:
 
   Replacement method for treatment cases ('control' by default).
+
+- reps:
+
+  Number of resampling replications for `index = "emp_RIR"` (default
+  1000).
+
+- emp_method:
+
+  Method for empirical RIR: `"search"` (default, supports lm and glm) or
+  `"direct"` (FWL-based, faster, and lm only).
+
+- seed:
+
+  Random seed for reproducibility in empirical RIR.
+
+- sign_flip_nullifies:
+
+  If `TRUE`, sign reversal counts as nullification in empirical RIR.
+
+- engine:
+
+  Engine for the search method: `"auto"`, `"fast"` (cached QR), or
+  `"slow"` (full refit).
 
 ## Value
 
@@ -104,18 +134,6 @@ konfound(m1, wt)
 #> see our Practical Guide at https://konfound-it.org/page/guide/
 konfound(m1, wt, to_return = "table")
 #> Dependent variable is mpg
-#> Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
-#> ℹ Please use tidy evaluation idioms with `aes()`.
-#> ℹ See also `vignette("ggplot2-in-packages")` for more information.
-#> ℹ The deprecated feature was likely used in the konfound package.
-#>   Please report the issue at
-#>   <https://github.com/konfound-project/konfound/issues>.
-#> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-#> ℹ Please use `linewidth` instead.
-#> ℹ The deprecated feature was likely used in the konfound package.
-#>   Please report the issue at
-#>   <https://github.com/konfound-project/konfound/issues>.
-#> 
 #> 
 #> X represents wt, Y represents mpg, v represents each covariate.
 #> First table is based on unconditional correlations, second table is based on
@@ -224,6 +242,11 @@ if (requireNamespace("lme4")) {
 
 m4 <- glm(outcome ~ condition, data = binary_dummy_data, family = binomial(link = "logit"))
 konfound(m4, condition, two_by_two = TRUE, n_treat = 55)
+#> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+#> ℹ Please use `linewidth` instead.
+#> ℹ The deprecated feature was likely used in the konfound package.
+#>   Please report the issue at
+#>   <https://github.com/konfound-project/konfound/issues>.
 #> Robustness of Inference to Replacement (RIR):
 #> RIR = 15
 #> Fragility = 10
