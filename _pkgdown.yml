@@ -7,6 +7,13 @@ reference:
       - konfound
       - pkonfound
       - mkonfound
+  - title: "Empirical RIR"
+    contents:
+      - konfound_empdist
+      - plot_hist
+      - plot_partial
+      - plot_comp
+      - plot_rir_dist
   - title: "Auxiliary"
     contents:
       - binary_dummy_data

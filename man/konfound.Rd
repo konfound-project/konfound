@@ -14,7 +14,12 @@ konfound(
   two_by_two = FALSE,
   n_treat = NULL,
   switch_trm = TRUE,
-  replace = "control"
+  replace = "control",
+  reps = 1000,
+  emp_method = "search",
+  seed = 123,
+  sign_flip_nullifies = FALSE,
+  engine = "slow"
 )
 }
 \arguments{
@@ -26,7 +31,10 @@ konfound(
 
 \item{tails}{Number of tails for the test (1 or 2).}
 
-\item{index}{Type of sensitivity analysis ('RIR' by default).}
+\item{index}{Type of sensitivity analysis: \code{"RIR"} (default),
+\code{"IT"}, or \code{"empirical_RIR"} to run the resampling-based
+empirical RIR. Note that \code{"empirical_RIR"} requires the model to be 
+fit with \code{model = TRUE}.}
 
 \item{to_return}{Type of output to return ('print', 'raw_output', 'table').}
 
@@ -39,6 +47,19 @@ for `glm` dichotomous variables.}
 \item{switch_trm}{Boolean; switch treatment and control in the analysis.}
 
 \item{replace}{Replacement method for treatment cases ('control' by default).}
+
+\item{reps}{Number of resampling replications for \code{index = "emp_RIR"} (default 1000).}
+
+\item{emp_method}{Method for empirical RIR: \code{"search"} (default, supports lm and glm)
+or \code{"direct"} (FWL-based, faster, and lm only).}
+
+\item{seed}{Random seed for reproducibility in empirical RIR.}
+
+\item{sign_flip_nullifies}{If \code{TRUE}, sign reversal counts as nullification
+in empirical RIR.}
+
+\item{engine}{Engine for the search method: \code{"auto"}, \code{"fast"} (cached QR), 
+or \code{"slow"} (full refit).}
 }
 \value{
 Depending on `to_return`, prints the result, returns a raw output,

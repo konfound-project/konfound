@@ -35,7 +35,9 @@ pkonfound(
   lower_bound = NULL,
   raw_treatment_success = NULL,
   replace_stu = NULL,
-  peer_effect_pi = 0.5
+  peer_effect_pi = 0.5,
+  scale = "t",
+  link = NULL
 )
 }
 \arguments{
@@ -51,7 +53,7 @@ pkonfound(
 
 \item{tails}{integer indicating if the test is one-tailed (1) or two-tailed (2; defaults to 2).}
 
-\item{index}{specifies whether output is RIR or IT (impact threshold); defaults to \code{"RIR"}.}
+\item{index}{specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), or \code{"VAM"} (value-added model). For \code{"RIR"}, use the \code{scale} argument to select the t-scale (default) or r-scale variant.}
 
 \item{nu}{specifies the hypothesis to be tested; defaults to testing whether \code{est_eff} is significantly different from 0.}
 
@@ -100,6 +102,10 @@ pkonfound(
 \item{replace_stu}{score of the hypothetical average student who replaces the original student.}
 
 \item{peer_effect_pi}{proportion of students exerting peer effects on the others.}
+
+\item{scale}{for \code{index = "RIR"}: \code{"t"} (default) computes RIR on the t-statistic scale (LM only); \code{"r"} computes RIR on the correlation scale, supports both LM and GLM, and relaxes the constant-SE assumption. Ignored for all other indices.}
+
+\item{link}{GLM link function for \code{index = "RIR", scale = "r"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM pathway is used.}
 }
 \description{
 For published studies, this command calculates (1) how much bias there must be in an estimate to nullify/sustain an inference; (2) the impact of an omitted variable necessary to nullify/sustain an inference for a regression coefficient.
@@ -129,6 +135,13 @@ The function accepts arguments depending on the type of model:
 \strong{VAM model (beta)}
 \itemize{
   \item est_eff, replace_stu, n_obs, eff_thr, peer_effect_pi
+}
+
+\strong{RIR with scale argument (index: RIR, scale: "t" or "r")}
+\itemize{
+  \item est_eff, std_err, n_obs, n_covariates, alpha, tails, nu, scale
+  \item scale = "t" (default): t-statistic scale, LM only
+  \item scale = "r": correlation scale, LM or GLM; link = "logit" or "probit" for GLM
 }
 }
 \note{
@@ -170,8 +183,7 @@ pkonfound prints the bias and the number of cases that would have to be replaced
 \describe{
   \item{\code{delta*}}{delta calculated using Oster’s unrestricted estimator}
   \item{\code{delta*restricted}}{delta calculated using Oster’s restricted estimator}
-  \item{\code{delta_exact}}{delta calculated using correlation-based approach}
-  \item{\code{delta_pctbias}}{percent bias when comparing \code{delta*} to \code{delta_exact}}
+  \item{\code{delta_Correlation}}{delta calculated using correlation-based approach}
   \item{\code{delta_sig}}{delta threshold at which focal predictor loses statistical significance at the chosen \code{alpha} (default: 0.05)}
   \item{\code{rxcvGz_sig}}{boundary partial correlation \eqn{r_{X,\mathrm{CV} | Z}} associated with \code{delta_sig}}
   \item{\code{rycvGz_sig}}{boundary partial correlation \eqn{r_{Y,\mathrm{CV} | Z}} associated with \code{delta_sig}}
@@ -179,9 +191,12 @@ pkonfound prints the bias and the number of cases that would have to be replaced
   \item{\code{var(X)}}{variance of the independent variable (\eqn{\sigma_X^2})}
   \item{\code{var(CV)}}{variance of the confounding variable (\eqn{\sigma_{CV}^2})}
   \item{\code{cor_oster}}{correlation matrix implied by \code{delta*}}
-  \item{\code{cor_exact}}{correlation matrix implied by \code{delta_exact}}
-  \item{\code{eff_x_M3_oster}}{effect estimate for X under the Oster‑PSE variant}
+  \item{\code{cor_Corr}}{correlation matrix implied by \code{delta_Correlation}}
+  \item{\code{eff_x_M3_oster}}{effect estimate for X under the Oster-PSE variant}
   \item{\code{eff_x_M3}}{effect estimate for X under the PSE adjustment}
+  \item{\code{impact_cv (r_xcv*r_ycv)}}{impact of the unobserved confounding variable}
+  \item{\code{impact_obs (r_xz*r_yz)}}{impact of the observed covariates}
+  \item{\code{impact_ratio}}{ratio of confounding variable impact to observed covariate impact}
   \item{\code{Table}}{formatted results table}
   \item{\code{Figure}}{COP diagnostic plot}
 }
@@ -235,6 +250,24 @@ pkonfound prints the bias and the number of cases that would have to be replaced
   \item{\code{peer_effect}}{Peer effect of each replaced student (compared to their replacements) on each of the non-replaced students.}
 }
 }
+
+\subsection{RIR with scale = "t" or "r"}{
+\describe{
+  \item{\code{scale}}{\code{"t"} or \code{"r"}}
+  \item{\code{model_type}}{\code{"lm"} or \code{"glm"}}
+  \item{\code{link}}{GLM link function (\code{"logit"} or \code{"probit"}); \code{NULL} for LM}
+  \item{\code{stat_type}}{\code{"t"} for LM or \code{"z"} for GLM}
+  \item{\code{observed_t} or \code{observed_z}}{observed test statistic (named by type)}
+  \item{\code{critical_t} or \code{critical_z}}{critical test statistic (named by type)}
+  \item{\code{observed_r}}{observed effect on the correlation scale (\code{NA} for scale = "t")}
+  \item{\code{critical_r}}{critical correlation threshold (\code{NA} for scale = "t")}
+  \item{\code{p_value}}{p-value of the observed test statistic}
+  \item{\code{RIR_perc}}{primary replacement fraction (pi_t or pi_r depending on scale)}
+  \item{\code{RIR}}{number of observations to replace}
+  \item{\code{RIR_z_perc}}{z-based replacement fraction, free of effective-df dependency (GLM, scale = "r" only; \code{NA} otherwise)}
+  \item{\code{RIR_z}}{z-based RIR count (GLM, scale = "r" only; \code{NA} otherwise)}
+}
+}
 }
 
 \examples{
@@ -242,7 +275,6 @@ pkonfound prints the bias and the number of cases that would have to be replaced
 pkonfound(2, .4, 100, 3)
 pkonfound(-2.2, .65, 200, 3)
 pkonfound(.5, 3, 200, 3)
-pkonfound(-0.2, 0.103, 20888, 3, n_treat = 17888, model_type = "logistic")
 
 # using a confidence interval 
 pkonfound(upper_bound = 3, lower_bound = 1, n_obs = 100, n_covariates = 3)
@@ -263,13 +295,29 @@ pkonfound(a = 35, b = 17, c = 17, d = 38, test = "chisq")
 # Calculating unconditional ITCV and benchmark correlation for ITCV
 pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, sdx = 0.22, sdy = 1, R2 = .3,
           index = "IT", to_return = "print")
-# Calculating delta* and delta_exact 
+          
+# Calculating delta* and delta_Correlation 
 pkonfound(est_eff = .4, std_err = .1, n_obs = 290, sdx = 2, sdy = 6, R2 = .7,
          eff_thr = 0, FR2max = .8, index = "COP", to_return = "raw_output")
+         
 # Calculating rxcv and rycv when preserving standard error
 pkonfound(est_eff = .5, std_err = .056, n_obs = 6174, eff_thr = .1,
          sdx = 0.22, sdy = 1, R2 = .3, index = "PSE", to_return = "raw_output")
+         
 # VAM beta
 pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
           peer_effect_pi = 0.3, index = "VAM")
+          
+# RIR on the t-scale (LM; default)
+pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
+          n_covariates = 3, index = "RIR")
+          
+# RIR on the r-scale 
+pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
+          n_covariates = 3, index = "RIR", scale = "r")
+          
+# RIR on the r-scale (GLM, logistic)
+pkonfound(est_eff = -0.2, std_err = 0.103, n_obs = 20888,
+          n_covariates = 3, index = "RIR", scale = "r", link = "logit")
+          
 }

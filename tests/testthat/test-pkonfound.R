@@ -1,27 +1,31 @@
 context("Checking pkonfound")
 
 test_that("pkonfound test positive, significant coefficient works", {
-    expect_equal(pkonfound(2, .4, 100, 3, to_return = "raw_output")$perc_bias_to_change, tolerance = .001, .603 * 100) # pct bias
-    expect_equal(pkonfound(2, .4, 100, 3, to_return = "raw_output")$rxcvGz, tolerance = .001, 0.566) # rxcvGz
-    expect_equal(pkonfound(2, .4, 100, 3, to_return = "raw_output")$itcvGz, tolerance = .001, 0.321) # itcvGz
+    out <- pkonfound(2, .4, 100, 3, to_return = "raw_output")
+    expect_equal(out$RIR, 61)
+    expect_equal(out$RIR_perc, 0.603, tolerance = .001)
+    expect_equal(out$observed_t, 5.0,  tolerance = .001)
 })
 
 test_that("pkonfound test negative, significant coefficient works", {
-    expect_equal(pkonfound(-2, .4, 100, 3, to_return = "raw_output")$perc_bias_to_change, tolerance = .001, .603 * 100)
-    expect_equal(pkonfound(-2, .4, 100, 3, to_return = "raw_output")$rxcvGz, tolerance = .001, 0.566)
-    expect_equal(pkonfound(-2, .4, 100, 3, to_return = "raw_output")$itcvGz, tolerance = .001, -0.321)
+    out <- pkonfound(-2, .4, 100, 3, to_return = "raw_output")
+    expect_equal(out$RIR, 61)
+    expect_equal(out$RIR_perc, 0.603, tolerance = .001)
+    expect_equal(out$observed_t, -5.0, tolerance = .001)
 })
 
 test_that("pkonfound test positive, not significant coefficient works", {
-    expect_equal(pkonfound(1, .4, 100, 3, to_return = "raw_output")$perc_bias_to_change, tolerance = .001, .206 * 100)
-    expect_equal(pkonfound(1, .4, 100, 3, to_return = "raw_output")$rxcvGz, tolerance = .001, 0.247)
-    expect_equal(pkonfound(1, .4, 100, 3, to_return = "raw_output")$itcvGz, tolerance = .001, 0.061)
+    out <- pkonfound(1, .4, 100, 3, to_return = "raw_output")
+    expect_equal(out$RIR, 21)
+    expect_equal(out$RIR_perc, 0.206, tolerance = .001)
+    expect_equal(out$observed_t, 2.5,  tolerance = .001)
 })
 
 test_that("pkonfound test negative, not significant coefficient works", {
-    expect_equal(pkonfound(-1, .4, 100, 3, to_return = "raw_output")$perc_bias_to_change, tolerance = .001, 0.206 * 100)
-    expect_equal(pkonfound(-1, .4, 100, 3, to_return = "raw_output")$rxcvGz, tolerance = .001, 0.247)
-    expect_equal(pkonfound(-1, .4, 100, 3, to_return = "raw_output")$itcvGz, tolerance = .001, -.061)
+    out <- pkonfound(-1, .4, 100, 3, to_return = "raw_output")
+    expect_equal(out$RIR, 21)
+    expect_equal(out$RIR_perc, 0.206, tolerance = .001)
+    expect_equal(out$observed_t, -2.5, tolerance = .001)
 })
 
 test_that("pkonfound creates the threshhold plot", {
@@ -225,5 +229,5 @@ test_that("pkonfound printed output works for a negative case", {
 })
 
 test_that("pkonfound works for a CI", {
-    expect_equal(pkonfound(upper_bound = 2, lower_bound = 1, n_obs = 200, n_covariates = 3, to_return = "raw_output")$RIR_perc, 66.664, tolerance = .001)
+    expect_equal(pkonfound(upper_bound = 2, lower_bound = 1, n_obs = 200, n_covariates = 3, to_return = "raw_output")$RIR_perc, 0.667, tolerance = .001)
 })

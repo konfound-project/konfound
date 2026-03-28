@@ -159,6 +159,13 @@ test_cop <- function(est_eff, # unstandardized
   rxcv_exact <- sqrt(1 - rxz^2) * rxcvGz_exact
   delta_exact <- rxcv_exact / rxz
 
+  ## Impact of the unobserved CV (Frank, 2000)
+  impact_cv <- abs(rxcv_exact * rycv_exact)
+  ## Impact of the observed covariates (Z block)
+  impact_obs <- abs(rxz * ryz)
+  ## Ratio: how large is the CV impact relative to observed impact?
+  impact_ratio <- impact_cv / impact_obs
+  
   ## previous approach - comment out, but could find in cop_pse_auxiliary
   ## exact_result <- cal_delta_exact(ryx, ryz, rxz, beta_thr, FR2max, R2, sdx, sdz)
   ## rxcv_exact <- rcvx_exact <- as.numeric(exact_result[1])
@@ -440,40 +447,80 @@ test_cop <- function(est_eff, # unstandardized
                    "var(CV)" = sdcv^2,
                   "eff_x_M3_oster" = eff_x_M3_oster,
                   "eff_x_M3" = eff_x_M3,
-                   "Table" = fTable,
-                   "Figure" = fig)
-#                   "conditional RIR pi (fixed y)" = cond_RIRpi_fixedY,
-#                   "conditional RIR (fixed y)" = cond_RIR_fixedY,
-#                   "conditional RIR pi (null)" = cond_RIRpi_null,
-#                   "conditional RIR (null)" = cond_RIR_null,
-#                   "conditional RIR pi (rxyGz)" = cond_RIRpi_rxyz,
-#                   "conditional RIR (rxyGz)" = cond_RIR_rxyz
+                  "impact_cv (r_xcv*r_ycv)" = impact_cv,
+                  "impact_obs (r_xz*r_yz)" = impact_obs,
+                  "impact_ratio" = impact_ratio,
+                  "Table" = fTable,
+                  "Figure" = fig)
+#                 "conditional RIR pi (fixed y)" = cond_RIRpi_fixedY,
+#                 "conditional RIR (fixed y)" = cond_RIR_fixedY,
+#                 "conditional RIR pi (null)" = cond_RIRpi_null,
+#                 "conditional RIR (null)" = cond_RIR_null,
+#                 "conditional RIR pi (rxyGz)" = cond_RIRpi_rxyz,
+#                 "conditional RIR (rxyGz)" = cond_RIR_rxyz
     return(output)
   }
   
 if (to_return == "print") {
-    cat(crayon::bold("Coefficient of Proportionality (COP):\n\n"))
-    cat("This function calculates a correlation-based coefficient of proportionality (delta_Correlation)\n")
-    cat("along with Oster's delta*. The correlation-based COP does not depend on the specification of\n")
-    cat("a baseline model.\n\n")
+    cat(crayon::bold("Coefficient of Proportionality (COP):"), "\n\n")
+    
+    ## --- Background ---
+    cat(crayon::bold("Background"), "\n")
+    cat("This function calculates a correlation-based coefficient of proportionality\n")
+    cat("(delta_Correlation) along with Oster's delta*. The correlation-based COP\n")
+    cat("does not depend on the specification of a baseline model.\n\n")
     
     if (negest == 1) {
-        cat("Using the absolute value of the estimated effect, result can be interpreted by symmetry.\n\n")
+        cat("Using the absolute value of the estimated effect, result can be interpreted\n")
+        cat("by symmetry.\n\n")
     }
     
+    ## --- COP ---
+    cat(crayon::bold("COP"), "\n")
     cat(sprintf(
         "The correlation-based delta (delta_Correlation) is %.3f, and delta* is %.3f \n(assuming no covariates in the baseline model M1).\n\n",
         delta_exact, delta_star
     ))
-
+    
+    ## --- Corresponding Impact of a Confounding Variable ---
+    cat(crayon::bold("Corresponding Impact of a Confounding Variable"), "\n")
+    cat(sprintf(
+        "The corresponding impact (Frank, 2000) of the unobserved covariate(s) necessary\n"
+    ))
+    cat(sprintf(
+        "to satisfy the specified conditions (eff_thr = %g and FR2max = %.2f) is\n",
+        eff_thr, FR2max
+    ))
+    
+    ## Guard: skip ratio when observed covariates have near-zero impact (avoids Inf%)
+    if (impact_obs < 1e-10) {
+        cat(sprintf(
+            "r_xcv * r_ycv = %.4f * %.4f = %.4f.\n",
+            abs(rxcv_exact), abs(rycv_exact), impact_cv
+        ))
+        cat("The impact of observed covariates is near zero; ratio not reported.\n\n")
+    } else {
+        cat(sprintf(
+            "r_xcv * r_ycv = %.4f * %.4f = %.4f, which is %.0f%% of the impact of the\n",
+            abs(rxcv_exact), abs(rycv_exact), impact_cv, impact_ratio * 100
+        ))
+        cat(sprintf(
+            "observed covariates (R_XZ * R_YZ = %.4f * %.4f = %.4f).\n\n",
+            abs(rxz), abs(ryz), impact_obs
+        ))
+    }
+    
+    cat("Through the product r_xcv * r_ycv, Frank's impact accounts for the relationship\n")
+    cat("of the covariate to the outcome (Y) as well as the focal predictor (X).\n")
+    cat("See the konfound command with index = \"IT\" for details of the Impact Threshold\n")
+    cat("for a Confounding Variable (ITCV).\n\n")
+    
+    ## --- Threshold Based on Statistical Significance ---
+    cat(crayon::bold("Threshold Based on Statistical Significance"), "\n")
     if (is.null(sig_out$error)) {
         cat(sprintf(
-            "Using alpha = %.2f and df = %s (so critical r = %.4f), the delta threshold \nfor statistical significance is %.3f.\n",
-            alpha, format(df_sig, big.mark=","), sig_out$r_crit, sig_out$delta_statsig
-        ))
-        cat("This corresponds to a CV (omitted confounder) with partial correlations\n")
-        cat(sprintf(
-            "r_xcv|z ~ %.4f (between X and CV given Z) and r_ycv|z ~ %.4f (between Y and CV given Z).\n\n",
+            "Using alpha = %.2f and df = %s (so critical r = %.4f), the delta threshold \nfor statistical significance is %.3f. This requires a CV (omitted confounder) \nwith partial correlations r_xcv|z ~ %.4f (between X and CV given Z) and\nr_ycv|z ~ %.4f (between Y and CV given Z).\n\n",
+            alpha, format(df_sig, big.mark=","), sig_out$r_crit, sig_out$delta_statsig,
             sig_out$rxcvGz, sig_out$rycvGz
         ))
     } else {
@@ -482,17 +529,12 @@ if (to_return == "print") {
             sig_out$error
         ))
     }
-
+    
     if (is.null(sig_out$error)) {
         se_sig <- est_eff_sig / t_sig
-        cat("Using the delta threshold for statistical significance and the corresponding partial correlations,\n")
         cat(sprintf(
-            "the coefficient of X in the final model will be %.4f with standard error of %.4f\n",
-            est_eff_sig, se_sig
-        ))
-        cat(sprintf(
-            "with t-ratio of %.4f and the final R2 will be %.3f.\n\n",
-            t_sig, R2_full_sig
+            "Using the delta threshold for statistical significance and the corresponding \npartial correlations, the coefficient of X in the final model will be %.4f\nwith standard error of %.4f with t-ratio of %.4f and the final R2 will be %.3f.\n\n",
+            est_eff_sig, se_sig, t_sig, R2_full_sig
         ))
     }
     
