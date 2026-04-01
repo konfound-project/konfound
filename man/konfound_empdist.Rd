@@ -53,6 +53,16 @@ and unlocks the stacked composition plot.}
 Object of class "konfound_empdist"
 }
 \description{
-Empirical RIR Distribution
+Computes the empirical distribution of k*, the minimum number of cases
+that must be replaced with null-effect cases to nullify the inference,
+across repeated resampling iterations. Extends the standard closed-form
+RIR by capturing how the robustness threshold varies with which specific
+cases are replaced.
 }
-\keyword{internal}
+\examples{
+\donttest{
+  m <- lm(mpg ~ wt + cyl, data = mtcars, model = TRUE)
+  result <- konfound_empdist(m, "wt", reps = 100, seed = 42)
+  print(result)
+}
+}

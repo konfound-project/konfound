@@ -77,6 +77,12 @@ label_cases <- function(fit, focal_var, high_q = 0.90) {
 
 #' Empirical RIR Distribution
 #'
+#' Computes the empirical distribution of k*, the minimum number of cases
+#' that must be replaced with null-effect cases to nullify the inference,
+#' across repeated resampling iterations. Extends the standard closed-form
+#' RIR by capturing how the robustness threshold varies with which specific
+#' cases are replaced.
+#'
 #' @param model Fitted lm or glm object (must have model = TRUE)
 #' @param target_var Name of the focal predictor coefficient
 #' @param reps Number of simulation replications
@@ -93,7 +99,12 @@ label_cases <- function(fit, focal_var, high_q = 0.90) {
 #' @param verbose Print detailed progress messages
 #' @param progress Print progress every 100 reps
 #' @return Object of class "konfound_empdist"
-#' @keywords internal
+#' @examples
+#' \donttest{
+#'   m <- lm(mpg ~ wt + cyl, data = mtcars, model = TRUE)
+#'   result <- konfound_empdist(m, "wt", reps = 100, seed = 42)
+#'   print(result)
+#' }
 #' @export
 konfound_empdist <- function(model, target_var,
                              reps = 1000,
