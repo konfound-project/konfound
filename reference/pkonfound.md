@@ -1259,7 +1259,7 @@ pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
 #> 
 #> If all of the bias comes from peer spillover effects, and we assume 30% (as specified) students are distracting the others, then a peer effect of 0.002 is needed to change the evaluation. Each replaced student must have a -0.002 effect (compared to their replacements) on each of the non-replaced students to cross the threshold for evaluation.
 #> 
-#> See the figure for combinations of size of peer effect by proportion to be replaced (pi) to change the evaluation. The red point marks the value reported above.
+#> See the figure for combinations of size of peer effect by proportion to be replaced (pi_p) to change the evaluation. The red point marks the value reported above.
 #> 
 #> The calculations and interpretation depend on your VAM model specification and estimation. See the paper for more details.
 #> 
