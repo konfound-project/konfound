@@ -83,7 +83,7 @@ test_VAM <- function(
   # cat("Each replaced student had a ", sprintf("%.3f", abs(peer_signed)), 
   #    " effect (compared to their replacements) on each of the non-replaced students.\n", sep="")
   # cat("\n")
-  cat("See the figure for combinations of size of peer effect by proportion to be replaced (pi) to change the evaluation. The red point marks the value reported above.\n")
+  cat("See the figure for combinations of size of peer effect by proportion to be replaced (pi_p) to change the evaluation. The red point marks the value reported above.\n")
   cat("\n")
   cat("The calculations and interpretation depend on your VAM model specification and estimation. See the paper for more details.\n\n")
   
@@ -98,7 +98,7 @@ test_VAM <- function(
     p_seq, abs(y_seq), type = "l",
     xlab = "Proportion to be replaced",
     ylab = "Absolute value of the peer effect",
-    main = "Size of peer effect by proportion to be replaced (pi)"
+    main = "Size of peer effect by proportion to be replaced (pi_p)"
   )
   points(peer_effect_pi, abs(peer_signed), col = "red", pch = 19)
   par(mar = old_mar)
