@@ -59,7 +59,7 @@ pkonfound(
 
 \item{n_treat}{the number of cases associated with the treatment condition (for logistic regression models).}
 
-\item{switch_trm}{indicates whether to switch the treatment and control cases; defaults to \code{FALSE}.}
+\item{switch_trm}{indicates whether to switch the treatment and control cases; defaults to \code{FALSE}. Only used for dichotomous models (logistic and 2x2 table).}
 
 \item{model_type}{the type of model; defaults to \code{"ols"}, but can be set to \code{"logistic"}.}
 
@@ -73,9 +73,9 @@ pkonfound(
 
 \item{two_by_two_table}{a table (matrix, data.frame, tibble, etc.) from which \code{a}, \code{b}, \code{c}, and \code{d} can be extracted.}
 
-\item{test}{specifies whether to use Fisher's Exact Test (\code{"fisher"}) or a chi-square test (\code{"chisq"}); defaults to \code{"fisher"}.}
+\item{test}{specifies whether to use Fisher's Exact Test (\code{"fisher"}) or a chi-square test (\code{"chisq"}); defaults to \code{"fisher"} (2x2 table model only).}
 
-\item{replace}{specifies whether to use the entire sample (\code{"entire"}) or the control group (\code{"control"}) for calculating the base rate; default is \code{"control"}.}
+\item{replace}{specifies whether to use the entire sample (\code{"entire"}) or the control group (\code{"control"}) for calculating the base rate; default is \code{"control"}. Only used for dichotomous models (logistic and 2x2 table); ignored for continuous outcomes.}
 
 \item{sdx}{the standard deviation of X (used for unconditional ITCV).}
 
@@ -97,11 +97,11 @@ pkonfound(
 
 \item{lower_bound}{optional (replaces \code{est_eff}); the lower bound of the confidence interval.}
 
-\item{raw_treatment_success}{optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark.}
+\item{raw_treatment_success}{optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark (logistic model only).}
 
-\item{replace_stu}{score of the hypothetical average student who replaces the original student.}
+\item{replace_stu}{score of the hypothetical average student who replaces the original student (VAM only).}
 
-\item{peer_effect_pi}{proportion of students exerting peer effects on the others.}
+\item{peer_effect_pi}{proportion of students exerting peer effects on the others (VAM only).}
 
 \item{scale}{for \code{index = "RIR"}: \code{"t"} (default) computes RIR on the t-statistic scale (LM only); \code{"r"} computes RIR on the correlation scale, supports both LM and GLM, and relaxes the constant-SE assumption. Ignored for all other indices.}
 

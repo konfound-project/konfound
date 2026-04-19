@@ -226,17 +226,41 @@ test_correlation_rir <- function(
     if (scale == "t") {
         # ── t-scale path ────────────────────────────────────────────────────
         # Primary metric: pi_stat / k_stat (t-based, identical to beta-metric RIR)
+        # Delta components (Frank et al. 2013 effect-based derivation)
+        delta_hat    <- est_eff - nu   # observed effect
+        delta_thresh <- stat_crit * std_err  # effect threshold for significance
         frac_text <- if (is_sig) {
             sprintf(
-                "pi_t = (|t_obs| - |t_crit|) / |t_obs|\n     = (%s - %s) / %s\n     = %s.",
+                paste0(
+                    "pi_t = (|delta_hat| - |delta_#|) / |delta_hat|",
+                    " = (|t_obs| - |t_crit|) / |t_obs|\n",
+                    "     = (%s - %s) / %s",
+                    " = (%s - %s) / %s\n",
+                    "     = %s."),
+                sprintf(fmt, abs(delta_hat)), sprintf(fmt, delta_thresh),
+                sprintf(fmt, abs(delta_hat)),
                 sprintf(fmt, abs(stat_obs)), sprintf(fmt, abs(stat_crit)),
                 sprintf(fmt, abs(stat_obs)), sprintf(fmt, pi_stat))
         } else {
             sprintf(
-                "pi_t = (|t_crit| - |t_obs|) / |t_crit|\n     = (%s - %s) / %s\n     = %s.",
+                paste0(
+                    "pi_t = (|delta_#| - |delta_hat|) / |delta_#|",
+                    " = (|t_crit| - |t_obs|) / |t_crit|\n",
+                    "     = (%s - %s) / %s",
+                    " = (%s - %s) / %s\n",
+                    "     = %s."),
+                sprintf(fmt, delta_thresh), sprintf(fmt, abs(delta_hat)),
+                sprintf(fmt, delta_thresh),
                 sprintf(fmt, abs(stat_crit)), sprintf(fmt, abs(stat_obs)),
                 sprintf(fmt, abs(stat_crit)), sprintf(fmt, pi_stat))
         }
+        delta_detail <- sprintf(
+            paste0(
+                "  delta_hat = estimated effect (est_eff - nu):\n",
+                "              delta_hat = %s;\n",
+                "  delta_# = effect threshold for significance (t_crit * std_err):\n",
+                "            delta_# = %s;"),
+            sprintf(fmt, delta_hat), sprintf(fmt, delta_thresh))
         stat_detail <- sprintf(
             "  t_obs = observed t-statistic (df = %d):\n          t_obs = (est_eff - nu) / std_err = %s;",
             df, sprintf(fmt, stat_obs))
@@ -373,6 +397,7 @@ test_correlation_rir <- function(
         "where:\n",
         "  ", pi_label, " = replacement fraction on the ",
         if (scale == "t") "t-statistic" else "correlation", " scale;\n",
+        if (scale == "t") paste0(delta_detail, "\n") else "",
         stat_detail, "\n",
         crit_detail, "\n\n",
         "Using a threshold of ", sf(thr_val),
