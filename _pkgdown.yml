@@ -8,7 +8,7 @@ reference:
       - pkonfound
       - mkonfound
   - title: "Differential attrition"
-     contents:
+    contents:
       - robust_attrition
   - title: "Empirical RIR"
     contents:
