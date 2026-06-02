@@ -85,20 +85,34 @@ robust_attrition <- function(
       is.na(ntreatob) || ntreatob < 0) {
     stop("ntreatob must be a single nonnegative numeric value.")
   }
+  if (ntreatob != round(ntreatob)) {
+      stop("ntreatob must be a whole number.")
+  }
   if (!is.numeric(ncontrolob) || length(ncontrolob) != 1 ||
       is.na(ncontrolob) || ncontrolob < 0) {
     stop("ncontrolob must be a single nonnegative numeric value.")
+  }
+  if (ncontrolob != round(ncontrolob)) {
+      stop("ncontrolob must be a whole number.")
   }
   if (!is.numeric(ntreattot) || length(ntreattot) != 1 ||
       is.na(ntreattot) || ntreattot <= 0) {
     stop("ntreattot must be a single positive numeric value.")
   }
+  if (ntreattot != round(ntreattot)) {
+      stop("ntreattot must be a whole number.")
+  }
   if (!is.numeric(ncontroltot) || length(ncontroltot) != 1 ||
       is.na(ncontroltot) || ncontroltot <= 0) {
     stop("ncontroltot must be a single positive numeric value.")
   }
+  if (ncontroltot != round(ncontroltot)) {
+      stop("ncontroltot must be a whole number.")
+  }
+  
   if (ntreatob > ntreattot) stop("ntreatob cannot exceed ntreattot.")
   if (ncontrolob > ncontroltot) stop("ncontrolob cannot exceed ncontroltot.")
+  
   if (!is.numeric(yobt) || length(yobt) != 1 || is.na(yobt)) {
     stop("yobt must be a single numeric value.")
   }
@@ -112,6 +126,13 @@ robust_attrition <- function(
   if (!is.numeric(ncovar) || length(ncovar) != 1 ||
       is.na(ncovar) || ncovar < 0) {
     stop("n_covariates must be a single nonnegative numeric value.")
+  }
+  if (ncovar != round(ncovar)) {
+      stop("n_covariates must be a whole number.")
+  }
+  if (ncovar >= ntreatob + ncontrolob - 2) {
+      stop("n_covariates is too large: it must be less than ntreatob + ncontrolob - 2 ",
+           "so that the observed-data degrees of freedom remain positive.")
   }
   if (!is.numeric(R2) || length(R2) != 1 ||
       is.na(R2) || R2 < 0 || R2 >= 1) {
@@ -145,6 +166,11 @@ robust_attrition <- function(
   ncontrolmi <- ncontroltot - ncontrolob
   nmiss <- ntreatmi + ncontrolmi
 
+  if (nmiss == 0) {
+      stop("No attrition detected: ntreatob equals ntreattot AND ncontrolob equals ncontroltot. ",
+           "The attrition analysis is not defined when there is no missing data.")
+  }
+  
   alphat <- ntreatmi / ntreattot
   alphac <- ncontrolmi / ncontroltot
   deltaob <- yobt - yobc
@@ -218,6 +244,15 @@ robust_attrition <- function(
   corr_rmi <- (rthresh * sqrt(a_corr * b_corr) - c_corr) /
     (pi_miss * symi * sxmi)
 
+  if (rob^2 > R2) {
+      stop("Inputs are inconsistent: the implied bivariate correlation ",
+           sprintf("(rob^2 = %.4f) ", rob^2),
+           sprintf("exceeds the supplied R2 = %.4f. ", R2),
+           "R2 must be at least as large as rob^2, since adding covariates ",
+           "cannot reduce R-squared. Check that R2 is consistent with yobt, yobc, ",
+           "std_err, and the observed sample sizes.")
+  }
+  
   R2yz_default <- (R2 - rob^2) / (1 - rob^2)
   R2xz_default <- 1 - (syob^2) * (1 - R2) /
     ((sxob^2) * df * se^2)
