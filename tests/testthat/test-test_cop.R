@@ -107,7 +107,15 @@ test_that("test_cop outputs the correct language and values when to_return is 'p
         "with standard error of 0.1809 with t-ratio of 1.9850 and the final R2 will be 0.257.",
         "",
         "Use to_return = \"raw_output\" to see more specific results and graphic",
-        "presentation of the result."
+        "presentation of the result.",
+        "",
+        "See Frank et al. (2026) for a description of the method.",
+        "",
+        "Citation: Frank, K. A., Lin, Q., Maroulis, S., Dai, S., Choi, J., Jess, N.,",
+        "Lin, H.-C., Liu, Y., Maestrales, S., Searle, E., and Tait, J. (2026).",
+        "Quantifying sensitivity to selection on unobserved covariates: Recasting",
+        "the coefficient of proportionality within a correlational framework.",
+        "Journal of Educational and Behavioral Statistics. Advance online publication."
     )
     
     # Check each line against expected
