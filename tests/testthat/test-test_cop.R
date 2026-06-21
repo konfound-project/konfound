@@ -115,7 +115,8 @@ test_that("test_cop outputs the correct language and values when to_return is 'p
         "Lin, H.-C., Liu, Y., Maestrales, S., Searle, E., and Tait, J. (2026).",
         "Quantifying sensitivity to selection on unobserved covariates: Recasting",
         "the coefficient of proportionality within a correlational framework.",
-        "Journal of Educational and Behavioral Statistics. Advance online publication."
+        "Journal of Educational and Behavioral Statistics. Advance online publication.",
+        "https://doi.org/10.3102/10769986261422704"
     )
     
     # Check each line against expected
