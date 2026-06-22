@@ -11,6 +11,7 @@
 * add an applicability guard that notifies users when supplied arguments are not applicable to the selected index and are ignored
 * add beta version of empirical RIR based on resampling, providing a distribution of RIR values
 * add beta version of `robust_attrition()` for evaluating the robustness of inferences to differential attrition (master branch only; not included in the CRAN 1.0.4 release)
+* add method citations to the printed output for the COP (Frank et al., 2026) and VAM (Lin et al., 2026) functions
 
 # konfound 1.0.3
 
