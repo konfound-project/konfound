@@ -26,16 +26,24 @@
 #' @param R2yz optional outcome-covariate fit; computed
 #'   internally when NULL (default).
 #' @param alpha significance level (default 0.05).
+#' @param pad_frac half-width of the plotting window for
+#'   \code{to_return = "plot"}, as a fraction of the observed
+#'   pooled mean. Defaults to 0.15 (a +/- 15% band). Larger
+#'   values draw a longer line.
 #' @param verbose if TRUE, the printed output includes a short
 #'   description of what each block computes and inline notes
 #'   about internally-computed defaults. Defaults to FALSE.
-#' @param to_return either "print" (default) to display output
-#'   and return the result list invisibly, or "raw_output" to
-#'   return the full list.
+#' @param to_return one of "print" (default) to display output
+#'   and return the result list invisibly, "raw_output" to
+#'   return the full list, or "plot" to return a ggplot object
+#'   showing the effect required in the missing data to nullify
+#'   the inference across assumed missing-data means.
 #'
 #' @return A list with components \code{inputs}, \code{nonpar},
 #'   \code{correlation_based}, and \code{derived}. Returned
-#'   invisibly when \code{to_return = "print"}.
+#'   invisibly when \code{to_return = "print"}. When
+#'   \code{to_return = "plot"}, a ggplot object is returned
+#'   instead.
 #'
 #' @details
 #' This is a beta (development) version. Calculations and output
@@ -52,6 +60,8 @@
 #' )
 #' }
 #'
+#' @importFrom ggplot2 ggplot geom_hline geom_abline annotate
+#'   coord_cartesian labs theme_bw theme
 #' @export
 robust_attrition <- function(
         std_err,
@@ -67,6 +77,7 @@ robust_attrition <- function(
         R2xz = NULL,
         R2yz = NULL,
         alpha = 0.05,
+        pad_frac = 0.15,
         verbose = FALSE,
         to_return = "print"
 ) {
@@ -152,7 +163,11 @@ robust_attrition <- function(
       is.na(alpha) || alpha <= 0 || alpha >= 1) {
     stop("alpha must satisfy 0 < alpha < 1.")
   }
-
+  if (!is.numeric(pad_frac) || length(pad_frac) != 1 ||
+      is.na(pad_frac) || pad_frac <= 0) {
+      stop("pad_frac must be a single positive numeric value.")
+  }
+  
   # ===================================================================
   # Shared preliminaries
   # ===================================================================
@@ -227,6 +242,17 @@ robust_attrition <- function(
 
   nonpar_slope <- alphac - xob * (alphac - alphat)
 
+  # delta_mi as a linear function of the specified missing-data mean Y#:
+  #   delta_mi(Y#) = nonpar_intercept + nonpar_lineslope * Y#
+  # nonpar_lineslope is the slope with respect to Y#; nonpar_intercept is
+  # the value at Y# = 0. The line passes through the original-calculation
+  # point (Y# = yob, delta_mi = nonpar_deltami).
+  nonpar_lineslope <- (alphac - alphat) *
+      (alphac - xob * (alphac - alphat)) / (alphat * alphac)
+  nonpar_intercept <- (alphac - xob * (alphac - alphat)) *
+      ((1 - alphac) * yobc - (1 - alphat) * yobt + deltasig) /
+      (alphat * alphac)
+  
   # ===================================================================
   # Correlation-based block
   # ===================================================================
@@ -537,7 +563,9 @@ robust_attrition <- function(
         pymic = nonpar_pymic,
         pyobt = nonpar_pyobt,
         pyfull = nonpar_pyfull,
-        slope = nonpar_slope
+        slope = nonpar_slope,
+        line_slope = nonpar_lineslope,
+        line_intercept = nonpar_intercept
       ),
       correlation_based = list(
         rmi = corr_rmi,
@@ -586,5 +614,90 @@ robust_attrition <- function(
       )
     )
     return(output)
+    
+  } else if (to_return == "plot") {
+      
+      # x-window: centered on the observed pooled mean (yob), the mean
+      # assumed for the missing data in the original calculation. Half-width
+      # defaults to pad_frac (15%) of |yob|; raise pad_frac for a longer line.
+      center <- yob
+      half <- pad_frac * abs(center)
+      if (!is.finite(half) || half <= 0) {
+          half <- max(abs(esteffect), 1)
+      }
+      x_lo <- center - half
+      x_hi <- center + half
+      
+      # y-window: cover the line across the x-window, the original point,
+      # and the delta_mi = 0 reference, with a small margin.
+      y_lo_line <- nonpar_intercept + nonpar_lineslope * x_lo
+      y_hi_line <- nonpar_intercept + nonpar_lineslope * x_hi
+      y_pts <- c(y_lo_line, y_hi_line, nonpar_deltami, 0)
+      y_min <- min(y_pts)
+      y_max <- max(y_pts)
+      y_margin <- 0.08 * (y_max - y_min)
+      if (!is.finite(y_margin) || y_margin <= 0) y_margin <- 1
+      
+      # in-panel key (upper-left, away from the rising line)
+      legend_x <- x_lo + 0.005 * (x_hi - x_lo)
+      legend_y <- (y_max + y_margin) -
+          0.01 * ((y_max + y_margin) - (y_min - y_margin))
+      legend_label <- paste0(
+          "Red point: original calculation (Y# = pooled mean)\n",
+          "Line slope: rise in delta_mi per unit of Y#\n",
+          sprintf("Y# = %.2f,  delta_mi = %.2f,  slope = %.3f",
+                  center, nonpar_deltami, nonpar_lineslope)
+      )
+      
+      p <- ggplot2::ggplot() +
+          # delta_mi = 0 reference (no effect in the missing data)
+          ggplot2::geom_hline(yintercept = 0, color = "grey70",
+                              linewidth = 0.5) +
+          # required missing-data effect across assumed missing-data means
+          ggplot2::geom_abline(intercept = nonpar_intercept,
+                               slope = nonpar_lineslope,
+                               color = "#1F78B4", linewidth = 1.1) +
+          # guide lines to the original-calculation point
+          ggplot2::annotate("segment", x = center, xend = center,
+                            y = -Inf, yend = nonpar_deltami,
+                            color = "#E31A1C", linetype = "dashed",
+                            linewidth = 0.6) +
+          ggplot2::annotate("segment", x = -Inf, xend = center,
+                            y = nonpar_deltami, yend = nonpar_deltami,
+                            color = "#E31A1C", linetype = "dashed",
+                            linewidth = 0.6) +
+          ggplot2::annotate("point", x = center, y = nonpar_deltami,
+                            color = "#E31A1C", size = 2.6) +
+          ggplot2::annotate("text", x = center, y = nonpar_deltami,
+                            label = "Original calculation",
+                            color = "#E31A1C", hjust = -0.05, vjust = 1.6,
+                            size = 3.4) +
+          ggplot2::annotate("label", x = legend_x, y = legend_y,
+                            hjust = 0, vjust = 1, label = legend_label,
+                            size = 11 / ggplot2::.pt, color = "grey20",
+                            fill = "white", lineheight = 1.1) +
+          ggplot2::coord_cartesian(xlim = c(x_lo, x_hi),
+                                   ylim = c(y_min - y_margin,
+                                            y_max + y_margin)) +
+          ggplot2::labs(
+              title = "Robustness of inference to differential attrition",
+              subtitle = paste0(
+                  "Effect the missing data would need to nullify the observed ",
+                  "inference,\nby assumed mean outcome in the missing data"
+              ),
+              x = "Assumed mean outcome in the missing data  (Y#)",
+              y = "Required effect in the missing data  (delta_mi)"
+          ) +
+          ggplot2::theme_bw() +
+          ggplot2::theme(
+              plot.title.position = "plot",
+              plot.title = ggplot2::element_text(size = 14),
+              plot.subtitle = ggplot2::element_text(size = 12)
+          )
+      
+      return(p)
+      
+  } else {
+      stop("to_return must be one of \"print\", \"raw_output\", or \"plot\".")
   }
 }

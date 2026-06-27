@@ -1,0 +1,5 @@
+v 3
+d robust_attrition: robustness of inferences to differential attrition (beta)
+d Beta (development) version, distributed from the konfound-project repo.
+f robust_attrition.ado
+f robust_attrition.sthlp
