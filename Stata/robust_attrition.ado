@@ -438,6 +438,11 @@ program define robust_attrition, rclass
         di as txt "marks the original calculation (Y# = observed pooled mean)."
         di ""
     }
+    else {
+        di as txt "To plot the effect in the missing data required to nullify the"
+        di as txt "inference across assumed missing-data means, add the graph option."
+        di ""
+    }
 
     return scalar nonpar_deltami = `np_deltami'
     return scalar nonpar_deltacomb = `np_deltacomb'
