@@ -518,7 +518,7 @@ program define robust_attrition, rclass
                 xscale(range(`x_lo' `x_hi') noextend) ///
                 ylabel(, angle(horizontal)) ///
                 plotregion(margin(zero)) ///
-                title("(test4)Robustness of inference to differential attrition", size(medlarge)) ///
+                title("Robustness of inference to differential attrition", size(medlarge)) ///
                 subtitle("Effect the missing data would need to nullify the observed inference," "by assumed mean outcome in the missing data", size(medsmall)) ///
                 xtitle("Assumed mean outcome in the missing data (Y#)") ///
                 ytitle("Required effect in the missing data (delta_mi)") ///
