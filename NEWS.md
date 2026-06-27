@@ -10,7 +10,7 @@
 * merge correlation-based RIR into index = "RIR" via a scale argument (scale = "t", default; scale = "r" for the correlation-based version)
 * add an applicability guard that notifies users when supplied arguments are not applicable to the selected index and are ignored
 * add beta version of empirical RIR based on resampling, providing a distribution of RIR values
-* add beta version of `robust_attrition()` for evaluating the robustness of inferences to differential attrition (master branch only; not included in the CRAN 1.0.4 release)
+* add beta version of `robust_attrition()` for evaluating the robustness of inferences to differential attrition, with a matching Stata implementation (`robust_attrition.ado`) installable from the konfound-project repository (master branch only; not included in the CRAN 1.0.4 release)
 * add method citations to the printed output for the COP (Frank et al., 2026) and VAM (Lin et al., 2026) functions
 
 # konfound 1.0.3

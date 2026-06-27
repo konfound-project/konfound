@@ -18,6 +18,7 @@ robust_attrition(
   R2xz = NULL,
   R2yz = NULL,
   alpha = 0.05,
+  pad_frac = 0.15,
   verbose = FALSE,
   to_return = "print"
 )
@@ -52,18 +53,27 @@ internally when NULL (default).}
 
 \item{alpha}{significance level (default 0.05).}
 
+\item{pad_frac}{half-width of the plotting window for
+\code{to_return = "plot"}, as a fraction of the observed
+pooled mean. Defaults to 0.15 (a +/- 15% band). Larger
+values draw a longer line.}
+
 \item{verbose}{if TRUE, the printed output includes a short
 description of what each block computes and inline notes
 about internally-computed defaults. Defaults to FALSE.}
 
-\item{to_return}{either "print" (default) to display output
-and return the result list invisibly, or "raw_output" to
-return the full list.}
+\item{to_return}{one of "print" (default) to display output
+and return the result list invisibly, "raw_output" to
+return the full list, or "plot" to return a ggplot object
+showing the effect required in the missing data to nullify
+the inference across assumed missing-data means.}
 }
 \value{
 A list with components \code{inputs}, \code{nonpar},
   \code{correlation_based}, and \code{derived}. Returned
-  invisibly when \code{to_return = "print"}.
+  invisibly when \code{to_return = "print"}. When
+  \code{to_return = "plot"}, a ggplot object is returned
+  instead.
 }
 \description{
 Quantifies what would need to be true in the attritted (missing)
