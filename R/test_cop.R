@@ -539,6 +539,8 @@ if (to_return == "print") {
     }
     
     cat("Use to_return = \"raw_output\" to see more specific results and graphic\npresentation of the result.\n")
+    cat("\nSee Frank et al. (2026) for a description of the method.\n\n")
+    cat("Citation: Frank, K. A., Lin, Q., Maroulis, S., Dai, S., Choi, J., Jess, N.,\nLin, H.-C., Liu, Y., Maestrales, S., Searle, E., and Tait, J. (2026).\nQuantifying sensitivity to selection on unobserved covariates: Recasting\nthe coefficient of proportionality within a correlational framework.\nJournal of Educational and Behavioral Statistics. Advance online publication.\nhttps://doi.org/10.3102/10769986261422704\n")
 }
   
 }

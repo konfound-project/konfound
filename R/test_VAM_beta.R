@@ -38,54 +38,88 @@ test_VAM <- function(
   peer_signed <- if (below) -abs(raw_peer) else abs(raw_peer)
   
   if (to_return == "print") {
-  # 4) Header and narrative
-  cat("This is beta version of the VAM function.\n")
-  cat("\n")
-  cat(sprintf(
-    "The reported VAM score is %.3f with evaluation threshold of %.2f. ",
-    est_eff, eff_thr
-  ))
-  cat(sprintf(
-    "The VAM score is %s the threshold. Therefore, the RIR indicates replacement required to %s the VAM %s the threshold.\n",
-    direction_text, action_text, move_text
-  ))
-  cat("\n")
-  
-  # 5) Replacement scenario summary
-  if (below) {
+      # 4) Header and narrative
+      cat("This is beta version of the VAM function.\n")
+      cat("\n")
       cat(sprintf(
-          "If there are no peer effects, then %d (%d%%) students must be replaced with students whose score is %.2f (as specified) to move the VAM %s the threshold (RIR = %d%% * %d = %d).\n",
-          rir_count, round(100*pi_replace), replace_stu, move_text,
-          round(100*pi_replace), n_obs, rir_count
+          "The reported VAM score is %.3f with evaluation threshold of %.2f.\n",
+          est_eff, eff_thr
       ))
-  } else {
       cat(sprintf(
-          "If there are no peer effects, then %d (%d%%) students whose score is %.2f (as specified) must be replaced with students whose score is at the threshold level %.2f to move the VAM %s the threshold (RIR = %d%% * %d = %d).\n",
-          rir_count, round(100*pi_replace), 
-          replace_stu, eff_thr, 
-          move_text,
-          round(100*pi_replace), n_obs, rir_count
+          paste0(
+              "The VAM score is %s the threshold. Therefore, the RIR indicates\n",
+              "replacement required to %s the VAM %s the threshold.\n"
+          ),
+          direction_text, action_text, move_text
       ))
-  }
-  cat("\n")
-  
-  # 6) Peer‐effect scenario summary
-  cat(sprintf(
-    "If all of the bias comes from peer spillover effects, and we assume %d%% (as specified) students are %s the others, then a peer effect of %.3f is needed to change the evaluation. Each replaced student must have a %+.3f effect (compared to their replacements) on each of the non-replaced students to cross the threshold for evaluation.\n",
-    round(100*peer_effect_pi),
-    if (below) "distracting" else "supporting",
-    abs(peer_signed),
-    peer_signed
-  ))
-  cat("\n")
-  
-  # 7) Additional narrative
-  # cat("Each replaced student had a ", sprintf("%.3f", abs(peer_signed)), 
-  #    " effect (compared to their replacements) on each of the non-replaced students.\n", sep="")
-  # cat("\n")
-  cat("See the figure for combinations of size of peer effect by proportion to be replaced (pi_p) to change the evaluation. The red point marks the value reported above.\n")
-  cat("\n")
-  cat("The calculations and interpretation depend on your VAM model specification and estimation. See the paper for more details.\n\n")
+      cat("\n")
+      
+      # 5) Replacement scenario summary
+      if (below) {
+          cat(sprintf(
+              paste0(
+                  "If there are no peer effects, then %d (%d%%) students must be\n",
+                  "replaced with students whose score is %.2f (as specified) to move the\n",
+                  "VAM %s the threshold (RIR = %d%% * %d = %d).\n"
+              ),
+              rir_count, round(100*pi_replace), replace_stu, move_text,
+              round(100*pi_replace), n_obs, rir_count
+          ))
+      } else {
+          cat(sprintf(
+              paste0(
+                  "If there are no peer effects, then %d (%d%%) students whose\n",
+                  "score is %.2f (as specified) must be replaced with students whose\n",
+                  "score is at the threshold level %.2f to move the VAM %s the\n",
+                  "threshold (RIR = %d%% * %d = %d).\n"
+              ),
+              rir_count, round(100*pi_replace),
+              replace_stu, eff_thr,
+              move_text,
+              round(100*pi_replace), n_obs, rir_count
+          ))
+      }
+      cat("\n")
+      
+      # 6) Peer-effect scenario summary
+      cat(sprintf(
+          paste0(
+              "If all of the bias comes from peer spillover effects, and we assume\n",
+              "%d%% (as specified) students are %s the others, then a\n",
+              "peer effect of %.3f is needed to change the evaluation.\n",
+              "Each replaced student must have a %+.3f effect (compared to\n",
+              "their replacements) on each of the non-replaced students to cross the\n",
+              "threshold for evaluation.\n"
+          ),
+          round(100*peer_effect_pi),
+          if (below) "distracting" else "supporting",
+          abs(peer_signed),
+          peer_signed
+      ))
+      cat("\n")
+      
+      # 7) Additional narrative
+      cat(paste0(
+          "See the figure for combinations of size of peer effect by proportion\n",
+          "to be replaced (pi_p) to change the evaluation. The red point marks the\n",
+          "value reported above.\n"
+      ))
+      cat("\n")
+      cat(paste0(
+          "The calculations and interpretation depend on your VAM model\n",
+          "specification and estimation. See the paper for more details.\n"
+      ))
+      
+      # Citation
+      cat("\nSee Lin et al. (2026) for a description of the method.\n\n")
+      cat(paste0(
+          "Citation: Lin, Q., Frank, K. A., and Maroulis, S. J. (2026).\n",
+          "Application of Sensitivity Analysis for Teacher Effectiveness\n",
+          "Evaluation in the Context of Accountability.\n",
+          "Journal of Research on Educational Effectiveness, 1-28.\n",
+          "https://doi.org/10.1080/19345747.2026.2658056"
+      ))
+      cat("\n")
   
   # 8) Plot with revised axis labels
   p_seq <- seq(0.01, 0.4999, length.out = 200)

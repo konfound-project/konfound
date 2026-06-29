@@ -22,9 +22,9 @@
 #' @param upper_bound optional (replaces \code{est_eff}); the upper bound of the confidence interval.
 #' @param lower_bound optional (replaces \code{est_eff}); the lower bound of the confidence interval.
 #' @param n_treat the number of cases associated with the treatment condition (for logistic regression models).
-#' @param replace specifies whether to use the entire sample (\code{"entire"}) or the control group (\code{"control"}) for calculating the base rate; default is \code{"control"}.
-#' @param switch_trm indicates whether to switch the treatment and control cases; defaults to \code{FALSE}.
-#' @param raw_treatment_success optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark.
+#' @param replace specifies whether to use the entire sample (\code{"entire"}) or the control group (\code{"control"}) for calculating the base rate; default is \code{"control"}. Only used for dichotomous models (logistic and 2x2 table); ignored for continuous outcomes.
+#' @param switch_trm indicates whether to switch the treatment and control cases; defaults to \code{FALSE}. Only used for dichotomous models (logistic and 2x2 table).
+#' @param raw_treatment_success optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark (logistic model only).
 #' @param model_type the type of model being estimated; defaults to \code{"ols"} for a linear regression model or \code{"logistic"} for a logistic regression model.
 #' @param link GLM link function for \code{index = "RIR", scale = "r"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM pathway is used.
 #' @param a the number of cases in the control group showing unsuccessful results (2x2 table model).
@@ -32,9 +32,9 @@
 #' @param c the number of cases in the treatment group showing unsuccessful results (2x2 table model).
 #' @param d the number of cases in the treatment group showing successful results (2x2 table model).
 #' @param two_by_two_table a table (matrix, data.frame, tibble, etc.) from which \code{a}, \code{b}, \code{c}, and \code{d} can be extracted.
-#' @param replace_stu score of the hypothetical average student who replaces the original student.
-#' @param peer_effect_pi proportion of students exerting peer effects on the others.  
-#' @param test specifies whether to use Fisher's Exact Test (\code{"fisher"}) or a chi-square test (\code{"chisq"}); defaults to \code{"fisher"}.
+#' @param replace_stu score of the hypothetical average student who replaces the original student (VAM only).
+#' @param peer_effect_pi proportion of students exerting peer effects on the others (VAM only).
+#' @param test specifies whether to use Fisher's Exact Test (\code{"fisher"}) or a chi-square test (\code{"chisq"}); defaults to \code{"fisher"} (2x2 table model only).
 #' @param to_return specifies the output format: \code{"print"} (default) to display output, \code{"plot"} for a plot, or \code{"raw_output"} to return a data.frame for further analysis.
 
 #' @details
@@ -62,7 +62,7 @@
 #' \itemize{
 #'   \item est_eff, replace_stu, n_obs, eff_thr, peer_effect_pi
 #' }
-#'
+#' 
 #' \strong{RIR with scale argument (index: RIR, scale: "t" or "r")}
 #' \itemize{
 #'   \item est_eff, std_err, n_obs, n_covariates, alpha, tails, nu, scale
@@ -255,15 +255,15 @@
 #' @param index specifies the sensitivity analysis index: \code{"RIR"} (default), \code{"IT"} (impact threshold), \code{"COP"} (coefficient of proportionality), \code{"PSE"} (proportional selection effect), or \code{"VAM"} (value-added model). For \code{"RIR"}, use the \code{scale} argument to select the t-scale (default) or r-scale variant.
 #' @param nu specifies the hypothesis to be tested; defaults to testing whether \code{est_eff} is significantly different from 0.
 #' @param n_treat the number of cases associated with the treatment condition (for logistic regression models).
-#' @param switch_trm indicates whether to switch the treatment and control cases; defaults to \code{FALSE}.
+#' @param switch_trm indicates whether to switch the treatment and control cases; defaults to \code{FALSE}. Only used for dichotomous models (logistic and 2x2 table).
 #' @param model_type the type of model; defaults to \code{"ols"}, but can be set to \code{"logistic"}.
 #' @param a the number of cases in the control group showing unsuccessful results (2x2 table model).
 #' @param b the number of cases in the control group showing successful results (2x2 table model).
 #' @param c the number of cases in the treatment group showing unsuccessful results (2x2 table model).
 #' @param d the number of cases in the treatment group showing successful results (2x2 table model).
 #' @param two_by_two_table a table (matrix, data.frame, tibble, etc.) from which \code{a}, \code{b}, \code{c}, and \code{d} can be extracted.
-#' @param test specifies whether to use Fisher's Exact Test (\code{"fisher"}) or a chi-square test (\code{"chisq"}); defaults to \code{"fisher"}.
-#' @param replace specifies whether to use the entire sample (\code{"entire"}) or the control group (\code{"control"}) for calculating the base rate; default is \code{"control"}.
+#' @param test specifies whether to use Fisher's Exact Test (\code{"fisher"}) or a chi-square test (\code{"chisq"}); defaults to \code{"fisher"} (2x2 table model only).
+#' @param replace specifies whether to use the entire sample (\code{"entire"}) or the control group (\code{"control"}) for calculating the base rate; default is \code{"control"}. Only used for dichotomous models (logistic and 2x2 table); ignored for continuous outcomes.
 #' @param sdx the standard deviation of X (used for unconditional ITCV).
 #' @param sdy the standard deviation of Y (used for unconditional ITCV).
 #' @param R2 the unadjusted, original \eqn{R^2} in the observed function (used for unconditional ITCV).
@@ -274,7 +274,7 @@
 #' @param to_return specifies the output format: \code{"print"} (default) to display output, \code{"plot"} for a plot, or \code{"raw_output"} to return a data.frame for further analysis.
 #' @param upper_bound optional (replaces \code{est_eff}); the upper bound of the confidence interval.
 #' @param lower_bound optional (replaces \code{est_eff}); the lower bound of the confidence interval.
-#' @param raw_treatment_success optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark.
+#' @param raw_treatment_success optional; the unadjusted count of successful outcomes in the treatment group for calculating the specific RIR benchmark (logistic model only).
 #' @param scale for \code{index = "RIR"}: \code{"t"} (default) computes RIR on the t-statistic scale (LM only); \code{"r"} computes RIR on the correlation scale, supports both LM and GLM, and relaxes the constant-SE assumption. Ignored for all other indices.
 #' @param link GLM link function for \code{index = "RIR", scale = "r"}: \code{"logit"} or \code{"probit"}. When \code{NULL} (default), the LM pathway is used.
 
@@ -312,8 +312,12 @@ pkonfound <- function(est_eff,
                       replace_stu = NULL,
                       peer_effect_pi = 0.5,
                       scale = "t",  # for index = "RIR": "t" (default, LM only) or "r" (LM/GLM)
-                      link = NULL   # for index = "RIR", scale = "r" with GLM: "logit" or "probit"
+                      link = NULL  # for index = "RIR", scale = "r" with GLM: "logit" or "probit"
 ) {
+    # Capture the arguments the user actually supplied (with
+    # partial-match expansion), for applicability checking below.
+    user_args <- setdiff(names(match.call())[-1], "")
+    
     if ("table" %in% to_return) stop("a table can only be
                                    output when using konfound")
     
@@ -322,6 +326,18 @@ pkonfound <- function(est_eff,
         est_eff = (upper_bound + lower_bound) / 2
         std_err = (est_eff - lower_bound) / qt(alpha / tails, n_obs - n_covariates, lower.tail = FALSE)
     }
+    
+    # Emit an informational message if the user supplied any
+    # arguments that are not applicable to the dispatched branch.
+    .check_pkonfound_applicability(
+        user_args,
+        .determine_pkonfound_branch(
+            index = index, model_type = model_type,
+            n_treat = n_treat, a = a,
+            two_by_two_table = two_by_two_table,
+            scale = scale, link = link
+        )
+    )
     
     if (index == "COP") {
         

@@ -1,0 +1,3 @@
+v 3
+d konfound: Stata tools from the konfound-project repository
+p robust_attrition Robustness of inferences to differential attrition (beta)
