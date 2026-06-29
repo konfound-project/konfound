@@ -9,6 +9,11 @@
 - [`mkonfound()`](https://konfound-it.org/konfound/reference/mkonfound.md)
   : Meta-Analysis and Sensitivity Analysis for Multiple Studies
 
+## Differential attrition
+
+- [`robust_attrition()`](https://konfound-it.org/konfound/reference/robust_attrition.md)
+  : Robustness of inferences to differential attrition (beta)
+
 ## Empirical RIR
 
 - [`konfound_empdist()`](https://konfound-it.org/konfound/reference/konfound_empdist.md)

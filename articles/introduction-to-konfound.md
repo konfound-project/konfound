@@ -31,18 +31,18 @@ counterfactuals of zero treatment effect could nullify an inference
 
 The sensitivity analysis techniques we describe in this paper and
 implement in the `konfound` R package differ from others in several
-ways. Unlike Linden, Mathur, and VanderWeele (2020), whose approach
-focuses on dichotomous outcomes and omitted variable sensitivity, our
-approach extends to continuous outcomes and evaluates both changes in
-estimates and standard errors. Oster (2019) focuses only on selection
-into the treatment based on unobservable variables versus observable
-variables necessary to nullify an estimate. The ITCV index focuses on
-the relationship of the unobservable to the predictor of interest and to
-the outcome. More generally, many others used simulation-based
-approaches, while our approach uses closed-form expressions to generate
-a single term representing sensitivity. These techniques, along with
-others, are reviewed and discussed (along with the ITCV and RIR
-approaches) in Frank et al. (2023).
+ways. Unlike Linden et al. (2020), whose approach focuses on dichotomous
+outcomes and omitted variable sensitivity, our approach extends to
+continuous outcomes and evaluates both changes in estimates and standard
+errors. Oster (2019) focuses only on selection into the treatment based
+on unobservable variables versus observable variables necessary to
+nullify an estimate. The ITCV index focuses on the relationship of the
+unobservable to the predictor of interest and to the outcome. More
+generally, many others used simulation-based approaches, while our
+approach uses closed-form expressions to generate a single term
+representing sensitivity. These techniques, along with others, are
+reviewed and discussed (along with the ITCV and RIR approaches) in Frank
+et al. (2023).
 
 We have implemented the calculation of both the ITCV and RIR indices in
 the `konfound` R package. This package is intended to provide an
@@ -276,19 +276,17 @@ Frank, K. A. 2000. “Impact of a Confounding Variable on a Regression
 Coefficient.” *Sociological Methods & Research* 29 (2): 147–94.
 <https://doi.org/10.1177/0049124100029002001>.
 
-Frank, K. A., Qinyun Lin, Spiro Maroulis, Shimeng Dai, Nicole Jess,
-Hung-chang Lin, Sarah Maestrales, Ellen Searle, Jordan Tait, et al.
-2022. “Improving Oster’s $\delta$\*: Exact Calculation for the
-Coefficient of Proportionality Without Subjective Specification of a
-Baseline Model.” *Ellen and Tait, Jordan, Improving Oster’s $\delta$\*:
-Exact Calculation for the Coefficient of Proportionality Without
-Subjective Specification of a Baseline Model (December 16, 2022)*.
+Frank, K. A., Qinyun Lin, Spiro Maroulis, et al. 2022. “Improving
+Oster’s $`\delta`$\*: Exact Calculation for the Coefficient of
+Proportionality Without Subjective Specification of a Baseline Model.”
+*Ellen and Tait, Jordan, Improving Oster’s $`\delta`$\*: Exact
+Calculation for the Coefficient of Proportionality Without Subjective
+Specification of a Baseline Model (December 16, 2022)*, ahead of print.
 <https://doi.org/10.2139/ssrn.4305243>.
 
-Frank, K. A., Q. Lin, S. Maroulis, A. S. Mueller, R. Xu, J. M.
-Rosenberg, C. S. Hayter, et al. 2021. “Hypothetical Case Replacement Can
-Be Used to Quantify the Robustness of Trial Results.” *Journal of
-Clinical Epidemiology* 134: 150–59.
+Frank, K. A., Q. Lin, S. Maroulis, et al. 2021. “Hypothetical Case
+Replacement Can Be Used to Quantify the Robustness of Trial Results.”
+*Journal of Clinical Epidemiology* 134: 150–59.
 <https://doi.org/10.1016/j.jclinepi.2021.01.025>.
 
 Frank, K. A., Q. Lin, R. Xu, S. Maroulis, and A. Mueller. 2023.
@@ -306,11 +304,10 @@ Frank, K. A., and K.-S. Min. 2007. “Indices of Robustness for Sample
 Representation.” *Sociological Methodology* 37 (1): 349–92.
 <https://doi.org/10.1111/j.1467-9531.2007.00186.x>.
 
-Frank, K. A., G. Sykes, D. Anagnostopoulos, M. Cannata, L. Chard, A.
-Krause, and R. McCrory. 2008. “Does NBPTS Certification Affect the
-Number of Colleagues a Teacher Helps with Instructional Matters?”
-*Educational Evaluation and Policy Analysis* 30 (1): 3–30.
-<https://doi.org/10.3102/0162373707313781>.
+Frank, K. A., G. Sykes, D. Anagnostopoulos, et al. 2008. “Does NBPTS
+Certification Affect the Number of Colleagues a Teacher Helps with
+Instructional Matters?” *Educational Evaluation and Policy Analysis* 30
+(1): 3–30. <https://doi.org/10.3102/0162373707313781>.
 
 Linden, Ariel, Maya B Mathur, and Tyler J VanderWeele. 2020. “Conducting
 Sensitivity Analysis for Unmeasured Confounding in Observational Studies
@@ -321,10 +318,9 @@ Oster, Emily. 2019. “Unobservable Selection and Coefficient Stability:
 Theory and Evidence.” *Journal of Business & Economic Statistics* 37
 (2): 187–204.
 
-Razavi, S., A. Jakeman, A. Saltelli, C. Prieur, B. Iooss, E. Borgonovo,
-E. Plischke, et al. 2021. “The Future of Sensitivity Analysis: An
-Essential Discipline for Systems Modeling and Policy Support.”
-*Environmental Modelling & Software* 137 (March).
+Razavi, S., A. Jakeman, A. Saltelli, et al. 2021. “The Future of
+Sensitivity Analysis: An Essential Discipline for Systems Modeling and
+Policy Support.” *Environmental Modelling & Software* 137 (March).
 <https://doi.org/10.1016/j.envsoft.2020.104954>.
 
 Xu, R., K. A. Frank, S. J. Maroulis, and J. M. Rosenberg. 2019.

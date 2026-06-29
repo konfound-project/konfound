@@ -97,7 +97,7 @@ pkonfound(
 - switch_trm:
 
   indicates whether to switch the treatment and control cases; defaults
-  to `FALSE`.
+  to `FALSE`. Only used for dichotomous models (logistic and 2x2 table).
 
 - model_type:
 
@@ -132,13 +132,15 @@ pkonfound(
 - test:
 
   specifies whether to use Fisher's Exact Test (`"fisher"`) or a
-  chi-square test (`"chisq"`); defaults to `"fisher"`.
+  chi-square test (`"chisq"`); defaults to `"fisher"` (2x2 table model
+  only).
 
 - replace:
 
   specifies whether to use the entire sample (`"entire"`) or the control
   group (`"control"`) for calculating the base rate; default is
-  `"control"`.
+  `"control"`. Only used for dichotomous models (logistic and 2x2
+  table); ignored for continuous outcomes.
 
 - sdx:
 
@@ -193,16 +195,17 @@ pkonfound(
 - raw_treatment_success:
 
   optional; the unadjusted count of successful outcomes in the treatment
-  group for calculating the specific RIR benchmark.
+  group for calculating the specific RIR benchmark (logistic model
+  only).
 
 - replace_stu:
 
   score of the hypothetical average student who replaces the original
-  student.
+  student (VAM only).
 
 - peer_effect_pi:
 
-  proportion of students exerting peer effects on the others.
+  proportion of students exerting peer effects on the others (VAM only).
 
 - scale:
 
@@ -634,11 +637,15 @@ pkonfound(2, .4, 100, 3)
 #> uniformly across the distribution of observations.
 #> 
 #> The closed-form fraction on the t-statistic scale is
-#>   pi_t = (|t_obs| - |t_crit|) / |t_obs|
-#>      = (5.000 - 1.985) / 5.000
+#>   pi_t = (|delta_hat| - |delta_#|) / |delta_hat| = (|t_obs| - |t_crit|) / |t_obs|
+#>      = (2.000 - 0.794) / 2.000 = (5.000 - 1.985) / 5.000
 #>      = 0.603.
 #> where:
 #>   pi_t = replacement fraction on the t-statistic scale;
+#>   delta_hat = estimated effect (est_eff - nu):
+#>               delta_hat = 2.000;
+#>   delta_# = effect threshold for significance (t_crit * std_err):
+#>             delta_# = 0.794;
 #>   t_obs = observed t-statistic (df = 95):
 #>           t_obs = (est_eff - nu) / std_err = 5.000;
 #>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 95):
@@ -680,11 +687,15 @@ pkonfound(-2.2, .65, 200, 3)
 #> uniformly across the distribution of observations.
 #> 
 #> The closed-form fraction on the t-statistic scale is
-#>   pi_t = (|t_obs| - |t_crit|) / |t_obs|
-#>      = (3.385 - 1.972) / 3.385
+#>   pi_t = (|delta_hat| - |delta_#|) / |delta_hat| = (|t_obs| - |t_crit|) / |t_obs|
+#>      = (2.200 - 1.282) / 2.200 = (3.385 - 1.972) / 3.385
 #>      = 0.417.
 #> where:
 #>   pi_t = replacement fraction on the t-statistic scale;
+#>   delta_hat = estimated effect (est_eff - nu):
+#>               delta_hat = -2.200;
+#>   delta_# = effect threshold for significance (t_crit * std_err):
+#>             delta_# = 1.282;
 #>   t_obs = observed t-statistic (df = 195):
 #>           t_obs = (est_eff - nu) / std_err = -3.385;
 #>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 195):
@@ -726,11 +737,15 @@ pkonfound(.5, 3, 200, 3)
 #> uniformly across the distribution of observations.
 #> 
 #> The closed-form fraction on the t-statistic scale is
-#>   pi_t = (|t_crit| - |t_obs|) / |t_crit|
-#>      = (1.972 - 0.167) / 1.972
+#>   pi_t = (|delta_#| - |delta_hat|) / |delta_#| = (|t_crit| - |t_obs|) / |t_crit|
+#>      = (5.917 - 0.500) / 5.917 = (1.972 - 0.167) / 1.972
 #>      = 0.915.
 #> where:
 #>   pi_t = replacement fraction on the t-statistic scale;
+#>   delta_hat = estimated effect (est_eff - nu):
+#>               delta_hat = 0.500;
+#>   delta_# = effect threshold for significance (t_crit * std_err):
+#>             delta_# = 5.917;
 #>   t_obs = observed t-statistic (df = 195):
 #>           t_obs = (est_eff - nu) / std_err = 0.167;
 #>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 195):
@@ -775,11 +790,15 @@ pkonfound(upper_bound = 3, lower_bound = 1, n_obs = 100, n_covariates = 3)
 #> uniformly across the distribution of observations.
 #> 
 #> The closed-form fraction on the t-statistic scale is
-#>   pi_t = (|t_obs| - |t_crit|) / |t_obs|
-#>      = (3.969 - 1.985) / 3.969
+#>   pi_t = (|delta_hat| - |delta_#|) / |delta_hat| = (|t_obs| - |t_crit|) / |t_obs|
+#>      = (2.000 - 1.000) / 2.000 = (3.969 - 1.985) / 3.969
 #>      = 0.500.
 #> where:
 #>   pi_t = replacement fraction on the t-statistic scale;
+#>   delta_hat = estimated effect (est_eff - nu):
+#>               delta_hat = 2.000;
+#>   delta_# = effect threshold for significance (t_crit * std_err):
+#>             delta_# = 1.000;
 #>   t_obs = observed t-statistic (df = 95):
 #>           t_obs = (est_eff - nu) / std_err = 3.969;
 #>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 95):
@@ -1253,16 +1272,35 @@ pkonfound(est_eff = 0.14, replace_stu = 0.16, n_obs = 20, eff_thr = 0.15,
           peer_effect_pi = 0.3, index = "VAM")
 #> This is beta version of the VAM function.
 #> 
-#> The reported VAM score is 0.140 with evaluation threshold of 0.15. The VAM score is below the threshold. Therefore, the RIR indicates replacement required to increase the VAM above the threshold.
+#> The reported VAM score is 0.140 with evaluation threshold of 0.15.
+#> The VAM score is below the threshold. Therefore, the RIR indicates
+#> replacement required to increase the VAM above the threshold.
 #> 
-#> If there are no peer effects, then 10 (50%) students must be replaced with students whose score is 0.16 (as specified) to move the VAM above the threshold (RIR = 50% * 20 = 10).
+#> If there are no peer effects, then 10 (50%) students must be
+#> replaced with students whose score is 0.16 (as specified) to move the
+#> VAM above the threshold (RIR = 50% * 20 = 10).
 #> 
-#> If all of the bias comes from peer spillover effects, and we assume 30% (as specified) students are distracting the others, then a peer effect of 0.002 is needed to change the evaluation. Each replaced student must have a -0.002 effect (compared to their replacements) on each of the non-replaced students to cross the threshold for evaluation.
+#> If all of the bias comes from peer spillover effects, and we assume
+#> 30% (as specified) students are distracting the others, then a
+#> peer effect of 0.002 is needed to change the evaluation.
+#> Each replaced student must have a -0.002 effect (compared to
+#> their replacements) on each of the non-replaced students to cross the
+#> threshold for evaluation.
 #> 
-#> See the figure for combinations of size of peer effect by proportion to be replaced (pi_p) to change the evaluation. The red point marks the value reported above.
+#> See the figure for combinations of size of peer effect by proportion
+#> to be replaced (pi_p) to change the evaluation. The red point marks the
+#> value reported above.
 #> 
-#> The calculations and interpretation depend on your VAM model specification and estimation. See the paper for more details.
+#> The calculations and interpretation depend on your VAM model
+#> specification and estimation. See the paper for more details.
 #> 
+#> See Lin et al. (2026) for a description of the method.
+#> 
+#> Citation: Lin, Q., Frank, K. A., and Maroulis, S. J. (2026).
+#> Application of Sensitivity Analysis for Teacher Effectiveness
+#> Evaluation in the Context of Accountability.
+#> Journal of Research on Educational Effectiveness, 1-28.
+#> https://doi.org/10.1080/19345747.2026.2658056
 
 #> 
 #> For more information, visit https://konfound-it.org
@@ -1283,11 +1321,15 @@ pkonfound(est_eff = 2, std_err = .4, n_obs = 100,
 #> uniformly across the distribution of observations.
 #> 
 #> The closed-form fraction on the t-statistic scale is
-#>   pi_t = (|t_obs| - |t_crit|) / |t_obs|
-#>      = (5.000 - 1.985) / 5.000
+#>   pi_t = (|delta_hat| - |delta_#|) / |delta_hat| = (|t_obs| - |t_crit|) / |t_obs|
+#>      = (2.000 - 0.794) / 2.000 = (5.000 - 1.985) / 5.000
 #>      = 0.603.
 #> where:
 #>   pi_t = replacement fraction on the t-statistic scale;
+#>   delta_hat = estimated effect (est_eff - nu):
+#>               delta_hat = 2.000;
+#>   delta_# = effect threshold for significance (t_crit * std_err):
+#>             delta_# = 0.794;
 #>   t_obs = observed t-statistic (df = 95):
 #>           t_obs = (est_eff - nu) / std_err = 5.000;
 #>   t_crit = critical t-value at alpha = 0.05 (t-distribution, df = 95):
