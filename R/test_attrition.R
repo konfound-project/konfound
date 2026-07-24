@@ -691,11 +691,117 @@ robust_attrition <- function(
           ggplot2::theme_bw() +
           ggplot2::theme(
               plot.title.position = "plot",
-              plot.title = ggplot2::element_text(size = 14),
-              plot.subtitle = ggplot2::element_text(size = 12)
+              plot.title = ggplot2::element_text(size = 16),
+              plot.subtitle = ggplot2::element_text(size = 14),
+              axis.title = ggplot2::element_text(size = 14),
+              axis.text = ggplot2::element_text(size = 13),
+              strip.text = ggplot2::element_text(size = 13),
+              legend.text = ggplot2::element_text(size = 13),
+              legend.position = "bottom"
           )
       
-      return(p)
+      # ---- Second plot: cell means by group and attrition status ----
+      # Four cell means from Y = b0 + b1*M + b2*T + b3*M*T. The observed
+      # (M = 0) cells are shared; the attritted (M = 1) cells differ between
+      # the nonparametric and correlation-based (parametric) frameworks.
+      means_df <- data.frame(
+          framework = factor(
+              rep(c("Nonparametric", "Correlation-based"), each = 4),
+              levels = c("Nonparametric", "Correlation-based")
+          ),
+          group = factor(
+              rep(c("Treatment", "Treatment", "Control", "Control"), times = 2),
+              levels = c("Treatment", "Control")
+          ),
+          M = rep(c(0, 1, 0, 1), times = 2),
+          Y = c(
+              yobt, nonpar_ytreatmi, yobc, nonpar_ycontrolmi,
+              yobt, corr_ytreatmi,   yobc, corr_Ycontrolmi
+          )
+      )
+      # nudge value labels off the crossing lines
+      means_df$vj <- ifelse(
+          (means_df$group == "Treatment" & means_df$M == 0) |
+              (means_df$group == "Control"   & means_df$M == 1),
+          -0.9, 1.8
+      )
+      
+      # delta indicators: observed effect (shared) and the framework-specific
+      # attritted effect, drawn just outside the M = 0 and M = 1 columns.
+      gap_df <- data.frame(
+          framework = factor(
+              rep(c("Nonparametric", "Correlation-based"), each = 2),
+              levels = c("Nonparametric", "Correlation-based")
+          ),
+          x   = rep(c(-0.08, 1.08), times = 2),
+          ylo = c(pmin(yobt, yobc), pmin(nonpar_ytreatmi, nonpar_ycontrolmi),
+                  pmin(yobt, yobc), pmin(corr_ytreatmi,  corr_Ycontrolmi)),
+          yhi = c(pmax(yobt, yobc), pmax(nonpar_ytreatmi, nonpar_ycontrolmi),
+                  pmax(yobt, yobc), pmax(corr_ytreatmi,  corr_Ycontrolmi)),
+          val = c(esteffect, nonpar_deltami, esteffect, corr_rbetami),
+          sym = c("ob", "mi", "ob", "mi")
+      )
+      gap_df$hj  <- ifelse(gap_df$x < 0, 1.15, -0.15)
+      gap_df$txt <- sprintf("hat(delta)^{%s} == %.3f", gap_df$sym, gap_df$val)
+      
+      p_means <- ggplot2::ggplot(
+          means_df,
+          ggplot2::aes(x = M, y = Y, color = group, group = group)
+      ) +
+          # treatment-control gap (double-headed) behind the lines
+          ggplot2::geom_segment(
+              data = gap_df, inherit.aes = FALSE,
+              ggplot2::aes(x = x, xend = x, y = ylo, yend = yhi),
+              color = "grey45", linewidth = 0.5,
+              arrow = grid::arrow(ends = "both",
+                                  length = grid::unit(0.05, "in"))
+          ) +
+          ggplot2::geom_text(
+              data = gap_df, inherit.aes = FALSE, parse = TRUE,
+              ggplot2::aes(x = x, y = (ylo + yhi) / 2, label = txt, hjust = hj),
+              color = "grey20", size = 4.2
+          ) +
+          ggplot2::geom_line(linewidth = 1.1) +
+          ggplot2::geom_point(size = 2.6) +
+          ggplot2::geom_text(
+              ggplot2::aes(label = sprintf("%.3f", Y), vjust = vj),
+              color = "grey20", size = 4.2, show.legend = FALSE
+          ) +
+          ggplot2::facet_wrap(~ framework) +
+          ggplot2::scale_color_manual(
+              values = c("Treatment" = "#1F78B4", "Control" = "#33A02C")
+          ) +
+          ggplot2::scale_x_continuous(
+              breaks = c(0, 1),
+              labels = c("Observed\n(M = 0)", "Attritted\n(M = 1)"),
+              limits = c(-0.45, 1.45)
+          ) +
+          ggplot2::scale_y_continuous(
+              expand = ggplot2::expansion(mult = 0.09)
+          ) +
+          ggplot2::labs(
+              title = expression(
+                  paste("Treatment estimates (", hat(delta)^{mi},
+                        ") in missing (attritted) data necessary to nullify the inference")
+              ),
+              subtitle = paste0(
+                  "Observed estimate on the left side (M = 0) and missing right side (M = 1).\n",
+                  "The left side is the observed treatment estimate; the right side is the treatment estimate \n",
+                  "in the missing data necessary to nullify the inference."
+              ),
+              x = "Missing status, M",
+              y = "Outcome mean, Y",
+              color = NULL
+          ) +
+          ggplot2::theme_bw() +
+          ggplot2::theme(
+              plot.title.position = "plot",
+              plot.title = ggplot2::element_text(size = 16),
+              plot.subtitle = ggplot2::element_text(size = 14),
+              legend.position = "bottom"
+          )
+      
+      return(list(robustness = p, means = p_means))
       
   } else {
       stop("to_return must be one of \"print\", \"raw_output\", or \"plot\".")

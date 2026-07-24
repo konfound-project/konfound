@@ -433,9 +433,12 @@ program define robust_attrition, rclass
     di ""
 
     if (`graph') {
-        di as txt "See the figure: effect in the missing data required to nullify"
-        di as txt "the inference, across assumed missing-data means. The red point"
-        di as txt "marks the original calculation (Y# = observed pooled mean)."
+        di as txt "See the two figures. The first shows the effect in the missing"
+        di as txt "data required to nullify the inference, across assumed"
+        di as txt "missing-data means; the red point marks the original"
+        di as txt "calculation (Y# = observed pooled mean). The second shows the"
+        di as txt "outcome means by group and attrition status, under both the"
+        di as txt "nonparametric and correlation-based frameworks."
         di ""
     }
     else {
@@ -505,6 +508,33 @@ program define robust_attrition, rclass
         local s_slope  = strtrim(string(`b_slp', "%12.3f"))
         local lgd3 = "Y# = `s_center',  delta_mi = `s_delta',  slope = `s_slope'"
 
+        * ---- values for the second plot (cell means) ----
+        * Four cell means from Y = b0 + b1*M + b2*T + b3*M*T. The observed
+        * (M = 0) cells are shared; the attritted (M = 1) cells differ between
+        * the nonparametric and correlation-based (parametric) frameworks.
+        local m_nptre = `np_ytreatmi'
+        local m_npctl = `np_ycontrolmi'
+        local m_cotre = `corr_ytreatmi'
+        local m_coctl = `corr_Ycontrolmi'
+        local m_dob   = `esteffect'
+        local m_dnp   = `np_deltami'
+        local m_dco   = `corr_rbetami'
+
+        * shared y-window across both panels, with a small margin
+        local m_ymin = min(`yobt', `yobc', `m_nptre', `m_npctl', `m_cotre', `m_coctl')
+        local m_ymax = max(`yobt', `yobc', `m_nptre', `m_npctl', `m_cotre', `m_coctl')
+        local m_pad  = 0.09 * (`m_ymax' - `m_ymin')
+        if (`m_pad' >= . | `m_pad' <= 0) local m_pad = 1
+        local m_ylo = `m_ymin' - `m_pad'
+        local m_yhi = `m_ymax' + `m_pad'
+
+        local m_sob = strtrim(string(`m_dob', "%12.3f"))
+        local m_snp = strtrim(string(`m_dnp', "%12.3f"))
+        local m_sco = strtrim(string(`m_dco', "%12.3f"))
+
+        * delta with a combining circumflex (U+0302), i.e. delta-hat
+        local dhat = ustrunescape("\u03B4\u0302")
+
         quietly {
             preserve
             clear
@@ -532,9 +562,70 @@ program define robust_attrition, rclass
                 legend(off) ///
                 graphregion(color(white)) ///
                 name(attrition_plot, replace)
+
+            * ---- Second plot: cell means by group and attrition status ----
+            clear
+            set obs 4
+            gen byte fw      = cond(_n <= 2, 1, 2)
+            gen double mstat = cond(mod(_n, 2) == 1, 0, 1)
+            label define _fwlbl 1 "Nonparametric" 2 "Correlation-based", replace
+            label values fw _fwlbl
+
+            gen double y_t = `yobt' if mstat == 0
+            gen double y_c = `yobc' if mstat == 0
+            replace y_t = `m_nptre' if fw == 1 & mstat == 1
+            replace y_c = `m_npctl' if fw == 1 & mstat == 1
+            replace y_t = `m_cotre' if fw == 2 & mstat == 1
+            replace y_c = `m_coctl' if fw == 2 & mstat == 1
+
+            * treatment-control gap, drawn just outside each column
+            gen double gap_x   = cond(mstat == 0, -0.08, 1.08)
+            gen double gap_lo  = min(y_t, y_c)
+            gen double gap_hi  = max(y_t, y_c)
+            gen double gap_mid = (gap_lo + gap_hi) / 2
+            gen byte   gappos  = cond(mstat == 0, 9, 3)
+
+            gen str50 gaplab = "`dhat'{superscript:ob} = `m_sob'" if mstat == 0
+            replace gaplab = "`dhat'{superscript:mi} = `m_snp'" if fw == 1 & mstat == 1
+            replace gaplab = "`dhat'{superscript:mi} = `m_sco'" if fw == 2 & mstat == 1
+
+            * nudge value labels off the crossing lines
+            gen byte pos_t = cond(mstat == 0, 12, 6)
+            gen byte pos_c = cond(mstat == 0, 6, 12)
+            gen str12 lab_t = string(y_t, "%9.3f")
+            gen str12 lab_c = string(y_c, "%9.3f")
+
+            twoway ///
+                (rcap gap_hi gap_lo gap_x, lcolor(gs7) lwidth(medium)) ///
+                (scatter gap_mid gap_x, msymbol(none) mlabel(gaplab) ///
+                    mlabcolor(black) mlabsize(small) mlabvposition(gappos)) ///
+                (line y_t mstat, lcolor("31 120 180") lwidth(medthick)) ///
+                (line y_c mstat, lcolor("51 160 44") lwidth(medthick)) ///
+                (scatter y_t mstat, mcolor("31 120 180") msymbol(O) msize(medium) ///
+                    mlabel(lab_t) mlabcolor(black) mlabsize(small) mlabvposition(pos_t)) ///
+                (scatter y_c mstat, mcolor("51 160 44") msymbol(O) msize(medium) ///
+                    mlabel(lab_c) mlabcolor(black) mlabsize(small) mlabvposition(pos_c)) ///
+                , ///
+                by(fw, ///
+                    title("Treatment estimates (`dhat'{superscript:mi}) in missing (attritted)" "data necessary to nullify the inference", size(medsmall)) ///
+                    subtitle("Observed estimate on the left side (M = 0) and missing right side (M = 1)." "The left side is the observed treatment estimate; the right side is the treatment estimate" "in the missing data necessary to nullify the inference.", size(small)) ///
+                    note("") ///
+                    iscale(*1.1) ///
+                    legend(position(6)) ///
+                ) ///
+                legend(order(5 "Treatment" 6 "Control") position(6) rows(1)) ///
+                yscale(range(`m_ylo' `m_yhi')) ///
+                ylabel(, angle(horizontal) labsize(small)) ///
+                xscale(range(-0.45 1.45)) ///
+                xlabel(0 "Observed (M = 0)" 1 "Attritted (M = 1)", labsize(small)) ///
+                xtitle("Missing status, M", size(small)) ///
+                ytitle("Outcome mean, Y", size(small)) ///
+                graphregion(color(white)) ///
+                name(attrition_means, replace)
             restore
         }
 
         graph display attrition_plot
+        graph display attrition_means
     }
 end
