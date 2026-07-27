@@ -791,7 +791,9 @@ robust_attrition <- function(
               legend.position = "bottom"
           )
       
-      return(invisible(list(robustness = p, means = p_means)))      
+      print(p)
+      print(p_means)
+      return(invisible(list(robustness = p, means = p_means)))
       
   } else {
       stop("to_return must be one of \"print\", \"raw_output\", or \"plot\".")
