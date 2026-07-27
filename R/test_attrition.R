@@ -709,11 +709,12 @@ robust_attrition <- function(
               yobt, corr_ytreatmi,   yobc, corr_Ycontrolmi
           )
       )
-      # nudge value labels off the crossing lines
-      means_df$vj <- ifelse(
-          (means_df$group == "Treatment" & means_df$M == 0) |
-              (means_df$group == "Control"   & means_df$M == 1),
-          -0.9, 1.8
+      # push each value label vertically away from the lines: the upper
+      # point in a column goes up, the lower point goes down. Within each
+      # (framework, M) column, compare the two group means.
+      means_df$vj_lab <- ave(
+          means_df$Y, means_df$framework, means_df$M,
+          FUN = function(v) ifelse(v == max(v), -0.8, 1.8)
       )
       
       # delta indicators: observed effect (shared) and the framework-specific
@@ -754,7 +755,7 @@ robust_attrition <- function(
           ggplot2::geom_line(linewidth = 1.1) +
           ggplot2::geom_point(size = 2.6) +
           ggplot2::geom_text(
-              ggplot2::aes(label = sprintf("%.3f", Y), vjust = vj),
+              ggplot2::aes(label = sprintf("%.3f", Y), vjust = vj_lab),
               color = "grey20", size = 4.2, show.legend = FALSE
           ) +
           ggplot2::facet_wrap(~ framework) +
@@ -764,7 +765,7 @@ robust_attrition <- function(
           ggplot2::scale_x_continuous(
               breaks = c(0, 1),
               labels = c("Observed\n(M = 0)", "Attritted\n(M = 1)"),
-              limits = c(-0.45, 1.45)
+              limits = c(-0.55, 1.55)
           ) +
           ggplot2::scale_y_continuous(
               expand = ggplot2::expansion(mult = 0.09)
