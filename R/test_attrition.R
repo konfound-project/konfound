@@ -376,21 +376,14 @@ robust_attrition <- function(
   corr_tvalidatep <- (a_root - j_root * corr_rlimp) /
     sqrt(z_root - w_root * corr_rlimp^2)
   corr_tvalidaten <- (a_root - j_root * corr_rlimn) /
-    sqrt(z_root - w_root * corr_rlimn^2)
-
+      sqrt(z_root - w_root * corr_rlimn^2)
+  
   # ===================================================================
-  # Output
+  # Printed report (shared by to_return = "print" and "plot")
   # ===================================================================
-  if (to_return == "print") {
-      
-      # -----------------------------------------------------------
-      # Header
-      # -----------------------------------------------------------
+  print_report <- function() {
       cat(crayon::bold("[BETA] Robustness to Differential Attrition\n\n"))
       
-      # -----------------------------------------------------------
-      # Verbose opening (context)
-      # -----------------------------------------------------------
       if (isTRUE(verbose)) {
           cat("This analysis quantifies what would have to be true in the\n")
           cat("attritted (missing) data to nullify an inference based on the\n")
@@ -404,9 +397,6 @@ robust_attrition <- function(
           cat("      from the attrition x treatment interaction.\n\n")
       }
       
-      # -----------------------------------------------------------
-      # Observed inputs
-      # -----------------------------------------------------------
       cat(sprintf("Observed treatment mean: %.4f\n", yobt))
       cat(sprintf("Observed control mean: %.4f\n", yobc))
       cat(sprintf("Estimated effect (observed): %.4f\n", esteffect))
@@ -418,9 +408,6 @@ robust_attrition <- function(
                   ntreatmi, 100 * alphat,
                   ncontrolmi, 100 * alphac))
       
-      # -----------------------------------------------------------
-      # Verbose notes on internally-computed defaults
-      # -----------------------------------------------------------
       if (isTRUE(verbose)) {
           if (is.null(R2xz)) {
               cat(sprintf(
@@ -438,9 +425,6 @@ robust_attrition <- function(
       
       cat("\n")
       
-      # -----------------------------------------------------------
-      # Nonparametric block
-      # -----------------------------------------------------------
       cat("Nonparametric:\n")
       if (isTRUE(verbose)) {
           cat("  (effect in missing data required to pull the\n")
@@ -452,9 +436,6 @@ robust_attrition <- function(
                   nonpar_deltacomb))
       cat("\n")
       
-      # -----------------------------------------------------------
-      # Correlation-based block
-      # -----------------------------------------------------------
       cat("Correlation-based:\n")
       if (isTRUE(verbose)) {
           cat("  (correlation in missing data required to nullify,\n")
@@ -474,9 +455,6 @@ robust_attrition <- function(
       ))
       cat("\n")
       
-      # -----------------------------------------------------------
-      # Footer
-      # -----------------------------------------------------------
       if (isTRUE(verbose)) {
           cat("For all computed quantities, run with to_return = \"raw_output\".\n")
           cat("See ?robust_attrition for help.\n")
@@ -485,6 +463,14 @@ robust_attrition <- function(
           cat("For all computed quantities, run with to_return = \"raw_output\".\n")
       }
       cat("\n")
+  }
+  
+  # ===================================================================
+  # Output
+  # ===================================================================
+  if (to_return == "print") {
+      
+      print_report()
       
       # -----------------------------------------------------------
       # Invisible return (same structure as raw_output)
@@ -616,6 +602,10 @@ robust_attrition <- function(
     return(output)
     
   } else if (to_return == "plot") {
+      
+      # Print the same report shown by to_return = "print", honoring verbose,
+      # then build and return the two plots.
+      print_report()
       
       # x-window: centered on the observed pooled mean (yob), the mean
       # assumed for the missing data in the original calculation. Half-width
@@ -801,7 +791,7 @@ robust_attrition <- function(
               legend.position = "bottom"
           )
       
-      return(list(robustness = p, means = p_means))
+      return(invisible(list(robustness = p, means = p_means)))      
       
   } else {
       stop("to_return must be one of \"print\", \"raw_output\", or \"plot\".")
