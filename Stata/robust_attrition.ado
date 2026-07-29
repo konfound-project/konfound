@@ -354,7 +354,7 @@ program define robust_attrition, rclass
         di as txt "This analysis quantifies what would have to be true in the"
         di as txt "attritted (missing) data to nullify an inference based on"
         di as txt "the observed data. Two complementary blocks are reported:"
-        di as txt "  (1) Nonparametric: the treatment effect in the missing"
+        di as txt "  (1) Nonparametric: the treatment estimate in the missing"
         di as txt "      data required to bring the combined-sample effect"
         di as txt "      to the significance threshold."
         di as txt "  (2) Correlation-based: the correlation (and implied"
@@ -511,8 +511,8 @@ program define robust_attrition, rclass
         * ---- values for the second plot (cell means) ----
         * Four cell means from Y = b0 + b1*M + b2*T + b3*M*T. The observed
         * (M = 0) cells are shared; the attritted (M = 1) cells differ between
-        * the nonparametric and correlation-based (parametric) frameworks.
-        local m_nptre = `np_ytreatmi'
+        * the mean-difference and correlation-based (parametric) frameworks.        
+		local m_nptre = `np_ytreatmi'
         local m_npctl = `np_ycontrolmi'
         local m_cotre = `corr_ytreatmi'
         local m_coctl = `corr_Ycontrolmi'
@@ -544,11 +544,11 @@ program define robust_attrition, rclass
 
             twoway ///
                 (line yline_y xline_x, lcolor(navy) lwidth(medthick)) ///
-                (pci `dmi' `x_lo' `dmi' `center', lpattern(dash) lcolor(red) lwidth(thin)) ///
-                (pci `y_winlo' `center' `dmi' `center', lpattern(dash) lcolor(red) lwidth(thin)) ///
+				(pci `dmi' `x_lo' `dmi' `x_hi', lpattern(dash) lcolor(red) lwidth(thin)) ///
                 (scatteri `dmi' `center', mcolor(red) msymbol(O) msize(medium)) ///
                 , ///
                 yline(0, lcolor(gs11) lwidth(thin)) ///
+                xline(`center', lpattern(dash) lcolor(red) lwidth(thin)) ///
                 yscale(range(`y_winlo' `y_winhi') noextend) ///
                 xscale(range(`x_lo' `x_hi') noextend) ///
                 ylabel(, angle(horizontal)) ///
@@ -557,7 +557,7 @@ program define robust_attrition, rclass
                 subtitle("Effect the missing data would need to nullify the observed inference," "by assumed mean outcome in the missing data", size(medsmall)) ///
                 xtitle("Assumed mean outcome in the missing data (Y#)") ///
                 ytitle("Required effect in the missing data (delta_mi)") ///
-                text(`dmi' `center' "Original calculation", placement(e) color(red) size(small)) ///
+                text(`dmi' `center' "Original calculation", placement(se) color(red) size(small)) ///
                 text(`lgd_y' `lgd_x' "Red point: original calculation (Y# = pooled mean)" "Line slope: rise in delta_mi per unit of Y#" "`lgd3'", placement(se) box fcolor(white) lcolor(black) margin(small) size(small) just(left)) ///
                 legend(off) ///
                 graphregion(color(white)) ///
@@ -568,7 +568,7 @@ program define robust_attrition, rclass
             set obs 4
             gen byte fw      = cond(_n <= 2, 1, 2)
             gen double mstat = cond(mod(_n, 2) == 1, 0, 1)
-            label define _fwlbl 1 "Nonparametric" 2 "Correlation-based", replace
+            label define _fwlbl 1 "Mean-difference" 2 "Correlation-based", replace
             label values fw _fwlbl
 
             gen double y_t = `yobt' if mstat == 0
