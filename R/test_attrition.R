@@ -388,7 +388,7 @@ robust_attrition <- function(
           cat("This analysis quantifies what would have to be true in the\n")
           cat("attritted (missing) data to nullify an inference based on the\n")
           cat("observed data. Two complementary blocks are reported:\n")
-          cat("  (1) Nonparametric: the treatment effect in the missing data\n")
+          cat("  (1) Nonparametric: the treatment estimate in the missing data\n")
           cat("      required to bring the combined-sample effect to the\n")
           cat("      significance threshold.\n")
           cat("  (2) Correlation-based: the correlation (and implied\n")
@@ -693,11 +693,11 @@ robust_attrition <- function(
       # ---- Second plot: cell means by group and attrition status ----
       # Four cell means from Y = b0 + b1*M + b2*T + b3*M*T. The observed
       # (M = 0) cells are shared; the attritted (M = 1) cells differ between
-      # the nonparametric and correlation-based (parametric) frameworks.
+      # the mean-difference and correlation-based (parametric) frameworks.
       means_df <- data.frame(
           framework = factor(
-              rep(c("Nonparametric", "Correlation-based"), each = 4),
-              levels = c("Nonparametric", "Correlation-based")
+              rep(c("Mean-difference", "Correlation-based"), each = 4),
+              levels = c("Mean-difference", "Correlation-based")
           ),
           group = factor(
               rep(c("Treatment", "Treatment", "Control", "Control"), times = 2),
@@ -721,8 +721,8 @@ robust_attrition <- function(
       # attritted effect, drawn just outside the M = 0 and M = 1 columns.
       gap_df <- data.frame(
           framework = factor(
-              rep(c("Nonparametric", "Correlation-based"), each = 2),
-              levels = c("Nonparametric", "Correlation-based")
+              rep(c("Mean-difference", "Correlation-based"), each = 2),
+              levels = c("Mean-difference", "Correlation-based")
           ),
           x   = rep(c(-0.08, 1.08), times = 2),
           ylo = c(pmin(yobt, yobc), pmin(nonpar_ytreatmi, nonpar_ycontrolmi),
