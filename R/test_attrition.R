@@ -376,26 +376,19 @@ robust_attrition <- function(
   corr_tvalidatep <- (a_root - j_root * corr_rlimp) /
     sqrt(z_root - w_root * corr_rlimp^2)
   corr_tvalidaten <- (a_root - j_root * corr_rlimn) /
-    sqrt(z_root - w_root * corr_rlimn^2)
-
+      sqrt(z_root - w_root * corr_rlimn^2)
+  
   # ===================================================================
-  # Output
+  # Printed report (shared by to_return = "print" and "plot")
   # ===================================================================
-  if (to_return == "print") {
-      
-      # -----------------------------------------------------------
-      # Header
-      # -----------------------------------------------------------
+  print_report <- function() {
       cat(crayon::bold("[BETA] Robustness to Differential Attrition\n\n"))
       
-      # -----------------------------------------------------------
-      # Verbose opening (context)
-      # -----------------------------------------------------------
       if (isTRUE(verbose)) {
           cat("This analysis quantifies what would have to be true in the\n")
           cat("attritted (missing) data to nullify an inference based on the\n")
           cat("observed data. Two complementary blocks are reported:\n")
-          cat("  (1) Nonparametric: the treatment effect in the missing data\n")
+          cat("  (1) Nonparametric: the treatment estimate in the missing data\n")
           cat("      required to bring the combined-sample effect to the\n")
           cat("      significance threshold.\n")
           cat("  (2) Correlation-based: the correlation (and implied\n")
@@ -404,9 +397,6 @@ robust_attrition <- function(
           cat("      from the attrition x treatment interaction.\n\n")
       }
       
-      # -----------------------------------------------------------
-      # Observed inputs
-      # -----------------------------------------------------------
       cat(sprintf("Observed treatment mean: %.4f\n", yobt))
       cat(sprintf("Observed control mean: %.4f\n", yobc))
       cat(sprintf("Estimated effect (observed): %.4f\n", esteffect))
@@ -418,9 +408,6 @@ robust_attrition <- function(
                   ntreatmi, 100 * alphat,
                   ncontrolmi, 100 * alphac))
       
-      # -----------------------------------------------------------
-      # Verbose notes on internally-computed defaults
-      # -----------------------------------------------------------
       if (isTRUE(verbose)) {
           if (is.null(R2xz)) {
               cat(sprintf(
@@ -438,9 +425,6 @@ robust_attrition <- function(
       
       cat("\n")
       
-      # -----------------------------------------------------------
-      # Nonparametric block
-      # -----------------------------------------------------------
       cat("Nonparametric:\n")
       if (isTRUE(verbose)) {
           cat("  (effect in missing data required to pull the\n")
@@ -452,9 +436,6 @@ robust_attrition <- function(
                   nonpar_deltacomb))
       cat("\n")
       
-      # -----------------------------------------------------------
-      # Correlation-based block
-      # -----------------------------------------------------------
       cat("Correlation-based:\n")
       if (isTRUE(verbose)) {
           cat("  (correlation in missing data required to nullify,\n")
@@ -474,9 +455,6 @@ robust_attrition <- function(
       ))
       cat("\n")
       
-      # -----------------------------------------------------------
-      # Footer
-      # -----------------------------------------------------------
       if (isTRUE(verbose)) {
           cat("For all computed quantities, run with to_return = \"raw_output\".\n")
           cat("See ?robust_attrition for help.\n")
@@ -485,6 +463,14 @@ robust_attrition <- function(
           cat("For all computed quantities, run with to_return = \"raw_output\".\n")
       }
       cat("\n")
+  }
+  
+  # ===================================================================
+  # Output
+  # ===================================================================
+  if (to_return == "print") {
+      
+      print_report()
       
       # -----------------------------------------------------------
       # Invisible return (same structure as raw_output)
@@ -617,6 +603,10 @@ robust_attrition <- function(
     
   } else if (to_return == "plot") {
       
+      # Print the same report shown by to_return = "print", honoring verbose,
+      # then build and return the two plots.
+      print_report()
+      
       # x-window: centered on the observed pooled mean (yob), the mean
       # assumed for the missing data in the original calculation. Half-width
       # defaults to pad_frac (15%) of |yob|; raise pad_frac for a longer line.
@@ -691,11 +681,120 @@ robust_attrition <- function(
           ggplot2::theme_bw() +
           ggplot2::theme(
               plot.title.position = "plot",
-              plot.title = ggplot2::element_text(size = 14),
-              plot.subtitle = ggplot2::element_text(size = 12)
+              plot.title = ggplot2::element_text(size = 16),
+              plot.subtitle = ggplot2::element_text(size = 14),
+              axis.title = ggplot2::element_text(size = 14),
+              axis.text = ggplot2::element_text(size = 13),
+              strip.text = ggplot2::element_text(size = 13),
+              legend.text = ggplot2::element_text(size = 13),
+              legend.position = "bottom"
           )
       
-      return(p)
+      # ---- Second plot: cell means by group and attrition status ----
+      # Four cell means from Y = b0 + b1*M + b2*T + b3*M*T. The observed
+      # (M = 0) cells are shared; the attritted (M = 1) cells differ between
+      # the mean-difference and correlation-based (parametric) frameworks.
+      means_df <- data.frame(
+          framework = factor(
+              rep(c("Mean-difference", "Correlation-based"), each = 4),
+              levels = c("Mean-difference", "Correlation-based")
+          ),
+          group = factor(
+              rep(c("Treatment", "Treatment", "Control", "Control"), times = 2),
+              levels = c("Treatment", "Control")
+          ),
+          M = rep(c(0, 1, 0, 1), times = 2),
+          Y = c(
+              yobt, nonpar_ytreatmi, yobc, nonpar_ycontrolmi,
+              yobt, corr_ytreatmi,   yobc, corr_Ycontrolmi
+          )
+      )
+      # push each value label vertically away from the lines: the upper
+      # point in a column goes up, the lower point goes down. Within each
+      # (framework, M) column, compare the two group means.
+      means_df$vj_lab <- ave(
+          means_df$Y, means_df$framework, means_df$M,
+          FUN = function(v) ifelse(v == max(v), -0.8, 1.8)
+      )
+      
+      # delta indicators: observed effect (shared) and the framework-specific
+      # attritted effect, drawn just outside the M = 0 and M = 1 columns.
+      gap_df <- data.frame(
+          framework = factor(
+              rep(c("Mean-difference", "Correlation-based"), each = 2),
+              levels = c("Mean-difference", "Correlation-based")
+          ),
+          x   = rep(c(-0.08, 1.08), times = 2),
+          ylo = c(pmin(yobt, yobc), pmin(nonpar_ytreatmi, nonpar_ycontrolmi),
+                  pmin(yobt, yobc), pmin(corr_ytreatmi,  corr_Ycontrolmi)),
+          yhi = c(pmax(yobt, yobc), pmax(nonpar_ytreatmi, nonpar_ycontrolmi),
+                  pmax(yobt, yobc), pmax(corr_ytreatmi,  corr_Ycontrolmi)),
+          val = c(esteffect, nonpar_deltami, esteffect, corr_rbetami),
+          sym = c("ob", "mi", "ob", "mi")
+      )
+      gap_df$hj  <- ifelse(gap_df$x < 0, 1.15, -0.15)
+      gap_df$txt <- sprintf("hat(delta)^{%s} == %.3f", gap_df$sym, gap_df$val)
+      
+      p_means <- ggplot2::ggplot(
+          means_df,
+          ggplot2::aes(x = M, y = Y, color = group, group = group)
+      ) +
+          # treatment-control gap (double-headed) behind the lines
+          ggplot2::geom_segment(
+              data = gap_df, inherit.aes = FALSE,
+              ggplot2::aes(x = x, xend = x, y = ylo, yend = yhi),
+              color = "grey45", linewidth = 0.5,
+              arrow = grid::arrow(ends = "both",
+                                  length = grid::unit(0.05, "in"))
+          ) +
+          ggplot2::geom_text(
+              data = gap_df, inherit.aes = FALSE, parse = TRUE,
+              ggplot2::aes(x = x, y = (ylo + yhi) / 2, label = txt, hjust = hj),
+              color = "grey20", size = 4.2
+          ) +
+          ggplot2::geom_line(linewidth = 1.1) +
+          ggplot2::geom_point(size = 2.6) +
+          ggplot2::geom_text(
+              ggplot2::aes(label = sprintf("%.3f", Y), vjust = vj_lab),
+              color = "grey20", size = 4.2, show.legend = FALSE
+          ) +
+          ggplot2::facet_wrap(~ framework) +
+          ggplot2::scale_color_manual(
+              values = c("Treatment" = "#1F78B4", "Control" = "#33A02C")
+          ) +
+          ggplot2::scale_x_continuous(
+              breaks = c(0, 1),
+              labels = c("Observed\n(M = 0)", "Attritted\n(M = 1)"),
+              limits = c(-0.55, 1.55)
+          ) +
+          ggplot2::scale_y_continuous(
+              expand = ggplot2::expansion(mult = 0.09)
+          ) +
+          ggplot2::labs(
+              title = expression(
+                  paste("Treatment estimates (", hat(delta)^{mi},
+                        ") in missing (attritted) data necessary to nullify the inference")
+              ),
+              subtitle = paste0(
+                  "Observed estimate on the left side (M = 0) and missing right side (M = 1).\n",
+                  "The left side is the observed treatment estimate; the right side is the treatment estimate \n",
+                  "in the missing data necessary to nullify the inference."
+              ),
+              x = "Missing status, M",
+              y = "Outcome mean, Y",
+              color = NULL
+          ) +
+          ggplot2::theme_bw() +
+          ggplot2::theme(
+              plot.title.position = "plot",
+              plot.title = ggplot2::element_text(size = 16),
+              plot.subtitle = ggplot2::element_text(size = 14),
+              legend.position = "bottom"
+          )
+      
+      print(p)
+      print(p_means)
+      return(invisible(list(robustness = p, means = p_means)))
       
   } else {
       stop("to_return must be one of \"print\", \"raw_output\", or \"plot\".")
