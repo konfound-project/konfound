@@ -184,7 +184,7 @@ program define robust_attrition, rclass
 
     tempname symi esteffect xbar tob ntreatmi ncontrolmi nmiss alphat alphac deltaob nobs df rob
     tempname fulln kdf tcrit rthresh pi xob yob deltasig ythresh nintended
-    tempname np_ycontrolmi np_ycontrolmib np_ytreatmi np_deltami np_ycombc np_ycombt np_deltacomb
+    tempname np_ycontrolmi np_ytreatmi np_deltami np_ycombc np_ycombt np_deltacomb
     tempname np_beta0 np_beta1 np_beta2 np_beta3 np_pyobc np_pymic np_pyobt np_pyfull np_slope
     tempname np_lineslope np_intercept
     tempname sxob xmi sxmi ymi a_corr b_corr c_corr corr_rmi
@@ -228,12 +228,11 @@ program define robust_attrition, rclass
     scalar `ythresh' = `yob'
     scalar `nintended' = `ntreattot' + `ncontroltot'
 
-    scalar `np_ycontrolmi' = (`ythresh' * (`alphat' * `xob' + `alphac' * (1-`xob')) - ///
-        `xob' * ((`alphat' - 1) * `yobt' - `alphac' * `yobc' + `yobc' + `deltasig')) / `alphac'
-    scalar `np_ycontrolmib' = (`ythresh' * (`alphat' * `xbar' + `alphac' * (1-`xbar')) - ///
+    scalar `np_ycontrolmi' = (`ythresh' * (`alphat' * `xbar' + `alphac' * (1-`xbar')) - ///
         `xbar' * ((`alphat' - 1) * `yobt' - `alphac' * `yobc' + `yobc' + `deltasig')) / `alphac'
-    scalar `np_ytreatmi' = (`ythresh' * (`alphat' * `xob' + `alphac' * (1-`xob')) - ///
-        `alphac' * (1-`xob') * `np_ycontrolmi') / (`alphat' * `xob')
+    scalar `np_ytreatmi' = (`ythresh' * (`alphat' * `xbar' + `alphac' * (1-`xbar')) - ///
+        `alphac' * (1-`xbar') * `np_ycontrolmi') / (`alphat' * `xbar')
+		
     scalar `np_deltami' = `np_ytreatmi' - `np_ycontrolmi'
     scalar `np_ycombc' = (1-`alphac') * `yobc' + `alphac' * `np_ycontrolmi'
     scalar `np_ycombt' = (1-`alphat') * `yobt' + `alphat' * `np_ytreatmi'
@@ -246,15 +245,15 @@ program define robust_attrition, rclass
     scalar `np_pymic' = `np_beta0' + `np_beta1'
     scalar `np_pyobt' = `np_beta0' + `np_beta2'
     scalar `np_pyfull' = `np_beta0' + `np_beta1' + `np_beta2' + `np_beta3'
-    scalar `np_slope' = `alphac' - `xob' * (`alphac' - `alphat')
+    scalar `np_slope' = `alphac' - `xbar' * (`alphac' - `alphat')
 
     * delta_mi as a linear function of the specified missing-data mean Y#:
     * delta_mi(Y#) = np_intercept + np_lineslope * Y#
     * The line passes through the original-calculation point
     * (Y# = yob, delta_mi = np_deltami).
     scalar `np_lineslope' = (`alphac' - `alphat') * ///
-        (`alphac' - `xob' * (`alphac' - `alphat')) / (`alphat' * `alphac')
-    scalar `np_intercept' = (`alphac' - `xob' * (`alphac' - `alphat')) * ///
+        (`alphac' - `xbar' * (`alphac' - `alphat')) / (`alphat' * `alphac')
+    scalar `np_intercept' = (`alphac' - `xbar' * (`alphac' - `alphat')) * ///
         ((1 - `alphac') * `yobc' - (1 - `alphat') * `yobt' + `deltasig') / ///
         (`alphat' * `alphac')
 

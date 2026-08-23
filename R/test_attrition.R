@@ -209,19 +209,14 @@ robust_attrition <- function(
   # Nonparametric block
   # ===================================================================
   nonpar_ycontrolmi <- (
-    ythresh * (alphat * xob + alphac * (1 - xob)) -
-    xob * ((alphat - 1) * yobt - alphac * yobc + yobc + deltasig)
-  ) / alphac
-
-  nonpar_ycontrolmib <- (
-    ythresh * (alphat * xbar + alphac * (1 - xbar)) -
-    xbar * ((alphat - 1) * yobt - alphac * yobc + yobc + deltasig)
+      ythresh * (alphat * xbar + alphac * (1 - xbar)) -
+          xbar * ((alphat - 1) * yobt - alphac * yobc + yobc + deltasig)
   ) / alphac
 
   nonpar_ytreatmi <- (
-    ythresh * (alphat * xob + alphac * (1 - xob)) -
-    alphac * (1 - xob) * nonpar_ycontrolmi
-  ) / (alphat * xob)
+      ythresh * (alphat * xbar + alphac * (1 - xbar)) -
+          alphac * (1 - xbar) * nonpar_ycontrolmi
+  ) / (alphat * xbar)
 
   nonpar_deltami <- nonpar_ytreatmi - nonpar_ycontrolmi
 
@@ -240,16 +235,16 @@ robust_attrition <- function(
   nonpar_pyfull <- nonpar_beta0 + nonpar_beta1 +
     nonpar_beta2 + nonpar_beta3
 
-  nonpar_slope <- alphac - xob * (alphac - alphat)
-
+  nonpar_slope <- alphac - xbar * (alphac - alphat)
+  
   # delta_mi as a linear function of the specified missing-data mean Y#:
   #   delta_mi(Y#) = nonpar_intercept + nonpar_lineslope * Y#
   # nonpar_lineslope is the slope with respect to Y#; nonpar_intercept is
   # the value at Y# = 0. The line passes through the original-calculation
   # point (Y# = yob, delta_mi = nonpar_deltami).
   nonpar_lineslope <- (alphac - alphat) *
-      (alphac - xob * (alphac - alphat)) / (alphat * alphac)
-  nonpar_intercept <- (alphac - xob * (alphac - alphat)) *
+      (alphac - xbar * (alphac - alphat)) / (alphat * alphac)
+  nonpar_intercept <- (alphac - xbar * (alphac - alphat)) *
       ((1 - alphac) * yobc - (1 - alphat) * yobt + deltasig) /
       (alphat * alphac)
   
@@ -535,7 +530,6 @@ robust_attrition <- function(
         ),
       nonpar = list(
         ycontrolmi = nonpar_ycontrolmi,
-        ycontrolmib = nonpar_ycontrolmib,
         ytreatmi = nonpar_ytreatmi,
         deltami = nonpar_deltami,
         ycombc = nonpar_ycombc,

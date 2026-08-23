@@ -192,29 +192,21 @@ test_correlation_rir <- function(
     
     ## Build print message
     action_clause <- if (is_sig) {
-        "nullify the inference (lose statistical significance)"
+        "nullify the inference (to reverse statistical significance)"
     } else {
-        "sustain an inference of an effect (reach statistical significance)"
+        "sustain an inference of an effect (to reach statistical significance)"
+    }
+    
+    implication_phrase <- if (is_sig) {
+        "nullifying the inference by replacing "
+    } else {
+        "sustaining the inference by replacing "
     }
     
     replacement_phrase <- if (is_sig) {
         paste0("data points for which the effect is ", nu, ".")
     } else {
-        paste0("data points at\nthe threshold for statistical significance.")
-    }
-    
-    interpretation_line <- if (is_sig) {
-        paste0(
-            "That is, the RIR value represents the proportion of the data that\n",
-            "would have to be replaced with data points for which the effect is ",
-            nu, "\n",
-            "for the observed relationship to lose statistical significance.")
-    } else {
-        paste0(
-            "This RIR value represents the proportion of the data that would\n",
-            "have to be replaced with data points at the threshold for\n",
-            "statistical significance for the result to become statistically\n",
-            "significant.")
+        paste0("data points at the threshold for statistical\nsignificance.")
     }
     
     thr_r <- abs(r_crit)
@@ -354,7 +346,7 @@ test_correlation_rir <- function(
         crayon::bold("Correlation-Based Robustness of Inference to Replacement (RIR):")
     }
     
-    # scale note and citation (appended after interpretation_line)
+    # scale note and citation
     scale_note <- if (scale == "t") {
         paste0(
             "\n\nNote: This RIR is computed via the t-statistic, which assumes\n",
@@ -404,14 +396,12 @@ test_correlation_rir <- function(
         " for statistical significance (alpha = ", alpha, "),\n",
         sprintf(fmt, pct(pi_primary)),
         "% of the observed estimate of ", sf(est_eff),
-        if (is_sig) " would have to be due to bias\n"
-        else " would need to be strengthened by replacement.\n",
-        if (is_sig) "to nullify the inference. " else "",
-        "This implies replacing ", k_primary, " of ", n_obs, " observations",
-        if (is_sig) "\n(" else " (",
+        if (is_sig) " would have to be due to bias.\n"
+        else " would need to be strengthened\nby replacement.\n",
+        "This implies ", implication_phrase,
+        k_primary, " of ", n_obs, " observations\n(",
         sprintf(fmt, pct(pi_primary)), "%) with ", replacement_phrase,
-        " Thus, RIR = ", k_primary, ".\n\n",
-        interpretation_line,
+        " Thus, RIR = ", k_primary, ".",
         z_ref_text,
         scale_note,
         cite_text
