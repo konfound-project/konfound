@@ -4,7 +4,7 @@
 
 #' Robustness of inferences to differential attrition (beta)
 #'
-#' Quantifies what would need to be true in the attritted (missing)
+#' Quantifies the conditions necessary in the attritted (missing)
 #' data to nullify an inference based on the observed data, using
 #' two complementary approaches: a nonparametric decomposition of
 #' the combined-sample effect, and a correlation-based framework
@@ -35,15 +35,20 @@
 #'   about internally-computed defaults. Defaults to FALSE.
 #' @param to_return one of "print" (default) to display output
 #'   and return the result list invisibly, "raw_output" to
-#'   return the full list, or "plot" to return a ggplot object
-#'   showing the effect required in the missing data to nullify
-#'   the inference across assumed missing-data means.
+#'   return the full list, or "plot" to draw and return the
+#'   figures. The "plot" option produces three figures: the
+#'   effect required in the missing data to nullify the
+#'   inference across assumed missing-data means under the
+#'   mean-difference framework, the same relationship under the
+#'   correlation-based framework, and the four cell means implied
+#'   by each framework.
 #'
 #' @return A list with components \code{inputs}, \code{nonpar},
 #'   \code{correlation_based}, and \code{derived}. Returned
 #'   invisibly when \code{to_return = "print"}. When
-#'   \code{to_return = "plot"}, a ggplot object is returned
-#'   instead.
+#'   \code{to_return = "plot"}, a named list of ggplot objects
+#'   (\code{robustness}, \code{robustness_corr}, \code{means}) is
+#'   returned invisibly instead.
 #'
 #' @details
 #' This is a beta (development) version. Calculations and output
@@ -174,6 +179,12 @@ robust_attrition <- function(
   symi <- syob
   esteffect <- yobt - yobc
 
+  # guard for zero estimated effect
+  if (esteffect == 0) {
+      stop("The observed treatment effect is exactly zero. ",
+           "There is no inference to nullify.")
+  }
+  
   xbar <- ntreattot / (ntreattot + ncontroltot)
   tob <- esteffect / se
 
@@ -196,17 +207,24 @@ robust_attrition <- function(
   fulln <- nobs + ntreatmi + ncontrolmi
   kdf <- fulln - ncovar - 2
   tcrit <- stats::qt(p = alpha / 2, df = kdf, lower.tail = FALSE)
-  rthresh <- tcrit / sqrt(kdf - tcrit^2)
+  rthresh <- sign(esteffect) * tcrit / sqrt(kdf + tcrit^2)
 
   pi_miss <- (ntreatmi + ncontrolmi) / fulln
   xob <- ntreatob / (ntreatob + ncontrolob)
   yob <- xob * yobt + (1 - xob) * yobc
-  deltasig <- tcrit * se * sqrt((nobs - 3) / (fulln - 3))
+  deltasig <- sign(esteffect) * tcrit * se * sqrt((nobs - 3) / (fulln - 3))
   ythresh <- yob
   nintended <- ntreattot + ncontroltot
 
+  # guard: no inference to nullify (observed effect does not exceed delta#)
+  if (abs(esteffect) <= abs(deltasig)) {
+      stop("The observed effect (", sprintf("%.4f", esteffect), ") does not exceed ",
+           "the inference threshold delta# (", sprintf("%.4f", abs(deltasig)), " in magnitude). ",
+           "No inference is supported at this threshold, so there is nothing to nullify.")
+  }
+  
   # ===================================================================
-  # Nonparametric block
+  # Mean-difference block
   # ===================================================================
   nonpar_ycontrolmi <- (
       ythresh * (alphat * xbar + alphac * (1 - xbar)) -
@@ -257,14 +275,31 @@ robust_attrition <- function(
   ymi <- yob
 
   a_corr <- (1 - pi_miss) * sxob^2 + pi_miss * sxmi^2 +
-    (1 - pi_miss) * pi_miss * (xob - xmi)^2
-  b_corr <- (1 - pi_miss) * syob^2 + pi_miss * symi^2 +
-    (1 - pi_miss) * pi_miss * (xob - xmi)^2
-  c_corr <- (1 - pi_miss) * rob * sxob * syob +
-    (1 - pi_miss) * pi_miss * (xob - xmi) * (yob - ymi)
-  corr_rmi <- (rthresh * sqrt(a_corr * b_corr) - c_corr) /
-    (pi_miss * symi * sxmi)
+      (1 - pi_miss) * pi_miss * (xob - xmi)^2
+  
+  # Single source of truth for the correlation-based block. Returns the
+  # correlation in the missing data required to nullify the inference for a
+  # specified mean outcome in the missing data (Y#). Used both for the
+  # reported value (at Y# = ymi) and for the Y# sensitivity plot, so the
+  # two can never be different.
+  #
+  # NOTE: from equation (12) in the main text page 17 the third term of
+  # b_h has been update to (yob - y_hash)^2, not (xob - xmi)^2. 
+  corr_r_at <- function(y_hash) {
+      b_h <- (1 - pi_miss) * syob^2 + pi_miss * symi^2 +
+          (1 - pi_miss) * pi_miss * (yob - y_hash)^2
+      c_h <- (1 - pi_miss) * rob * sxob * syob +
+          (1 - pi_miss) * pi_miss * (xob - xmi) * (yob - y_hash)
+      (rthresh * sqrt(a_corr * b_h) - c_h) / (pi_miss * symi * sxmi)
+  }
+ 
+  corr_rmi <- corr_r_at(ymi)
 
+  # A correlation required to nullify cannot exceed [-1, 1].
+  # When it does, no correlation in the attritted data could nullify the
+  # inference, so the implied coefficient and its test are not defined.
+  corr_valid <- abs(corr_rmi) <= 1
+  
   if (rob^2 > R2) {
       stop("Inputs are inconsistent: the implied bivariate correlation ",
            sprintf("(rob^2 = %.4f) ", rob^2),
@@ -296,6 +331,12 @@ robust_attrition <- function(
   corr_sdxGzmi <- sqrt(1 - R2xz_used) * sxmi
   corr_rbetami <- corr_rmi * corr_sdyGzmi / corr_sdxGzmi
 
+  # Implied regression coefficient in the missing data required to nullify
+  # the inference, as a function of the specified missing-data mean Y#.
+  corr_delta_at <- function(y_hash) {
+      corr_r_at(y_hash) * corr_sdyGzmi / corr_sdxGzmi
+  }
+  
   corr_Ycontrolmi <- yob - xmi * corr_rbetami
   corr_ytreatmi <- corr_rbetami + corr_Ycontrolmi
   corr_rbeta3 <- corr_rbetami - esteffect
@@ -311,23 +352,38 @@ robust_attrition <- function(
 
   sdyGxob <- syob * sqrt(1 - rob^2)
   ssdyGxob <- (sdyGxob * sqrt(nobs - 1))^2
-  sdyGxmi <- symi * sqrt(1 - corr_rmi^2)
-  ssdyGxmi <- (sdyGxmi * sqrt(nmiss - 1))^2
+
+  if (corr_valid) {
+      sdyGxmi  <- symi * sqrt(1 - corr_rmi^2)
+      ssdyGxmi <- (sdyGxmi * sqrt(nmiss - 1))^2
+  } else {
+      sdyGxmi  <- NA_real_
+      ssdyGxmi <- NA_real_
+  }
 
   varxob <- xob * (1 - xob)
   sx2ob <- varxob * nobs
   varxmi <- xmi * (1 - xmi)
   sx2mi <- varxmi * nmiss
 
-  corr_tdenom1 <- (ssdyGxob + ssdyGxmi) / (nobs + nmiss - 4)
-  corr_tdenom2 <- (sx2ob + sx2mi) / (sx2ob * sx2mi)
-  corr_sebeta <- sqrt(corr_tdenom1 * corr_tdenom2)
-
-  corr_betadiff <- corr_rbetami - esteffect
-  corr_tbeta <- corr_betadiff / corr_sebeta
-  corr_p_value <- 2 * stats::pt(
-    q = abs(corr_tbeta), df = kdf, lower.tail = FALSE
-  )
+  if (corr_valid) {
+      corr_tdenom1  <- (ssdyGxob + ssdyGxmi) / (nobs + nmiss - 4)
+      corr_tdenom2  <- (sx2ob + sx2mi) / (sx2ob * sx2mi)
+      corr_sebeta   <- sqrt(corr_tdenom1 * corr_tdenom2)
+      
+      corr_betadiff <- corr_rbetami - esteffect
+      corr_tbeta    <- corr_betadiff / corr_sebeta
+      corr_p_value  <- 2 * stats::pt(
+          q = abs(corr_tbeta), df = kdf, lower.tail = FALSE
+      )
+  } else {
+      corr_tdenom1  <- NA_real_
+      corr_tdenom2  <- NA_real_
+      corr_sebeta   <- NA_real_
+      corr_betadiff <- corr_rbetami - esteffect
+      corr_tbeta    <- NA_real_
+      corr_p_value  <- NA_real_
+  }
 
   # ===================================================================
   # Minimum effect different from observed effect (root-finding)
@@ -380,10 +436,10 @@ robust_attrition <- function(
       cat(crayon::bold("[BETA] Robustness to Differential Attrition\n\n"))
       
       if (isTRUE(verbose)) {
-          cat("This analysis quantifies what would have to be true in the\n")
+          cat("This analysis quantifies the conditions necessary in the\n")
           cat("attritted (missing) data to nullify an inference based on the\n")
           cat("observed data. Two complementary blocks are reported:\n")
-          cat("  (1) Nonparametric: the treatment estimate in the missing data\n")
+          cat("  (1) Mean-difference: the treatment estimate in the missing data\n")
           cat("      required to bring the combined-sample effect to the\n")
           cat("      significance threshold.\n")
           cat("  (2) Correlation-based: the correlation (and implied\n")
@@ -420,7 +476,7 @@ robust_attrition <- function(
       
       cat("\n")
       
-      cat("Nonparametric:\n")
+      cat("Mean-difference framework:\n")
       if (isTRUE(verbose)) {
           cat("  (effect in missing data required to pull the\n")
           cat("   combined-sample effect to the inference threshold)\n")
@@ -429,19 +485,31 @@ robust_attrition <- function(
                   nonpar_deltami))
       cat(sprintf("  Effect in combined data: %.4f\n",
                   nonpar_deltacomb))
+      cat("\n  For the model Y = B0 + B1*Missing + B2*X + B3*X*Missing:\n")
+      cat(sprintf("    B3: %.4f\n", nonpar_beta3))
       cat("\n")
       
-      cat("Correlation-based:\n")
+      cat("Correlation-based framework:\n")
       if (isTRUE(verbose)) {
           cat("  (correlation in missing data required to nullify,\n")
           cat("   with the implied regression coefficient and the\n")
           cat("   attrition x treatment interaction)\n")
       }
-      cat(sprintf("  Effect in missing data to nullify: %.4f\n",
-                  corr_rbetami))
-      cat("\n  For the model Y = B0 + B1*X + B2*Missing + B3*X*Missing:\n")
-      cat(sprintf("    B3: %.4f\n", corr_rbeta3))
-      cat(sprintf("    p-value for B3: %.4f\n", corr_p_value))
+      
+      if (corr_valid) {
+          cat(sprintf("  Effect in missing data to nullify: %.4f\n",
+                      corr_rbetami))
+          cat("\n  For the model Y = B0 + B1*Missing + B2*X + B3*X*Missing:\n")
+          cat(sprintf("    B3: %.4f\n", corr_rbeta3))
+          cat(sprintf("    p-value for B3: %.4f\n", corr_p_value))
+      } else {
+          cat(sprintf("\n  Required correlation in missing data: %.4f\n", corr_rmi))
+          cat("\n  This exceeds the attainable range for a correlation.\n")
+          cat("  No correlation in the attritted data could nullify this\n")
+          cat("  inference, so the implied coefficient and its test are\n")
+          cat("  not defined.\n")
+      }
+      
       cat("\n  Min missing effect to nullify:\n")
       cat(sprintf("    +root: %.4f\n", corr_BMIp))
       cat(sprintf(
@@ -557,6 +625,7 @@ robust_attrition <- function(
         rbeta3 = corr_rbeta3,
         rcomb = corr_rcomb,
         sebeta = corr_sebeta,
+        corr_valid = corr_valid,
         betadiff = corr_betadiff,
         tbeta = corr_tbeta,
         p_value = corr_p_value,
@@ -666,8 +735,9 @@ robust_attrition <- function(
           ggplot2::labs(
               title = "Robustness of inference to differential attrition",
               subtitle = paste0(
-                  "Effect the missing data would need to nullify the observed ",
-                  "inference,\nby assumed mean outcome in the missing data"
+                  "Effect in the missing data necessary to nullify the observed ",
+                  "inference,\nby assumed mean outcome in the missing data ",
+                  "(mean-difference framework)"
               ),
               x = "Assumed mean outcome in the missing data  (Y#)",
               y = "Required effect in the missing data  (delta_mi)"
@@ -683,7 +753,91 @@ robust_attrition <- function(
               legend.text = ggplot2::element_text(size = 13),
               legend.position = "bottom"
           )
+
+      # ---- Correlational framework version of Figure A1 (Figure A2) ----
+      # Same x-window as the mean-difference plot, so the two figures are
+      # directly comparable. The curve is evaluated on a grid rather than
+      # drawn with geom_abline, because the relationship is exactly linear
+      # only under the b_h term as currently coded (see the note at
+      # corr_r_at above).
+      corr_pad  <- 0.06 * (x_hi - x_lo)
+      corr_grid <- seq(x_lo - corr_pad, x_hi + corr_pad, length.out = 201)
+      corr_df <- data.frame(
+          y_hash = corr_grid,
+          delta  = vapply(corr_grid, corr_delta_at, numeric(1))
+      )
       
+      # local slope at the original-calculation point, by central difference
+      corr_h <- max(1e-4, 1e-3 * abs(center))
+      corr_slope <- (corr_delta_at(center + corr_h) -
+                         corr_delta_at(center - corr_h)) / (2 * corr_h)
+      
+      cy_pts <- c(corr_df$delta, corr_rbetami, 0)
+      cy_min <- min(cy_pts)
+      cy_max <- max(cy_pts)
+      cy_margin <- 0.08 * (cy_max - cy_min)
+      if (!is.finite(cy_margin) || cy_margin <= 0) cy_margin <- 1
+      
+      corr_legend_y <- (cy_max + cy_margin) -
+          0.01 * ((cy_max + cy_margin) - (cy_min - cy_margin))
+      corr_legend_label <- paste0(
+          "Red point: original calculation (Y# = pooled mean)\n",
+          "Line slope: rise in delta|Z_mi per unit of Y#\n",
+          sprintf("Y# = %.2f,  delta|Z_mi = %.2f,  slope = %.3f",
+                  center, corr_rbetami, corr_slope)
+      )
+      
+      p_corr <- ggplot2::ggplot() +
+          ggplot2::geom_hline(yintercept = 0, color = "grey70",
+                              linewidth = 0.5) +
+          ggplot2::geom_line(
+              data = corr_df, inherit.aes = FALSE,
+              ggplot2::aes(x = y_hash, y = delta),
+              color = "#6A3D9A", linewidth = 1.1
+          ) +
+          ggplot2::annotate("segment", x = center, xend = center,
+                            y = -Inf, yend = corr_rbetami,
+                            color = "#E31A1C", linetype = "dashed",
+                            linewidth = 0.6) +
+          ggplot2::annotate("segment", x = -Inf, xend = center,
+                            y = corr_rbetami, yend = corr_rbetami,
+                            color = "#E31A1C", linetype = "dashed",
+                            linewidth = 0.6) +
+          ggplot2::annotate("point", x = center, y = corr_rbetami,
+                            color = "#E31A1C", size = 2.6) +
+          ggplot2::annotate("text", x = center, y = corr_rbetami,
+                            label = "Original calculation",
+                            color = "#E31A1C", hjust = -0.05, vjust = 1.6,
+                            size = 3.4) +
+          ggplot2::annotate("label", x = legend_x, y = corr_legend_y,
+                            hjust = 0, vjust = 1, label = corr_legend_label,
+                            size = 11 / ggplot2::.pt, color = "grey20",
+                            fill = "white", lineheight = 1.1) +
+          ggplot2::coord_cartesian(xlim = c(x_lo, x_hi),
+                                   ylim = c(cy_min - cy_margin,
+                                            cy_max + cy_margin)) +
+          ggplot2::labs(
+              title = "Robustness of inference to differential attrition",
+              subtitle = paste0(
+                  "Effect in the missing data necessary to nullify the ",
+                  "observed inference,\nby assumed mean outcome in the ",
+                  "missing data (correlation-based framework)"
+              ),
+              x = "Assumed mean outcome in the missing data  (Y#)",
+              y = "Required effect in the missing data  (delta|Z_mi)"
+          ) +
+          ggplot2::theme_bw() +
+          ggplot2::theme(
+              plot.title.position = "plot",
+              plot.title = ggplot2::element_text(size = 16),
+              plot.subtitle = ggplot2::element_text(size = 14),
+              axis.title = ggplot2::element_text(size = 14),
+              axis.text = ggplot2::element_text(size = 13),
+              strip.text = ggplot2::element_text(size = 13),
+              legend.text = ggplot2::element_text(size = 13),
+              legend.position = "bottom"
+          )      
+            
       # ---- Second plot: cell means by group and attrition status ----
       # Four cell means from Y = b0 + b1*M + b2*T + b3*M*T. The observed
       # (M = 0) cells are shared; the attritted (M = 1) cells differ between
@@ -787,8 +941,11 @@ robust_attrition <- function(
           )
       
       print(p)
+      print(p_corr)
       print(p_means)
-      return(invisible(list(robustness = p, means = p_means)))
+      return(invisible(list(robustness = p,
+                            robustness_corr = p_corr,
+                            means = p_means)))
       
   } else {
       stop("to_return must be one of \"print\", \"raw_output\", or \"plot\".")
