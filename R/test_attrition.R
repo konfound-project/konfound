@@ -25,6 +25,14 @@
 #'   internally from other inputs when NULL (default).
 #' @param R2yz optional outcome-covariate fit; computed
 #'   internally when NULL (default).
+#' @param ycmi optional. The assumed mean outcome among the missing
+#'   control cases. This is the anchor for the mean-difference framework
+#'   in equation (7). Defaults to \code{yobc}, the observed control mean,
+#'   which assumes no outcome selection among controls.
+#' @param ypooled optional. The assumed mean outcome across all missing
+#'   cases, treatment and control combined. This is the earlier
+#'   parameterization. It describes the same relationship as \code{ycmi}
+#'   and is converted internally, so supply one or the other, not both.
 #' @param alpha significance level (default 0.05).
 #' @param pad_frac half-width of the plotting window for
 #'   \code{to_return = "plot"}, as a fraction of the observed
@@ -81,6 +89,8 @@ robust_attrition <- function(
         R2,
         R2xz = NULL,
         R2yz = NULL,
+        ycmi = NULL, # assumed mean outcome among the missing control cases
+        ypooled = NULL, # assumed mean outcome across all missing cases (treatment + control)
         alpha = 0.05,
         pad_frac = 0.15,
         verbose = FALSE,
@@ -213,7 +223,7 @@ robust_attrition <- function(
   xob <- ntreatob / (ntreatob + ncontrolob)
   yob <- xob * yobt + (1 - xob) * yobc
   deltasig <- sign(esteffect) * tcrit * se * sqrt((nobs - 3) / (fulln - 3))
-  ythresh <- yob
+  #ythresh <- yob
   nintended <- ntreattot + ncontroltot
 
   # guard: no inference to nullify (observed effect does not exceed delta#)
@@ -224,20 +234,75 @@ robust_attrition <- function(
   }
   
   # ===================================================================
+  # Mean-difference anchor
+  # ===================================================================
+  # From equation (6), the combined-sample effect decomposes as
+  #   delta_combined = delta_ob + alphat*(delta_mi - delta_ob) + (alphac - alphat)*(yobc - ycmi).
+  # Setting delta_combined = delta# and solving for delta_mi (equation 7) gives a relationship 
+  # that is linear in ycmi, the control mean among the missing cases:
+  #   delta_mi(ycmi) = nonpar_intercept + nonpar_slope * ycmi
+  
+  nonpar_slope <- (alphac - alphat) / alphat
+  nonpar_intercept <- (deltasig + (alphat - alphac) * yobc -
+                       (1 - alphat) * esteffect) / alphat
+  
+  # Share of the missing cases that are in the treatment group. Used to
+  # convert between ycmi and the pooled missing-data mean.
+  
+  # w_ for weight
+  w_treat_mi <- ntreatmi / (ntreatmi + ncontrolmi)
+  
+  # The anchor may be given as ycmi (equation 7, the default) or as the
+  # pooled mean across all missing cases (the earlier parameterization).
+  # The two describe the same relationship, so ypooled is converted to
+  # ycmi and a single computation follows.
+  if (!is.null(ycmi) && !is.null(ypooled)) {
+      stop("Supply ycmi or ypooled, not both. They are two parameterizations ",
+           "of the same relationship.")
+  }
+  
+  if (!is.null(ypooled)) {
+      if (!is.numeric(ypooled) || length(ypooled) != 1 || is.na(ypooled)) {
+          stop("ypooled must be a single numeric value.")
+      }
+      # Y# = ycmi + w_treat_mi * delta_mi(ycmi); invert for ycmi
+      ycmi <- (ypooled - w_treat_mi * nonpar_intercept) /
+          (1 + w_treat_mi * nonpar_slope)
+      nonpar_anchor <- "ypooled"
+  } else if (!is.null(ycmi)) {
+      if (!is.numeric(ycmi) || length(ycmi) != 1 || is.na(ycmi)) {
+          stop("ycmi must be a single numeric value.")
+      }
+      nonpar_anchor <- "ycmi"
+  } else {
+      ycmi <- yobc
+      nonpar_anchor <- "default"
+  }
+  
+  # ===================================================================
   # Mean-difference block
   # ===================================================================
-  nonpar_ycontrolmi <- (
-      ythresh * (alphat * xbar + alphac * (1 - xbar)) -
-          xbar * ((alphat - 1) * yobt - alphac * yobc + yobc + deltasig)
-  ) / alphac
+  # retired and collapsed with ycmi
+  # nonpar_ycontrolmi <- (
+  #     ythresh * (alphat * xbar + alphac * (1 - xbar)) -
+  #         xbar * ((alphat - 1) * yobt - alphac * yobc + yobc + deltasig)
+  # ) / alphac
+  # 
+  # nonpar_ytreatmi <- (
+  #     ythresh * (alphat * xbar + alphac * (1 - xbar)) -
+  #         alphac * (1 - xbar) * nonpar_ycontrolmi
+  # ) / (alphat * xbar)
+  # 
+  # nonpar_deltami <- nonpar_ytreatmi - nonpar_ycontrolmi
 
-  nonpar_ytreatmi <- (
-      ythresh * (alphat * xbar + alphac * (1 - xbar)) -
-          alphac * (1 - xbar) * nonpar_ycontrolmi
-  ) / (alphat * xbar)
-
-  nonpar_deltami <- nonpar_ytreatmi - nonpar_ycontrolmi
-
+  nonpar_ycontrolmi <- ycmi
+  nonpar_deltami <- nonpar_intercept + nonpar_slope * ycmi
+  nonpar_ytreatmi <- ycmi + nonpar_deltami
+  
+  # Pooled mean across all missing cases implied by this anchor. 
+  # Reported so the result can be read under either parameterization.
+  nonpar_ypooled <- ycmi + w_treat_mi * nonpar_deltami
+  
   nonpar_ycombc <- (1 - alphac) * yobc + alphac * nonpar_ycontrolmi
   nonpar_ycombt <- (1 - alphat) * yobt + alphat * nonpar_ytreatmi
   nonpar_deltacomb <- nonpar_ycombt - nonpar_ycombc
@@ -253,18 +318,14 @@ robust_attrition <- function(
   nonpar_pyfull <- nonpar_beta0 + nonpar_beta1 +
     nonpar_beta2 + nonpar_beta3
 
-  nonpar_slope <- alphac - xbar * (alphac - alphat)
+  # nonpar_slope <- alphac - xbar * (alphac - alphat)
   
-  # delta_mi as a linear function of the specified missing-data mean Y#:
-  #   delta_mi(Y#) = nonpar_intercept + nonpar_lineslope * Y#
-  # nonpar_lineslope is the slope with respect to Y#; nonpar_intercept is
-  # the value at Y# = 0. The line passes through the original-calculation
-  # point (Y# = yob, delta_mi = nonpar_deltami).
-  nonpar_lineslope <- (alphac - alphat) *
-      (alphac - xbar * (alphac - alphat)) / (alphat * alphac)
-  nonpar_intercept <- (alphac - xbar * (alphac - alphat)) *
-      ((1 - alphac) * yobc - (1 - alphat) * yobt + deltasig) /
-      (alphat * alphac)
+  # nonpar_slope and nonpar_intercept is defined above
+  # nonpar_lineslope <- (alphac - alphat) *
+  #     (alphac - xbar * (alphac - alphat)) / (alphat * alphac)
+  # nonpar_intercept <- (alphac - xbar * (alphac - alphat)) *
+  #     ((1 - alphac) * yobc - (1 - alphat) * yobt + deltasig) /
+  #     (alphat * alphac)
   
   # ===================================================================
   # Correlation-based block
@@ -481,11 +542,22 @@ robust_attrition <- function(
           cat("  (effect in missing data required to pull the\n")
           cat("   combined-sample effect to the inference threshold)\n")
       }
+      # added block based on YCmi or ypooled usage
+      cat(sprintf("  Assumed control mean in missing data (YCmi): %.4f%s\n",
+                  ycmi,
+                  switch(nonpar_anchor,
+                         default = "  [default: observed control mean]",
+                         ypooled = "  [converted from ypooled]",
+                         "")))
+      cat(sprintf("  Implied pooled mean in missing data (Y#): %.4f\n",
+                  nonpar_ypooled))
+      
       cat(sprintf("  Effect in missing data to nullify: %.4f\n",
                   nonpar_deltami))
       cat(sprintf("  Effect in combined data: %.4f\n",
                   nonpar_deltacomb))
       cat("\n  For the model Y = B0 + B1*Missing + B2*X + B3*X*Missing:\n")
+      cat(sprintf("    B1: %.4f\n", nonpar_beta1))
       cat(sprintf("    B3: %.4f\n", nonpar_beta3))
       cat("\n")
       
@@ -549,6 +621,9 @@ robust_attrition <- function(
               alpha = alpha
           ),
           nonpar = list(
+              ycmi = ycmi,
+              ypooled = nonpar_ypooled,
+              anchor = nonpar_anchor,
               ycontrolmi = nonpar_ycontrolmi,
               ytreatmi = nonpar_ytreatmi,
               deltami = nonpar_deltami,
@@ -611,8 +686,7 @@ robust_attrition <- function(
         pymic = nonpar_pymic,
         pyobt = nonpar_pyobt,
         pyfull = nonpar_pyfull,
-        slope = nonpar_slope,
-        line_slope = nonpar_lineslope,
+        line_slope = nonpar_slope,
         line_intercept = nonpar_intercept
       ),
       correlation_based = list(
@@ -658,7 +732,7 @@ robust_attrition <- function(
         xob = xob,
         yob = yob,
         deltasig = deltasig,
-        ythresh = ythresh,
+        #ythresh = ythresh,
         nintended = nintended
       )
     )
@@ -670,10 +744,10 @@ robust_attrition <- function(
       # then build and return the two plots.
       print_report()
       
-      # x-window: centered on the observed pooled mean (yob), the mean
-      # assumed for the missing data in the original calculation. Half-width
-      # defaults to pad_frac (15%) of |yob|; raise pad_frac for a longer line.
-      center <- yob
+      # x-window: centered on the assumed mean outcome among missing control cases 
+      # (now, ycmi; previously, yob), Half-width defaults to pad_frac (15%) of |ycmi|; 
+      # raise pad_frac for a longer line.
+      center <- ycmi
       half <- pad_frac * abs(center)
       if (!is.finite(half) || half <= 0) {
           half <- max(abs(esteffect), 1)
@@ -683,8 +757,8 @@ robust_attrition <- function(
       
       # y-window: cover the line across the x-window, the original point,
       # and the delta_mi = 0 reference, with a small margin.
-      y_lo_line <- nonpar_intercept + nonpar_lineslope * x_lo
-      y_hi_line <- nonpar_intercept + nonpar_lineslope * x_hi
+      y_lo_line <- nonpar_intercept + nonpar_slope * x_lo
+      y_hi_line <- nonpar_intercept + nonpar_slope * x_hi
       y_pts <- c(y_lo_line, y_hi_line, nonpar_deltami, 0)
       y_min <- min(y_pts)
       y_max <- max(y_pts)
@@ -696,10 +770,13 @@ robust_attrition <- function(
       legend_y <- (y_max + y_margin) -
           0.01 * ((y_max + y_margin) - (y_min - y_margin))
       legend_label <- paste0(
-          "Red point: original calculation (Y# = pooled mean)\n",
-          "Line slope: rise in delta_mi per unit of Y#\n",
-          sprintf("Y# = %.2f,  delta_mi = %.2f,  slope = %.3f",
-                  center, nonpar_deltami, nonpar_lineslope)
+          switch(nonpar_anchor,
+                 default = "Red point: YCmi = observed control mean\n",
+                 ypooled = "Red point: YCmi converted from ypooled\n",
+                 "Red point: supplied YCmi\n"),
+          "Line slope: rise in delta_mi per unit of YCmi\n",
+          sprintf("YCmi = %.2f,  delta_mi = %.2f,  slope = %.3f",
+                  center, nonpar_deltami, nonpar_slope)
       )
       
       p <- ggplot2::ggplot() +
@@ -708,7 +785,7 @@ robust_attrition <- function(
                               linewidth = 0.5) +
           # required missing-data effect across assumed missing-data means
           ggplot2::geom_abline(intercept = nonpar_intercept,
-                               slope = nonpar_lineslope,
+                               slope = nonpar_slope,
                                color = "#1F78B4", linewidth = 1.1) +
           # guide lines to the original-calculation point
           ggplot2::annotate("segment", x = center, xend = center,
@@ -736,10 +813,10 @@ robust_attrition <- function(
               title = "Robustness of inference to differential attrition",
               subtitle = paste0(
                   "Effect in the missing data necessary to nullify the observed ",
-                  "inference,\nby assumed mean outcome in the missing data ",
+                  "inference,\nby assumed control mean in the missing data ",
                   "(mean-difference framework)"
               ),
-              x = "Assumed mean outcome in the missing data  (Y#)",
+              x = "Assumed control mean in the missing data  (YCmi)",
               y = "Required effect in the missing data  (delta_mi)"
           ) +
           ggplot2::theme_bw() +
@@ -755,24 +832,35 @@ robust_attrition <- function(
           )
 
       # ---- Correlational framework version of Figure A1 (Figure A2) ----
-      # Same x-window as the mean-difference plot, so the two figures are
-      # directly comparable. The curve is evaluated on a grid rather than
-      # drawn with geom_abline, because the relationship is exactly linear
-      # only under the b_h term as currently coded (see the note at
-      # corr_r_at above).
-      corr_pad  <- 0.06 * (x_hi - x_lo)
-      corr_grid <- seq(x_lo - corr_pad, x_hi + corr_pad, length.out = 201)
+      # The correlation-based framework is anchored at the pooled observed
+      # mean, not at ycmi, so it gets its own x-window. The curve is
+      # evaluated on a grid rather than drawn with geom_abline, because the
+      # relationship is exactly linear only under the b_h term as currently
+      # coded (see the note at corr_r_at above).
+      
+      # The correlation-based framework is anchored at the pooled observed
+      # mean, not at ycmi. Use its own window.
+      corr_center <- yob
+      corr_half   <- pad_frac * abs(corr_center)
+      if (!is.finite(corr_half) || corr_half <= 0) corr_half <- max(abs(esteffect), 1)
+      corr_x_lo <- corr_center - corr_half
+      corr_x_hi <- corr_center + corr_half
+      corr_legend_x <- corr_x_lo + 0.005 * (corr_x_hi - corr_x_lo)
+     
+      corr_pad <- 0.06 * (corr_x_hi - corr_x_lo)    
+      
+      corr_grid <- seq(corr_x_lo - corr_pad, corr_x_hi + corr_pad, length.out = 201)
       corr_df <- data.frame(
           y_hash = corr_grid,
           delta  = vapply(corr_grid, corr_delta_at, numeric(1))
       )
       
       # local slope at the original-calculation point, by central difference
-      corr_h <- max(1e-4, 1e-3 * abs(center))
-      corr_slope <- (corr_delta_at(center + corr_h) -
-                         corr_delta_at(center - corr_h)) / (2 * corr_h)
+      corr_h <- max(1e-4, 1e-3 * abs(corr_center))
+      corr_slope <- (corr_delta_at(corr_center + corr_h) -
+                         corr_delta_at(corr_center - corr_h)) / (2 * corr_h)
       
-      cy_pts <- c(corr_df$delta, corr_rbetami, 0)
+      cy_pts <- c(corr_delta_at(corr_x_lo), corr_delta_at(corr_x_hi), corr_rbetami, 0)
       cy_min <- min(cy_pts)
       cy_max <- max(cy_pts)
       cy_margin <- 0.08 * (cy_max - cy_min)
@@ -784,7 +872,7 @@ robust_attrition <- function(
           "Red point: original calculation (Y# = pooled mean)\n",
           "Line slope: rise in delta|Z_mi per unit of Y#\n",
           sprintf("Y# = %.2f,  delta|Z_mi = %.2f,  slope = %.3f",
-                  center, corr_rbetami, corr_slope)
+                  corr_center, corr_rbetami, corr_slope)
       )
       
       p_corr <- ggplot2::ggplot() +
@@ -795,25 +883,25 @@ robust_attrition <- function(
               ggplot2::aes(x = y_hash, y = delta),
               color = "#6A3D9A", linewidth = 1.1
           ) +
-          ggplot2::annotate("segment", x = center, xend = center,
+          ggplot2::annotate("segment", x = corr_center, xend = corr_center,
                             y = -Inf, yend = corr_rbetami,
                             color = "#E31A1C", linetype = "dashed",
                             linewidth = 0.6) +
-          ggplot2::annotate("segment", x = -Inf, xend = center,
+          ggplot2::annotate("segment", x = -Inf, xend = corr_center,
                             y = corr_rbetami, yend = corr_rbetami,
                             color = "#E31A1C", linetype = "dashed",
                             linewidth = 0.6) +
-          ggplot2::annotate("point", x = center, y = corr_rbetami,
+          ggplot2::annotate("point", x = corr_center, y = corr_rbetami,
                             color = "#E31A1C", size = 2.6) +
-          ggplot2::annotate("text", x = center, y = corr_rbetami,
+          ggplot2::annotate("text", x = corr_center, y = corr_rbetami,
                             label = "Original calculation",
                             color = "#E31A1C", hjust = -0.05, vjust = 1.6,
                             size = 3.4) +
-          ggplot2::annotate("label", x = legend_x, y = corr_legend_y,
+          ggplot2::annotate("label", x = corr_legend_x, y = corr_legend_y,
                             hjust = 0, vjust = 1, label = corr_legend_label,
                             size = 11 / ggplot2::.pt, color = "grey20",
                             fill = "white", lineheight = 1.1) +
-          ggplot2::coord_cartesian(xlim = c(x_lo, x_hi),
+          ggplot2::coord_cartesian(xlim = c(corr_x_lo, corr_x_hi),
                                    ylim = c(cy_min - cy_margin,
                                             cy_max + cy_margin)) +
           ggplot2::labs(
@@ -881,7 +969,7 @@ robust_attrition <- function(
           sym = c("ob", "mi", "ob", "mi")
       )
       gap_df$hj  <- ifelse(gap_df$x < 0, 1.15, -0.15)
-      gap_df$txt <- sprintf("hat(delta)^{%s} == %.3f", gap_df$sym, gap_df$val)
+      gap_df$txt <- sprintf("hat(delta)^{%s} == %.4f", gap_df$sym, gap_df$val)
       
       p_means <- ggplot2::ggplot(
           means_df,
